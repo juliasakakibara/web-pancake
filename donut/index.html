@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <!-- theme-preamble:v1 -->
+  <script>(function(){try{var t=localStorage.getItem('letbe-ds-dark-mode');if(t==='1')document.documentElement.setAttribute('data-theme','dark');else if(t==='0')document.documentElement.setAttribute('data-theme','light');}catch(e){}})();</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta data-lb-page="donut">
+  <title>Donut — letbe-ds</title>
+  <link rel="stylesheet" href="../tokens/theme.css">
+  <link rel="stylesheet" href="../tokens/fonts.css">
+  <link rel="stylesheet" href="../components/components.css">
+  <link rel="stylesheet" href="../components/theme-editor.css">
+  <link rel="stylesheet" href="../components/gallery.css">
+</head>
+<body data-lb-base="..">
+
+<main class="gallery-main">
+  <section class="gallery-section" id="donut">
+    <h1 class="gallery-section__title" style="font-size: var(--lb-t-heading-l-font-size); line-height: var(--lb-t-heading-l-line-height);">Donut</h1>
+    <p class="gallery-section__desc">Proportions chart. Hand-rolled SVG, no dependencies. Each segment is a same-radius circle with a <code class="lb-code">stroke-dasharray</code> arc and per-segment rotation. Set <code class="lb-code">thickness</code> to 50 for a pie chart. Pair with the Donut Legend list for a side-by-side breakdown.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>a11y (built in):</strong> the SVG renders as one <code class="lb-code">role="img"</code> node whose <code class="lb-code">aria-label</code> is a generated summary of the whole series (<code class="lb-code">Donut chart of 100: Mobile: 60, Desktop: 32, Tablet: 8</code>, or <code class="lb-code">Donut chart (no data)</code> when empty), so the chart is never a silent graphic; each arc additionally carries a <code class="lb-code">&lt;title&gt;</code> for the native hover tooltip. The <code class="lb-code">.lb-donut__center</code> slot survives every re-render as ordinary DOM text, so the headline number is read as text rather than baked into the drawing.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>Usage:</strong> <code class="lb-code">&lt;div data-lb-donut&gt;</code> with a <code class="lb-code">&lt;script type="application/json"&gt;</code> child holding <code class="lb-code">{ data, colors, thickness, gap }</code>. <code class="lb-code">data</code> is an array of <code class="lb-code">{ label, value }</code>.</p>
+
+    <hr class="gallery-desc-divider">
+
+    <!-- ────────────────── Default ────────────────── -->
+    <h2 class="gallery-section__title">Default</h2>
+    <p class="gallery-section__desc">Three segments, default thickness, default colors from the data palette.</p>
+    <div class="gallery-row">
+      <div data-lb-donut>
+        <script type="application/json">
+          {"data":[
+            {"label":"Mobile","value":60},
+            {"label":"Desktop","value":32},
+            {"label":"Tablet","value":8}
+          ]}
+        </script>
+      </div>
+    </div>
+
+    <!-- ────────────────── With center value ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">With center value</h2>
+    <p class="gallery-section__desc">Add a <code class="lb-code">.lb-donut__center</code> child to the donut for the headline number — typical for goal-vs-target or percent-complete charts.</p>
+    <div class="gallery-row">
+      <div data-lb-donut>
+        <script type="application/json">
+          {"data":[
+            {"label":"Complete","value":68},
+            {"label":"Remaining","value":32}
+          ],"colors":["var(--lb-data-3)","var(--lb-bg-strong)"]}
+        </script>
+        <div class="lb-donut__center">
+          <div class="lb-donut__center-value">68%</div>
+          <div class="lb-donut__center-label">Complete</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ────────────────── Thickness control ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Thickness — thin ring → pie</h2>
+    <p class="gallery-section__desc">The <code class="lb-code">thickness</code> config (0–50, in viewBox units) controls the donut hole. <code class="lb-code">50</code> closes the hole entirely (pie chart).</p>
+    <div class="lb-cluster" style="--gap: var(--lb-size-6x);">
+      <div data-lb-donut style="width: 8rem; height: 8rem;">
+        <script type="application/json">
+          {"thickness":6,"data":[{"label":"a","value":40},{"label":"b","value":30},{"label":"c","value":30}]}
+        </script>
+      </div>
+      <div data-lb-donut style="width: 8rem; height: 8rem;">
+        <script type="application/json">
+          {"thickness":14,"data":[{"label":"a","value":40},{"label":"b","value":30},{"label":"c","value":30}]}
+        </script>
+      </div>
+      <div data-lb-donut style="width: 8rem; height: 8rem;">
+        <script type="application/json">
+          {"thickness":28,"data":[{"label":"a","value":40},{"label":"b","value":30},{"label":"c","value":30}]}
+        </script>
+      </div>
+      <div data-lb-donut style="width: 8rem; height: 8rem;">
+        <script type="application/json">
+          {"thickness":50,"gap":0,"data":[{"label":"a","value":40},{"label":"b","value":30},{"label":"c","value":30}]}
+        </script>
+      </div>
+    </div>
+
+    <!-- ────────────────── With legend ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">With legend</h2>
+    <p class="gallery-section__desc">Compose the donut with a <code class="lb-code">.lb-donut-legend</code> list. Segments take <code class="lb-code">--lb-data-1</code>…<code class="lb-code">--lb-data-8</code> in data order unless the config passes a <code class="lb-code">colors</code> array, so give each swatch the matching <code class="lb-code">var(--lb-data-N)</code> — as the demo below does.</p>
+    <div class="lb-cluster" style="--gap: var(--lb-size-8x); align-items: center;">
+      <div data-lb-donut style="width: 10rem; height: 10rem;">
+        <script type="application/json">
+          {"data":[
+            {"label":"Acquisition","value":42},
+            {"label":"Retention","value":28},
+            {"label":"Expansion","value":20},
+            {"label":"Other","value":10}
+          ]}
+        </script>
+      </div>
+      <ul class="lb-donut-legend">
+        <li class="lb-donut-legend__item">
+          <span class="lb-donut-legend__swatch" style="background: var(--lb-data-1);"></span>
+          <span class="lb-donut-legend__label">Acquisition</span>
+          <span class="lb-donut-legend__value">42%</span>
+        </li>
+        <li class="lb-donut-legend__item">
+          <span class="lb-donut-legend__swatch" style="background: var(--lb-data-2);"></span>
+          <span class="lb-donut-legend__label">Retention</span>
+          <span class="lb-donut-legend__value">28%</span>
+        </li>
+        <li class="lb-donut-legend__item">
+          <span class="lb-donut-legend__swatch" style="background: var(--lb-data-3);"></span>
+          <span class="lb-donut-legend__label">Expansion</span>
+          <span class="lb-donut-legend__value">20%</span>
+        </li>
+        <li class="lb-donut-legend__item">
+          <span class="lb-donut-legend__swatch" style="background: var(--lb-data-4);"></span>
+          <span class="lb-donut-legend__label">Other</span>
+          <span class="lb-donut-legend__value">10%</span>
+        </li>
+      </ul>
+    </div>
+
+    <!-- ────────────────── In a Card with Stat ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">In a Card — quota widget</h2>
+    <p class="gallery-section__desc">The donut + center value pattern, wrapped in a Card with a label and caption.</p>
+    <div class="lb-card lb-card--padded" style="max-width: 22rem;">
+      <div class="lb-card__heading">
+        <div class="lb-card__title">Storage used</div>
+        <div class="lb-card__subtitle">42.8 GB of 100 GB allocated</div>
+      </div>
+      <div class="lb-cluster" style="margin-top: var(--lb-size-6x); --gap: var(--lb-size-6x); align-items: center;">
+        <div data-lb-donut style="width: 9rem; height: 9rem;">
+          <script type="application/json">
+            {"thickness":18,"data":[{"label":"Used","value":42.8},{"label":"Free","value":57.2}],"colors":["var(--lb-data-1)","var(--lb-bg-strong)"]}
+          </script>
+          <div class="lb-donut__center">
+            <div class="lb-donut__center-value">43%</div>
+          </div>
+        </div>
+        <ul class="lb-donut-legend">
+          <li class="lb-donut-legend__item">
+            <span class="lb-donut-legend__swatch" style="background: var(--lb-data-1);"></span>
+            <span class="lb-donut-legend__label">Used</span>
+            <span class="lb-donut-legend__value">42.8 GB</span>
+          </li>
+          <li class="lb-donut-legend__item">
+            <span class="lb-donut-legend__swatch" style="background: var(--lb-bg-strong);"></span>
+            <span class="lb-donut-legend__label">Free</span>
+            <span class="lb-donut-legend__value">57.2 GB</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script src="../js/lb.js"></script>
+<script src="../js/slot-engine.js"></script>
+<script src="../js/theme-editor.js"></script>
+<script src="../js/token-exporter.js"></script>
+<script src="../js/gallery-layout.js"></script>
+</body>
+</html>

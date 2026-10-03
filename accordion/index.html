@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <!-- theme-preamble:v1 -->
+  <script>(function(){try{var t=localStorage.getItem('letbe-ds-dark-mode');if(t==='1')document.documentElement.setAttribute('data-theme','dark');else if(t==='0')document.documentElement.setAttribute('data-theme','light');}catch(e){}})();</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta data-lb-page="accordion">
+  <title>Accordion — letbe-ds</title>
+  <link rel="stylesheet" href="../tokens/theme.css">
+  <link rel="stylesheet" href="../tokens/fonts.css">
+  <link rel="stylesheet" href="../components/components.css">
+  <link rel="stylesheet" href="../components/theme-editor.css">
+  <link rel="stylesheet" href="../components/gallery.css">
+</head>
+<body data-lb-base="..">
+
+<main class="gallery-main">
+  <section class="gallery-section" id="accordion">
+    <h1 class="gallery-section__title" style="font-size: var(--lb-t-heading-l-font-size); line-height: var(--lb-t-heading-l-line-height);">Accordion</h1>
+    <p class="gallery-section__desc">Collapsible panels for progressively disclosing content. Use when you have grouped information that doesn't need to be visible at once — FAQ lists, settings sections, nested details, filter groups. Avoid for primary navigation; use tabs or nav instead.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>a11y (built in):</strong> triggers are real <code class="lb-code">&lt;button&gt;</code>s, so <kbd>Enter</kbd>/<kbd>Space</kbd> and the native <code class="lb-code">disabled</code> attribute work without extra wiring. The controller pairs each trigger with its panel — <code class="lb-code">aria-expanded</code> + <code class="lb-code">aria-controls</code> on the trigger, <code class="lb-code">role=region</code> + <code class="lb-code">aria-labelledby</code> on the panel — and collapses with the <code class="lb-code">hidden</code> attribute, so a closed panel leaves both the tab order and the accessibility tree. Chevrons are <code class="lb-code">aria-hidden</code>; every trigger is its own tab stop (no roving <code class="lb-code">tabindex</code>) with a <code class="lb-code">:focus-visible</code> ring.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>Usage:</strong> Set <code class="lb-code">data-lb-accordion</code> on the root. Each item needs a <code class="lb-code">.lb-accordion__trigger</code> button and matching <code class="lb-code">.lb-accordion__panel</code>. The trigger's right cluster (<code class="lb-code">.lb-accordion__indicators</code>) holds an optional <code class="lb-code">.lb-counter</code> count + chevron.</p>
+<hr class="gallery-desc-divider">
+
+<h2 class="gallery-section__title">Accordion Demo</h2>
+    <div class="lb-accordion" data-lb-accordion>
+      <div class="lb-accordion__item" data-lb-id="acc-1">
+        <button class="lb-accordion__trigger" aria-expanded="true">
+          <span class="lb-accordion__trigger-label">What is letbe-ds?</span>
+          <span class="lb-accordion__indicators">
+            <span class="lb-accordion__chevron lb-accordion__chevron--open" aria-hidden="true" data-lb-icon="chevron-down" style="width: 1.5rem; height: 1.5rem;"></span>
+          </span>
+        </button>
+        <div class="lb-accordion__panel">
+          <div class="lb-accordion__panel-inner">letbe-ds is a framework-agnostic design system using pure CSS and vanilla JavaScript, driven by tokens exported from the letbe Figma plugin. No build tools required.</div>
+        </div>
+      </div>
+      <div class="lb-accordion__item" data-lb-id="acc-2">
+        <button class="lb-accordion__trigger" aria-expanded="false">
+          <span class="lb-accordion__trigger-label">Can I use it with any framework?</span>
+          <span class="lb-accordion__indicators">
+            <span class="lb-accordion__chevron" aria-hidden="true" data-lb-icon="chevron-down" style="width: 1.5rem; height: 1.5rem;"></span>
+          </span>
+        </button>
+        <div class="lb-accordion__panel" hidden>
+          <div class="lb-accordion__panel-inner">Yes! Since it's pure CSS + vanilla JS, it works with React, Vue, Svelte, PHP, Django, or plain HTML.</div>
+        </div>
+      </div>
+      <div class="lb-accordion__item" data-lb-id="acc-3">
+        <button class="lb-accordion__trigger" aria-expanded="false" disabled>
+          <span class="lb-accordion__trigger-label">Disabled item</span>
+          <span class="lb-accordion__indicators">
+            <span class="lb-accordion__chevron" aria-hidden="true" data-lb-icon="chevron-down" style="width: 1.5rem; height: 1.5rem;"></span>
+          </span>
+        </button>
+        <div class="lb-accordion__panel" hidden>
+          <div class="lb-accordion__panel-inner">This content is hidden.</div>
+        </div>
+      </div>
+    </div>
+
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">With leading icons</h2>
+    <p class="gallery-section__desc">Add an optional <code class="lb-code">.lb-accordion__icon</code> slot before the label — useful for category-style accordions (settings panels, theme editors, sidebar groups) where each section has a recognisable visual anchor. Inherits trigger color, so disabled/hover states flow through.</p>
+    <div class="lb-accordion" data-lb-accordion>
+      <div class="lb-accordion__item" data-lb-id="icon-1">
+        <button class="lb-accordion__trigger" aria-expanded="true">
+          <span class="lb-accordion__icon" aria-hidden="true" data-lb-icon="palette"></span>
+          <span class="lb-accordion__trigger-label">Color</span>
+          <span class="lb-accordion__indicators">
+            <span class="lb-accordion__chevron lb-accordion__chevron--open" aria-hidden="true" data-lb-icon="chevron-down" style="width: 1.5rem; height: 1.5rem;"></span>
+          </span>
+        </button>
+        <div class="lb-accordion__panel">
+          <div class="lb-accordion__panel-inner">Brand color, accent palette, surface tinting.</div>
+        </div>
+      </div>
+      <div class="lb-accordion__item" data-lb-id="icon-2">
+        <button class="lb-accordion__trigger" aria-expanded="false">
+          <span class="lb-accordion__icon" aria-hidden="true" data-lb-icon="type"></span>
+          <span class="lb-accordion__trigger-label">Typography</span>
+          <span class="lb-accordion__indicators">
+            <span class="lb-accordion__chevron" aria-hidden="true" data-lb-icon="chevron-down" style="width: 1.5rem; height: 1.5rem;"></span>
+          </span>
+        </button>
+        <div class="lb-accordion__panel" hidden>
+          <div class="lb-accordion__panel-inner">Font family, base size, density, hierarchy contrast.</div>
+        </div>
+      </div>
+      <div class="lb-accordion__item" data-lb-id="icon-3">
+        <button class="lb-accordion__trigger" aria-expanded="false">
+          <span class="lb-accordion__icon" aria-hidden="true" data-lb-icon="pencil"></span>
+          <span class="lb-accordion__trigger-label">Stroke</span>
+          <span class="lb-accordion__indicators">
+            <span class="lb-accordion__chevron" aria-hidden="true" data-lb-icon="chevron-down" style="width: 1.5rem; height: 1.5rem;"></span>
+          </span>
+        </button>
+        <div class="lb-accordion__panel" hidden>
+          <div class="lb-accordion__panel-inner">Action stroke, decorative stroke, icon stroke.</div>
+        </div>
+      </div>
+      <div class="lb-accordion__item" data-lb-id="icon-4">
+        <button class="lb-accordion__trigger" aria-expanded="false">
+          <span class="lb-accordion__icon" aria-hidden="true" data-lb-icon="square-rounded"></span>
+          <span class="lb-accordion__trigger-label">Radius</span>
+          <span class="lb-accordion__indicators">
+            <span class="lb-accordion__chevron" aria-hidden="true" data-lb-icon="chevron-down" style="width: 1.5rem; height: 1.5rem;"></span>
+          </span>
+        </button>
+        <div class="lb-accordion__panel" hidden>
+          <div class="lb-accordion__panel-inner">Square, soft, rounded, pill — remaps L2 radius aliases to L1 primitives.</div>
+        </div>
+      </div>
+    </div>
+
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Filter accordion — with count badges</h2>
+    <p class="gallery-section__desc">Reuses the shared Counter (<code class="lb-code">.lb-counter</code>) to show how many filters are active inside a collapsed section.</p>
+    <div class="lb-accordion" data-lb-accordion data-lb-allow-multiple="true">
+      <div class="lb-accordion__item" data-lb-id="filter-1">
+        <button class="lb-accordion__trigger" aria-expanded="false">
+          <span class="lb-accordion__trigger-label">Category</span>
+          <span class="lb-accordion__indicators">
+            <span class="lb-counter">3</span>
+            <span class="lb-accordion__chevron" aria-hidden="true" data-lb-icon="chevron-down" style="width: 1.5rem; height: 1.5rem;"></span>
+          </span>
+        </button>
+        <div class="lb-accordion__panel" hidden>
+          <div class="lb-accordion__panel-inner">
+            <div style="display: flex; flex-direction: column; gap: var(--lb-size-2x);">
+              <label class="lb-checkbox-wrap"><input type="checkbox" class="lb-checkbox" checked><span class="lb-checkbox__label">Design</span></label>
+              <label class="lb-checkbox-wrap"><input type="checkbox" class="lb-checkbox" checked><span class="lb-checkbox__label">Engineering</span></label>
+              <label class="lb-checkbox-wrap"><input type="checkbox" class="lb-checkbox" checked><span class="lb-checkbox__label">Product</span></label>
+              <label class="lb-checkbox-wrap"><input type="checkbox" class="lb-checkbox"><span class="lb-checkbox__label">Marketing</span></label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="lb-accordion__item" data-lb-id="filter-2">
+        <button class="lb-accordion__trigger" aria-expanded="false">
+          <span class="lb-accordion__trigger-label">Status</span>
+          <span class="lb-accordion__indicators">
+            <span class="lb-counter">1</span>
+            <span class="lb-accordion__chevron" aria-hidden="true" data-lb-icon="chevron-down" style="width: 1.5rem; height: 1.5rem;"></span>
+          </span>
+        </button>
+        <div class="lb-accordion__panel" hidden>
+          <div class="lb-accordion__panel-inner">
+            <div style="display: flex; flex-direction: column; gap: var(--lb-size-2x);">
+              <label class="lb-checkbox-wrap"><input type="checkbox" class="lb-checkbox" checked><span class="lb-checkbox__label">Active</span></label>
+              <label class="lb-checkbox-wrap"><input type="checkbox" class="lb-checkbox"><span class="lb-checkbox__label">Pending</span></label>
+              <label class="lb-checkbox-wrap"><input type="checkbox" class="lb-checkbox"><span class="lb-checkbox__label">Archived</span></label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="lb-accordion__item" data-lb-id="filter-3">
+        <button class="lb-accordion__trigger" aria-expanded="false">
+          <span class="lb-accordion__trigger-label">Owner</span>
+          <span class="lb-accordion__indicators">
+            <span class="lb-accordion__chevron" aria-hidden="true" data-lb-icon="chevron-down" style="width: 1.5rem; height: 1.5rem;"></span>
+          </span>
+        </button>
+        <div class="lb-accordion__panel" hidden>
+          <div class="lb-accordion__panel-inner">No owners selected. Start typing to filter.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script src="../js/lb.js"></script>
+<script src="../js/slot-engine.js"></script>
+<script src="../js/theme-editor.js"></script>
+<script src="../js/token-exporter.js"></script>
+<script src="../js/gallery-layout.js"></script>
+
+<script>
+  // Filter-accordion demo wiring: badge count reflects checked checkboxes inside
+  // the same item. Accordion itself is agnostic — the consumer owns this logic.
+  // `.lb-counter:empty { display: none }` hides the badge when the count is 0.
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('[data-lb-id^="filter-"]').forEach((item) => {
+      const badge = item.querySelector('.lb-counter');
+      const checks = item.querySelectorAll('input[type="checkbox"]');
+      if (!badge || !checks.length) return;
+      const sync = () => {
+        const count = Array.from(checks).filter((c) => c.checked).length;
+        badge.textContent = count > 0 ? String(count) : '';
+      };
+      checks.forEach((c) => c.addEventListener('change', sync));
+      sync();
+    });
+  });
+</script>
+</body>
+</html>

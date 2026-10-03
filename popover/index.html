@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <!-- theme-preamble:v1 -->
+  <script>(function(){try{var t=localStorage.getItem('letbe-ds-dark-mode');if(t==='1')document.documentElement.setAttribute('data-theme','dark');else if(t==='0')document.documentElement.setAttribute('data-theme','light');}catch(e){}})();</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta data-lb-page="popover">
+  <title>Popover — letbe-ds</title>
+  <link rel="stylesheet" href="../tokens/theme.css">
+  <link rel="stylesheet" href="../tokens/fonts.css">
+  <link rel="stylesheet" href="../components/components.css">
+  <link rel="stylesheet" href="../components/theme-editor.css">
+  <link rel="stylesheet" href="../components/gallery.css">
+</head>
+<body data-lb-base="..">
+
+<main class="gallery-main">
+  <section class="gallery-section" id="popover">
+    <h1 class="gallery-section__title" style="font-size: var(--lb-t-heading-l-font-size); line-height: var(--lb-t-heading-l-line-height);">Popover</h1>
+    <p class="gallery-section__desc">Non-modal floating panel anchored to a trigger. Four positions: top, bottom, left, right. Use for quick supplementary info, tool panels, or simple actions that don't warrant a full modal. Dismisses on outside click, or on <kbd>Esc</kbd> while focus is inside <code class="lb-code">.lb-popover-host</code>.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>a11y (built in):</strong> <code class="lb-code">LB.Popover</code> wires the pair on init — the trigger gets <code class="lb-code">aria-haspopup="dialog"</code> + <code class="lb-code">aria-expanded</code> + <code class="lb-code">aria-controls</code> (the panel id is minted if you don't supply one), and the panel gets <code class="lb-code">role="dialog"</code> with <code class="lb-code">aria-modal="false"</code> — this one is deliberately non-modal. Focus is neither moved nor trapped: the panel follows its trigger in DOM order, so <kbd>Tab</kbd> walks straight into it, <kbd>Esc</kbd> closes while focus is anywhere inside <code class="lb-code">.lb-popover-host</code>, and a mousedown outside closes it. Opening is an opacity-only fade — nothing travels.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>Usage:</strong> Everything lives in one wrapper: <code class="lb-code">.lb-popover-host</code> with <code class="lb-code">data-lb-popover</code>, containing a <code class="lb-code">.lb-popover-trigger</code> (stack it with normal <code class="lb-code">.lb-btn</code> classes) followed by its <code class="lb-code">.lb-popover</code> panel with one position modifier (<code class="lb-code">.lb-popover--top/bottom/left/right</code>). Author the panel with inline <code class="lb-code">display:none</code> as the demo does — the stylesheet never hides it, and init's own hiding only lands at <code class="lb-code">DOMContentLoaded</code>; auto-init then wires the trigger click to toggle, with no ids to manage. It dispatches no CustomEvents and has no public open/close methods; the only JS hook is the <code class="lb-code">onOpenChange(open)</code> callback, so when you need to react, assign <code class="lb-code">host._lbPopover = new LB.Popover(host, { onOpenChange })</code> before DOMContentLoaded and the auto-init sweep will skip that host. <code class="lb-code">destroy()</code> removes the document-level outside-click listener when you tear the host down.</p>
+
+<hr class="gallery-desc-divider">
+
+
+<h2 class="gallery-section__title">Popover Demo</h2>
+    <div class="lb-popover-host" data-lb-popover>
+      <button class="lb-popover-trigger lb-btn lb-btn--secondary lb-btn--medium">Show Popover</button>
+      <div class="lb-popover lb-popover--bottom" style="display:none;">
+        <div class="lb-popover__header">Popover Title</div>
+        <div class="lb-popover__body">This is the popover content. Click the trigger or press Escape to close.</div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script src="../js/lb.js"></script>
+<script src="../js/slot-engine.js"></script>
+<script src="../js/theme-editor.js"></script>
+<script src="../js/token-exporter.js"></script>
+<script src="../js/gallery-layout.js"></script>
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <!-- theme-preamble:v1 -->
+  <script>(function(){try{var t=localStorage.getItem('letbe-ds-dark-mode');if(t==='1')document.documentElement.setAttribute('data-theme','dark');else if(t==='0')document.documentElement.setAttribute('data-theme','light');}catch(e){}})();</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta data-lb-page="chip">
+  <title>Chip — letbe-ds</title>
+  <link rel="stylesheet" href="../tokens/theme.css">
+  <link rel="stylesheet" href="../tokens/fonts.css">
+  <link rel="stylesheet" href="../components/components.css">
+  <link rel="stylesheet" href="../components/theme-editor.css">
+  <link rel="stylesheet" href="../components/gallery.css">
+</head>
+<body data-lb-base="..">
+
+<main class="gallery-main">
+  <section class="gallery-section" id="chip">
+    <h1 class="gallery-section__title" style="font-size: var(--lb-t-heading-l-font-size); line-height: var(--lb-t-heading-l-line-height);">Chip</h1>
+    <p class="gallery-section__desc">Compact, toggle-able tag — interactive by definition (pointer cursor, hover, selected state). For read-only descriptors that just label a thing, use Badge instead. Unselected chips take the neutral secondary-action style: per the accent principle, violet signals primary actions, links and state only. Selected chips take the quiet selection contract — <code class="lb-code">action-bg/fg/border-selected</code>, an accent-muted fill with accent text and border — the same reading as selected rows, tabs and date ranges. Clicking or pressing <kbd>Enter</kbd>/<kbd>Space</kbd> toggles selection; a leading check appears while selected — the <strong>×</strong> removal idiom lives only on Multi-Select field pills. Use for filter lists, tag selection, and multi-choice interfaces. Not for primary navigation.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>a11y (built in):</strong> toggle chips ship as <code class="lb-code">&lt;span&gt;</code>s, so init gives every non-<code class="lb-code">button</code> chip <code class="lb-code">role="button"</code>, <code class="lb-code">tabindex="0"</code> and a keydown handler that fires on <kbd>Enter</kbd> / <kbd>Space</kbd>; selection is conveyed programmatically via <code class="lb-code">aria-pressed</code>, written on init and re-synced on every toggle, because the quiet selected styling carries less weight than a filled one. The leading check is <code class="lb-code">aria-hidden</code> decoration, disabled chips return before any of that (no role, no tab stop, <code class="lb-code">pointer-events: none</code>), and focus draws the system <code class="lb-code">:focus-visible</code> outline.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>Usage:</strong> Load <code class="lb-code">js/lb.js</code> and every <code class="lb-code">.lb-chip</code> auto-inits at <code class="lb-code">LB.init()</code> (self-runs on <code class="lb-code">DOMContentLoaded</code>) — no data attribute, no constructor; author <code class="lb-code">&lt;span class="lb-chip"&gt;Label&lt;/span&gt;</code> and add <code class="lb-code">.lb-chip--selected</code> to pre-select. Never author the check yourself: init injects and removes <code class="lb-code">.lb-chip__check</code> as selection changes, and strips any legacy <code class="lb-code">.lb-chip__remove</code> button. Every toggle dispatches a bubbling <code class="lb-code">lb-chip-toggle</code> CustomEvent with <code class="lb-code">detail.selected</code> (boolean) — listen once on a container; there is no instance handle or method API, so state reads from the class. Chips inside <code class="lb-code">[data-lb-multi-select]</code> or <code class="lb-code">.lb-filter-bar</code> are deliberately skipped — those are removal pills owned by their field — as are <code class="lb-code">--disabled</code> chips.</p>
+
+<hr class="gallery-desc-divider">
+
+
+<h2 class="gallery-section__title">Chip Demo</h2>
+    <div class="gallery-label">Default</div>
+    <div class="gallery-row">
+      <span class="lb-chip">Design</span>
+      <span class="lb-chip">Development</span>
+      <span class="lb-chip">Marketing</span>
+      <span class="lb-chip">Research</span>
+    </div>
+    <div class="gallery-label">Pre-selected</div>
+    <div class="gallery-row">
+      <span class="lb-chip lb-chip--selected">React</span>
+      <span class="lb-chip lb-chip--selected">TypeScript</span>
+      <span class="lb-chip">Vue</span>
+      <span class="lb-chip">Svelte</span>
+    </div>
+    <div class="gallery-label">Disabled</div>
+    <div class="gallery-row">
+      <span class="lb-chip lb-chip--disabled">Unavailable</span>
+    </div>
+  </section>
+</main>
+
+<script src="../js/lb.js"></script>
+<script src="../js/slot-engine.js"></script>
+<script src="../js/theme-editor.js"></script>
+<script src="../js/token-exporter.js"></script>
+<script src="../js/gallery-layout.js"></script>
+</body>
+</html>

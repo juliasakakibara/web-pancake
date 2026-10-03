@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <!-- theme-preamble:v1 -->
+  <script>(function(){try{var t=localStorage.getItem('letbe-ds-dark-mode');if(t==='1')document.documentElement.setAttribute('data-theme','dark');else if(t==='0')document.documentElement.setAttribute('data-theme','light');}catch(e){}})();</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta data-lb-page="rating">
+  <title>Rating — letbe-ds</title>
+  <link rel="stylesheet" href="../tokens/theme.css">
+  <link rel="stylesheet" href="../tokens/fonts.css">
+  <link rel="stylesheet" href="../components/components.css">
+  <link rel="stylesheet" href="../components/theme-editor.css">
+  <link rel="stylesheet" href="../components/gallery.css">
+</head>
+<body data-lb-base="..">
+
+<main class="gallery-main">
+  <section class="gallery-section" id="rating">
+    <h1 class="gallery-section__title" style="font-size: var(--lb-t-heading-l-font-size); line-height: var(--lb-t-heading-l-line-height);">Rating</h1>
+    <p class="gallery-section__desc">Whole-step rating input — five stars by default. Built as a native <code class="lb-code">radiogroup</code> so screen readers and keyboard arrow keys behave like any radio set. Filled state swaps between paired icon variants (<code class="lb-code">star</code> ↔ <code class="lb-code">star-filled</code>, also <code class="lb-code">heart</code>, <code class="lb-code">thumbs-up</code>). Hover preview, sizes, and read-only / disabled states ship out of the box.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>a11y (built in):</strong> every item is a real <code class="lb-code">&lt;input type="radio"&gt;</code> sharing one <code class="lb-code">name</code>, hidden with <code class="lb-code">opacity: 0</code> rather than removed, so arrow-key roving, the single tab stop and form submission stay native and the glyphs ride along as <code class="lb-code">aria-hidden</code> decoration. Names are generated: each input gets an <code class="lb-code">aria-label</code> (<code class="lb-code">3 stars</code>, or the humanised icon name in <code class="lb-code">select</code> mode) and the group's <code class="lb-code">aria-label</code> is rewritten to <code class="lb-code">Rating: 3 of 5</code> on every change — a consumer-supplied label is left untouched. Interactive ratings are <code class="lb-code">role="radiogroup"</code>; <code class="lb-code">data-lb-readonly</code> switches to <code class="lb-code">role="img"</code> with the value in the label and disables the inputs (out of tab order), and <code class="lb-code">prefers-reduced-motion</code> drops the hover scale.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>Usage:</strong> Add <code class="lb-code">data-lb-rating</code> to a wrapper <code class="lb-code">div</code>. Configure with <code class="lb-code">data-lb-value</code>, <code class="lb-code">data-lb-count</code>, <code class="lb-code">data-lb-icon</code>, <code class="lb-code">data-lb-size</code>, <code class="lb-code">data-lb-readonly</code>, <code class="lb-code">data-lb-disabled</code>, <code class="lb-code">data-lb-mode</code>, <code class="lb-code">data-lb-icons</code>, <code class="lb-code">data-lb-clearable</code> and <code class="lb-code">data-lb-name</code>. Fires <code class="lb-code">lb-rating-change</code> with <code class="lb-code">{value}</code>.</p>
+
+    <hr class="gallery-desc-divider">
+
+    <!-- ────────────────── Default ────────────────── -->
+    <h2 class="gallery-section__title">Default — five stars, interactive</h2>
+    <p class="gallery-section__desc">Click or use Tab → arrow keys to set a rating. The chosen star and all preceding stars fill.</p>
+    <div class="gallery-row">
+      <div data-lb-rating></div>
+    </div>
+
+    <!-- ────────────────── With initial value ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">With initial value</h2>
+    <p class="gallery-section__desc">Set <code class="lb-code">data-lb-value</code> to seed the input.</p>
+    <div class="gallery-row">
+      <div data-lb-rating data-lb-value="3"></div>
+    </div>
+
+    <!-- ────────────────── Sizes ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Sizes</h2>
+    <p class="gallery-section__desc">Three sizes — same scale as buttons and form inputs.</p>
+    <div class="lb-stack">
+      <div data-lb-rating data-lb-value="4" data-lb-size="small"></div>
+      <div data-lb-rating data-lb-value="4" data-lb-size="medium"></div>
+      <div data-lb-rating data-lb-value="4" data-lb-size="large"></div>
+    </div>
+
+    <!-- ────────────────── Custom count ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Custom count — <code class="lb-code">data-lb-count</code></h2>
+    <p class="gallery-section__desc">Three-point scale for binary-ish feedback, ten-point scale for NPS-style surveys.</p>
+    <div class="lb-stack">
+      <div data-lb-rating data-lb-value="2" data-lb-count="3"></div>
+      <div data-lb-rating data-lb-value="7" data-lb-count="10" data-lb-size="small"></div>
+    </div>
+
+    <!-- ────────────────── Custom icon ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Custom icon — <code class="lb-code">data-lb-icon</code></h2>
+    <p class="gallery-section__desc">Pair an icon name like <code class="lb-code">heart</code> — the component swaps to the matching <code class="lb-code">-filled</code> variant on activation. Same cumulative behaviour as stars.</p>
+    <div class="gallery-row">
+      <div data-lb-rating data-lb-value="3" data-lb-icon="heart"></div>
+    </div>
+
+    <!-- ────────────────── Select mode — thumbs ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Pick one — <code class="lb-code">data-lb-mode="select"</code></h2>
+    <p class="gallery-section__desc">Switch to select mode and supply <code class="lb-code">data-lb-icons</code> (CSV). Each item gets its own glyph and only the chosen one highlights — perfect for thumbs-up/down feedback or any radio-style "pick one of these" question.</p>
+    <div class="lb-stack" style="max-width: 24rem;">
+      <div class="lb-label">Was this article helpful?</div>
+      <div class="lb-cluster" style="--gap: var(--lb-size-3x);">
+        <div data-lb-rating data-lb-mode="select" data-lb-icons="thumbs-down,thumbs-up" data-lb-size="large" aria-label="Was this article helpful?" id="thumbs-rating"></div>
+        <span class="lb-rating__value-text" id="thumbs-out">No feedback yet</span>
+      </div>
+    </div>
+    <script>
+      (function(){
+        const r = document.getElementById('thumbs-rating');
+        const out = document.getElementById('thumbs-out');
+        if (!r || !out) return;
+        r.addEventListener('lb-rating-change', (e) => {
+          out.textContent = e.detail.value === 1 ? 'Thanks — we\u2019ll improve' : 'Glad it helped';
+        });
+      })();
+    </script>
+
+    <!-- ────────────────── Toggle — single heart like ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Toggle — <code class="lb-code">data-lb-clearable</code></h2>
+    <p class="gallery-section__desc">Add <code class="lb-code">data-lb-clearable</code> so clicking the currently-selected item clears it. Combined with <code class="lb-code">data-lb-count="1"</code> and a paired icon like <code class="lb-code">heart</code>, you get a one-click like / unlike toggle. Works in any mode — handy for cumulative ratings where users want to remove their score.</p>
+    <div class="lb-stack" style="max-width: 24rem;">
+      <div class="lb-cluster" style="--gap: var(--lb-size-2x);">
+        <div data-lb-rating data-lb-count="1" data-lb-icon="heart" data-lb-clearable data-lb-size="large" id="like-rating"></div>
+        <span class="lb-rating__value-text" id="like-out">0 likes</span>
+      </div>
+    </div>
+    <script>
+      (function(){
+        const r = document.getElementById('like-rating');
+        const out = document.getElementById('like-out');
+        if (!r || !out) return;
+        let base = 247;
+        r.addEventListener('lb-rating-change', (e) => {
+          const liked = e.detail.value === 1;
+          out.textContent = `${base + (liked ? 1 : 0)} likes${liked ? ' · you liked this' : ''}`;
+        });
+      })();
+    </script>
+
+    <!-- ────────────────── Emoji satisfaction ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Emoji satisfaction (CSAT)</h2>
+    <p class="gallery-section__desc">Five-face survey scale (worst → best) reusing the bundled <code class="lb-code">angry</code>, <code class="lb-code">frown</code>, <code class="lb-code">meh</code>, <code class="lb-code">smile</code>, <code class="lb-code">laugh</code> icons. The selected face swaps to a filled variant — a soft tinted circle behind the features — so the active state reads clearly while keeping eyes and mouth recognisable.</p>
+    <div class="lb-stack" style="max-width: 28rem;">
+      <div class="lb-label">How was your experience?</div>
+      <div data-lb-rating data-lb-mode="select" data-lb-icons="angry,frown,meh,smile,laugh" data-lb-size="large" aria-label="How was your experience?" id="csat-rating"></div>
+      <p class="lb-hint" id="csat-out">Pick one</p>
+    </div>
+    <script>
+      (function(){
+        const r = document.getElementById('csat-rating');
+        const out = document.getElementById('csat-out');
+        if (!r || !out) return;
+        const labels = ['Very dissatisfied', 'Dissatisfied', 'Neutral', 'Satisfied', 'Very satisfied'];
+        r.addEventListener('lb-rating-change', (e) => {
+          out.textContent = labels[e.detail.value - 1] || 'Pick one';
+        });
+      })();
+    </script>
+
+    <!-- ────────────────── Read-only display ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Read-only — display only</h2>
+    <p class="gallery-section__desc">Add <code class="lb-code">data-lb-readonly</code> for compact display in lists, cards, and review summaries. Pair with a value text span for the numeric form.</p>
+    <div class="lb-stack">
+      <div class="lb-cluster" style="--gap: var(--lb-size-2x);">
+        <div data-lb-rating data-lb-value="4" data-lb-readonly data-lb-size="small"></div>
+        <span class="lb-rating__value-text">4.0 · 124 reviews</span>
+      </div>
+      <div class="lb-cluster" style="--gap: var(--lb-size-2x);">
+        <div data-lb-rating data-lb-value="5" data-lb-readonly data-lb-size="small" data-lb-icon="heart"></div>
+        <span class="lb-rating__value-text">Fan favourite</span>
+      </div>
+    </div>
+
+    <!-- ────────────────── Disabled ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Disabled</h2>
+    <p class="gallery-section__desc">Use when the field is part of a form that is read-only or pending some other state. Hover and click are disabled; visual is dimmed.</p>
+    <div class="gallery-row">
+      <div data-lb-rating data-lb-value="3" data-lb-disabled></div>
+    </div>
+
+    <!-- ────────────────── In a form ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">In a form</h2>
+    <p class="gallery-section__desc">The component renders native radio inputs internally. Set <code class="lb-code">data-lb-name</code> so they submit under that name. Output below updates live to demonstrate the <code class="lb-code">lb-rating-change</code> event.</p>
+    <form class="lb-stack" id="rating-form" style="max-width: 32rem;">
+      <div class="lb-label">How would you rate the experience?</div>
+      <div data-lb-rating data-lb-name="experience" data-lb-size="large" aria-label="How would you rate the experience?" id="form-rating"></div>
+      <p class="lb-hint" id="form-rating-out">No rating yet</p>
+    </form>
+    <script>
+      (function(){
+        const r = document.getElementById('form-rating');
+        const out = document.getElementById('form-rating-out');
+        if (!r || !out) return;
+        r.addEventListener('lb-rating-change', (e) => {
+          out.textContent = `Selected: ${e.detail.value} of 5`;
+        });
+      })();
+    </script>
+  </section>
+</main>
+
+<script src="../js/lb.js"></script>
+<script src="../js/slot-engine.js"></script>
+<script src="../js/theme-editor.js"></script>
+<script src="../js/token-exporter.js"></script>
+<script src="../js/gallery-layout.js"></script>
+</body>
+</html>

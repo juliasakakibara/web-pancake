@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <!-- theme-preamble:v1 -->
+  <script>(function(){try{var t=localStorage.getItem('letbe-ds-dark-mode');if(t==='1')document.documentElement.setAttribute('data-theme','dark');else if(t==='0')document.documentElement.setAttribute('data-theme','light');}catch(e){}})();</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta data-lb-page="button">
+  <title>Button — letbe-ds</title>
+  <link rel="stylesheet" href="../tokens/theme.css">
+  <link rel="stylesheet" href="../tokens/fonts.css">
+  <link rel="stylesheet" href="../components/components.css">
+  <link rel="stylesheet" href="../components/theme-editor.css">
+  <link rel="stylesheet" href="../components/gallery.css">
+</head>
+<body data-lb-base="..">
+
+<main class="gallery-main">
+  <section class="gallery-section" id="button">
+
+    <h1 class="gallery-section__title" style="font-size: var(--lb-t-heading-l-font-size); line-height: var(--lb-t-heading-l-line-height);">Button</h1>
+    <p class="gallery-section__desc">Action trigger. Two components: <code class="lb-code">.lb-btn</code> for buttons with text labels (with optional leading/trailing icon and count badge), and <code class="lb-code">.lb-icon-btn</code> for icon-only buttons that need an <code class="lb-code">aria-label</code>.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>a11y (built in):</strong> both components are native <code class="lb-code">&lt;button&gt;</code> elements — tab order, <kbd>Enter</kbd>/<kbd>Space</kbd> activation and disabled semantics come from the platform, not from JS. Keyboard focus draws a <code class="lb-code">:focus-visible</code> outline in <code class="lb-code">--lb-border-focus</code> (mouse clicks stay clean), and every hover/pressed rule is guarded with <code class="lb-code">:not(:disabled):not([aria-disabled="true"])</code>, so both spellings of disabled read as inactive. Icon glyphs are <code class="lb-code">aria-hidden="true"</code>; <code class="lb-code">.lb-icon-btn</code> has no visible text so it always carries an <code class="lb-code">aria-label</code>, while the count pill is plain text inside the button and therefore joins its accessible name.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>Usage:</strong> Primary for the main path (one per screen/group). Secondary for alternatives. Ghost for low-emphasis affordances. Danger for destructive actions. All slots compose freely — icon, label, and count badge can appear together.</p>
+
+    <hr class="gallery-desc-divider">
+
+    <!-- ─────────────────────────── Variants ─────────────────────────── -->
+    <h2 class="gallery-section__title">Variants</h2>
+    <p class="gallery-section__desc">Four visual variants — always paired with a size class (<code class="lb-code">.lb-btn .lb-btn--secondary .lb-btn--medium</code>); a bare <code class="lb-code">.lb-btn</code> renders collapsed. Pick by emphasis: <strong>primary</strong> for the main path, <strong>secondary</strong> for alternatives, <strong>ghost</strong> for low-emphasis or in-context actions, <strong>danger</strong> for destructive actions. <code class="lb-code">--neutral</code> and <code class="lb-code">--subtle</code> are back-compat aliases that render as ghost.</p>
+    <div class="gallery-row">
+      <button class="lb-btn lb-btn--primary lb-btn--medium">Primary</button>
+      <button class="lb-btn lb-btn--secondary lb-btn--medium">Secondary</button>
+      <button class="lb-btn lb-btn--ghost lb-btn--medium">Ghost</button>
+      <button class="lb-btn lb-btn--danger lb-btn--medium">Danger</button>
+    </div>
+
+    <!-- ─────────────────────────── Accent slots ─────────────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Second and third accent</h2>
+    <p class="gallery-section__desc"><code class="lb-code">--accent-2</code> and <code class="lb-code">--accent-3</code> are filled actions wearing the theme's extra signal slots — a premium tier, a promotional moment, a distinct product surface. The slots ship <strong>dormant</strong>: until a theme fills them (Theme Editor → Color), both variants render identically to <code class="lb-code">--primary</code> — that is intended, not a bug. Fill slot 2 with a color and every <code class="lb-code">--accent-2</code> button re-paints, contrast-measured, while primary stays untouched. Accent is a signal: use these only when the second meaning is real, and never as a substitute for the neutral secondary action.</p>
+    <div class="gallery-row">
+      <button class="lb-btn lb-btn--primary lb-btn--medium">Primary</button>
+      <button class="lb-btn lb-btn--accent-2 lb-btn--medium">Accent-2</button>
+      <button class="lb-btn lb-btn--accent-3 lb-btn--medium">Accent-3</button>
+    </div>
+
+    <!-- ─────────────────────────── Sizes ─────────────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Sizes</h2>
+    <p class="gallery-section__desc">Two sizes: <strong>medium</strong> (40px, default — pairs with inputs) and <strong>small</strong> (32px — for dense toolbars or inline actions).</p>
+    <div class="gallery-label">Medium</div>
+    <div class="gallery-row">
+      <button class="lb-btn lb-btn--primary lb-btn--medium">Primary</button>
+      <button class="lb-btn lb-btn--secondary lb-btn--medium">Secondary</button>
+      <button class="lb-btn lb-btn--ghost lb-btn--medium">Ghost</button>
+      <button class="lb-btn lb-btn--danger lb-btn--medium">Danger</button>
+    </div>
+    <div class="gallery-label" style="margin-top: var(--lb-size-3x);">Small</div>
+    <div class="gallery-row">
+      <button class="lb-btn lb-btn--primary lb-btn--small">Primary</button>
+      <button class="lb-btn lb-btn--secondary lb-btn--small">Secondary</button>
+      <button class="lb-btn lb-btn--ghost lb-btn--small">Ghost</button>
+      <button class="lb-btn lb-btn--danger lb-btn--small">Danger</button>
+    </div>
+
+    <!-- ─────────────────────────── With leading icon ─────────────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">With leading icon</h2>
+    <p class="gallery-section__desc">Icon BEFORE label — the most common composition. Use <code class="lb-code">.lb-btn__icon</code> as the first child. Reads as "icon + verb": "+ Add item", "✎ Edit". Reinforces the action's intent.</p>
+    <div class="gallery-row">
+      <button class="lb-btn lb-btn--primary lb-btn--medium">
+        <span class="lb-btn__icon" aria-hidden="true" data-lb-icon="plus"></span>
+        Add item
+      </button>
+      <button class="lb-btn lb-btn--secondary lb-btn--medium">
+        <span class="lb-btn__icon" aria-hidden="true" data-lb-icon="pencil"></span>
+        Edit
+      </button>
+      <button class="lb-btn lb-btn--ghost lb-btn--medium">
+        <span class="lb-btn__icon" aria-hidden="true" data-lb-icon="filter"></span>
+        Filter
+      </button>
+      <button class="lb-btn lb-btn--danger lb-btn--medium">
+        <span class="lb-btn__icon" aria-hidden="true" data-lb-icon="trash-2"></span>
+        Delete
+      </button>
+    </div>
+    <div class="gallery-row" style="margin-top: var(--lb-size-3x);">
+      <button class="lb-btn lb-btn--primary lb-btn--small">
+        <span class="lb-btn__icon" aria-hidden="true" data-lb-icon="plus"></span>
+        Add
+      </button>
+      <button class="lb-btn lb-btn--secondary lb-btn--small">
+        <span class="lb-btn__icon" aria-hidden="true" data-lb-icon="download"></span>
+        Export
+      </button>
+    </div>
+
+    <!-- ─────────────────────────── With trailing icon ─────────────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">With trailing icon</h2>
+    <p class="gallery-section__desc">Icon AFTER label — different intent. Use for "continue", "open menu", "expand": the icon points to where the action takes the user, not what the action does. Same <code class="lb-code">.lb-btn__icon</code> slot, just placed after the label text.</p>
+    <div class="gallery-row">
+      <button class="lb-btn lb-btn--primary lb-btn--medium">
+        Continue
+        <span class="lb-btn__icon" aria-hidden="true" data-lb-icon="arrow-right"></span>
+      </button>
+      <button class="lb-btn lb-btn--secondary lb-btn--medium">
+        More options
+        <span class="lb-btn__icon" aria-hidden="true" data-lb-icon="chevron-down"></span>
+      </button>
+      <button class="lb-btn lb-btn--ghost lb-btn--medium">
+        View all
+        <span class="lb-btn__icon" aria-hidden="true" data-lb-icon="external-link"></span>
+      </button>
+    </div>
+
+    <!-- ─────────────────────────── With count badge ─────────────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">With count badge</h2>
+    <p class="gallery-section__desc">Optional trailing pill carrying a number. Filters, notifications, "Reset (3)" affordances, multi-select counters. Uses the shared <a class="lb-link" href="../counter/"><code class="lb-code">.lb-counter</code></a> component with the <code class="lb-code">--on-btn</code> variant so the pill inherits the host button's variant colour pair (inverted contrast: pill bg = button text colour, digit = button bg colour). Empty counter auto-hides via <code class="lb-code">:empty { display: none }</code> — blank the <code class="lb-code">textContent</code> to remove the pill without rebuilding markup.</p>
+    <div class="gallery-row">
+      <button class="lb-btn lb-btn--primary lb-btn--medium">
+        Notifications
+        <span class="lb-counter lb-counter--on-btn">12</span>
+      </button>
+      <button class="lb-btn lb-btn--secondary lb-btn--medium">
+        Reset all
+        <span class="lb-counter lb-counter--on-btn">3</span>
+      </button>
+      <button class="lb-btn lb-btn--ghost lb-btn--medium">
+        Filters
+        <span class="lb-counter lb-counter--on-btn">8</span>
+      </button>
+      <button class="lb-btn lb-btn--danger lb-btn--medium">
+        Errors
+        <span class="lb-counter lb-counter--on-btn">5</span>
+      </button>
+    </div>
+    <div class="gallery-row" style="margin-top: var(--lb-size-3x);">
+      <button class="lb-btn lb-btn--primary lb-btn--small">
+        Apply
+        <span class="lb-counter lb-counter--on-btn">99+</span>
+      </button>
+      <button class="lb-btn lb-btn--secondary lb-btn--small">
+        Reset
+        <span class="lb-counter lb-counter--on-btn">2</span>
+      </button>
+      <button class="lb-btn lb-btn--secondary lb-btn--small" disabled>
+        Reset
+        <span class="lb-counter lb-counter--on-btn"></span>
+      </button>
+    </div>
+    <p class="gallery-section__desc" style="margin-top: var(--lb-size-2x); max-width: 50rem; font-size: var(--lb-t-body-s-font-size);">The third small button shows the empty-count behaviour — pair with <code class="lb-code">disabled</code> on the host button to make the control read as inactive.</p>
+
+    <!-- ─────────────────────────── With icon and count ─────────────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">With icon and count</h2>
+    <p class="gallery-section__desc">All three slots together: leading icon, label, trailing count. Useful for filter pickers ("⚲ Issues 5"), inbox tabs ("📥 Inbox 12"), or any control that benefits from both an icon mnemonic and a numeric badge.</p>
+    <div class="gallery-row">
+      <button class="lb-btn lb-btn--primary lb-btn--medium">
+        <span class="lb-btn__icon" aria-hidden="true" data-lb-icon="bell"></span>
+        Notifications
+        <span class="lb-counter lb-counter--on-btn">12</span>
+      </button>
+      <button class="lb-btn lb-btn--secondary lb-btn--medium">
+        <span class="lb-btn__icon" aria-hidden="true" data-lb-icon="filter"></span>
+        Filters
+        <span class="lb-counter lb-counter--on-btn">3</span>
+      </button>
+      <button class="lb-btn lb-btn--ghost lb-btn--medium">
+        <span class="lb-btn__icon" aria-hidden="true" data-lb-icon="inbox"></span>
+        Inbox
+        <span class="lb-counter lb-counter--on-btn">8</span>
+      </button>
+    </div>
+
+    <!-- ─────────────────────────── States ─────────────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">States</h2>
+    <p class="gallery-section__desc">Buttons inherit hover, active, and focus styles automatically. The <code class="lb-code">disabled</code> attribute is the only state authors set explicitly — applies to all variants and all compositions. <code class="lb-code">aria-disabled="true"</code> renders identically and keeps the button in the tab order, but the CSS sets <code class="lb-code">pointer-events: none</code> on it too, so it is not a way to keep a disabled-looking button clickable.</p>
+    <div class="gallery-label">Disabled — all variants</div>
+    <div class="gallery-row">
+      <button class="lb-btn lb-btn--primary lb-btn--medium" disabled>Primary</button>
+      <button class="lb-btn lb-btn--secondary lb-btn--medium" disabled>Secondary</button>
+      <button class="lb-btn lb-btn--ghost lb-btn--medium" disabled>Ghost</button>
+      <button class="lb-btn lb-btn--danger lb-btn--medium" disabled>Danger</button>
+    </div>
+    <div class="gallery-label" style="margin-top: var(--lb-size-3x);">Disabled with icon and count</div>
+    <div class="gallery-row">
+      <button class="lb-btn lb-btn--primary lb-btn--medium" disabled>
+        <span class="lb-btn__icon" aria-hidden="true" data-lb-icon="plus"></span>
+        Add item
+      </button>
+      <button class="lb-btn lb-btn--secondary lb-btn--medium" disabled>
+        Filters
+        <span class="lb-counter lb-counter--on-btn">3</span>
+      </button>
+    </div>
+
+    <!-- ─────────────────────────── Icon-only — lb-icon-btn ─────────────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Icon-only — <code class="lb-code">.lb-icon-btn</code></h2>
+    <p class="gallery-section__desc">Separate component for icon-only buttons. Square shape, fixed box dimensions (40px medium, 32px small) with the icon glyph centered (24px medium, 16px small). <strong>Always require an <code class="lb-code">aria-label</code></strong> — there's no visible text, so assistive tech needs the verb.</p>
+    <div class="gallery-label">Medium — all variants</div>
+    <div class="gallery-row">
+      <button class="lb-icon-btn lb-icon-btn--primary lb-icon-btn--medium" aria-label="Add">
+        <span data-lb-icon="plus" aria-hidden="true"></span>
+      </button>
+      <button class="lb-icon-btn lb-icon-btn--secondary lb-icon-btn--medium" aria-label="Edit">
+        <span data-lb-icon="pencil" aria-hidden="true"></span>
+      </button>
+      <button class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--medium" aria-label="Settings">
+        <span data-lb-icon="settings" aria-hidden="true"></span>
+      </button>
+      <button class="lb-icon-btn lb-icon-btn--danger lb-icon-btn--medium" aria-label="Delete">
+        <span data-lb-icon="trash-2" aria-hidden="true"></span>
+      </button>
+      <button class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--medium" aria-label="Close" disabled>
+        <span data-lb-icon="x" aria-hidden="true"></span>
+      </button>
+    </div>
+    <div class="gallery-label" style="margin-top: var(--lb-size-3x);">Small — all variants</div>
+    <div class="gallery-row">
+      <button class="lb-icon-btn lb-icon-btn--primary lb-icon-btn--small" aria-label="Add">
+        <span data-lb-icon="plus" aria-hidden="true"></span>
+      </button>
+      <button class="lb-icon-btn lb-icon-btn--secondary lb-icon-btn--small" aria-label="Edit">
+        <span data-lb-icon="pencil" aria-hidden="true"></span>
+      </button>
+      <button class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--small" aria-label="Settings">
+        <span data-lb-icon="settings" aria-hidden="true"></span>
+      </button>
+      <button class="lb-icon-btn lb-icon-btn--danger lb-icon-btn--small" aria-label="Delete">
+        <span data-lb-icon="trash-2" aria-hidden="true"></span>
+      </button>
+    </div>
+
+    <!-- ─────────────────────────── Button group ─────────────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Button group — <code class="lb-code">.lb-btn-group</code></h2>
+    <p class="gallery-section__desc">Layout wrapper that aligns multiple buttons with consistent spacing. Variants: <code class="lb-code">--start</code>, <code class="lb-code">--end</code>, <code class="lb-code">--center</code>, <code class="lb-code">--justify</code> (spread), <code class="lb-code">--stack</code> (vertical). Use for modal footers, toolbar actions, paired CTAs.</p>
+    <div class="gallery-label">Start (left-aligned)</div>
+    <div class="lb-btn-group lb-btn-group--start">
+      <button class="lb-btn lb-btn--ghost lb-btn--medium">Cancel</button>
+      <button class="lb-btn lb-btn--secondary lb-btn--medium">Save draft</button>
+      <button class="lb-btn lb-btn--primary lb-btn--medium">Publish</button>
+    </div>
+    <div class="gallery-label" style="margin-top: var(--lb-size-3x);">End (right-aligned — common for modal footers)</div>
+    <div class="lb-btn-group lb-btn-group--end">
+      <button class="lb-btn lb-btn--ghost lb-btn--medium">Discard</button>
+      <button class="lb-btn lb-btn--secondary lb-btn--medium">Preview</button>
+      <button class="lb-btn lb-btn--primary lb-btn--medium">Submit</button>
+    </div>
+
+  </section>
+</main>
+
+<script src="../js/lb.js"></script>
+<script src="../js/slot-engine.js"></script>
+<script src="../js/theme-editor.js"></script>
+<script src="../js/token-exporter.js"></script>
+<script src="../js/gallery-layout.js"></script>
+</body>
+</html>

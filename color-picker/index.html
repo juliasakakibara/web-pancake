@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <!-- theme-preamble:v1 -->
+  <script>(function(){try{var t=localStorage.getItem('letbe-ds-dark-mode');if(t==='1')document.documentElement.setAttribute('data-theme','dark');else if(t==='0')document.documentElement.setAttribute('data-theme','light');}catch(e){}})();</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta data-lb-page="color-picker">
+  <title>Color Picker — letbe-ds</title>
+  <link rel="stylesheet" href="../tokens/theme.css">
+  <link rel="stylesheet" href="../tokens/fonts.css">
+  <link rel="stylesheet" href="../components/components.css">
+  <link rel="stylesheet" href="../components/theme-editor.css">
+  <link rel="stylesheet" href="../components/gallery.css">
+</head>
+<body data-lb-base="..">
+
+<main class="gallery-main">
+  <section class="gallery-section" id="color-picker">
+    <h1 class="gallery-section__title" style="font-size: var(--lb-t-heading-l-font-size); line-height: var(--lb-t-heading-l-line-height);">Color Picker</h1>
+    <p class="gallery-section__desc">Saturation × value surface plus hue and optional alpha sliders. Below the picker, a HEX / RGB / HSL toggle swaps the bottom input row — type a hex string, the three RGB channels, or H/S/L directly. Hand-rolled, no dependencies. Reuses the existing <a class="lb-link" href="../popover/">Popover</a> for the trigger-swatch dropdown and <a class="lb-link" href="../input/">Input</a> for the text fields. Optional preset row and a native EyeDropper button when the browser supports it (Chrome and Edge today; elsewhere the button is not rendered).</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>a11y (built in):</strong> the saturation surface, hue rail and alpha rail are each <code class="lb-code">role="slider"</code> with <code class="lb-code">tabindex="0"</code> and an <code class="lb-code">aria-label</code>; arrow keys move them (<kbd>Shift</kbd> for the coarse step) and every change rewrites <code class="lb-code">aria-valuenow</code> on hue/alpha and <code class="lb-code">aria-valuetext</code> on the surface, so the value is readable without seeing the gradient. Each hex and numeric field carries its own <code class="lb-code">aria-label</code>, and the sync pass skips whatever field holds focus — a value is never reformatted mid-edit. In popover mode the trigger is a <code class="lb-code">button[aria-haspopup=dialog][aria-expanded]</code> and the panel a named <code class="lb-code">role="dialog"</code> that <kbd>Esc</kbd> or an outside click closes.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>Usage:</strong> <code class="lb-code">&lt;div data-lb-color-picker data-lb-value="#7c3aed"&gt;&lt;/div&gt;</code>. Add <code class="lb-code">data-lb-popover</code> for the trigger-swatch dropdown variant, <code class="lb-code">data-lb-alpha</code> for the alpha slider (and an A column in RGB / HSL modes), <code class="lb-code">data-lb-presets</code> (CSV) for a preset row.</p>
+
+    <hr class="gallery-desc-divider">
+
+    <!-- ────────────────── Default ────────────────── -->
+    <h2 class="gallery-section__title">Default — inline with format toggle</h2>
+    <p class="gallery-section__desc">Drag the surface to set saturation and brightness, the hue rail for color, or use the HEX / RGB / HSL toggle to type values in the format your codebase uses. Keyboard: arrow keys on each surface (<kbd>Shift</kbd> for the coarse step), <kbd>Enter</kbd> on the hex field, and the numeric fields apply as you type.</p>
+    <div style="max-width: 18rem;">
+      <div data-lb-color-picker data-lb-value="#7c3aed"></div>
+    </div>
+
+    <!-- ────────────────── Popover trigger ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Popover trigger — <code class="lb-code">data-lb-popover</code></h2>
+    <p class="gallery-section__desc">Compact swatch button that opens the picker in a Popover. Same picker UI inside; the trigger lines up with form controls in a settings row.</p>
+    <div class="lb-cluster" style="--gap: var(--lb-size-3x);">
+      <div class="lb-label">Brand color</div>
+      <div data-lb-color-picker data-lb-popover data-lb-value="#7c3aed"></div>
+    </div>
+
+    <!-- ────────────────── With alpha ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">With alpha — <code class="lb-code">data-lb-alpha</code></h2>
+    <p class="gallery-section__desc">Adds an alpha slider beneath the hue. Accepts <code class="lb-code">rgba(…)</code> or 8-digit hex (<code class="lb-code">#rrggbbaa</code>) on input. The trigger swatch shows the checkerboard so transparency reads even at small sizes.</p>
+    <div style="max-width: 18rem;">
+      <div data-lb-color-picker data-lb-alpha data-lb-value="rgba(124, 58, 237, 0.7)"></div>
+    </div>
+
+    <!-- ────────────────── With presets ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">With presets — <code class="lb-code">data-lb-presets</code></h2>
+    <p class="gallery-section__desc">A CSV of swatches under the picker — handy for brand palettes, status colors, or recently used.</p>
+    <div style="max-width: 18rem;">
+      <div data-lb-color-picker
+           data-lb-value="#22c55e"
+           data-lb-presets="#000000,#ffffff,#7c3aed,#06b6d4,#22c55e,#f59e0b,#ef4444,#3b82f6"></div>
+    </div>
+
+    <!-- ────────────────── Live event output ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Event listener — live output</h2>
+    <p class="gallery-section__desc">Listens for <code class="lb-code">lb-color-change</code> and prints all four formats (hex, rgb, rgba, hsl) you can use in your application.</p>
+    <div class="lb-cluster" style="--gap: var(--lb-size-6x); align-items: flex-start;">
+      <div style="width: 18rem;">
+        <div data-lb-color-picker data-lb-alpha data-lb-presets="#7c3aed,#06b6d4,#22c55e,#f59e0b,#ef4444" data-lb-value="#7c3aed" id="event-cp"></div>
+      </div>
+      <pre id="event-out" class="lb-card lb-card--padded" style="margin: 0; font-family: var(--lb-font-family-3); font-size: var(--lb-t-body-s-font-size); white-space: pre-wrap;"></pre>
+    </div>
+    <script>
+      (function() {
+        const cp = document.getElementById('event-cp');
+        const out = document.getElementById('event-out');
+        if (!cp || !out) return;
+        const fmt = (d) => `hex:  ${d.hex}
+rgb:  rgb(${d.rgb.r}, ${d.rgb.g}, ${d.rgb.b})
+rgba: ${d.rgba}
+hsl:  hsl(${d.hsl.h}, ${d.hsl.s}%, ${d.hsl.l}%)
+alpha: ${d.rgb.a}`;
+        cp.addEventListener('lb-color-change', (e) => { out.textContent = fmt(e.detail); });
+      })();
+    </script>
+
+    <!-- ────────────────── In a Card / form ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">In a settings card</h2>
+    <p class="gallery-section__desc">Popover variant in a typical settings row — label on the left, picker trigger on the right, hint underneath.</p>
+    <div class="lb-card lb-card--padded" style="max-width: 32rem;">
+      <div class="lb-stack">
+        <div class="lb-cluster" style="justify-content: space-between;">
+          <div>
+            <div class="lb-label">Accent color</div>
+            <div class="lb-hint" style="margin-top: var(--lb-size-1x);">Used for buttons and links across the app.</div>
+          </div>
+          <div data-lb-color-picker data-lb-popover data-lb-value="#7c3aed"></div>
+        </div>
+        <div class="lb-cluster" style="justify-content: space-between;">
+          <div>
+            <div class="lb-label">Banner background</div>
+            <div class="lb-hint" style="margin-top: var(--lb-size-1x);">Optional — leave transparent to inherit page background.</div>
+          </div>
+          <div data-lb-color-picker data-lb-popover data-lb-alpha data-lb-value="rgba(6, 182, 212, 0.3)"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script src="../js/lb.js"></script>
+<script src="../js/slot-engine.js"></script>
+<script src="../js/theme-editor.js"></script>
+<script src="../js/token-exporter.js"></script>
+<script src="../js/gallery-layout.js"></script>
+</body>
+</html>

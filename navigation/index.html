@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <!-- theme-preamble:v1 -->
+  <script>(function(){try{var t=localStorage.getItem('letbe-ds-dark-mode');if(t==='1')document.documentElement.setAttribute('data-theme','dark');else if(t==='0')document.documentElement.setAttribute('data-theme','light');}catch(e){}})();</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta data-lb-page="navigation">
+  <title>Navigation — letbe-ds</title>
+  <link rel="stylesheet" href="../tokens/theme.css">
+  <link rel="stylesheet" href="../tokens/fonts.css">
+  <link rel="stylesheet" href="../components/components.css">
+  <link rel="stylesheet" href="../components/theme-editor.css">
+  <link rel="stylesheet" href="../components/gallery.css">
+</head>
+<body data-lb-base="..">
+
+<main class="gallery-main">
+  <section class="gallery-section" id="navigation">
+    <h1 class="gallery-section__title" style="font-size: var(--lb-t-heading-l-font-size); line-height: var(--lb-t-heading-l-line-height);">Navigation</h1>
+    <p class="gallery-section__desc">App-level navigation. Two variants: horizontal (top app bar, brand + items + actions, underline marks the active page) and vertical (sidebar, sectioned groups, left bar marks the active page). Items support optional leading icons and a trailing notification badge. Vertical variant has a collapsed icon-only mode for compact app shells.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>a11y (built in):</strong> each variant is a real <code class="lb-code">&lt;nav aria-label&gt;</code> landmark, and the current page is marked twice — <code class="lb-code">.lb-nav__item--active</code> for the eye, <code class="lb-code">aria-current="page"</code> for the screen reader (the demo script moves both together). Unavailable entries render as <code class="lb-code">&lt;span aria-disabled="true"&gt;</code> instead of <code class="lb-code">&lt;a&gt;</code>, so they leave the tab order; icons and the brand mark are <code class="lb-code">aria-hidden</code> / <code class="lb-code">alt=""</code>; items take a <code class="lb-code">:focus-visible</code> outline. In <code class="lb-code">--collapsed</code> the labels are <code class="lb-code">display: none</code>, which drops them from the accessibility tree — each item then needs a <code class="lb-code">title</code> (as the demo does) to keep an accessible name.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>Usage:</strong> <code class="lb-code">&lt;nav class="lb-nav lb-nav--horizontal"&gt;</code> or <code class="lb-code">--vertical</code>. Each item is <code class="lb-code">&lt;a class="lb-nav__item"&gt;</code> with optional <code class="lb-code">.lb-nav__item-icon</code>, <code class="lb-code">.lb-nav__item-label</code>, <code class="lb-code">.lb-nav__item-badge</code>; render an unavailable entry as <code class="lb-code">&lt;span class="lb-nav__item lb-nav__item--disabled" aria-disabled="true"&gt;</code> instead of <code class="lb-code">&lt;a&gt;</code>. Group items in vertical sidebars with <code class="lb-code">&lt;li class="lb-nav__group"&gt;</code> + <code class="lb-code">.lb-nav__group-label</code>; that label is a plain <code class="lb-code">&lt;span&gt;</code> heading, so nothing in the markup ties it to the items beneath it. Add <code class="lb-code">--collapsed</code> for icon-only mode. Mark active page with <code class="lb-code">.lb-nav__item--active</code> + <code class="lb-code">aria-current="page"</code>.</p>
+
+    <hr class="gallery-desc-divider">
+
+    <!-- ────────────────── Horizontal ────────────────── -->
+    <h2 class="gallery-section__title">Horizontal — top app bar</h2>
+    <p class="gallery-section__desc">Brand on the left, navigation items in the middle, actions slot on the right (auth buttons, user menu, search). Active item gets a brand underline so the current location reads at a glance.</p>
+    <nav class="lb-nav lb-nav--horizontal" aria-label="Demo top nav">
+      <a class="lb-nav__brand" href="#">
+        <img src="../assets/brand/letbe-logo-square.svg" class="lb-nav__brand-mark" alt="" aria-hidden="true">
+        <span>letbe-ds</span>
+      </a>
+      <ul class="lb-nav__list">
+        <li><a class="lb-nav__item lb-nav__item--active" href="#" aria-current="page"><span class="lb-nav__item-label">Dashboard</span></a></li>
+        <li><a class="lb-nav__item" href="#"><span class="lb-nav__item-label">Projects</span></a></li>
+        <li><a class="lb-nav__item" href="#"><span class="lb-nav__item-label">Inbox</span><span class="lb-nav__item-badge">12</span></a></li>
+        <li><a class="lb-nav__item" href="#"><span class="lb-nav__item-label">Settings</span></a></li>
+        <li><span class="lb-nav__item lb-nav__item--disabled" aria-disabled="true"><span class="lb-nav__item-label">Billing</span></span></li>
+      </ul>
+      <div class="lb-nav__actions">
+        <button class="lb-btn lb-btn--ghost lb-btn--small">Sign in</button>
+        <button class="lb-btn lb-btn--primary lb-btn--small">Sign up</button>
+      </div>
+    </nav>
+
+    <!-- ────────────────── Vertical ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Vertical — sidebar with sections</h2>
+    <p class="gallery-section__desc">Sidebar pattern for app shells. Brand at top, sectioned groups labelled below, optional actions at the bottom. Active item gets a left bar plus brand-tinted background. Items can carry trailing badges for counts.</p>
+    <nav class="lb-nav lb-nav--vertical" aria-label="Demo sidebar" style="height: 480px;">
+      <a class="lb-nav__brand" href="#">
+        <img src="../assets/brand/letbe-logo-square.svg" class="lb-nav__brand-mark" alt="" aria-hidden="true">
+        <span>letbe-ds</span>
+      </a>
+      <ul class="lb-nav__list">
+        <li class="lb-nav__group">
+          <span class="lb-nav__group-label">Workspace</span>
+          <a class="lb-nav__item lb-nav__item--active" href="#" aria-current="page">
+            <span class="lb-nav__item-icon" data-lb-icon="home" aria-hidden="true"></span>
+            <span class="lb-nav__item-label">Dashboard</span>
+          </a>
+          <a class="lb-nav__item" href="#">
+            <span class="lb-nav__item-icon" data-lb-icon="folder" aria-hidden="true"></span>
+            <span class="lb-nav__item-label">Projects</span>
+            <span class="lb-nav__item-badge">3</span>
+          </a>
+          <a class="lb-nav__item" href="#">
+            <span class="lb-nav__item-icon" data-lb-icon="inbox" aria-hidden="true"></span>
+            <span class="lb-nav__item-label">Inbox</span>
+            <span class="lb-nav__item-badge">12</span>
+          </a>
+        </li>
+        <li class="lb-nav__group">
+          <span class="lb-nav__group-label">Account</span>
+          <a class="lb-nav__item" href="#">
+            <span class="lb-nav__item-icon" data-lb-icon="user" aria-hidden="true"></span>
+            <span class="lb-nav__item-label">Profile</span>
+          </a>
+          <a class="lb-nav__item" href="#">
+            <span class="lb-nav__item-icon" data-lb-icon="settings" aria-hidden="true"></span>
+            <span class="lb-nav__item-label">Settings</span>
+          </a>
+          <span class="lb-nav__item lb-nav__item--disabled" aria-disabled="true">
+            <span class="lb-nav__item-icon" data-lb-icon="credit-card" aria-hidden="true"></span>
+            <span class="lb-nav__item-label">Billing</span>
+          </span>
+        </li>
+      </ul>
+      <div class="lb-nav__actions">
+        <button class="lb-btn lb-btn--ghost lb-btn--small" style="width: 100%;">
+          <span class="lb-btn__icon" data-lb-icon="log-out"></span>
+          Sign out
+        </button>
+      </div>
+    </nav>
+
+    <!-- ────────────────── Collapsed sidebar ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Vertical collapsed — icon-only</h2>
+    <p class="gallery-section__desc">Add <code class="lb-code">--collapsed</code> to render the sidebar as a compact icon rail. Labels, badges, and group headers are hidden via CSS — same markup, no JS toggling. <code class="lb-code">display: none</code> also drops the labels from the accessibility tree, so each item carries a <code class="lb-code">title</code> for its accessible name. Useful as a "compact mode" for tight viewports or as a default for power-user dense apps.</p>
+    <nav class="lb-nav lb-nav--vertical lb-nav--collapsed" aria-label="Demo collapsed sidebar" style="height: 360px;">
+      <a class="lb-nav__brand" href="#">
+        <img src="../assets/brand/letbe-logo-square.svg" class="lb-nav__brand-mark" alt="" aria-hidden="true">
+        <span class="lb-nav__brand-text">letbe-ds</span>
+      </a>
+      <ul class="lb-nav__list">
+        <li class="lb-nav__group">
+          <span class="lb-nav__group-label">Workspace</span>
+          <a class="lb-nav__item lb-nav__item--active" href="#" title="Dashboard" aria-current="page">
+            <span class="lb-nav__item-icon" data-lb-icon="home" aria-hidden="true"></span>
+            <span class="lb-nav__item-label">Dashboard</span>
+          </a>
+          <a class="lb-nav__item" href="#" title="Projects">
+            <span class="lb-nav__item-icon" data-lb-icon="folder" aria-hidden="true"></span>
+            <span class="lb-nav__item-label">Projects</span>
+          </a>
+          <a class="lb-nav__item" href="#" title="Inbox">
+            <span class="lb-nav__item-icon" data-lb-icon="inbox" aria-hidden="true"></span>
+            <span class="lb-nav__item-label">Inbox</span>
+          </a>
+        </li>
+        <li class="lb-nav__group">
+          <span class="lb-nav__group-label">Account</span>
+          <a class="lb-nav__item" href="#" title="Profile">
+            <span class="lb-nav__item-icon" data-lb-icon="user" aria-hidden="true"></span>
+            <span class="lb-nav__item-label">Profile</span>
+          </a>
+          <a class="lb-nav__item" href="#" title="Settings">
+            <span class="lb-nav__item-icon" data-lb-icon="settings" aria-hidden="true"></span>
+            <span class="lb-nav__item-label">Settings</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <!-- ────────────────── Combined app shell ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">App shell — top + side combined</h2>
+    <p class="gallery-section__desc">A common pattern for product UI: horizontal nav owns global identity + cross-app actions, vertical nav owns the contextual section navigation. Together they bracket the page content.</p>
+    <div style="border: var(--lb-border-width-thin) solid var(--lb-border-default); border-radius: var(--lb-radius-surface); overflow: hidden; height: 480px; display: flex; flex-direction: column;">
+      <nav class="lb-nav lb-nav--horizontal" aria-label="App top nav">
+        <a class="lb-nav__brand" href="#">
+          <img src="../assets/brand/letbe-logo-square.svg" class="lb-nav__brand-mark" alt="" aria-hidden="true">
+          <span>letbe-ds</span>
+        </a>
+        <ul class="lb-nav__list">
+          <li><a class="lb-nav__item lb-nav__item--active" href="#" aria-current="page"><span class="lb-nav__item-label">App</span></a></li>
+          <li><a class="lb-nav__item" href="#"><span class="lb-nav__item-label">Docs</span></a></li>
+          <li><a class="lb-nav__item" href="#"><span class="lb-nav__item-label">Changelog</span></a></li>
+        </ul>
+        <div class="lb-nav__actions">
+          <span class="lb-avatar lb-avatar--small" role="img" aria-label="Jane Doe" data-lb-initials="JD"><img class="lb-avatar__img" src="../assets/avatars/avatar-01.jpg" alt=""></span>
+        </div>
+      </nav>
+      <div style="display: flex; flex: 1; min-height: 0;">
+        <nav class="lb-nav lb-nav--vertical" aria-label="App sidebar" style="border-right: var(--lb-border-width-thin) solid var(--lb-border-default);">
+          <ul class="lb-nav__list">
+            <li class="lb-nav__group">
+              <span class="lb-nav__group-label">Build</span>
+              <a class="lb-nav__item lb-nav__item--active" href="#" aria-current="page">
+                <span class="lb-nav__item-icon" data-lb-icon="layout-grid" aria-hidden="true"></span>
+                <span class="lb-nav__item-label">Components</span>
+              </a>
+              <a class="lb-nav__item" href="#">
+                <span class="lb-nav__item-icon" data-lb-icon="palette" aria-hidden="true"></span>
+                <span class="lb-nav__item-label">Tokens</span>
+              </a>
+              <a class="lb-nav__item" href="#">
+                <span class="lb-nav__item-icon" data-lb-icon="file-text" aria-hidden="true"></span>
+                <span class="lb-nav__item-label">Templates</span>
+              </a>
+            </li>
+            <li class="lb-nav__group">
+              <span class="lb-nav__group-label">Ship</span>
+              <a class="lb-nav__item" href="#">
+                <span class="lb-nav__item-icon" data-lb-icon="upload" aria-hidden="true"></span>
+                <span class="lb-nav__item-label">Deploy</span>
+              </a>
+              <a class="lb-nav__item" href="#">
+                <span class="lb-nav__item-icon" data-lb-icon="bell" aria-hidden="true"></span>
+                <span class="lb-nav__item-label">Alerts</span>
+                <span class="lb-nav__item-badge">2</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
+        <div style="flex: 1; padding: var(--lb-size-6x); color: var(--lb-fg-muted); display: flex; align-items: center; justify-content: center; background: var(--lb-surface-bg-default);">
+          <span style="font-size: var(--lb-t-body-s-font-size);">Page content area</span>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script src="../js/lb.js"></script>
+<script src="../js/slot-engine.js"></script>
+<script src="../js/theme-editor.js"></script>
+<script src="../js/token-exporter.js"></script>
+<script src="../js/gallery-layout.js"></script>
+
+<script>
+  // Demo wiring — make the nav items in every demo on this page
+  // clickable so the active-state treatment is visible. Production
+  // consumers would use real <a href> targets and let the browser
+  // handle navigation; this is just gallery polish.
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('main .lb-nav').forEach((nav) => {
+      const items = nav.querySelectorAll('.lb-nav__item:not(.lb-nav__item--disabled)');
+      items.forEach((item) => {
+        item.addEventListener('click', (e) => {
+          e.preventDefault();
+          // Clear active on every item in the same nav, then set on the
+          // clicked one. aria-current also moves so screen readers track
+          // the change.
+          nav.querySelectorAll('.lb-nav__item').forEach((sibling) => {
+            sibling.classList.remove('lb-nav__item--active');
+            sibling.removeAttribute('aria-current');
+          });
+          item.classList.add('lb-nav__item--active');
+          item.setAttribute('aria-current', 'page');
+        });
+      });
+    });
+  });
+</script>
+</body>
+</html>

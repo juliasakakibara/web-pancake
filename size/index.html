@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <!-- theme-preamble:v1 -->
+  <script>(function(){try{var t=localStorage.getItem('letbe-ds-dark-mode');if(t==='1')document.documentElement.setAttribute('data-theme','dark');else if(t==='0')document.documentElement.setAttribute('data-theme','light');}catch(e){}})();</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta data-lb-page="size">
+  <title>Size — letbe-ds</title>
+  <link rel="stylesheet" href="../tokens/theme.css">
+  <link rel="stylesheet" href="../tokens/fonts.css">
+  <link rel="stylesheet" href="../components/components.css">
+  <link rel="stylesheet" href="../components/theme-editor.css">
+  <link rel="stylesheet" href="../components/gallery.css">
+  <style>
+    /* grid (not flex column) + contained scroll: the bars' widths ARE
+       the size-token values, so the table can't shrink — it scrolls in
+       place on narrow screens, and the single grid track floors every
+       row at the same min-content width so the row dividers span the
+       full scrolled width instead of stopping ragged at the viewport. */
+    .spec-table { display: grid; gap: var(--lb-size-3x); overflow-x: auto; }
+    .spec-row { display: grid; grid-template-columns: 140px 80px 1fr; gap: var(--lb-size-4x); align-items: center; padding-bottom: var(--lb-size-2x); border-bottom: var(--lb-border-width-thin) solid var(--lb-border-muted); }
+    .spec-row__token { font-family: 'Roboto Mono', monospace; font-size: var(--lb-font-size-xs); color: var(--lb-fg-default); word-break: break-all; }
+    .spec-row__value { font-family: 'Roboto Mono', monospace; font-size: var(--lb-font-size-xs); color: var(--lb-fg-muted); }
+    .spec-bar { height: var(--lb-size-2x); background: var(--lb-fg-accent); border-radius: var(--lb-radius-interactive); }
+  </style>
+</head>
+<body data-lb-base="..">
+
+<main class="gallery-main">
+  <section class="gallery-section" id="size">
+    <h1 class="gallery-section__title" style="font-size: var(--lb-t-heading-l-font-size); line-height: var(--lb-t-heading-l-line-height);">Size</h1>
+    <p class="gallery-section__desc">L1 size scale — used across spacing, padding, gap, heights, widths, and (via reference) border-widths. Built on a 4px base grid with a 2px sub-grid; <code class="lb-code">--lb-size-hairline</code> (1px) and <code class="lb-code">--lb-size-theme</code> (1.6px) are the only values off both grids. Use <code class="lb-code">--lb-size-2x</code> (8px) for intra-element spacing, <code class="lb-code">--lb-size-4x</code> (16px) for element-to-element, <code class="lb-code">--lb-size-6x</code> (24px) for sections. Includes the theme-editable <code class="lb-code">--lb-size-theme</code> — default 1.6px, backs the L2 <code class="lb-code">--lb-border-width-action</code> and is runtime-mutable via the theme editor's Action stroke knob.</p>
+    <hr class="gallery-desc-divider">
+    <h2 class="gallery-section__title">Size primitives</h2>
+    <div class="gallery-label">L1 primitives (primitives.size.*)</div>
+    <div class="spec-table">
+      <div class="spec-row"><div class="spec-row__token">--lb-size-0</div><div class="spec-row__value">0px</div><div class="spec-bar" style="width: 0;"></div></div>
+      <div class="spec-row"><div class="spec-row__token">--lb-size-hairline</div><div class="spec-row__value">1px</div><div class="spec-bar" style="width: 1px;"></div></div>
+      <div class="spec-row"><div class="spec-row__token">--lb-size-theme</div><div class="spec-row__value">1.6px</div><div class="spec-bar" style="width: 1.6px;"></div></div>
+      <div class="spec-row"><div class="spec-row__token">--lb-size-0-5x</div><div class="spec-row__value">2px</div><div class="spec-bar" style="width: 2px;"></div></div>
+      <div class="spec-row"><div class="spec-row__token">--lb-size-1x</div><div class="spec-row__value">4px</div><div class="spec-bar" style="width: 4px;"></div></div>
+      <div class="spec-row"><div class="spec-row__token">--lb-size-1-5x</div><div class="spec-row__value">6px</div><div class="spec-bar" style="width: 6px;"></div></div>
+      <div class="spec-row"><div class="spec-row__token">--lb-size-2x</div><div class="spec-row__value">8px</div><div class="spec-bar" style="width: 8px;"></div></div>
+      <div class="spec-row"><div class="spec-row__token">--lb-size-3x</div><div class="spec-row__value">12px</div><div class="spec-bar" style="width: 12px;"></div></div>
+      <div class="spec-row"><div class="spec-row__token">--lb-size-3-5x</div><div class="spec-row__value">14px</div><div class="spec-bar" style="width: 14px;"></div></div>
+      <div class="spec-row"><div class="spec-row__token">--lb-size-4x</div><div class="spec-row__value">16px</div><div class="spec-bar" style="width: 16px;"></div></div>
+      <div class="spec-row"><div class="spec-row__token">--lb-size-5x</div><div class="spec-row__value">20px</div><div class="spec-bar" style="width: 20px;"></div></div>
+      <div class="spec-row"><div class="spec-row__token">--lb-size-6x</div><div class="spec-row__value">24px</div><div class="spec-bar" style="width: 24px;"></div></div>
+      <div class="spec-row"><div class="spec-row__token">--lb-size-8x</div><div class="spec-row__value">32px</div><div class="spec-bar" style="width: 32px;"></div></div>
+      <div class="spec-row"><div class="spec-row__token">--lb-size-10x</div><div class="spec-row__value">40px</div><div class="spec-bar" style="width: 40px;"></div></div>
+      <div class="spec-row"><div class="spec-row__token">--lb-size-12x</div><div class="spec-row__value">48px</div><div class="spec-bar" style="width: 48px;"></div></div>
+      <div class="spec-row"><div class="spec-row__token">--lb-size-16x</div><div class="spec-row__value">64px</div><div class="spec-bar" style="width: 64px;"></div></div>
+      <div class="spec-row"><div class="spec-row__token">--lb-size-20x</div><div class="spec-row__value">80px</div><div class="spec-bar" style="width: 80px;"></div></div>
+      <div class="spec-row"><div class="spec-row__token">--lb-size-24x</div><div class="spec-row__value">96px</div><div class="spec-bar" style="width: 96px;"></div></div>
+    </div>
+  </section>
+</main>
+
+<script src="../js/lb.js"></script>
+<script src="../js/slot-engine.js"></script>
+<script src="../js/theme-editor.js"></script>
+<script src="../js/token-exporter.js"></script>
+<script src="../js/gallery-layout.js"></script>
+</body>
+</html>

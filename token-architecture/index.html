@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <!-- theme-preamble:v1 -->
+  <script>(function(){try{var t=localStorage.getItem('letbe-ds-dark-mode');if(t==='1')document.documentElement.setAttribute('data-theme','dark');else if(t==='0')document.documentElement.setAttribute('data-theme','light');}catch(e){}})();</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta data-lb-page="token-architecture">
+  <title>Token Architecture — letbe-ds</title>
+  <link rel="stylesheet" href="../tokens/theme.css">
+  <link rel="stylesheet" href="../tokens/fonts.css">
+  <link rel="stylesheet" href="../components/components.css">
+  <link rel="stylesheet" href="../components/theme-editor.css">
+  <link rel="stylesheet" href="../components/gallery.css">
+  <style>
+    /* Page glue — exhibit layout only; every visual value is a token. */
+    .tokarch-chain { display: flex; flex-wrap: wrap; align-items: center; gap: var(--lb-size-2x); margin: var(--lb-size-4x) 0; }
+    .tokarch-chain__arrow { color: var(--lb-fg-subtle); }
+    .tokarch-chain .gallery-label { width: auto; margin: 0; }
+    /* Tier cascade — static vertical stepper (sanctioned declarative use);
+       swatches are painted by the live variables so the diagram re-themes. */
+    .tokarch-cascade { margin: var(--lb-size-8x) 0 var(--lb-size-10x); max-width: 640px; }
+    .tokarch-cascade .lb-stepper__label .lb-code { margin-left: var(--lb-size-1x); }
+    .tokarch-cascade__swatch {
+      display: inline-block;
+      width: var(--lb-size-16x);
+      height: var(--lb-size-6x);
+      margin-top: var(--lb-size-2x);
+      border-radius: var(--lb-radius-field);
+      border: var(--lb-border-width-thin) solid var(--lb-border-muted);
+    }
+    .tokarch-cascade .lb-btn { margin: var(--lb-size-3x) 0 var(--lb-size-2x); }
+    .tokarch-cascade__note { font-size: var(--lb-t-body-s-font-size); color: var(--lb-fg-muted); margin-bottom: var(--lb-size-8x); }
+    .tokarch-exhibit {
+      display: grid;
+      grid-template-columns: minmax(220px, 1fr) 2fr;
+      gap: var(--lb-size-8x);
+      align-items: center;
+      padding: var(--lb-size-6x);
+      background: var(--lb-surface-bg-default);
+      border: var(--lb-border-width-thin) solid var(--lb-surface-border-default);
+      border-radius: var(--lb-radius-surface);
+      margin: var(--lb-size-4x) 0 var(--lb-size-8x);
+    }
+    .tokarch-exhibit__stage { display: flex; flex-direction: column; align-items: flex-start; gap: var(--lb-size-4x); }
+    .tokarch-map { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--lb-size-1-5x); }
+    .tokarch-map li { display: flex; flex-wrap: wrap; gap: var(--lb-size-2x); align-items: baseline; font-size: var(--lb-t-body-s-font-size); color: var(--lb-fg-muted); }
+    /* long token one-liners wrap mid-token only when a line can't hold
+       them (same pattern as the gallery desc prose); nowrap made the
+       longest chip a 371px unbreakable atom that inflated the whole
+       exhibit grid past phone widths */
+    .tokarch-map .lb-code { overflow-wrap: anywhere; }
+    .tokarch-grammar { display: flex; flex-wrap: wrap; gap: var(--lb-size-1x); align-items: flex-start; margin: var(--lb-size-4x) 0; }
+    .tokarch-grammar__part { display: flex; flex-direction: column; gap: var(--lb-size-1x); align-items: center; }
+    .tokarch-grammar__part .gallery-label { width: auto; margin: 0; }
+    @media (max-width: 768px) { .tokarch-exhibit { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body data-lb-base="..">
+
+<main class="gallery-main">
+  <section class="gallery-section" id="token-architecture">
+
+    <h1 class="gallery-section__title">Token Architecture</h1>
+    <p class="gallery-section__desc">Tokens are this system's real API — every color, size, radius and type style flows from one DTCG source file through three tiers into every component and into Figma. This page is the reasoning: how names are built, what each role owns, and the rules that keep five hundred tokens coherent. If you ever extend the system, this is the contract you're extending.</p>
+
+    <hr class="gallery-desc-divider">
+
+    <h2 class="gallery-section__title">Three tiers, one direction</h2>
+    <p class="gallery-section__desc">Every color reference flows downhill: <strong>L1 primitives</strong> hold raw values (the palette ramps, the size scale) and are never bound by components directly for color; <strong>L2 semantic</strong> names roles on surfaces (<code class="lb-code">bg-default</code>, <code class="lb-code">fg-muted</code>, <code class="lb-code">border-focus</code>) and is the default binding for components; <strong>L3 conceptual</strong> exists only for the three concept families — <code class="lb-code">action-*</code>, <code class="lb-code">field-*</code>, <code class="lb-code">surface-*</code> — where components share a concept, not just a color. L2 and L3 hold only references, never literals. The one sanctioned flat scale: spacing and sizing bind L1 <code class="lb-code">size-*</code> directly.</p>
+    <ol class="lb-stepper lb-stepper--vertical tokarch-cascade" data-lb-no-code aria-label="How one color resolves: from raw value through the tiers to a rendered component">
+      <li class="lb-stepper__step">
+        <span class="lb-stepper__indicator">0</span>
+        <div class="lb-stepper__content">
+          <p class="lb-stepper__label">Raw <code class="lb-code">#623ca8</code></p>
+          <p class="lb-stepper__description">A hex literal — meaningless on its own, and no component may ever touch it directly.</p>
+          <span class="tokarch-cascade__swatch" style="background: #623ca8;" title="#623ca8"></span>
+        </div>
+      </li>
+      <li class="lb-stepper__step">
+        <span class="lb-stepper__indicator">1</span>
+        <div class="lb-stepper__content">
+          <p class="lb-stepper__label">L1 · primitive <code class="lb-code">violet.600</code></p>
+          <p class="lb-stepper__description">The primitive names the value — palette ramps and scales. The only tier allowed to hold a literal, and it never changes with a theme.</p>
+          <span class="tokarch-cascade__swatch" style="background: var(--lb-violet-600);" title="--lb-violet-600"></span>
+        </div>
+      </li>
+      <li class="lb-stepper__step">
+        <span class="lb-stepper__indicator">2</span>
+        <div class="lb-stepper__content">
+          <p class="lb-stepper__label">L2 · semantic <code class="lb-code">bg.accent</code></p>
+          <p class="lb-stepper__description">Names the role, holds only a reference — <code class="lb-code">{violet.600}</code> in the factory theme. This is the tier themes re-point: apply a brand and the swatch below leaves violet for the brand ramp.</p>
+          <span class="tokarch-cascade__swatch" style="background: var(--lb-bg-accent);" title="--lb-bg-accent"></span>
+        </div>
+      </li>
+      <li class="lb-stepper__step">
+        <span class="lb-stepper__indicator">3</span>
+        <div class="lb-stepper__content">
+          <p class="lb-stepper__label">L3 · component <code class="lb-code">action.bg-primary-default</code></p>
+          <p class="lb-stepper__description">Concept families only — action, field, surface. State lives at this tier, never at L2.</p>
+          <span class="tokarch-cascade__swatch" style="background: var(--lb-action-bg-primary-default);" title="--lb-action-bg-primary-default"></span>
+        </div>
+      </li>
+      <li class="lb-stepper__step">
+        <span class="lb-stepper__indicator">4</span>
+        <div class="lb-stepper__content">
+          <p class="lb-stepper__label">Consumer <code class="lb-code">.lb-btn--primary</code></p>
+          <p class="lb-stepper__description">The component consumes the variable, never the value — the same pixel, four names deep.</p>
+          <button type="button" class="lb-btn lb-btn--primary lb-btn--medium"><span class="lb-btn__label">Primary action</span></button>
+        </div>
+      </li>
+    </ol>
+    <p class="gallery-section__desc tokarch-cascade__note">Every swatch above is painted by its live variable, not an image. Apply a preset and you can watch the tiers do their jobs: the raw hex and <code class="lb-code">violet.600</code> stay violet — primitives never move — while <code class="lb-code">bg.accent</code> and everything downstream re-paint to the brand. The seam between steps 1 and 2 is exactly where theming grafts in.</p>
+    <p class="gallery-section__desc">The source is standard <strong>DTCG</strong> (<code class="lb-code">tokens/source-tokens.json</code>: <code class="lb-code">$value</code>/<code class="lb-code">$type</code>, aliases as <code class="lb-code">{path.to.token}</code>). <code class="lb-code">scripts/build-tokens.js</code> generates <code class="lb-code">tokens/theme.css</code> — generated, never hand-edited.</p>
+
+    <h2 class="gallery-section__title">The naming grammar</h2>
+    <p class="gallery-section__desc">One grammar for every color variable: prefix, role axis, role, then optional modifier and state. Reading a token name tells you what it paints and where it may appear.</p>
+    <div class="tokarch-grammar">
+      <div class="tokarch-grammar__part"><code class="lb-code">--lb-</code><span class="gallery-label">namespace</span></div>
+      <div class="tokarch-grammar__part"><code class="lb-code">action-</code><span class="gallery-label">L3 concept</span></div>
+      <div class="tokarch-grammar__part"><code class="lb-code">bg-</code><span class="gallery-label">role axis</span></div>
+      <div class="tokarch-grammar__part"><code class="lb-code">primary-</code><span class="gallery-label">variant</span></div>
+      <div class="tokarch-grammar__part"><code class="lb-code">hover</code><span class="gallery-label">state (L3 only)</span></div>
+    </div>
+    <p class="gallery-section__desc">Two grammar laws: <strong>state suffixes live only at L3</strong> (L2 is static vocabulary — there is no <code class="lb-code">bg-accent-hover</code>), and <strong>the modifier vocabulary is closed</strong>: intensity is <code class="lb-code">subtle</code> → <code class="lb-code">muted</code> → default → <code class="lb-code">strong</code> → <code class="lb-code">bolder</code>, roles are words like <code class="lb-code">accent</code>, <code class="lb-code">inverse</code>, <code class="lb-code">focus</code>, <code class="lb-code">value</code>, <code class="lb-code">disabled</code>. A new word costs the whole system a vocabulary entry — it must earn it.</p>
+
+    <h2 class="gallery-section__title">Role prefixes — what each axis owns</h2>
+    <p class="gallery-section__desc"><strong>The prefix names what the pixel <em>is</em>, not which CSS property draws it.</strong> <code class="lb-code">bg-*</code> owns surfaces and fills: containers, control fills, tracks, value-display fills. <code class="lb-code">fg-*</code> owns foreground ink: text <em>and icons</em> — every icon in the set draws with <code class="lb-code">currentColor</code>, so an outlined icon's SVG stroke is colored by <code class="lb-code">color</code>, an <code class="lb-code">fg</code> concern; the system's <code class="lb-code">stroke-*</code> tokens are <em>widths</em>, and no color-valued stroke token exists. <code class="lb-code">border-*</code> owns boundaries: component borders, dividers, outlines, focus rings — never icon artwork, never fills. Beside these sit <code class="lb-code">surface-*</code> and <code class="lb-code">field-*</code> (L3 concepts), and <code class="lb-code">data-1..8</code> — the categorical chart palette, deliberately role-free.</p>
+
+    <div class="tokarch-exhibit">
+      <div class="tokarch-exhibit__stage">
+        <button type="button" class="lb-btn lb-btn--primary lb-btn--medium"><span class="lb-btn__icon" aria-hidden="true" data-lb-icon="check"></span><span class="lb-btn__label">Confirm</span></button>
+        <button type="button" class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--medium" aria-label="Settings"><span class="lb-icon-btn__icon" data-lb-icon="settings"></span></button>
+      </div>
+      <ul class="tokarch-map">
+        <li><code class="lb-code">action.bg-primary-default</code> fills the button — <code class="lb-code">bg</code> axis, an area</li>
+        <li><code class="lb-code">action.fg-primary-default</code> inks the label <em>and</em> the check glyph — one <code class="lb-code">fg</code> token, text and icon together</li>
+        <li><code class="lb-code">action.border-primary-default</code> draws the boundary — sanctioned to equal the fill on filled controls</li>
+        <li>the ghost icon button's gear is pure <code class="lb-code">fg</code>: no fill, no border token touches the glyph</li>
+      </ul>
+    </div>
+
+    <p class="gallery-section__desc"><strong>Property ≠ role.</strong> SVG <code class="lb-code">stroke</code> and CSS <code class="lb-code">border-color</code> may legitimately carry a <code class="lb-code">bg-*</code> token when they draw a graphic surface. The spinner's ring is drawn with borders; the donut's track is drawn with stroke — both are surfaces, so both bind <code class="lb-code">bg</code> roles. A chart axis drawn with stroke is a rule, so it binds <code class="lb-code">border-muted</code>. The role follows the pixel's meaning.</p>
+
+    <div class="tokarch-exhibit">
+      <div class="tokarch-exhibit__stage">
+        <span class="lb-spinner lb-spinner--large" role="status" aria-label="Loading"></span>
+      </div>
+      <ul class="tokarch-map">
+        <li><code class="lb-code">border-color: var(--lb-bg-bolder)</code> — the ring's track is a surface, drawn via border</li>
+        <li><code class="lb-code">border-top-color: var(--lb-bg-accent-value)</code> — the moving arc is a value display</li>
+        <li>no <code class="lb-code">border-*</code> token appears: nothing here is a boundary</li>
+      </ul>
+    </div>
+
+    <h2 class="gallery-section__title">Roles vs intensity — why <code class="lb-code">bg.accent-value</code> exists</h2>
+    <p class="gallery-section__desc">Suffixes usually mean intensity. But some suffixed tokens are <strong>roles</strong>: <code class="lb-code">fg.inverse-strong</code> is the theme-stable on-color ink, and the <code class="lb-code">*-value</code> family are value-display fills. The test is the <em>reference surface</em>: the accent interaction chain (<code class="lb-code">accent</code>/<code class="lb-code">-strong</code>/<code class="lb-code">-bolder</code>) is tuned for white text <em>on</em> the fill at 4.5:1, so it darkens through states in both themes. A slider fill answers to a different surface — its neutral track, at 3:1 — so in dark mode it must go <em>lighter</em>, not darker. Different reference surface, different role. Every pairing is measured in <a class="lb-link" href="../tokens/CONTRAST.md">tokens/CONTRAST.md</a>.</p>
+
+    <div class="tokarch-exhibit">
+      <div class="tokarch-exhibit__stage" style="width: 100%; max-width: 320px; gap: var(--lb-size-6x);">
+        <div class="lb-slider-wrap" data-lb-slider style="width: 100%;">
+          <div class="lb-slider-track-wrap lb-slider-track-wrap--medium">
+            <div class="lb-slider-track"><div class="lb-slider-track__fill" style="width: 60%;"></div></div>
+            <input type="range" class="lb-slider" min="0" max="100" value="60" aria-label="Example value" aria-valuemin="0" aria-valuemax="100" aria-valuenow="60">
+          </div>
+        </div>
+        <progress class="lb-progress" value="60" max="100" style="width: 100%;"></progress>
+      </div>
+      <ul class="tokarch-map">
+        <li><code class="lb-code">bg.accent-value</code> — the fill and thumb: violet-600 light, violet-400 dark (measured 6.4:1 on its track)</li>
+        <li><code class="lb-code">border-muted</code> / <code class="lb-code">bg-bolder</code> — the tracks: neutral surfaces the value reads against</li>
+        <li>status progress bars use <code class="lb-code">bg.success-value</code> / <code class="lb-code">-warning-value</code> / <code class="lb-code">-danger-value</code> — same role, status hues</li>
+      </ul>
+    </div>
+
+    <h2 class="gallery-section__title">Cross-role rules — and the sanctioned exceptions</h2>
+    <p class="gallery-section__desc">Binding one role's token where another role's pixel lives is forbidden — <code class="lb-code">fg</code> as a fill and <code class="lb-code">bg</code> as ink are the classic drifts, and audits hunt them. Exactly three patterns are sanctioned, each because the target's value <em>is</em> the source's surface:</p>
+    <div class="lb-table-wrap">
+      <table class="lb-table lb-table--medium">
+        <thead>
+          <tr>
+            <th class="lb-table__cell" scope="col">Sanctioned pattern</th>
+            <th class="lb-table__cell" scope="col">Example</th>
+            <th class="lb-table__cell" scope="col">Why it's legal</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="lb-table__cell">Filled control's border = its fill</td>
+            <td class="lb-table__cell"><code class="lb-code">action.border-primary-* → {bg.accent*}</code></td>
+            <td class="lb-table__cell">The border's value <em>is</em> the fill surface</td>
+          </tr>
+          <tr>
+            <td class="lb-table__cell">Cutout ring = the surface it cuts into</td>
+            <td class="lb-table__cell"><code class="lb-code">surface.border-cutout → {bg.default}</code></td>
+            <td class="lb-table__cell">The ring exists to <em>be</em> the page surface</td>
+          </tr>
+          <tr>
+            <td class="lb-table__cell">Categorical palette is role-free</td>
+            <td class="lb-table__cell"><code class="lb-code">data.1..8</code> as fill, stroke, or bg</td>
+            <td class="lb-table__cell">Categorical identity, not role-on-surface — by design</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2 class="gallery-section__title">Minting a token — the checklist</h2>
+    <p class="gallery-section__desc">Want to extend the system? Every new token answers five questions, in order:</p>
+    <ol class="gallery-section__desc" style="padding-left: var(--lb-size-6x);">
+      <li><strong>Is it really new?</strong> Grep the vocabulary first — most needs are an existing role or an existing intensity step.</li>
+      <li><strong>Which tier?</strong> A raw value is L1. A role on a surface is L2. Only <code class="lb-code">action</code>/<code class="lb-code">field</code>/<code class="lb-code">surface</code> concepts are L3 — and never as 1:1 aliases of an L2 token.</li>
+      <li><strong>Which existing word?</strong> The modifier vocabulary is closed; a genuinely new word needs the same scrutiny this page gives <code class="lb-code">value</code>.</li>
+      <li><strong>Measure it.</strong> Add its pairings to <code class="lb-code">scripts/audit-contrast.js</code> and keep <a class="lb-link" href="../tokens/CONTRAST.md">CONTRAST.md</a> green — the audit exits non-zero on failure.</li>
+      <li><strong>Hand it off.</strong> Token names are API: new tokens go to the Figma plugin via the handoff protocol so code and design never drift.</li>
+    </ol>
+
+    <h2 class="gallery-section__title">The Figma round-trip — the letbe plugin</h2>
+    <p class="gallery-section__desc">The same source file drives both worlds. <code class="lb-code">source-tokens.json</code> generates the CSS <em>and</em>, through the <a class="lb-link" href="https://www.figma.com/community/plugin/1671570185456177314/letbe-tokens">letbe tokens Figma plugin</a>, becomes Figma variables — every alias intact, both themes, typography modes included. Design follows code: a token renamed in source is a breaking change everywhere at once, which is exactly the point. The round-trip runs both ways — the gallery's theme editor exports the same DTCG JSON the plugin imports, so a brand explored in the browser (or one of the built-in presets) becomes a Figma variable set in one import. The component library built on these variables is published on <a class="lb-link" href="https://www.figma.com/community/file/1672532598361033237">Figma Community</a>.</p>
+    <div class="tokarch-chain">
+      <code class="lb-code">source-tokens.json</code>
+      <span class="tokarch-chain__arrow" aria-hidden="true">→</span>
+      <code class="lb-code">build-tokens.js</code>
+      <span class="tokarch-chain__arrow" aria-hidden="true">→</span>
+      <code class="lb-code">theme.css</code>
+      <span class="tokarch-chain__arrow" aria-hidden="true">→</span>
+      <span class="gallery-label">every component</span>
+    </div>
+    <div class="tokarch-chain">
+      <code class="lb-code">source-tokens.json</code>
+      <span class="tokarch-chain__arrow" aria-hidden="true">→</span>
+      <span class="gallery-label">letbe plugin</span>
+      <span class="tokarch-chain__arrow" aria-hidden="true">→</span>
+      <code class="lb-code">Figma variables</code>
+      <span class="tokarch-chain__arrow" aria-hidden="true">⇄</span>
+      <span class="gallery-label">theme editor export</span>
+    </div>
+
+    <h2 class="gallery-section__title">Where to go next</h2>
+    <div class="about-links" style="display: flex; flex-wrap: wrap; gap: var(--lb-size-3x); margin-top: var(--lb-size-4x);">
+      <a class="lb-btn lb-btn--secondary lb-btn--medium" href="../tokens/CONTRAST.md"><span class="lb-btn__label">Measured contrast</span></a>
+      <a class="lb-btn lb-btn--secondary lb-btn--medium" href="https://www.figma.com/community/plugin/1671570185456177314/letbe-tokens"><span class="lb-btn__label">Figma plugin</span></a>
+      <a class="lb-btn lb-btn--secondary lb-btn--medium" href="https://www.figma.com/community/file/1672532598361033237"><span class="lb-btn__label">Figma library</span></a>
+      <a class="lb-btn lb-btn--secondary lb-btn--medium" href="../colors/"><span class="lb-btn__label">Colors</span></a>
+      <a class="lb-btn lb-btn--ghost lb-btn--medium" href="../about/"><span class="lb-btn__label">About letbe-ds</span></a>
+      <a class="lb-btn lb-btn--ghost lb-btn--medium" href="../llms.txt"><span class="lb-btn__label">llms.txt</span></a>
+    </div>
+
+  </section>
+</main>
+
+<script src="../js/lb.js"></script>
+<script src="../js/slot-engine.js"></script>
+<script src="../js/theme-editor.js"></script>
+<script src="../js/token-exporter.js"></script>
+<script src="../js/gallery-layout.js"></script>
+</body>
+</html>

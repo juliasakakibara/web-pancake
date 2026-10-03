@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <!-- theme-preamble:v1 -->
+  <script>(function(){try{var t=localStorage.getItem('letbe-ds-dark-mode');if(t==='1')document.documentElement.setAttribute('data-theme','dark');else if(t==='0')document.documentElement.setAttribute('data-theme','light');}catch(e){}})();</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta data-lb-page="dashboard">
+  <title>Dashboard composition — letbe-ds</title>
+  <link rel="stylesheet" href="../tokens/theme.css">
+  <link rel="stylesheet" href="../tokens/fonts.css">
+  <link rel="stylesheet" href="../components/components.css">
+  <link rel="stylesheet" href="../components/theme-editor.css">
+  <link rel="stylesheet" href="../components/gallery.css">
+  <style>
+    /* Local — full-bleed dashboard frame so the Resizable can use the
+       viewport. Drops the gallery main padding for this page only so
+       the dashboard reads as a real product UI, not a doc page. */
+    .dashboard-shell {
+      height: calc(100vh - 4rem);
+      min-height: 36rem;
+      border: var(--lb-border-width-thin) solid var(--lb-surface-border-default);
+      border-radius: var(--lb-radius-overlay);
+      background: var(--lb-surface-bg-default);
+      overflow: hidden;
+    }
+    .dashboard-pane { padding: var(--lb-size-4x); height: 100%; box-sizing: border-box; overflow: auto; }
+    .dashboard-pane--rail { background: var(--lb-surface-bg-elevated); }
+    /* Page-flow variant: the Store-overview composition scrolls with the
+       page instead of clamping to the viewport like the app-frame demo. */
+    .dashboard-shell--page { height: auto; min-height: 0; overflow: visible; }
+    .dashboard-section + .dashboard-section { margin-top: var(--lb-size-6x); }
+    .dashboard-h2 {
+      font-family: var(--lb-t-heading-s-font-family);
+      font-size: var(--lb-t-heading-s-font-size);
+      font-weight: var(--lb-t-heading-s-font-weight);
+      margin: 0 0 var(--lb-size-3x);
+      color: var(--lb-fg-default);
+    }
+    .dashboard-rail-title {
+      font-family: var(--lb-t-label-s-font-family);
+      font-size: var(--lb-t-label-s-font-size);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--lb-fg-muted);
+      margin: 0 0 var(--lb-size-2x);
+    }
+  </style>
+</head>
+<body data-lb-base="..">
+
+<main class="gallery-main">
+  <section class="gallery-section" id="dashboard">
+    <h1 class="gallery-section__title" style="font-size: var(--lb-t-heading-l-font-size); line-height: var(--lb-t-heading-l-line-height);">Dashboard composition</h1>
+    <p class="gallery-section__desc">A real-world product page composed of letbe-ds primitives — no app code, no framework, and a local <code class="lb-code">&lt;style&gt;</code> block only for the full-bleed page frame and the section and rail headings. Demonstrates how the Charts suite (Stat, Sparkline, Bar List, Donut, Bar Chart, Line Chart) composes with Card, Table, Resizable, Tree, and Layout primitives into an admin overview.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>a11y (built in):</strong> no chart here is a silent graphic &mdash; Sparkline, Bar Chart, Line Chart and Donut each render a single <code class="lb-code">role="img"</code> node whose <code class="lb-code">aria-label</code> is a generated label/value summary of the series. The nav rail is a real <code class="lb-code">role="tree"</code> (<code class="lb-code">treeitem</code> / <code class="lb-code">group</code> / <code class="lb-code">aria-level</code> / <code class="lb-code">aria-expanded</code>, roving tabindex): <kbd>&darr;</kbd><kbd>&uarr;</kbd> move, <kbd>&rarr;</kbd><kbd>&larr;</kbd> expand and collapse, <kbd>Home</kbd>/<kbd>End</kbd> jump, <kbd>Enter</kbd> selects. The Resizable splitters are focusable <code class="lb-code">role="separator"</code> handles with <code class="lb-code">aria-valuenow/min/max</code> that resize on <kbd>&larr;</kbd><kbd>&rarr;</kbd>, <kbd>PageUp</kbd>/<kbd>PageDown</kbd> and <kbd>Home</kbd>/<kbd>End</kbd>, and the live-visitor badge drops its pulsing dot under <code class="lb-code">prefers-reduced-motion</code>.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>Usage:</strong> One script — core <code class="lb-code">js/lb.js</code> — runs this whole page: the Resizable shell, Tree rail, Popover filters, every chart and the Bar Lists auto-init from their <code class="lb-code">data-lb-*</code> attributes on DOMContentLoaded, with no <code class="lb-code">js/components/*</code> modules required. The numbers here are static inline JSON; a live dashboard pushes updates through the chart instances (<code class="lb-code">el._lbLineChart.setData(cfg)</code>, <code class="lb-code">el._lbDonut.setData(data)</code>, …) and wires navigation off <code class="lb-code">lb-tree-select</code> (bubbles, <code class="lb-code">detail.value</code> / <code class="lb-code">label</code>) plus pane-size persistence off <code class="lb-code">lb-resizable-change</code> (bubbles, <code class="lb-code">detail.sizes</code>). The filter-row popovers ship unwired — bring your own range/comparison state (same rule as the media player's engine). The local <code class="lb-code">&lt;style&gt;</code> block is page furniture (full-bleed frame, rail titles), not part of the DS contract.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>Two compositions:</strong> the app-frame demo below (Resizable shell + Tree rail), and the <strong>Store overview</strong> commerce skeleton further down — the KPI strip → time-series → breakdowns → table layout. <strong>Pieces in play:</strong> <a class="lb-link" href="../resizable/">Resizable</a> shell, <a class="lb-link" href="../tree/">Tree</a> nav rail, <a class="lb-link" href="../layout/">Grid</a> KPI strip, <a class="lb-link" href="../card/">Card</a> surfaces, <a class="lb-link" href="../stat/">Stat</a> + <a class="lb-link" href="../sparkline/">Sparkline</a>, <a class="lb-link" href="../line-chart/">Line Chart</a>, <a class="lb-link" href="../bar-chart/">Bar Chart</a>, <a class="lb-link" href="../bar-list/">Bar List</a>, <a class="lb-link" href="../donut/">Donut</a>, <a class="lb-link" href="../table/">Table</a>.</p>
+
+    <hr class="gallery-desc-divider">
+
+    <!-- ────────────────── The dashboard ────────────────── -->
+    <div class="dashboard-shell">
+      <div data-lb-resizable>
+        <!-- ░░░░░░░░░░░░░░░░░░ Left rail: navigation tree ░░░░░░░░░░░░░░░░░░ -->
+        <div tabindex="0" class="dashboard-pane dashboard-pane--rail" data-lb-size="18" data-lb-min="12">
+          <p class="dashboard-rail-title">Workspace</p>
+          <ul data-lb-tree>
+            <li data-lb-node data-lb-icon="folder" data-lb-expanded>Insights
+              <ul>
+                <li data-lb-node data-lb-icon="bar-chart">Overview</li>
+                <li data-lb-node data-lb-icon="users">Customers</li>
+                <li data-lb-node data-lb-icon="dollar-sign">Revenue</li>
+                <li data-lb-node data-lb-icon="globe">Traffic</li>
+              </ul>
+            </li>
+            <li data-lb-node data-lb-icon="folder">Reports
+              <ul>
+                <li data-lb-node data-lb-icon="file-text">Weekly summary</li>
+                <li data-lb-node data-lb-icon="file-text">Quarterly review</li>
+              </ul>
+            </li>
+            <li data-lb-node data-lb-icon="settings">Settings</li>
+          </ul>
+        </div>
+
+        <!-- ░░░░░░░░░░░░░░░░░░ Main column ░░░░░░░░░░░░░░░░░░ -->
+        <div tabindex="0" class="dashboard-pane">
+          <!-- KPI strip — Stat + Sparkline inside Cards, in a Grid -->
+          <section class="dashboard-section">
+            <h2 class="dashboard-h2">Overview</h2>
+            <div class="lb-grid" style="--min: 14rem;">
+              <div class="lb-card lb-card--padded">
+                <div class="lb-stat" style="margin-bottom: var(--lb-size-3x);">
+                  <div class="lb-stat__label">MRR</div>
+                  <div class="lb-stat__value">$54,210</div>
+                  <div class="lb-stat__sub">
+                    <span class="lb-badge lb-badge--small lb-badge--success"><span class="lb-badge__icon" data-lb-icon="trending-up"></span>8.1%</span>
+                    <span class="lb-stat__caption">vs last month</span>
+                  </div>
+                </div>
+                <div data-lb-sparkline data-lb-variant="area" data-lb-dot data-lb-data="38,42,40,44,46,48,52,54"></div>
+              </div>
+              <div class="lb-card lb-card--padded">
+                <div class="lb-stat" style="margin-bottom: var(--lb-size-3x);">
+                  <div class="lb-stat__label">Customers</div>
+                  <div class="lb-stat__value">2,184</div>
+                  <div class="lb-stat__sub">
+                    <span class="lb-badge lb-badge--small lb-badge--success"><span class="lb-badge__icon" data-lb-icon="trending-up"></span>64</span>
+                    <span class="lb-stat__caption">net new</span>
+                  </div>
+                </div>
+                <div data-lb-sparkline data-lb-variant="area" data-lb-dot data-lb-data="1980,2050,2070,2080,2110,2130,2150,2184" style="--color: var(--lb-data-2);"></div>
+              </div>
+              <div class="lb-card lb-card--padded">
+                <div class="lb-stat" style="margin-bottom: var(--lb-size-3x);">
+                  <div class="lb-stat__label">Conversion</div>
+                  <div class="lb-stat__value">4.2%</div>
+                  <div class="lb-stat__sub">
+                    <span class="lb-badge lb-badge--small lb-badge--danger"><span class="lb-badge__icon" data-lb-icon="trending-down"></span>0.3 pp</span>
+                  </div>
+                </div>
+                <div data-lb-sparkline data-lb-variant="area" data-lb-dot data-lb-data="4.5,4.4,4.6,4.5,4.3,4.5,4.4,4.2" style="--color: var(--lb-data-5);"></div>
+              </div>
+              <div class="lb-card lb-card--padded">
+                <div class="lb-stat" style="margin-bottom: var(--lb-size-3x);">
+                  <div class="lb-stat__label">Sessions</div>
+                  <div class="lb-stat__value">31.4k</div>
+                  <div class="lb-stat__sub">
+                    <span class="lb-badge lb-badge--small lb-badge--success"><span class="lb-badge__icon" data-lb-icon="trending-up"></span>4.8%</span>
+                  </div>
+                </div>
+                <div data-lb-sparkline data-lb-variant="bar" data-lb-data="3.8,4.2,3.6,4.1,4.5,4.0,4.7,4.5" style="--color: var(--lb-data-3);"></div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Line chart panel -->
+          <section class="dashboard-section">
+            <div class="lb-card lb-card--padded">
+              <div class="lb-card__heading">
+                <div class="lb-card__title">Revenue — last 90 days</div>
+                <div class="lb-card__subtitle">Free vs Pro vs Enterprise · daily snapshot</div>
+              </div>
+              <div data-lb-line-chart style="margin-top: var(--lb-size-4x); --line-chart-height: 14rem;">
+                <script type="application/json">
+                  {"x":["Mar 1","Mar 8","Mar 15","Mar 22","Mar 29","Apr 5","Apr 12","Apr 19","Apr 26"],"series":[
+                    {"name":"Free","data":[42,44,46,49,51,53,55,58,62]},
+                    {"name":"Pro","data":[112,118,124,131,138,146,152,160,168]},
+                    {"name":"Enterprise","data":[18,19,20,22,23,25,27,28,30]}
+                  ]}
+                </script>
+              </div>
+            </div>
+          </section>
+
+          <!-- Bar chart + Donut side by side -->
+          <section class="dashboard-section">
+            <div class="lb-grid" style="--min: 22rem;">
+              <div class="lb-card lb-card--padded">
+                <div class="lb-card__heading">
+                  <div class="lb-card__title">Weekly active users</div>
+                  <div class="lb-card__subtitle">Plan breakdown</div>
+                </div>
+                <div data-lb-bar-chart style="margin-top: var(--lb-size-4x); --bar-chart-height: 14rem;">
+                  <script type="application/json">
+                    {"stacked":true,"x":["Wk -3","Wk -2","Wk -1","This wk"],"series":[
+                      {"name":"Free","data":[3200,3450,3680,3920]},
+                      {"name":"Pro","data":[1840,1920,2080,2240]},
+                      {"name":"Enterprise","data":[420,470,510,540]}
+                    ]}
+                  </script>
+                </div>
+              </div>
+              <div class="lb-card lb-card--padded">
+                <div class="lb-card__heading">
+                  <div class="lb-card__title">Traffic sources</div>
+                  <div class="lb-card__subtitle">Last 30 days</div>
+                </div>
+                <div class="lb-cluster" style="margin-top: var(--lb-size-4x); --gap: var(--lb-size-6x); align-items: center;">
+                  <div data-lb-donut style="width: 9rem; height: 9rem;">
+                    <script type="application/json">
+                      {"thickness":18,"data":[
+                        {"label":"Direct","value":42},
+                        {"label":"Search","value":28},
+                        {"label":"Referral","value":20},
+                        {"label":"Social","value":10}
+                      ]}
+                    </script>
+                  </div>
+                  <ul class="lb-donut-legend">
+                    <li class="lb-donut-legend__item"><span class="lb-donut-legend__swatch" style="background: var(--lb-data-1);"></span><span class="lb-donut-legend__label">Direct</span><span class="lb-donut-legend__value">42%</span></li>
+                    <li class="lb-donut-legend__item"><span class="lb-donut-legend__swatch" style="background: var(--lb-data-2);"></span><span class="lb-donut-legend__label">Search</span><span class="lb-donut-legend__value">28%</span></li>
+                    <li class="lb-donut-legend__item"><span class="lb-donut-legend__swatch" style="background: var(--lb-data-3);"></span><span class="lb-donut-legend__label">Referral</span><span class="lb-donut-legend__value">20%</span></li>
+                    <li class="lb-donut-legend__item"><span class="lb-donut-legend__swatch" style="background: var(--lb-data-4);"></span><span class="lb-donut-legend__label">Social</span><span class="lb-donut-legend__value">10%</span></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Table + adjacent Bar List -->
+          <section class="dashboard-section">
+            <div class="lb-grid" style="--min: 22rem;">
+              <div class="lb-card lb-card--padded">
+                <div class="lb-card__heading">
+                  <div class="lb-card__title">Top customers</div>
+                  <div class="lb-card__subtitle">By MRR · last 30 days</div>
+                </div>
+                <table class="lb-table" style="margin-top: var(--lb-size-4x);">
+                  <thead>
+                    <tr>
+                      <th>Customer</th>
+                      <th class="lb-table__cell--end">MRR</th>
+                      <th class="lb-table__cell--end">Δ</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr><td>Acme Corp</td><td class="lb-table__cell--end">$12,800</td><td class="lb-table__cell--end" style="color: var(--lb-fg-success);">↑ 4.2%</td></tr>
+                    <tr><td>Globex</td><td class="lb-table__cell--end">$8,210</td><td class="lb-table__cell--end" style="color: var(--lb-fg-success);">↑ 1.8%</td></tr>
+                    <tr><td>Initech</td><td class="lb-table__cell--end">$6,540</td><td class="lb-table__cell--end" style="color: var(--lb-fg-danger);">↓ 0.6%</td></tr>
+                    <tr><td>Hooli</td><td class="lb-table__cell--end">$5,120</td><td class="lb-table__cell--end" style="color: var(--lb-fg-success);">↑ 2.1%</td></tr>
+                    <tr><td>Pied Piper</td><td class="lb-table__cell--end">$3,840</td><td class="lb-table__cell--end" style="color: var(--lb-fg-success);">↑ 12.4%</td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="lb-card lb-card--padded">
+                <div class="lb-card__heading">
+                  <div class="lb-card__title">Top pages</div>
+                  <div class="lb-card__subtitle">By sessions · last 7 days</div>
+                </div>
+                <ul data-lb-bar-list style="margin-top: var(--lb-size-4x); --color: var(--lb-data-2);">
+                  <li data-lb-bar-list-row data-lb-value="2486"><span class="lb-bar-list__label">/dashboard</span><span class="lb-bar-list__value">2,486</span></li>
+                  <li data-lb-bar-list-row data-lb-value="1190"><span class="lb-bar-list__label">/projects</span><span class="lb-bar-list__value">1,190</span></li>
+                  <li data-lb-bar-list-row data-lb-value="864"><span class="lb-bar-list__label">/settings</span><span class="lb-bar-list__value">864</span></li>
+                  <li data-lb-bar-list-row data-lb-value="412"><span class="lb-bar-list__label">/billing</span><span class="lb-bar-list__value">412</span></li>
+                  <li data-lb-bar-list-row data-lb-value="208"><span class="lb-bar-list__label">/integrations</span><span class="lb-bar-list__value">208</span></li>
+                </ul>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <!-- ░░░░░░░░░░░░░░░░░░ Right rail: live status ░░░░░░░░░░░░░░░░░░ -->
+        <div tabindex="0" class="dashboard-pane dashboard-pane--rail" data-lb-size="18" data-lb-min="12">
+          <p class="dashboard-rail-title">Live</p>
+          <div class="lb-stack" style="--gap: var(--lb-size-3x);">
+            <div class="lb-stat lb-stat--compact">
+              <div class="lb-stat__label">Online</div>
+              <div class="lb-stat__value">312</div>
+            </div>
+            <div class="lb-stat lb-stat--compact">
+              <div class="lb-stat__label">Pending</div>
+              <div class="lb-stat__value">14</div>
+            </div>
+            <div class="lb-stat lb-stat--compact">
+              <div class="lb-stat__label">Errors</div>
+              <div class="lb-stat__value">2</div>
+              <div class="lb-stat__sub">
+                <span class="lb-badge lb-badge--small lb-badge--danger"><span class="lb-badge__icon" data-lb-icon="trending-down"></span>5</span>
+              </div>
+            </div>
+          </div>
+
+          <p class="dashboard-rail-title" style="margin-top: var(--lb-size-6x);">API uptime</p>
+          <div data-lb-donut style="width: 9rem; height: 9rem;">
+            <script type="application/json">
+              {"thickness":14,"data":[{"label":"Up","value":99.94},{"label":"Down","value":0.06}],"colors":["var(--lb-data-3)","var(--lb-bg-strong)"]}
+            </script>
+            <div class="lb-donut__center">
+              <div class="lb-donut__center-value">99.94%</div>
+              <div class="lb-donut__center-label">30-day</div>
+            </div>
+          </div>
+
+          <p class="dashboard-rail-title" style="margin-top: var(--lb-size-6x);">Activity</p>
+          <ul data-lb-bar-list style="--color: var(--lb-data-1);">
+            <li data-lb-bar-list-row data-lb-value="124"><span class="lb-bar-list__label">Sign-ups</span><span class="lb-bar-list__value">124</span></li>
+            <li data-lb-bar-list-row data-lb-value="86"><span class="lb-bar-list__label">Upgrades</span><span class="lb-bar-list__value">86</span></li>
+            <li data-lb-bar-list-row data-lb-value="42"><span class="lb-bar-list__label">Cancellations</span><span class="lb-bar-list__value">42</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════ Store overview — the commerce skeleton ══════════════ -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Store overview — the commerce skeleton</h2>
+    <p class="gallery-section__desc">The analytics layout: trading, commerce and analytics dashboards converge on <strong>KPI strip → big time-series → breakdowns → table</strong>, and this page follows that order. Everything here is existing vocabulary: the filter row (Popover dropdowns + the <code class="lb-code">--pulse</code> live badge), KPI Stat cards with sparklines, the revenue chart using the <strong>dashed comparison series</strong> ("previous period" as context, not competition), a channel donut · top-products bar list · goal ring (Donut center slot), two axis-chart cards, and the canonical recent-customers table.</p>
+
+    <div class="dashboard-shell dashboard-shell--page" style="padding: var(--lb-size-6x);">
+      <!-- Filter row -->
+      <div class="lb-cluster" style="--gap: var(--lb-size-2x); align-items: center; margin-bottom: var(--lb-size-5x);">
+        <div class="lb-popover-host" data-lb-popover>
+          <button class="lb-popover-trigger lb-btn lb-btn--secondary lb-btn--small" type="button"><span class="lb-btn__icon" aria-hidden="true" data-lb-icon="calendar"></span> Last 30 days <span class="lb-btn__icon" aria-hidden="true" data-lb-icon="chevron-down"></span></button>
+          <div class="lb-popover lb-popover--bottom" style="display:none; min-width: 11rem; padding: var(--lb-size-1x);">
+            <button class="lb-btn lb-btn--ghost lb-btn--small" type="button" style="width: 100%; justify-content: flex-start;">Last 7 days</button>
+            <button class="lb-btn lb-btn--ghost lb-btn--small" type="button" style="width: 100%; justify-content: flex-start;">Last 30 days</button>
+            <button class="lb-btn lb-btn--ghost lb-btn--small" type="button" style="width: 100%; justify-content: flex-start;">Last 90 days</button>
+          </div>
+        </div>
+        <div class="lb-popover-host" data-lb-popover>
+          <button class="lb-popover-trigger lb-btn lb-btn--secondary lb-btn--small" type="button">vs Previous period <span class="lb-btn__icon" aria-hidden="true" data-lb-icon="chevron-down"></span></button>
+          <div class="lb-popover lb-popover--bottom" style="display:none; min-width: 12rem; padding: var(--lb-size-1x);">
+            <button class="lb-btn lb-btn--ghost lb-btn--small" type="button" style="width: 100%; justify-content: flex-start;">vs Previous period</button>
+            <button class="lb-btn lb-btn--ghost lb-btn--small" type="button" style="width: 100%; justify-content: flex-start;">vs Same period last year</button>
+            <button class="lb-btn lb-btn--ghost lb-btn--small" type="button" style="width: 100%; justify-content: flex-start;">No comparison</button>
+          </div>
+        </div>
+        <div style="flex: 1;"></div>
+        <span class="lb-badge lb-badge--success"><span class="lb-badge__dot lb-badge__dot--pulse"></span>42 live visitors</span>
+      </div>
+
+      <!-- KPI strip -->
+      <div class="lb-grid" style="--min: 14rem; margin-bottom: var(--lb-size-5x);">
+        <div class="lb-card lb-card--padded">
+          <div class="lb-stat" style="margin-bottom: var(--lb-size-3x);">
+            <div class="lb-stat__label">Revenue</div>
+            <div class="lb-stat__value">$128,940</div>
+            <div class="lb-stat__sub"><span class="lb-badge lb-badge--small lb-badge--success"><span class="lb-badge__icon" data-lb-icon="trending-up"></span>12.4%</span><span class="lb-stat__caption">vs prev. period</span></div>
+          </div>
+          <div data-lb-sparkline data-lb-variant="area" data-lb-dot data-lb-data="86,92,98,95,104,112,109,120,126,129"></div>
+        </div>
+        <div class="lb-card lb-card--padded">
+          <div class="lb-stat" style="margin-bottom: var(--lb-size-3x);">
+            <div class="lb-stat__label">Orders</div>
+            <div class="lb-stat__value">3,214</div>
+            <div class="lb-stat__sub"><span class="lb-badge lb-badge--small lb-badge--success"><span class="lb-badge__icon" data-lb-icon="trending-up"></span>6.1%</span><span class="lb-stat__caption">vs prev. period</span></div>
+          </div>
+          <div data-lb-sparkline data-lb-variant="area" data-lb-dot data-lb-data="240,255,262,258,270,284,279,296,305,321" style="--color: var(--lb-data-2);"></div>
+        </div>
+        <div class="lb-card lb-card--padded">
+          <div class="lb-stat" style="margin-bottom: var(--lb-size-3x);">
+            <div class="lb-stat__label">Avg. order value</div>
+            <div class="lb-stat__value">$40.11</div>
+            <div class="lb-stat__sub"><span class="lb-badge lb-badge--small lb-badge--danger"><span class="lb-badge__icon" data-lb-icon="trending-down"></span>1.8%</span><span class="lb-stat__caption">vs prev. period</span></div>
+          </div>
+          <div data-lb-sparkline data-lb-variant="area" data-lb-dot data-lb-data="42.2,41.8,41.5,41.9,41.2,40.8,41.0,40.4,40.3,40.1" style="--color: var(--lb-data-5);"></div>
+        </div>
+        <div class="lb-card lb-card--padded">
+          <div class="lb-stat" style="margin-bottom: var(--lb-size-3x);">
+            <div class="lb-stat__label">Visitors</div>
+            <div class="lb-stat__value">84.2k</div>
+            <div class="lb-stat__sub"><span class="lb-badge lb-badge--small lb-badge--success"><span class="lb-badge__icon" data-lb-icon="trending-up"></span>9.3%</span><span class="lb-stat__caption">vs prev. period</span></div>
+          </div>
+          <div data-lb-sparkline data-lb-variant="bar" data-lb-data="6.8,7.2,7.0,7.6,8.1,7.8,8.4,8.2,8.6,8.9" style="--color: var(--lb-data-3);"></div>
+        </div>
+      </div>
+
+      <!-- Big time-series with dashed comparison -->
+      <section class="dashboard-section">
+        <div class="lb-card lb-card--padded">
+          <div class="lb-card__heading">
+            <div class="lb-card__title">Revenue</div>
+            <div class="lb-card__subtitle">This period vs previous — the dashed line is context, not competition</div>
+          </div>
+          <div data-lb-line-chart style="margin-top: var(--lb-size-4x); --line-chart-height: 15rem;">
+            <script type="application/json">
+              {"area":true,"legend":true,"x":["Day 1","Day 4","Day 7","Day 10","Day 13","Day 16","Day 19","Day 22","Day 25","Day 28"],"series":[
+                {"name":"This period","data":[3820,4100,3960,4380,4520,4290,4710,4880,4750,5120]},
+                {"name":"Previous period","data":[3540,3720,3680,3910,4050,3980,4180,4260,4150,4390],"dashed":true}
+              ],"colors":["var(--lb-data-1)","var(--lb-fg-muted)"]}
+            </script>
+          </div>
+        </div>
+      </section>
+
+      <!-- Breakdown trio: channels · top products · goal -->
+      <section class="dashboard-section">
+        <div class="lb-grid" style="--min: 16rem;">
+          <div class="lb-card lb-card--padded">
+            <div class="lb-card__heading"><div class="lb-card__title">Sales by channel</div></div>
+            <div class="lb-cluster" style="margin-top: var(--lb-size-4x); --gap: var(--lb-size-5x); align-items: center;">
+              <div data-lb-donut style="width: 8rem; height: 8rem;">
+                <script type="application/json">
+                  {"thickness":18,"data":[
+                    {"label":"Store","value":46},
+                    {"label":"Marketplace","value":27},
+                    {"label":"Social","value":17},
+                    {"label":"Wholesale","value":10}
+                  ]}
+                </script>
+              </div>
+              <ul class="lb-donut-legend">
+                <li class="lb-donut-legend__item"><span class="lb-donut-legend__swatch" style="background: var(--lb-data-1);"></span><span class="lb-donut-legend__label">Store</span><span class="lb-donut-legend__value">46%</span></li>
+                <li class="lb-donut-legend__item"><span class="lb-donut-legend__swatch" style="background: var(--lb-data-2);"></span><span class="lb-donut-legend__label">Marketplace</span><span class="lb-donut-legend__value">27%</span></li>
+                <li class="lb-donut-legend__item"><span class="lb-donut-legend__swatch" style="background: var(--lb-data-3);"></span><span class="lb-donut-legend__label">Social</span><span class="lb-donut-legend__value">17%</span></li>
+                <li class="lb-donut-legend__item"><span class="lb-donut-legend__swatch" style="background: var(--lb-data-4);"></span><span class="lb-donut-legend__label">Wholesale</span><span class="lb-donut-legend__value">10%</span></li>
+              </ul>
+            </div>
+          </div>
+          <div class="lb-card lb-card--padded">
+            <div class="lb-card__heading"><div class="lb-card__title">Top products</div></div>
+            <ul data-lb-bar-list style="margin-top: var(--lb-size-4x); --color: var(--lb-data-2);">
+              <li data-lb-bar-list-row data-lb-value="18400"><span class="lb-bar-list__label">Signature hoodie</span><span class="lb-bar-list__value">$18.4k</span></li>
+              <li data-lb-bar-list-row data-lb-value="14100"><span class="lb-bar-list__label">Field jacket</span><span class="lb-bar-list__value">$14.1k</span></li>
+              <li data-lb-bar-list-row data-lb-value="9800"><span class="lb-bar-list__label">Canvas tote</span><span class="lb-bar-list__value">$9.8k</span></li>
+              <li data-lb-bar-list-row data-lb-value="7200"><span class="lb-bar-list__label">Wool beanie</span><span class="lb-bar-list__value">$7.2k</span></li>
+              <li data-lb-bar-list-row data-lb-value="5600"><span class="lb-bar-list__label">Enamel mug</span><span class="lb-bar-list__value">$5.6k</span></li>
+            </ul>
+          </div>
+          <div class="lb-card lb-card--padded">
+            <div class="lb-card__heading"><div class="lb-card__title">Monthly goal</div><div class="lb-card__subtitle">$150k target</div></div>
+            <div style="display: grid; place-items: center; margin-top: var(--lb-size-4x);">
+              <div data-lb-donut style="width: 9rem; height: 9rem;">
+                <script type="application/json">
+                  {"thickness":14,"data":[
+                    {"label":"Achieved","value":86},
+                    {"label":"Remaining","value":14}
+                  ],"colors":["var(--lb-data-3)","var(--lb-bg-strong)"]}
+                </script>
+                <div class="lb-donut__center">
+                  <div class="lb-donut__center-value">86%</div>
+                  <div class="lb-donut__center-label">of goal</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Axis-chart pair -->
+      <section class="dashboard-section">
+        <div class="lb-grid" style="--min: 22rem;">
+          <div class="lb-card lb-card--padded">
+            <div class="lb-card__heading"><div class="lb-card__title">Orders by country</div></div>
+            <div data-lb-bar-chart style="margin-top: var(--lb-size-4x); --bar-chart-height: 14rem;">
+              <script type="application/json">
+                {"orientation":"horizontal","x":["US","DE","GB","NL","FR","JP"],"series":[{"name":"Orders","data":[1084,612,498,342,296,214]}]}
+              </script>
+            </div>
+          </div>
+          <div class="lb-card lb-card--padded">
+            <div class="lb-card__heading"><div class="lb-card__title">Orders by day</div></div>
+            <div data-lb-bar-chart style="margin-top: var(--lb-size-4x); --bar-chart-height: 14rem;">
+              <script type="application/json">
+                {"x":["Mon","Tue","Wed","Thu","Fri","Sat","Sun"],"series":[{"name":"Orders","data":[412,438,465,502,548,468,381]}]}
+              </script>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Recent customers -->
+      <section class="dashboard-section" style="margin-bottom: 0;">
+        <div class="lb-card lb-card--padded">
+          <div class="lb-card__heading"><div class="lb-card__title">Recent customers</div></div>
+          <div class="lb-table-wrap" style="margin-top: var(--lb-size-4x);">
+            <table class="lb-table lb-table--hoverable">
+              <thead>
+                <tr>
+                  <th class="lb-table__cell" scope="col">Customer</th>
+                  <th class="lb-table__cell" scope="col">Status</th>
+                  <th class="lb-table__cell" scope="col">Country</th>
+                  <th class="lb-table__cell lb-table__cell--end" scope="col">Orders</th>
+                  <th class="lb-table__cell lb-table__cell--end" scope="col">Spent</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td class="lb-table__cell"><div class="lb-table__inline"><span class="lb-avatar lb-avatar--small" role="img" aria-label="Ines Duarte" data-lb-initials="ID"></span>Ines Duarte</div></td><td class="lb-table__cell"><span class="lb-badge lb-badge--small lb-badge--success"><span class="lb-badge__dot"></span>Repeat</span></td><td class="lb-table__cell">Portugal</td><td class="lb-table__cell lb-table__cell--end">12</td><td class="lb-table__cell lb-table__cell--end">$1,486</td></tr>
+                <tr><td class="lb-table__cell"><div class="lb-table__inline"><span class="lb-avatar lb-avatar--small" role="img" aria-label="Tom Novak" data-lb-initials="TN"></span>Tom Novak</div></td><td class="lb-table__cell"><span class="lb-badge lb-badge--small lb-badge--warning"><span class="lb-badge__dot"></span>New</span></td><td class="lb-table__cell">Czechia</td><td class="lb-table__cell lb-table__cell--end">1</td><td class="lb-table__cell lb-table__cell--end">$86</td></tr>
+                <tr><td class="lb-table__cell"><div class="lb-table__inline"><span class="lb-avatar lb-avatar--small" role="img" aria-label="Aya Sato" data-lb-initials="AS"></span>Aya Sato</div></td><td class="lb-table__cell"><span class="lb-badge lb-badge--small lb-badge--success"><span class="lb-badge__dot"></span>Repeat</span></td><td class="lb-table__cell">Japan</td><td class="lb-table__cell lb-table__cell--end">7</td><td class="lb-table__cell lb-table__cell--end">$924</td></tr>
+                <tr><td class="lb-table__cell"><div class="lb-table__inline"><span class="lb-avatar lb-avatar--small" role="img" aria-label="Amir Said" data-lb-initials="AS"></span>Amir Said</div></td><td class="lb-table__cell"><span class="lb-badge lb-badge--small lb-badge--danger"><span class="lb-badge__dot"></span>At risk</span></td><td class="lb-table__cell">Morocco</td><td class="lb-table__cell lb-table__cell--end">4</td><td class="lb-table__cell lb-table__cell--end">$312</td></tr>
+                <tr><td class="lb-table__cell"><div class="lb-table__inline"><span class="lb-avatar lb-avatar--small" role="img" aria-label="Lea Fischer" data-lb-initials="LF"></span>Lea Fischer</div></td><td class="lb-table__cell"><span class="lb-badge lb-badge--small lb-badge--success"><span class="lb-badge__dot"></span>Repeat</span></td><td class="lb-table__cell">Germany</td><td class="lb-table__cell lb-table__cell--end">9</td><td class="lb-table__cell lb-table__cell--end">$1,102</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </div>
+  </section>
+</main>
+
+<script src="../js/lb.js"></script>
+<script src="../js/slot-engine.js"></script>
+<script src="../js/theme-editor.js"></script>
+<script src="../js/token-exporter.js"></script>
+<script src="../js/gallery-layout.js"></script>
+</body>
+</html>

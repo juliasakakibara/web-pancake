@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <!-- theme-preamble:v1 -->
+  <script>(function(){try{var t=localStorage.getItem('letbe-ds-dark-mode');if(t==='1')document.documentElement.setAttribute('data-theme','dark');else if(t==='0')document.documentElement.setAttribute('data-theme','light');}catch(e){}})();</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta data-lb-page="resizable">
+  <title>Resizable — letbe-ds</title>
+  <link rel="stylesheet" href="../tokens/theme.css">
+  <link rel="stylesheet" href="../tokens/fonts.css">
+  <link rel="stylesheet" href="../components/components.css">
+  <link rel="stylesheet" href="../components/theme-editor.css">
+  <link rel="stylesheet" href="../components/gallery.css">
+  <style>
+    /* Local demo styling — each rendered example gets a fixed height
+       and a card surface so the splitter has something to grip. */
+    .demo-resizable-frame {
+      height: 18rem;
+      border: var(--lb-border-width-thin) solid var(--lb-surface-border-default);
+      border-radius: var(--lb-radius-overlay);
+      background: var(--lb-surface-bg-default);
+      overflow: hidden;
+    }
+    .demo-resizable-pane {
+      padding: var(--lb-size-4x);
+      font-family: var(--lb-t-body-m-font-family);
+      font-size: var(--lb-t-body-m-font-size);
+      color: var(--lb-fg-default);
+    }
+    .demo-resizable-pane--muted {
+      background: var(--lb-surface-bg-subtle);
+      color: var(--lb-fg-muted);
+    }
+    .demo-resizable-label {
+      font-family: var(--lb-t-label-s-font-family);
+      font-size: var(--lb-t-label-s-font-size);
+      font-weight: var(--lb-t-label-s-font-weight);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--lb-fg-muted);
+      margin-bottom: var(--lb-size-2x);
+    }
+  </style>
+</head>
+<body data-lb-base="..">
+
+<main class="gallery-main">
+  <section class="gallery-section" id="resizable">
+    <h1 class="gallery-section__title" style="font-size: var(--lb-t-heading-l-font-size); line-height: var(--lb-t-heading-l-line-height);">Resizable</h1>
+    <p class="gallery-section__desc">Splittable panel container — a flex layout with drag handles auto-injected between adjacent panels. Pointer events cover mouse, trackpad, and touch; arrow keys nudge the boundary in 5% steps with PageUp/Down for 10% and Home/End to drive it to the panel's floor (5% unless <code class="lb-code">data-lb-min</code> says otherwise). Each handle is a <code class="lb-code">role="separator"</code> with proper <code class="lb-code">aria-orientation</code> and value attributes.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>a11y (built in):</strong> each injected handle is a focusable window splitter — <code class="lb-code">role="separator"</code>, <code class="lb-code">tabindex="0"</code>, <code class="lb-code">aria-orientation</code> (flipped against the container axis), an <code class="lb-code">aria-label</code>, and <code class="lb-code">aria-valuenow</code>/<code class="lb-code">aria-valuemin</code>/<code class="lb-code">aria-valuemax</code> rewritten on every drag, key press and <code class="lb-code">setSizes()</code> call. Keyboard alone does the whole job: <kbd>←</kbd>/<kbd>→</kbd> (or <kbd>↑</kbd>/<kbd>↓</kbd> when vertical) move 5%, <kbd>PageUp</kbd>/<kbd>PageDown</kbd> 10%, <kbd>Home</kbd>/<kbd>End</kbd> run the boundary to the floor. Per-panel <code class="lb-code">data-lb-min</code> (default 5%) keeps a pane from collapsing out of reach, and the handle takes the standard <code class="lb-code">:focus-visible</code> outline.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>Usage:</strong> Add <code class="lb-code">data-lb-resizable</code> to a wrapper <code class="lb-code">div</code>. Direct children become panels — handles are inserted between them. Set <code class="lb-code">data-lb-direction="vertical"</code> for stacked layout, per-panel <code class="lb-code">data-lb-size</code> (%) for initial sizing, <code class="lb-code">data-lb-min</code> for a floor.</p>
+
+    <hr class="gallery-desc-divider">
+
+    <!-- ────────────────── Two-pane horizontal ────────────────── -->
+    <h2 class="gallery-section__title">Two-pane horizontal — sidebar + main</h2>
+    <p class="gallery-section__desc">The default direction. Drag the divider between the two panels with the mouse, or focus it with Tab and press <kbd>←</kbd> / <kbd>→</kbd>.</p>
+    <div class="demo-resizable-frame">
+      <div data-lb-resizable>
+        <div class="demo-resizable-pane demo-resizable-pane--muted" data-lb-size="25">
+          <div class="demo-resizable-label">Sidebar</div>
+          <div>Navigation, filters, or whatever lives on the side.</div>
+        </div>
+        <div class="demo-resizable-pane">
+          <div class="demo-resizable-label">Main content</div>
+          <div>This is the main reading area. Drag the divider on the left to give it more or less room.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ────────────────── Two-pane vertical ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Two-pane vertical — <code class="lb-code">data-lb-direction="vertical"</code></h2>
+    <p class="gallery-section__desc">Same component, stacked axis. Useful for editor + preview, or list + detail.</p>
+    <div class="demo-resizable-frame">
+      <div data-lb-resizable data-lb-direction="vertical">
+        <div class="demo-resizable-pane">
+          <div class="demo-resizable-label">Editor</div>
+          <div>Top half — editing surface.</div>
+        </div>
+        <div class="demo-resizable-pane demo-resizable-pane--muted">
+          <div class="demo-resizable-label">Preview</div>
+          <div>Bottom half — render output.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ────────────────── Three-pane horizontal ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Three-pane — IDE layout</h2>
+    <p class="gallery-section__desc">Two handles, one for each adjacent boundary. Each panel can have its own initial size and minimum.</p>
+    <div class="demo-resizable-frame">
+      <div data-lb-resizable>
+        <div class="demo-resizable-pane demo-resizable-pane--muted" data-lb-size="20" data-lb-min="15">
+          <div class="demo-resizable-label">Files</div>
+          <div>Tree view of the project, channels, or whatever the left rail holds.</div>
+        </div>
+        <div class="demo-resizable-pane" data-lb-size="55">
+          <div class="demo-resizable-label">Editor</div>
+          <div>Center column carries the primary working surface — code, document, conversation thread.</div>
+        </div>
+        <div class="demo-resizable-pane demo-resizable-pane--muted" data-lb-size="25" data-lb-min="15">
+          <div class="demo-resizable-label">Inspector</div>
+          <div>Right rail for details, properties, or chat-style metadata.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ────────────────── Nested ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Nested splits</h2>
+    <p class="gallery-section__desc">Resizables compose — one panel can itself be a vertical Resizable, giving the IDE-style left rail + center stack + right rail layout.</p>
+    <div class="demo-resizable-frame" style="height: 24rem;">
+      <div data-lb-resizable>
+        <div class="demo-resizable-pane demo-resizable-pane--muted" data-lb-size="22">
+          <div class="demo-resizable-label">Files</div>
+          <div>Left rail.</div>
+        </div>
+        <div data-lb-resizable data-lb-direction="vertical" style="display: flex;">
+          <div class="demo-resizable-pane" data-lb-size="65">
+            <div class="demo-resizable-label">Editor</div>
+            <div>Top half of the center column.</div>
+          </div>
+          <div class="demo-resizable-pane demo-resizable-pane--muted">
+            <div class="demo-resizable-label">Terminal</div>
+            <div>Bottom half — log output, terminal, run results.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ────────────────── Min sizes ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Min sizes — <code class="lb-code">data-lb-min</code></h2>
+    <p class="gallery-section__desc">Each panel can declare a percentage floor. Try dragging the divider all the way left — the sidebar bottoms out at 20% instead of collapsing.</p>
+    <div class="demo-resizable-frame">
+      <div data-lb-resizable id="min-resizable">
+        <div class="demo-resizable-pane demo-resizable-pane--muted" data-lb-size="40" data-lb-min="20">
+          <div class="demo-resizable-label">Sidebar (min 20%)</div>
+          <div>Has a 20% floor — drag the divider all the way left to test.</div>
+        </div>
+        <div class="demo-resizable-pane" data-lb-min="30">
+          <div class="demo-resizable-label">Main (min 30%)</div>
+          <div>Has a 30% floor — drag the divider all the way right to test.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ────────────────── Programmatic + event ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Event listener and programmatic API</h2>
+    <p class="gallery-section__desc">The component dispatches <code class="lb-code">lb-resizable-change</code> with <code class="lb-code">{sizes}</code> after every drag and key adjustment. <code class="lb-code">el._lbResizable.setSizes([…])</code> moves the boundaries from JS — useful for "reset" buttons or saved layouts.</p>
+    <div class="lb-stack">
+      <div class="lb-cluster">
+        <button class="lb-btn lb-btn--secondary lb-btn--small" id="r-reset">Reset to 50/50</button>
+        <button class="lb-btn lb-btn--secondary lb-btn--small" id="r-collapse">Collapse sidebar</button>
+        <span class="lb-rating__value-text" id="r-out">50.0% / 50.0%</span>
+      </div>
+      <div class="demo-resizable-frame">
+        <div data-lb-resizable id="api-resizable">
+          <div class="demo-resizable-pane demo-resizable-pane--muted">
+            <div class="demo-resizable-label">Pane A</div>
+          </div>
+          <div class="demo-resizable-pane">
+            <div class="demo-resizable-label">Pane B</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      (function(){
+        const r = document.getElementById('api-resizable');
+        const out = document.getElementById('r-out');
+        const reset = document.getElementById('r-reset');
+        const collapse = document.getElementById('r-collapse');
+        if (!r || !out) return;
+        const fmt = (s) => s.map((x) => x.toFixed(1) + '%').join(' / ');
+        r.addEventListener('lb-resizable-change', (e) => { out.textContent = fmt(e.detail.sizes); });
+        reset.addEventListener('click', () => r._lbResizable.setSizes([50, 50]));
+        collapse.addEventListener('click', () => r._lbResizable.setSizes([10, 90]));
+      })();
+    </script>
+  </section>
+</main>
+
+<script src="../js/lb.js"></script>
+<script src="../js/slot-engine.js"></script>
+<script src="../js/theme-editor.js"></script>
+<script src="../js/token-exporter.js"></script>
+<script src="../js/gallery-layout.js"></script>
+</body>
+</html>

@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <!-- theme-preamble:v1 -->
+  <script>(function(){try{var t=localStorage.getItem('letbe-ds-dark-mode');if(t==='1')document.documentElement.setAttribute('data-theme','dark');else if(t==='0')document.documentElement.setAttribute('data-theme','light');}catch(e){}})();</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta data-lb-page="card">
+  <title>Card — letbe-ds</title>
+  <link rel="stylesheet" href="../tokens/theme.css">
+  <link rel="stylesheet" href="../tokens/fonts.css">
+  <link rel="stylesheet" href="../components/components.css">
+  <link rel="stylesheet" href="../components/theme-editor.css">
+  <link rel="stylesheet" href="../components/gallery.css">
+</head>
+<body data-lb-base="..">
+
+<main class="gallery-main">
+  <section class="gallery-section" id="card">
+    <h1 class="gallery-section__title" style="font-size: var(--lb-t-heading-l-font-size); line-height: var(--lb-t-heading-l-line-height);">Card</h1>
+    <p class="gallery-section__desc">Surface container for grouped content. Default is bordered with 24px padding; variants layer on top — <code class="lb-code">--elevated</code> (shadow), <code class="lb-code">--interactive</code> (hover lift + brand border + focus ring), <code class="lb-code">--stat</code> (dashboard metric tile). Three sizes: <code class="lb-code">--sm</code> / default / <code class="lb-code">--lg</code>. Media in three positions: top (default), left (horizontal layout), background (full-bleed overlay). Composable slots: <code class="lb-code">__header</code>, <code class="lb-code">__body</code>, <code class="lb-code">__section</code> (divided subsection), <code class="lb-code">__footer</code>, <code class="lb-code">__media</code>.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>a11y (built in):</strong> for clickable cards, render the whole card as a <code class="lb-code">&lt;a&gt;</code> or <code class="lb-code">&lt;button class="lb-card lb-card--interactive"&gt;</code> so the full surface is one click target — don't nest a button inside a clickable div. Selected grid tiles use <code class="lb-code">aria-pressed</code> (button) or <code class="lb-code">aria-current</code> (navigation). The CSS supplies the rest: <code class="lb-code">--interactive</code> carries its own <code class="lb-code">:focus-visible</code> outline, and under <code class="lb-code">prefers-reduced-motion: reduce</code> the hover lift is dropped while the border and shadow feedback stay.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>Usage:</strong> Pure CSS — no controller, no <code class="lb-code">data-lb-*</code> hook, no events; compose the slot classes and ship. Selection in picker grids is consumer-wired: toggle <code class="lb-code">.lb-card--selected</code> and mirror it into <code class="lb-code">aria-pressed</code> yourself, exactly as this page's plan-picker demo does in a page-local script — <code class="lb-code">lb.js</code> never touches cards. The only live parts are <code class="lb-code">data-lb-icon</code> slots (nav chevron, header icon buttons), hydrated by the <code class="lb-code">LB.init()</code> sweep on <code class="lb-code">DOMContentLoaded</code> — load <code class="lb-code">js/lb.js</code> when using those and call <code class="lb-code">LB.initIcons(root)</code> for cards injected after boot.</p>
+
+    <hr class="gallery-desc-divider">
+
+    <!-- ────────────────── Default + variants ────────────────── -->
+    <h2 class="gallery-section__title">Default + variants</h2>
+    <p class="gallery-section__desc">Default card has a visible border and no shadow. Variants add elevation, interactivity, or swap to the Stat tile style.</p>
+    <div class="lb-grid" style="--min: 15rem;">
+      <div class="lb-card">
+        <div class="lb-card__body">
+          <h3 class="lb-card__title">Default</h3>
+          <p class="lb-card__description">Bordered surface with 24px padding. The baseline card.</p>
+        </div>
+      </div>
+      <div class="lb-card lb-card--elevated">
+        <div class="lb-card__body">
+          <h3 class="lb-card__title">Elevated</h3>
+          <p class="lb-card__description">Adds a soft drop shadow for visual depth on busy pages.</p>
+        </div>
+      </div>
+      <button type="button" class="lb-card lb-card--interactive">
+        <div class="lb-card__body">
+          <h3 class="lb-card__title">Interactive</h3>
+          <p class="lb-card__description">Hover to see the brand-accent border, lift animation, and shadow. Entire card is one click target.</p>
+        </div>
+      </button>
+    </div>
+
+    <!-- ────────────────── Sizes ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Sizes</h2>
+    <p class="gallery-section__desc">Three padding tiers — <code class="lb-code">--sm</code> (16px), default (24px), <code class="lb-code">--lg</code> (32px). One CSS custom property <code class="lb-code">--_card-pad</code> drives header, body, footer, and section paddings together.</p>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: var(--lb-size-4x);">
+      <div class="lb-card lb-card--sm">
+        <div class="lb-card__body">
+          <h3 class="lb-card__title">Small</h3>
+          <p class="lb-card__description">16px padding. Dense dashboards, inline widgets.</p>
+        </div>
+      </div>
+      <div class="lb-card">
+        <div class="lb-card__body">
+          <h3 class="lb-card__title">Default</h3>
+          <p class="lb-card__description">24px padding. Most general-purpose use.</p>
+        </div>
+      </div>
+      <div class="lb-card lb-card--lg">
+        <div class="lb-card__body">
+          <h3 class="lb-card__title">Large</h3>
+          <p class="lb-card__description">32px padding. Feature cards, marketing content.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ────────────────── Anatomy: header + body + footer ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Anatomy — header + body + footer</h2>
+    <p class="gallery-section__desc">Optional header with title + trailing actions. Divided from body by a thin line. Footer pins actions at the bottom with its own divider.</p>
+    <div style="max-width: 480px;">
+      <div class="lb-card">
+        <div class="lb-card__header">
+          <div class="lb-card__header-title">
+            <h3 class="lb-card__title">Team members</h3>
+            <p class="lb-card__description">8 active · 2 invited</p>
+          </div>
+          <div class="lb-card__header-actions">
+            <button type="button" class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--small" aria-label="More actions">
+              <span class="lb-icon-btn__icon" data-lb-icon="more-vertical"></span>
+            </button>
+          </div>
+        </div>
+        <div class="lb-card__body">
+          <p style="margin: 0; color: var(--lb-fg-muted);">Invite teammates to this workspace. They'll receive an email with a sign-in link and can get started right away.</p>
+        </div>
+        <div class="lb-card__footer">
+          <button class="lb-btn lb-btn--secondary lb-btn--small">View all</button>
+          <button class="lb-btn lb-btn--primary lb-btn--small">Invite</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ────────────────── Media variants ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Media — top / left / background</h2>
+    <p class="gallery-section__desc">Media slot supports three positions. Left (<code class="lb-code">lb-card--media-left</code>) pairs with horizontal layout — media takes a 14rem-max column. Background (<code class="lb-code">lb-card--media-bg</code>) overlays content on a full-bleed image with a dark-to-transparent scrim for legibility.</p>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--lb-size-4x);">
+      <div class="lb-card">
+        <div class="lb-card__media lb-card__media--top lb-card__media--16x9" style="background-image: linear-gradient(135deg, var(--lb-violet-500), var(--lb-blue-600)); background-size: cover;"></div>
+        <div class="lb-card__body">
+          <h3 class="lb-card__title">Top media</h3>
+          <p class="lb-card__description">Image stacked above the content. The default layout.</p>
+        </div>
+      </div>
+
+      <div class="lb-card lb-card--media-left">
+        <div class="lb-card__media" style="background-image: linear-gradient(135deg, var(--lb-green-500), var(--lb-yellow-500)); background-size: cover;"></div>
+        <div class="lb-card__body">
+          <h3 class="lb-card__title">Left media</h3>
+          <p class="lb-card__description">Horizontal layout — media column + content column. Good for list items with thumbnails.</p>
+        </div>
+      </div>
+
+      <div class="lb-card lb-card--media-bg lb-card--lg" style="min-height: 14rem;">
+        <div class="lb-card__media" style="background-image: linear-gradient(135deg, var(--lb-red-500), var(--lb-violet-700)); background-size: cover;"></div>
+        <div class="lb-card__body" style="justify-content: flex-end; flex: 1;">
+          <h3 class="lb-card__title">Background media</h3>
+          <p class="lb-card__description">Full-bleed image with scrim. Content overlays — all text flips to inverse for legibility.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ────────────────── Media aspect ratios ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Media aspect ratios</h2>
+    <p class="gallery-section__desc">Top-stacked media carries a fixed ratio so the box never collapses — <code class="lb-code">lb-card__media--top</code> defaults to 16:9. Override with a ratio preset (mirrors the Figma <code class="lb-code">card/media</code> variants): <code class="lb-code">--16x9</code>, <code class="lb-code">--4x3</code>, <code class="lb-code">--1x1</code>, <code class="lb-code">--3x4</code>. Left- and background-media derive their size from layout, so ratios don't apply there.</p>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: var(--lb-size-4x); max-width: 800px;">
+      <div class="lb-card">
+        <div class="lb-card__media lb-card__media--top lb-card__media--16x9" style="background-image: linear-gradient(135deg, var(--lb-violet-500), var(--lb-blue-600));"></div>
+        <div class="lb-card__body"><p class="lb-card__description"><code>--16x9</code></p></div>
+      </div>
+      <div class="lb-card">
+        <div class="lb-card__media lb-card__media--top lb-card__media--4x3" style="background-image: linear-gradient(135deg, var(--lb-green-500), var(--lb-yellow-500));"></div>
+        <div class="lb-card__body"><p class="lb-card__description"><code>--4x3</code></p></div>
+      </div>
+      <div class="lb-card">
+        <div class="lb-card__media lb-card__media--top lb-card__media--1x1" style="background-image: linear-gradient(135deg, var(--lb-red-500), var(--lb-violet-700));"></div>
+        <div class="lb-card__body"><p class="lb-card__description"><code>--1x1</code></p></div>
+      </div>
+      <div class="lb-card">
+        <div class="lb-card__media lb-card__media--top lb-card__media--3x4" style="background-image: linear-gradient(135deg, var(--lb-blue-600), var(--lb-green-500));"></div>
+        <div class="lb-card__body"><p class="lb-card__description"><code>--3x4</code></p></div>
+      </div>
+    </div>
+
+    <!-- ────────────────── Sections ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Section dividers</h2>
+    <p class="gallery-section__desc">Use <code class="lb-code">__section</code> to split a card into logical groups separated by a thin line. Common for Settings cards.</p>
+    <div style="max-width: 480px;">
+      <div class="lb-card">
+        <div class="lb-card__header">
+          <div class="lb-card__header-title">
+            <h3 class="lb-card__title">Notifications</h3>
+          </div>
+        </div>
+        <div class="lb-card__section">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+              <p style="margin: 0 0 var(--lb-size-0-5x); font-weight: var(--lb-font-weight-medium);">Email digest</p>
+              <p style="margin: 0; color: var(--lb-fg-muted); font-size: var(--lb-t-body-s-font-size);">Daily summary of activity.</p>
+            </div>
+            <label class="lb-switch-wrap"><input type="checkbox" class="lb-switch" role="switch" aria-label="Email notifications" checked></label>
+          </div>
+        </div>
+        <div class="lb-card__section">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+              <p style="margin: 0 0 var(--lb-size-0-5x); font-weight: var(--lb-font-weight-medium);">Mentions</p>
+              <p style="margin: 0; color: var(--lb-fg-muted); font-size: var(--lb-t-body-s-font-size);">When teammates tag you directly.</p>
+            </div>
+            <label class="lb-switch-wrap"><input type="checkbox" class="lb-switch" role="switch" aria-label="Push notifications" checked></label>
+          </div>
+        </div>
+        <div class="lb-card__section">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+              <p style="margin: 0 0 var(--lb-size-0-5x); font-weight: var(--lb-font-weight-medium);">Product updates</p>
+              <p style="margin: 0; color: var(--lb-fg-muted); font-size: var(--lb-t-body-s-font-size);">Monthly release notes.</p>
+            </div>
+            <label class="lb-switch-wrap"><input type="checkbox" class="lb-switch" role="switch" aria-label="Weekly digest"></label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ────────────────── Stat cards ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Stat tiles — dashboard metrics</h2>
+    <p class="gallery-section__desc">Specialised layout for KPIs. Label (uppercase caption) + big tabular-nums value + optional delta with up/down tone (success / danger).</p>
+    <div class="lb-grid" style="--min: 11rem;">
+      <div class="lb-card lb-card--stat">
+        <p class="lb-card__stat-label">Monthly revenue</p>
+        <p class="lb-card__stat-value">$48,210</p>
+        <span class="lb-card__stat-delta lb-card__stat-delta--up">
+          <span data-lb-icon="chevron-up" aria-hidden="true"></span>
+          +12.4% vs last month
+        </span>
+      </div>
+      <div class="lb-card lb-card--stat">
+        <p class="lb-card__stat-label">Active users</p>
+        <p class="lb-card__stat-value">2,847</p>
+        <span class="lb-card__stat-delta lb-card__stat-delta--up">
+          <span data-lb-icon="chevron-up" aria-hidden="true"></span>
+          +3.2%
+        </span>
+      </div>
+      <div class="lb-card lb-card--stat">
+        <p class="lb-card__stat-label">Churn rate</p>
+        <p class="lb-card__stat-value">2.1%</p>
+        <span class="lb-card__stat-delta lb-card__stat-delta--down">
+          <span data-lb-icon="chevron-down" aria-hidden="true"></span>
+          −0.4%
+        </span>
+      </div>
+      <div class="lb-card lb-card--stat">
+        <p class="lb-card__stat-label">Avg response time</p>
+        <p class="lb-card__stat-value">4.2h</p>
+        <span class="lb-card__stat-delta">No change</span>
+      </div>
+    </div>
+
+    <!-- ────────────────── Selected state (picker grid) ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Selected state — picker grid</h2>
+    <p class="gallery-section__desc">Combine <code class="lb-code">--interactive</code> + <code class="lb-code">--selected</code> for picker patterns (plan picker, theme picker, avatar picker). Use <code class="lb-code">aria-pressed</code> on buttons or <code class="lb-code">aria-current</code> on links.</p>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--lb-size-4x); max-width: 720px;" id="plan-picker">
+      <button type="button" class="lb-card lb-card--interactive" aria-pressed="false" data-plan="free">
+        <div class="lb-card__body">
+          <h3 class="lb-card__title">Free</h3>
+          <p class="lb-card__description">$0/mo · Up to 3 projects</p>
+        </div>
+      </button>
+      <button type="button" class="lb-card lb-card--interactive lb-card--selected" aria-pressed="true" data-plan="pro">
+        <div class="lb-card__body">
+          <h3 class="lb-card__title">Pro</h3>
+          <p class="lb-card__description">$12/mo · Unlimited projects</p>
+        </div>
+      </button>
+      <button type="button" class="lb-card lb-card--interactive" aria-pressed="false" data-plan="team">
+        <div class="lb-card__body">
+          <h3 class="lb-card__title">Team</h3>
+          <p class="lb-card__description">$36/mo · 10 seats + SSO</p>
+        </div>
+      </button>
+    </div>
+
+    <!-- ────────────────── Navigation card ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Navigation card — trailing chevron</h2>
+    <p class="gallery-section__desc">Add <code class="lb-code">.lb-card__nav-icon</code> to signal "this card navigates somewhere". Chevron sits at the right edge, muted by default, slides 2px right and goes full-color on hover. Pair with <code class="lb-code">.lb-card--interactive</code> + a real <code class="lb-code">&lt;a&gt;</code> or <code class="lb-code">&lt;button&gt;</code>.</p>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--lb-size-3x); max-width: 720px;">
+      <a href="#" class="lb-card lb-card--interactive">
+        <div class="lb-card__body">
+          <h3 class="lb-card__title">Workspace settings</h3>
+          <p class="lb-card__description">Manage members, billing, and integrations.</p>
+        </div>
+        <span class="lb-card__nav-icon" aria-hidden="true" data-lb-icon="chevron-right"></span>
+      </a>
+      <a href="#" class="lb-card lb-card--interactive">
+        <div class="lb-card__body">
+          <h3 class="lb-card__title">API documentation</h3>
+          <p class="lb-card__description">Reference, examples, and best practices.</p>
+        </div>
+        <span class="lb-card__nav-icon" aria-hidden="true" data-lb-icon="chevron-right"></span>
+      </a>
+      <a href="https://lucide.dev" target="_blank" rel="noopener noreferrer" class="lb-card lb-card--interactive">
+        <div class="lb-card__body">
+          <h3 class="lb-card__title">Lucide icons</h3>
+          <p class="lb-card__description">External — opens in new tab.</p>
+        </div>
+        <span class="lb-card__nav-icon" aria-hidden="true" data-lb-icon="arrow-up-right"></span>
+      </a>
+    </div>
+
+    <!-- ────────────────── Disabled ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Disabled</h2>
+    <p class="gallery-section__desc">Reduced opacity, pointer events disabled. For options that exist but aren't available (out of stock, locked behind a plan). When the card is rendered as a real <code class="lb-code">&lt;button&gt;</code> use the native <code class="lb-code">disabled</code> attribute; otherwise add <code class="lb-code">aria-disabled="true"</code> + <code class="lb-code">tabindex="-1"</code> so assistive tech announces the unavailable state.</p>
+    <div style="max-width: 320px;">
+      <div class="lb-card lb-card--interactive lb-card--disabled" role="button" aria-disabled="true" tabindex="-1">
+        <div class="lb-card__body">
+          <h3 class="lb-card__title">Enterprise</h3>
+          <p class="lb-card__description">Contact sales for a quote</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ────────────────── Loading / skeleton ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Loading state</h2>
+    <p class="gallery-section__desc">Use Skeleton primitives inside card slots to mirror the final layout while data loads.</p>
+    <div style="max-width: 320px;">
+      <div class="lb-card">
+        <div class="lb-card__media lb-card__media--16x9">
+          <div class="lb-skeleton lb-skeleton--rectangular" style="width: 100%; height: 100%; border-radius: 0;"></div>
+        </div>
+        <div class="lb-card__body">
+          <div class="lb-skeleton lb-skeleton--text" style="width: 60%; height: 1.25rem;"></div>
+          <div class="lb-skeleton-lines" style="margin-top: var(--lb-size-2x);">
+            <div class="lb-skeleton lb-skeleton--text"></div>
+            <div class="lb-skeleton lb-skeleton--text" style="width: 80%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+</main>
+
+<script src="../js/lb.js"></script>
+<script src="../js/slot-engine.js"></script>
+<script src="../js/theme-editor.js"></script>
+<script src="../js/token-exporter.js"></script>
+<script src="../js/gallery-layout.js"></script>
+
+<script>
+  // Plan picker — toggle selected state on click, one at a time
+  document.addEventListener('DOMContentLoaded', () => {
+    const picker = document.getElementById('plan-picker');
+    if (!picker) return;
+    picker.addEventListener('click', (e) => {
+      const card = e.target.closest('[data-plan]');
+      if (!card) return;
+      picker.querySelectorAll('[data-plan]').forEach((c) => {
+        c.setAttribute('aria-pressed', 'false');
+        c.classList.remove('lb-card--selected');
+      });
+      card.setAttribute('aria-pressed', 'true');
+      card.classList.add('lb-card--selected');
+    });
+  });
+</script>
+</body>
+</html>

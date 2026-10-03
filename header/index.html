@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <!-- theme-preamble:v1 -->
+  <script>(function(){try{var t=localStorage.getItem('letbe-ds-dark-mode');if(t==='1')document.documentElement.setAttribute('data-theme','dark');else if(t==='0')document.documentElement.setAttribute('data-theme','light');}catch(e){}})();</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta data-lb-page="header">
+  <title>Header — letbe-ds</title>
+  <link rel="stylesheet" href="../tokens/theme.css">
+  <link rel="stylesheet" href="../tokens/fonts.css">
+  <link rel="stylesheet" href="../components/components.css">
+  <link rel="stylesheet" href="../components/theme-editor.css">
+  <link rel="stylesheet" href="../components/gallery.css">
+</head>
+<body data-lb-base="..">
+
+<main class="gallery-main">
+  <section class="gallery-section" id="header">
+    <h1 class="gallery-section__title" style="font-size: var(--lb-t-heading-l-font-size); line-height: var(--lb-t-heading-l-line-height);">Header</h1>
+    <p class="gallery-section__desc">The site/app navigation header — <code class="lb-code">LB.Header</code>. Three base compositions from one component: <strong>contained bar</strong> (default, app-shell), <strong>mega-menu</strong> (categorized full-width panels, marketing), and <strong>floating pill</strong> (centered rounded island, landing pages). Logo, nav items, and CTA are slots. Responsive: nav collapses to an accessible modal drawer at ≤768px. Reuses <code class="lb-code">.lb-btn</code> for CTAs.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>a11y (built in):</strong> mega-menus are disclosure widgets (<code class="lb-code">button</code> + <code class="lb-code">aria-expanded</code>, not <code class="lb-code">role=menu</code> — links stay links); <kbd>Esc</kbd> closes a panel/drawer and returns focus; the mobile drawer is a real modal (<code class="lb-code">role=dialog</code> + <code class="lb-code">aria-modal</code> + focus trap + scroll-lock); a visually-hidden skip-to-content link leads each header. The active page pairs <code class="lb-code">aria-current="page"</code> with a non-colour indicator — an underline bar in the header, a left bar + selected fill in the drawer — so the current page stays visible even in themes where the selected ink equals the default ink. <strong>Resize the window below 768px</strong> to see the drawer.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>Usage:</strong> Load <code class="lb-code">js/lb.js</code> first, then <code class="lb-code">js/components/lb-header.js</code>; every <code class="lb-code">&lt;header data-lb-header&gt;</code> auto-inits, and a console warning names the missing script if you forget the module. You author both nav copies: the inline links in <code class="lb-code">.lb-header__inner</code> and the drawer content in <code class="lb-code">[data-lb-header-drawer]</code> are separate markup the component toggles, never clones — the burger is <code class="lb-code">[data-lb-header-toggle]</code>, and a mega item is a <code class="lb-code">.lb-header__item</code> wrapping <code class="lb-code">button[data-lb-header-mega]</code> plus its sibling <code class="lb-code">[data-lb-header-mega-panel]</code>. The scroll listener attaches only when <code class="lb-code">--transparent</code> or <code class="lb-code">--shrink</code> is present (rAF-throttled) and toggles <code class="lb-code">lb-header--scrolled</code> — style against that class for custom scrolled looks. Observe <code class="lb-code">lb-header-drawer-open/-close</code> and <code class="lb-code">lb-header-mega-open</code> (<code class="lb-code">{trigger}</code>) / <code class="lb-code">lb-header-mega-close</code>, or call <code class="lb-code">el._lbHeader</code> methods directly.</p>
+
+    <hr class="gallery-desc-divider">
+
+    <!-- ────────────────── A. Contained bar ────────────────── -->
+    <h2 class="gallery-section__title">A · Contained bar — <code class="lb-code">default</code></h2>
+    <p class="gallery-section__desc">Logo left, inline nav, CTAs right. The default and the app-shell header. Here shown <code class="lb-code">--sticky</code> inside a scroll box.</p>
+    <div style="border: var(--lb-border-width-thin) solid var(--lb-border-muted); border-radius: var(--lb-radius-overlay); overflow: hidden;">
+      <header class="lb-header lb-header--sticky" data-lb-header>
+        <a class="lb-header__skip" href="#demoA-main">Skip to content</a>
+        <div class="lb-header__inner" data-lb-header-inner>
+          <a class="lb-header__brand" href="#"><span class="lb-header__logo" data-lb-icon="letbe"></span> letbe</a>
+          <nav class="lb-header__nav" aria-label="Primary">
+            <a class="lb-header__link lb-header__link--active" href="#" aria-current="page">Product</a>
+            <a class="lb-header__link" href="#">Pricing</a>
+            <a class="lb-header__link" href="#">Docs</a>
+            <a class="lb-header__link" href="#">Blog</a>
+          </nav>
+          <div class="lb-header__actions">
+            <a class="lb-btn lb-btn--ghost lb-btn--small" href="#">Sign in</a>
+            <a class="lb-btn lb-btn--primary lb-btn--small" href="#">Get started</a>
+          </div>
+          <button class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--medium lb-header__toggle" data-lb-header-toggle aria-label="Open menu"><span data-lb-icon="menu"></span></button>
+        </div>
+        <div class="lb-header__drawer" data-lb-header-drawer aria-label="Menu">
+          <div class="lb-header__drawer-head">
+            <strong>Menu</strong>
+            <button class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--medium lb-header__toggle" data-lb-header-drawer-close aria-label="Close menu"><span data-lb-icon="x"></span></button>
+          </div>
+          <a class="lb-header__link lb-header__link--active" href="#" aria-current="page">Product</a>
+          <a class="lb-header__link" href="#">Pricing</a>
+          <a class="lb-header__link" href="#">Docs</a>
+          <a class="lb-header__link" href="#">Blog</a>
+          <div class="lb-header__drawer-actions">
+            <a class="lb-btn lb-btn--ghost lb-btn--medium" href="#">Sign in</a>
+            <a class="lb-btn lb-btn--primary lb-btn--medium" href="#">Get started</a>
+          </div>
+        </div>
+      </header>
+      <div id="demoA-main" tabindex="0" style="height: 260px; overflow-y: auto; padding: var(--lb-size-4x); background: var(--lb-bg-default);">
+        <p class="gallery-section__desc">Scroll this box — the bar stays pinned. (Sticky headers must be a direct child of the scroll root; here the header is a sibling of this scroll area.)</p>
+        <div style="height: 600px;"></div>
+      </div>
+    </div>
+
+    <!-- ────────────────── B. Mega-menu ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">B · Mega-menu — marketing header</h2>
+    <p class="gallery-section__desc">A nav item opens a full-width categorized panel. Click <strong>Resources</strong>. Disclosure pattern — <kbd>Esc</kbd> closes and returns focus; outside-click closes.</p>
+    <div style="border: var(--lb-border-width-thin) solid var(--lb-border-muted); border-radius: var(--lb-radius-overlay); overflow: hidden;">
+      <header class="lb-header" data-lb-header>
+        <a class="lb-header__skip" href="#demoB-main">Skip to content</a>
+        <div class="lb-header__inner" data-lb-header-inner>
+          <a class="lb-header__brand" href="#"><span class="lb-header__logo" data-lb-icon="letbe"></span> letbe</a>
+          <nav class="lb-header__nav" aria-label="Primary (mega-menu demo)">
+            <a class="lb-header__link" href="#">Product</a>
+            <div class="lb-header__item">
+              <button class="lb-header__link" data-lb-header-mega>Resources <span data-lb-icon="chevron-down"></span></button>
+              <div class="lb-header__mega" data-lb-header-mega-panel id="megaB">
+                <div class="lb-header__mega-inner">
+                  <div class="lb-header__mega-col">
+                    <span class="lb-header__mega-label">Learn</span>
+                    <a class="lb-header__mega-link" href="#">Documentation <small>Guides & API reference</small></a>
+                    <a class="lb-header__mega-link" href="#">Tutorials <small>Step-by-step</small></a>
+                    <a class="lb-header__mega-link" href="#">Changelog <small>What's new</small></a>
+                  </div>
+                  <div class="lb-header__mega-col">
+                    <span class="lb-header__mega-label">Community</span>
+                    <a class="lb-header__mega-link" href="#">Discord <small>Chat with the team</small></a>
+                    <a class="lb-header__mega-link" href="#">GitHub <small>Source & issues</small></a>
+                    <a class="lb-header__mega-link" href="#">Showcase <small>Built with letbe</small></a>
+                  </div>
+                  <div class="lb-header__mega-col">
+                    <span class="lb-header__mega-label">Company</span>
+                    <a class="lb-header__mega-link" href="#">About <small>Our story</small></a>
+                    <a class="lb-header__mega-link" href="#">Careers <small>Join us</small></a>
+                    <a class="lb-header__mega-link" href="#">Contact <small>Talk to sales</small></a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <a class="lb-header__link" href="#">Pricing</a>
+            <a class="lb-header__link" href="#">Enterprise</a>
+          </nav>
+          <div class="lb-header__actions">
+            <a class="lb-btn lb-btn--ghost lb-btn--small" href="#">Sign in</a>
+            <a class="lb-btn lb-btn--primary lb-btn--small" href="#">Start free</a>
+          </div>
+          <button class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--medium lb-header__toggle" data-lb-header-toggle aria-label="Open menu"><span data-lb-icon="menu"></span></button>
+        </div>
+        <div class="lb-header__drawer" data-lb-header-drawer aria-label="Menu">
+          <div class="lb-header__drawer-head">
+            <strong>Menu</strong>
+            <button class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--medium lb-header__toggle" data-lb-header-drawer-close aria-label="Close menu"><span data-lb-icon="x"></span></button>
+          </div>
+          <a class="lb-header__link" href="#">Product</a>
+          <a class="lb-header__link" href="#">Resources</a>
+          <a class="lb-header__link" href="#">Pricing</a>
+          <a class="lb-header__link" href="#">Enterprise</a>
+          <div class="lb-header__drawer-actions">
+            <a class="lb-btn lb-btn--ghost lb-btn--medium" href="#">Sign in</a>
+            <a class="lb-btn lb-btn--primary lb-btn--medium" href="#">Start free</a>
+          </div>
+        </div>
+      </header>
+      <div id="demoB-main" style="height: 220px; padding: var(--lb-size-4x); background: var(--lb-bg-default);">
+        <p class="gallery-section__desc">Page content. The mega panel overlays this area.</p>
+      </div>
+    </div>
+
+    <!-- ────────────────── C. Floating pill ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">C · Floating pill — <code class="lb-code">--floating</code></h2>
+    <p class="gallery-section__desc">Centered rounded island hovering over content — the 2026 landing-page look. <strong>Solid by default</strong> (safe contrast). Glass/translucency is opt-in via <code class="lb-code">--glass</code> because translucent headers fail WCAG contrast over variable backgrounds — so it's never the default.</p>
+    <div style="border: var(--lb-border-width-thin) solid var(--lb-border-muted); border-radius: var(--lb-radius-overlay); overflow: hidden; position: relative;">
+      <div style="height: 320px; overflow-y: auto; background: linear-gradient(135deg, var(--lb-violet-600), var(--lb-blue-600));">
+        <header class="lb-header lb-header--floating" data-lb-header>
+          <a class="lb-header__skip" href="#demoC-main">Skip to content</a>
+          <div class="lb-header__inner" data-lb-header-inner>
+            <a class="lb-header__brand" href="#"><span class="lb-header__logo" data-lb-icon="letbe"></span> letbe</a>
+            <nav class="lb-header__nav" aria-label="Primary (pill demo)">
+              <a class="lb-header__link" href="#">Features</a>
+              <a class="lb-header__link" href="#">Pricing</a>
+              <a class="lb-header__link" href="#">Docs</a>
+            </nav>
+            <div class="lb-header__actions">
+              <a class="lb-btn lb-btn--primary lb-btn--small" href="#">Get started</a>
+            </div>
+            <button class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--medium lb-header__toggle" data-lb-header-toggle aria-label="Open menu"><span data-lb-icon="menu"></span></button>
+          </div>
+          <div class="lb-header__drawer" data-lb-header-drawer aria-label="Menu">
+            <div class="lb-header__drawer-head">
+              <strong>Menu</strong>
+              <button class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--medium lb-header__toggle" data-lb-header-drawer-close aria-label="Close menu"><span data-lb-icon="x"></span></button>
+            </div>
+            <a class="lb-header__link" href="#">Features</a>
+            <a class="lb-header__link" href="#">Pricing</a>
+            <a class="lb-header__link" href="#">Docs</a>
+            <div class="lb-header__drawer-actions">
+              <a class="lb-btn lb-btn--primary lb-btn--medium" href="#">Get started</a>
+            </div>
+          </div>
+        </header>
+        <div id="demoC-main" style="padding: var(--lb-size-16x) var(--lb-size-6x); color: var(--lb-fg-inverse);">
+          <h3 style="font-size: var(--lb-t-heading-l-font-size); margin: 0 0 var(--lb-size-2x);">Ship faster.</h3>
+          <p style="opacity: 0.85; max-width: 30rem;">The pill floats above the hero. Scroll the box — it stays put. Solid fill keeps the logo and links readable over any background.</p>
+          <div style="height: 400px;"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ────────────────── Scroll behaviors ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Scroll behaviors</h2>
+    <ul class="gallery-section__desc">
+      <li><code class="lb-code">--sticky</code> — pins to the top of the scroll root (must be a direct child of it, never inside a <code class="lb-code">min-height:100vh</code> wrapper, or it stops sticking).</li>
+      <li><code class="lb-code">--transparent</code> — transparent over a hero, flips to solid once scrolled (JS adds <code class="lb-code">--scrolled</code> past an 8px threshold; override with <code class="lb-code">data-lb-scroll-threshold</code>).</li>
+      <li><code class="lb-code">--shrink</code> — trims vertical padding once scrolled.</li>
+      <li><code class="lb-code">--glass</code> — opt-in translucency + blur (only with the solid fallback baked in); never default.</li>
+    </ul>
+
+    <!-- ────────────────── API ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">API</h2>
+    <p class="gallery-section__desc">Add <code class="lb-code">data-lb-header</code> to a <code class="lb-code">&lt;header&gt;</code>. Auto-inits. Instance at <code class="lb-code">el._lbHeader</code>: <code class="lb-code">openDrawer()</code> / <code class="lb-code">closeDrawer()</code> / <code class="lb-code">toggleDrawer()</code>, <code class="lb-code">openMega(btn)</code> / <code class="lb-code">closeMega()</code>. Events (bubbling): <code class="lb-code">lb-header-drawer-open/-close</code>, <code class="lb-code">lb-header-mega-open/-close</code>.</p>
+    <pre data-lb-code-block data-lb-lang="html"><code>&lt;header class="lb-header lb-header--sticky" data-lb-header&gt;
+  &lt;a class="lb-header__skip" href="#main"&gt;Skip to content&lt;/a&gt;
+  &lt;div class="lb-header__inner" data-lb-header-inner&gt;
+    &lt;a class="lb-header__brand" href="/"&gt;&lt;span class="lb-header__logo"&gt;…logo…&lt;/span&gt; Brand&lt;/a&gt;
+    &lt;nav class="lb-header__nav" aria-label="Primary"&gt;
+      &lt;a class="lb-header__link" href="#"&gt;Product&lt;/a&gt;
+      &lt;!-- mega item --&gt;
+      &lt;div class="lb-header__item"&gt;
+        &lt;button class="lb-header__link" data-lb-header-mega&gt;Resources &lt;span data-lb-icon="chevron-down"&gt;&lt;/span&gt;&lt;/button&gt;
+        &lt;div class="lb-header__mega" data-lb-header-mega-panel&gt;…&lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/nav&gt;
+    &lt;div class="lb-header__actions"&gt;
+      &lt;a class="lb-btn lb-btn--primary lb-btn--medium" href="#"&gt;Get started&lt;/a&gt;
+    &lt;/div&gt;
+    &lt;button class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--medium lb-header__toggle" data-lb-header-toggle aria-label="Open menu"&gt;&lt;span data-lb-icon="menu"&gt;&lt;/span&gt;&lt;/button&gt;
+  &lt;/div&gt;
+  &lt;div class="lb-header__drawer" data-lb-header-drawer aria-label="Menu"&gt;…mobile nav…&lt;/div&gt;
+&lt;/header&gt;</code></pre>
+
+  </section>
+</main>
+
+<script src="../js/lb.js"></script>
+<script src="../js/components/lb-header.js"></script>
+<script src="../js/slot-engine.js"></script>
+<script src="../js/theme-editor.js"></script>
+<script src="../js/token-exporter.js"></script>
+<script src="../js/gallery-layout.js"></script>
+</body>
+</html>

@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <!-- theme-preamble:v1 -->
+  <script>(function(){try{var t=localStorage.getItem('letbe-ds-dark-mode');if(t==='1')document.documentElement.setAttribute('data-theme','dark');else if(t==='0')document.documentElement.setAttribute('data-theme','light');}catch(e){}})();</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta data-lb-page="dock">
+  <title>Composer Dock — letbe-ds</title>
+  <link rel="stylesheet" href="../tokens/theme.css">
+  <link rel="stylesheet" href="../tokens/fonts.css">
+  <link rel="stylesheet" href="../components/components.css">
+  <link rel="stylesheet" href="../components/theme-editor.css">
+  <link rel="stylesheet" href="../components/gallery.css">
+</head>
+<body data-lb-base="..">
+
+<main class="gallery-main">
+  <section class="gallery-section" id="dock">
+    <h1 class="gallery-section__title" style="font-size: var(--lb-t-heading-l-font-size); line-height: var(--lb-t-heading-l-line-height);">Composer Dock</h1>
+    <p class="gallery-section__desc">The workspace input module — mounts the existing <a class="lb-link" href="../chat/">Composer</a> (<code class="lb-code">.lb-composer</code> — chips, attach, mic, send, model slot, all <code class="lb-code">LB.Composer</code> behavior) at the bottom of a canvas. <strong>Docked by default</strong> (sticky — a floating bar would overlap the last message instead of letting the thread scroll clear of it). <code class="lb-code">--floating</code> is the opt-in for media/canvas contexts where nothing scrolls underneath. Content caps at <code class="lb-code">--lb-dock-max</code> (48rem) so the composer lines up with the thread above it — the same measure as <code class="lb-code">--lb-chat-thread-width</code>. The <strong>parameter tray</strong> is a consumed <a class="lb-link" href="../popover/">Popover</a> (<code class="lb-code">--top --tray</code>) with <a class="lb-link" href="../segmented/">Segmented</a> option rows — the disclosure semantics come from Popover, and the dock ships no JS of its own. Consumed here: <a class="lb-link" href="../chat/">Composer</a> · <a class="lb-link" href="../popover/">Popover</a> · <a class="lb-link" href="../chip/">Chip</a> · <a class="lb-link" href="../segmented/">Segmented</a> · <a class="lb-link" href="../banner/">Banner</a>. See it composed in the <a class="lb-link" href="../ai-chat/">AI Chat template</a>.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>a11y (built in):</strong> suggestion chips are real buttons before the input in DOM order; tray toggle gets <code class="lb-code">aria-haspopup/expanded/controls</code> + Esc + outside-click from Popover; safe-area padding for home-indicator devices. Mobile: on-screen keyboards shrink the visual viewport and the sticky dock rides along natively.</p>
+
+    <hr class="gallery-desc-divider">
+
+    <!-- ────────────────── A. Docked (default) ────────────────── -->
+    <h2 class="gallery-section__title">A · Docked — chat canvas</h2>
+    <p class="gallery-section__desc">Scroll the box — the dock stays pinned, content passes under the fade-free solid band. Suggestion chips above, hint line below, model button opens the tray. Actions are split by type: the input row holds only text + send; single-action buttons (attach, mic) live in the footer-left tools slot, and multi-option triggers (model — a menu, so it carries the chevron per the affordance policy) sit footer-right. An optional compact notice (<code class="lb-code">.lb-dock__notice</code> + <code class="lb-code">.lb-banner--s</code>) can sit above the composer.</p>
+    <div style="border: var(--lb-border-width-thin) solid var(--lb-border-muted); border-radius: var(--lb-radius-overlay); overflow: hidden;">
+      <div style="height: 420px; overflow-y: auto; background: var(--lb-bg-default);">
+        <div id="dockA-thread" style="max-width: 48rem; margin: 0 auto; padding: var(--lb-size-6x) var(--lb-size-4x); display: flex; flex-direction: column; gap: var(--lb-size-6x);">
+          <div class="lb-bubble lb-bubble--user">
+            <div class="lb-bubble__content">
+              <div class="lb-bubble__body">Why is the sky blue?</div>
+            </div>
+          </div>
+          <div class="lb-bubble">
+            <div class="lb-bubble__content">
+              <div class="lb-bubble__body">
+                <p>The sky looks blue because sunlight scatters as it passes through the atmosphere &mdash; shorter blue wavelengths scatter far more than the longer red ones, so blue light reaches your eyes from every direction.</p>
+                <p>At sunrise and sunset the light crosses far more air, the blue is scattered away before it reaches you, and the reds and oranges are what remain.</p>
+              </div>
+            </div>
+          </div>
+          <div style="height: 40px;"></div>
+        </div>
+        <div class="lb-dock">
+          <div class="lb-dock__inner">
+            <div class="lb-dock__suggestions">
+              <button type="button" class="lb-chip">Does it look different from space?</button>
+              <button type="button" class="lb-chip">What is the overview effect?</button>
+            </div>
+            <div class="lb-composer" data-lb-composer>
+              <div class="lb-composer__chips lb-composer__chips--empty" data-lb-composer-chips></div>
+              <div class="lb-composer__row">
+                <textarea data-lb-composer-input placeholder="Ask anything…" rows="1"></textarea>
+</div>
+              <div class="lb-composer__footer">
+                <div class="lb-composer__tools" data-lb-composer-tools>
+                  <button type="button" data-lb-composer-attach aria-label="Attach files"><span data-lb-icon="plus" aria-hidden="true"></span></button>
+                  <button type="button" data-lb-composer-mic aria-label="Voice"><span data-lb-icon="mic" aria-hidden="true"></span></button>
+                </div>
+                <div class="lb-composer__end"><div class="lb-composer__model">
+                  <div class="lb-popover-host" data-lb-popover>
+                    <button type="button" class="lb-popover-trigger lb-btn lb-btn--ghost lb-btn--small">Fable 5 <span class="lb-btn__icon" aria-hidden="true" data-lb-icon="chevron-down"></span></button>
+                    <div class="lb-popover lb-popover--top lb-popover--tray" style="display:none;">
+                      <div class="lb-dock__tray-row">
+                        <span class="lb-dock__tray-label">Model</span>
+                        <div class="lb-segmented lb-segmented--full-width" data-lb-segmented aria-label="Model">
+                          <button type="button" class="lb-segmented__item" data-lb-value="fast">Fast</button>
+                          <button type="button" class="lb-segmented__item" aria-checked="true" data-lb-value="smart">Smart</button>
+                        </div>
+                      </div>
+                      <div class="lb-dock__tray-row">
+                        <span class="lb-dock__tray-label">Effort</span>
+                        <div class="lb-segmented lb-segmented--full-width" data-lb-segmented aria-label="Effort">
+                          <button type="button" class="lb-segmented__item" data-lb-value="low">Low</button>
+                          <button type="button" class="lb-segmented__item" aria-checked="true" data-lb-value="med">Medium</button>
+                          <button type="button" class="lb-segmented__item" data-lb-value="high">High</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div><div class="lb-composer__actions">
+                  <button type="button" data-lb-composer-send aria-label="Send"><span data-lb-icon="send" aria-hidden="true"></span></button>
+                  <button type="button" data-lb-composer-stop aria-label="Stop" hidden><span data-lb-icon="square-rounded" aria-hidden="true"></span></button>
+                </div></div>
+              </div>
+            </div>
+            <p class="lb-dock__hint">Enter to send · Shift+Enter for a new line · drop files anywhere</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ────────────────── B. Floating over canvas ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">B · <code class="lb-code">--floating</code> — media canvas</h2>
+    <p class="gallery-section__desc">Nothing scrolls under the bar, so it may overlay the canvas. The host container sets <code class="lb-code">position: relative</code>. Tray here carries generation parameters (ratio · count) — segmented rows inside the same consumed Popover.</p>
+    <div style="border: var(--lb-border-width-thin) solid var(--lb-border-muted); border-radius: var(--lb-radius-overlay); overflow: hidden; position: relative;">
+      <div style="height: 380px; position: relative; background: var(--lb-bg-strong); padding: var(--lb-size-4x); overflow: hidden;">
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr)); gap: var(--lb-size-3x);">
+          <div class="lb-card lb-card--padded" style="aspect-ratio: 16/9;"></div>
+          <div class="lb-card lb-card--padded" style="aspect-ratio: 16/9;"></div>
+          <div class="lb-card lb-card--padded" style="aspect-ratio: 16/9;"></div>
+          <div class="lb-card lb-card--padded" style="aspect-ratio: 16/9;"></div>
+          <div class="lb-card lb-card--padded" style="aspect-ratio: 16/9;"></div>
+          <div class="lb-card lb-card--padded" style="aspect-ratio: 16/9;"></div>
+        </div>
+        <div class="lb-dock lb-dock--floating">
+          <div class="lb-dock__inner" style="max-width: 36rem;">
+            <div class="lb-composer" data-lb-composer>
+              <div class="lb-composer__chips lb-composer__chips--empty" data-lb-composer-chips></div>
+              <div class="lb-composer__row">
+                <textarea data-lb-composer-input placeholder="What do you want to create?" rows="1"></textarea>
+</div>
+              <div class="lb-composer__footer">
+                <div class="lb-composer__tools" data-lb-composer-tools>
+                  <button type="button" data-lb-composer-attach aria-label="Add ingredients"><span data-lb-icon="plus" aria-hidden="true"></span></button>
+                  <button type="button" class="lb-chip">Agent</button>
+                </div>
+                <div class="lb-composer__end"><div class="lb-composer__model">
+                  <div class="lb-popover-host" data-lb-popover>
+                    <button type="button" class="lb-popover-trigger lb-btn lb-btn--ghost lb-btn--small">16:9 · ×2 <span class="lb-btn__icon" aria-hidden="true" data-lb-icon="chevron-down"></span></button>
+                    <div class="lb-popover lb-popover--top lb-popover--tray" style="display:none;">
+                      <div class="lb-dock__tray-row">
+                        <span class="lb-dock__tray-label">Aspect ratio</span>
+                        <div class="lb-segmented lb-segmented--full-width" data-lb-segmented aria-label="Aspect ratio">
+                          <button type="button" class="lb-segmented__item" aria-checked="true" data-lb-value="16:9">16:9</button>
+                          <button type="button" class="lb-segmented__item" data-lb-value="4:3">4:3</button>
+                          <button type="button" class="lb-segmented__item" data-lb-value="1:1">1:1</button>
+                          <button type="button" class="lb-segmented__item" data-lb-value="9:16">9:16</button>
+                        </div>
+                      </div>
+                      <div class="lb-dock__tray-row">
+                        <span class="lb-dock__tray-label">Count</span>
+                        <div class="lb-segmented lb-segmented--full-width" data-lb-segmented aria-label="Count">
+                          <button type="button" class="lb-segmented__item" data-lb-value="1">×1</button>
+                          <button type="button" class="lb-segmented__item" aria-checked="true" data-lb-value="2">×2</button>
+                          <button type="button" class="lb-segmented__item" data-lb-value="4">×4</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div><div class="lb-composer__actions">
+                  <button type="button" data-lb-composer-send aria-label="Generate"><span data-lb-icon="send" aria-hidden="true"></span></button>
+                </div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ────────────────── Usage ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Usage</h2>
+    <p class="gallery-section__desc">Pure CSS module — the composer brings its own <code class="lb-code">LB.Composer</code> behavior (load <code class="lb-code">js/components/lb-chat.js</code>), the tray is a standard <code class="lb-code">data-lb-popover</code>. Docked: place <code class="lb-code">.lb-dock</code> as the last child of the scroll container. Floating: add <code class="lb-code">--floating</code> and give the host <code class="lb-code">position: relative</code>.</p>
+    <pre data-lb-code-block data-lb-lang="html"><code>&lt;div class="lb-dock"&gt;                                &lt;!-- or .lb-dock.lb-dock--floating --&gt;
+  &lt;div class="lb-dock__inner"&gt;
+    &lt;div class="lb-dock__suggestions"&gt;&lt;button class="lb-chip"&gt;Example prompt&lt;/button&gt;&lt;/div&gt;  &lt;!-- optional --&gt;
+    &lt;div class="lb-composer" data-lb-composer&gt;
+      … chips row + input row (textarea only) + footer: tools left (attach/mic) · end cluster right (model + send) …
+      &lt;div class="lb-composer__model"&gt;
+        &lt;div class="lb-popover-host" data-lb-popover&gt;    &lt;!-- parameter tray --&gt;
+          &lt;button class="lb-popover-trigger lb-btn lb-btn--ghost lb-btn--small"&gt;Model ▾&lt;/button&gt;
+          &lt;div class="lb-popover lb-popover--top lb-popover--tray" style="display:none;"&gt;
+            &lt;div class="lb-dock__tray-row"&gt;
+              &lt;span class="lb-dock__tray-label"&gt;Aspect ratio&lt;/span&gt;
+              &lt;div class="lb-segmented lb-segmented--full-width" data-lb-segmented&gt;…&lt;/div&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;p class="lb-dock__hint"&gt;Enter to send · Shift+Enter = new line&lt;/p&gt;         &lt;!-- optional --&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+
+  </section>
+</main>
+
+<script src="../js/lb.js"></script>
+<script src="../js/components/lb-chat.js"></script>
+<script>
+  // Demo feedback: sending in demo A appends your message above.
+  document.addEventListener('DOMContentLoaded', () => {
+    const thread = document.getElementById('dockA-thread');
+    const composer = thread && thread.parentElement.querySelector('[data-lb-composer]');
+    if (!thread || !composer) return;
+    composer.addEventListener('lb-composer-submit', (e) => {
+      const b = document.createElement('div');
+      b.className = 'lb-bubble lb-bubble--user';
+      b.innerHTML = '<div class="lb-bubble__content"><div class="lb-bubble__body"></div></div>';
+      b.querySelector('.lb-bubble__body').textContent = e.detail.value;
+      thread.insertBefore(b, thread.lastElementChild);
+      const scroller = thread.parentElement;
+      scroller.scrollTop = scroller.scrollHeight;
+    });
+  });
+</script>
+<script src="../js/slot-engine.js"></script>
+<script src="../js/theme-editor.js"></script>
+<script src="../js/token-exporter.js"></script>
+<script src="../js/gallery-layout.js"></script>
+</body>
+</html>

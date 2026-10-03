@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <!-- theme-preamble:v1 -->
+  <script>(function(){try{var t=localStorage.getItem('letbe-ds-dark-mode');if(t==='1')document.documentElement.setAttribute('data-theme','dark');else if(t==='0')document.documentElement.setAttribute('data-theme','light');}catch(e){}})();</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta data-lb-page="stat">
+  <title>Stat — letbe-ds</title>
+  <link rel="stylesheet" href="../tokens/theme.css">
+  <link rel="stylesheet" href="../tokens/fonts.css">
+  <link rel="stylesheet" href="../components/components.css">
+  <link rel="stylesheet" href="../components/theme-editor.css">
+  <link rel="stylesheet" href="../components/gallery.css">
+</head>
+<body data-lb-base="..">
+
+<main class="gallery-main">
+  <section class="gallery-section" id="stat">
+    <h1 class="gallery-section__title" style="font-size: var(--lb-t-heading-l-font-size); line-height: var(--lb-t-heading-l-line-height);">Stat</h1>
+    <p class="gallery-section__desc">Single-metric primitive. Label, value, optional delta, optional caption. Pure HTML/CSS, no JS class. Compose with <a class="lb-link" href="../card/">Card</a> for a surface, with <a class="lb-link" href="../sparkline/">Sparkline</a> for the trend strip, or with <a class="lb-link" href="../layout/">Grid</a> for a KPI row. The delta indicator is just a small <a class="lb-link" href="../badge/">Badge</a> with the right tone and a <code class="lb-code">trending-up</code> / <code class="lb-code">trending-down</code> / <code class="lb-code">minus</code> icon — reusing the system's status palette so it stays in lockstep with the theme.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>a11y (built in):</strong> Stat ships no roles and no JS controller — label, value and caption are plain text in DOM order, so it inherits whatever heading structure the host page already has. The optional leading glyph is <code class="lb-code">aria-hidden="true"</code> and always <code class="lb-code">fg-muted</code>: the <code class="lb-code">.lb-stat__label</code> text carries the meaning. Direction never rides on color alone — each delta Badge pairs its tone with a <code class="lb-code">trending-up</code> / <code class="lb-code">trending-down</code> / <code class="lb-code">minus</code> glyph beside the value.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>Usage:</strong> <code class="lb-code">.lb-stat</code> wrapper holds <code class="lb-code">.lb-stat__label</code>, <code class="lb-code">.lb-stat__value</code>, optional <code class="lb-code">.lb-stat__sub</code> with a Badge and <code class="lb-code">.lb-stat__caption</code>. Modifiers: <code class="lb-code">--compact</code>, <code class="lb-code">--row</code>.</p>
+
+    <hr class="gallery-desc-divider">
+
+    <!-- ────────────────── Default ────────────────── -->
+    <h2 class="gallery-section__title">Default</h2>
+    <p class="gallery-section__desc">Label + value is the minimum.</p>
+    <div class="gallery-row">
+      <div class="lb-stat">
+        <div class="lb-stat__label">Active users</div>
+        <div class="lb-stat__value">12,486</div>
+      </div>
+    </div>
+
+    <!-- ────────────────── With delta ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">With delta chip</h2>
+    <p class="gallery-section__desc">Three tones via the Badge component — success for gains, danger for losses, default for flat. Pair with <code class="lb-code">trending-up</code> / <code class="lb-code">trending-down</code> / <code class="lb-code">minus</code> icons.</p>
+    <div class="lb-cluster" style="--gap: var(--lb-size-8x);">
+      <div class="lb-stat">
+        <div class="lb-stat__label">Revenue</div>
+        <div class="lb-stat__value">$284k</div>
+        <div class="lb-stat__sub">
+          <span class="lb-badge lb-badge--small lb-badge--success"><span class="lb-badge__icon" data-lb-icon="trending-up"></span>12.4%</span>
+        </div>
+      </div>
+      <div class="lb-stat">
+        <div class="lb-stat__label">Churn</div>
+        <div class="lb-stat__value">3.1%</div>
+        <div class="lb-stat__sub">
+          <span class="lb-badge lb-badge--small lb-badge--danger"><span class="lb-badge__icon" data-lb-icon="trending-down"></span>0.6 pp</span>
+        </div>
+      </div>
+      <div class="lb-stat">
+        <div class="lb-stat__label">NPS</div>
+        <div class="lb-stat__value">42</div>
+        <div class="lb-stat__sub">
+          <span class="lb-badge lb-badge--small lb-badge--default"><span class="lb-badge__icon" data-lb-icon="minus"></span>0.0</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ────────────────── With caption ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">With caption — comparison context</h2>
+    <p class="gallery-section__desc">A short note next to the delta tells the reader what the comparison is against.</p>
+    <div class="gallery-row">
+      <div class="lb-stat">
+        <div class="lb-stat__label">Monthly recurring revenue</div>
+        <div class="lb-stat__value">$54,210</div>
+        <div class="lb-stat__sub">
+          <span class="lb-badge lb-badge--small lb-badge--success"><span class="lb-badge__icon" data-lb-icon="trending-up"></span>8.1%</span>
+          <span class="lb-stat__caption">vs last month</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ────────────────── In a Card — KPI strip ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">With icon — scan anchors for large grids</h2>
+    <p class="gallery-section__desc">Optional leading icon in the label row: <code class="lb-code">&lt;span class="lb-stat__icon" data-lb-icon="…"&gt;</code> before the label text, <code class="lb-code">aria-hidden</code> (the label carries the meaning), always <code class="lb-code">fg-muted</code> — never accent or delta colors. Absent by default — an icon on every tile adds noise without adding meaning; icons earn their place only as <strong>scan anchors in large mixed-metric dashboards</strong>. Consistency rule: all tiles in a grid get one, or none — skip them on small same-family strips.</p>
+    <div class="lb-grid" style="--min: 13rem;">
+      <div class="lb-card lb-card--padded">
+        <div class="lb-stat">
+          <div class="lb-stat__label"><span class="lb-stat__icon" aria-hidden="true" data-lb-icon="dollar-sign"></span>Revenue</div>
+          <div class="lb-stat__value">$128,940</div>
+          <div class="lb-stat__sub"><span class="lb-badge lb-badge--small lb-badge--success"><span class="lb-badge__icon" data-lb-icon="trending-up"></span>12.4%</span></div>
+        </div>
+      </div>
+      <div class="lb-card lb-card--padded">
+        <div class="lb-stat">
+          <div class="lb-stat__label"><span class="lb-stat__icon" aria-hidden="true" data-lb-icon="users"></span>Visitors</div>
+          <div class="lb-stat__value">84.2k</div>
+          <div class="lb-stat__sub"><span class="lb-badge lb-badge--small lb-badge--success"><span class="lb-badge__icon" data-lb-icon="trending-up"></span>9.3%</span></div>
+        </div>
+      </div>
+      <div class="lb-card lb-card--padded">
+        <div class="lb-stat">
+          <div class="lb-stat__label"><span class="lb-stat__icon" aria-hidden="true" data-lb-icon="clock"></span>Avg. session</div>
+          <div class="lb-stat__value">4m 12s</div>
+          <div class="lb-stat__sub"><span class="lb-badge lb-badge--small lb-badge--danger"><span class="lb-badge__icon" data-lb-icon="trending-down"></span>0.8%</span></div>
+        </div>
+      </div>
+      <div class="lb-card lb-card--padded">
+        <div class="lb-stat">
+          <div class="lb-stat__label"><span class="lb-stat__icon" aria-hidden="true" data-lb-icon="globe"></span>Top region</div>
+          <div class="lb-stat__value">Europe</div>
+          <div class="lb-stat__sub"><span class="lb-stat__caption">41% of traffic</span></div>
+        </div>
+      </div>
+    </div>
+
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">KPI strip — Stat × Card × Grid</h2>
+    <p class="gallery-section__desc">The dashboard pattern: four Cards in a Grid, each holding a Stat. Tokens carry the surface and breathing.</p>
+    <div class="lb-grid" style="--min: 14rem;">
+      <div class="lb-card lb-card--padded">
+        <div class="lb-stat">
+          <div class="lb-stat__label">MRR</div>
+          <div class="lb-stat__value">$54,210</div>
+          <div class="lb-stat__sub">
+            <span class="lb-badge lb-badge--small lb-badge--success"><span class="lb-badge__icon" data-lb-icon="trending-up"></span>8.1%</span>
+            <span class="lb-stat__caption">vs last month</span>
+          </div>
+        </div>
+      </div>
+      <div class="lb-card lb-card--padded">
+        <div class="lb-stat">
+          <div class="lb-stat__label">Customers</div>
+          <div class="lb-stat__value">2,184</div>
+          <div class="lb-stat__sub">
+            <span class="lb-badge lb-badge--small lb-badge--success"><span class="lb-badge__icon" data-lb-icon="trending-up"></span>64</span>
+            <span class="lb-stat__caption">net new</span>
+          </div>
+        </div>
+      </div>
+      <div class="lb-card lb-card--padded">
+        <div class="lb-stat">
+          <div class="lb-stat__label">Conversion</div>
+          <div class="lb-stat__value">4.2%</div>
+          <div class="lb-stat__sub">
+            <span class="lb-badge lb-badge--small lb-badge--danger"><span class="lb-badge__icon" data-lb-icon="trending-down"></span>0.3 pp</span>
+            <span class="lb-stat__caption">vs last week</span>
+          </div>
+        </div>
+      </div>
+      <div class="lb-card lb-card--padded">
+        <div class="lb-stat">
+          <div class="lb-stat__label">Avg session</div>
+          <div class="lb-stat__value">6m 14s</div>
+          <div class="lb-stat__sub">
+            <span class="lb-badge lb-badge--small lb-badge--default"><span class="lb-badge__icon" data-lb-icon="minus"></span>0s</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ────────────────── Compact ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Compact — for dense sidebars</h2>
+    <p class="gallery-section__desc"><code class="lb-code">--compact</code> drops the value to a heading-s scale so multiple stats fit a narrow rail.</p>
+    <div class="lb-stack" style="max-width: 16rem; padding: var(--lb-size-4x); border: var(--lb-border-width-thin) solid var(--lb-surface-border-default); border-radius: var(--lb-radius-overlay);">
+      <div class="lb-stat lb-stat--compact">
+        <div class="lb-stat__label">Online</div>
+        <div class="lb-stat__value">312</div>
+      </div>
+      <div class="lb-stat lb-stat--compact">
+        <div class="lb-stat__label">Pending</div>
+        <div class="lb-stat__value">14</div>
+      </div>
+      <div class="lb-stat lb-stat--compact">
+        <div class="lb-stat__label">Errors</div>
+        <div class="lb-stat__value">2</div>
+        <div class="lb-stat__sub">
+          <span class="lb-badge lb-badge--small lb-badge--danger"><span class="lb-badge__icon" data-lb-icon="trending-down"></span>5</span>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script src="../js/lb.js"></script>
+<script src="../js/slot-engine.js"></script>
+<script src="../js/theme-editor.js"></script>
+<script src="../js/token-exporter.js"></script>
+<script src="../js/gallery-layout.js"></script>
+</body>
+</html>

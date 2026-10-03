@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <!-- theme-preamble:v1 -->
+  <script>(function(){try{var t=localStorage.getItem('letbe-ds-dark-mode');if(t==='1')document.documentElement.setAttribute('data-theme','dark');else if(t==='0')document.documentElement.setAttribute('data-theme','light');}catch(e){}})();</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta data-lb-page="select">
+  <title>Select — letbe-ds</title>
+  <link rel="stylesheet" href="../tokens/theme.css">
+  <link rel="stylesheet" href="../tokens/fonts.css">
+  <link rel="stylesheet" href="../components/components.css">
+  <link rel="stylesheet" href="../components/theme-editor.css">
+  <link rel="stylesheet" href="../components/gallery.css">
+</head>
+<body data-lb-base="..">
+
+<main class="gallery-main">
+  <section class="gallery-section" id="select">
+    <h1 class="gallery-section__title" style="font-size: var(--lb-t-heading-l-font-size); line-height: var(--lb-t-heading-l-line-height);">Select</h1>
+    <p class="gallery-section__desc">Dropdown for choosing one option from a predefined list. Use when you have a moderate number of options (5–30) and a single value to pick. MultiSelect, further down this page, takes several values and adds an optional search field under <code class="lb-code">data-lb-filterable</code>. For a type-to-filter field, use Dropdown — both are <code class="lb-code">role=combobox</code>, but Dropdown's trigger is a text input. For free text, use Input. Sizes: small, medium.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>a11y (built in):</strong> the trigger is a real <code class="lb-code">button</code> wired as <code class="lb-code">role=combobox</code> + <code class="lb-code">aria-haspopup=listbox</code> + <code class="lb-code">aria-expanded</code> + <code class="lb-code">aria-controls</code>; the popup is a <code class="lb-code">role=listbox</code> of <code class="lb-code">role=option</code> items carrying <code class="lb-code">aria-selected</code>, and the roaming highlight is published as <code class="lb-code">aria-activedescendant</code> — focus stays on the trigger throughout and is returned there on every close path. <kbd>↑</kbd>/<kbd>↓</kbd>/<kbd>Enter</kbd>/<kbd>Space</kbd> open, <kbd>↑</kbd>/<kbd>↓</kbd> roam past disabled options, <kbd>Home</kbd>/<kbd>End</kbd> jump, <kbd>Enter</kbd>/<kbd>Space</kbd> select, <kbd>Esc</kbd> closes. MultiSelect puts <code class="lb-code">role=combobox</code> + <code class="lb-code">aria-haspopup=listbox</code> + <code class="lb-code">aria-expanded</code> on a <code class="lb-code">tabindex=0</code> element (a <code class="lb-code">button</code> would nest the pill remove buttons illegally), adds <code class="lb-code">aria-multiselectable</code>, gives every pill remove <code class="lb-code">button</code> an <code class="lb-code">aria-label</code>, and under <code class="lb-code">data-lb-filterable</code> moves focus into the search input, where <code class="lb-code">LB.List</code> owns arrow/<kbd>Home</kbd>/<kbd>End</kbd>/<kbd>Enter</kbd>.</p>
+
+<hr class="gallery-desc-divider">
+
+
+    <!-- ────────────────── Default ────────────────── -->
+    <h2 class="gallery-section__title">Default</h2>
+    <p class="gallery-section__desc">Custom-styled select with full keyboard support: <kbd>↑</kbd>/<kbd>↓</kbd> roam, <kbd>Enter</kbd> selects, <kbd>Esc</kbd> closes, <kbd>Home</kbd>/<kbd>End</kbd> jump. Pass options via <code class="lb-code">data-lb-options</code> as a JSON array of <code class="lb-code">{value, label}</code> pairs. Long option labels truncate with an ellipsis on the one-line trigger (the full label is mirrored into the trigger's <code class="lb-code">title</code>), so the field never grows taller than its row mates. <strong>Form-native:</strong> add <code class="lb-code">data-lb-name</code> and the select renders a hidden input that submits with the form like a native control; <code class="lb-code">data-lb-required</code> announces <code class="lb-code">aria-required</code>. The instance API (<code class="lb-code">el._lbSelect</code>) carries <code class="lb-code">getValue()</code>, side-effect-free <code class="lb-code">setValue(v)</code> (updates UI + submitted value, fires nothing — user selection is what emits the bubbling <code class="lb-code">lb-select-change</code>), and <code class="lb-code">setError(msg)</code>/<code class="lb-code">clearError()</code> toggling the error border, <code class="lb-code">aria-invalid</code> and a <code class="lb-code">.lb-field__error</code> message with the standard alert icon; errors clear on selection, and the field follows its form's <code class="lb-code">reset</code>.</p>
+    <div class="gallery-row" style="max-width: 360px;">
+      <div class="lb-select-field" data-lb-select data-lb-options='[{"value":"1","label":"Option One"},{"value":"2","label":"Option Two"},{"value":"3","label":"Option Three"},{"value":"4","label":"Option Four"}]' data-lb-placeholder="Choose option" style="width: 100%;">
+        <label class="lb-label">Choose option</label>
+        <div class="lb-select-wrap"></div>
+      </div>
+    </div>
+
+    <!-- ────────────────── Small ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Small</h2>
+    <p class="gallery-section__desc">Compact size for toolbars and filter rows. Set <code class="lb-code">data-lb-size="small"</code>. Individual options can be disabled with <code class="lb-code">"disabled": true</code> in the option object.</p>
+    <div class="gallery-row" style="max-width: 360px;">
+      <div class="lb-select-field" data-lb-select data-lb-size="small" data-lb-options='[{"value":"a","label":"Small Select A"},{"value":"b","label":"Small Select B"},{"value":"c","label":"Disabled","disabled":true},{"value":"d","label":"Small Select D"}]' data-lb-placeholder="Small select" style="width: 100%;">
+        <label class="lb-label">Small</label>
+        <div class="lb-select-wrap"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════════════════
+       MULTISELECT — multi-value variant, pills for chosen items
+       ══════════════════════════════════════════════════════════════════════ -->
+  <section class="gallery-section" id="multi-select" style="margin-top: var(--lb-size-16x);">
+    <h2 class="gallery-section__title">MultiSelect</h2>
+    <p class="gallery-section__desc">Multi-value form field. Selected items appear as removable pills inside the field. Popup shows a checkbox list (<code class="lb-code">.lb-list--multi-select</code>) for picking. Use for tag inputs, filter facets, team-member assignment, category pickers. For a single value, use the Select above; for free-form text, use <strong>Input</strong>.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>Usage:</strong> <code class="lb-code">&lt;div class="lb-multi-select-field" data-lb-multi-select data-lb-options='[...]'&gt;</code>. Optional <code class="lb-code">data-lb-filterable</code> for search input; <code class="lb-code">data-lb-sort-selected</code> to float selected items to the top on open. Dispatches <code class="lb-code">lb-multi-select-change</code> with <code class="lb-code">{ values, toggled }</code>.</p>
+
+    <hr class="gallery-desc-divider">
+
+    <h2 class="gallery-section__title">Default</h2>
+    <p class="gallery-section__desc">Click the field to open. Ticking an option adds a pill; the X on a pill removes the value.</p>
+    <div style="max-width: 420px; display: flex; flex-direction: column; gap: var(--lb-size-4x);">
+      <div class="lb-multi-select-field"
+           id="demo-default"
+           data-lb-multi-select
+           data-lb-placeholder="Select categories"
+           data-lb-options='[{"value":"design","label":"Design"},{"value":"engineering","label":"Engineering"},{"value":"product","label":"Product"},{"value":"marketing","label":"Marketing"},{"value":"sales","label":"Sales"},{"value":"ops","label":"Operations"},{"value":"legal","label":"Legal","disabled":true}]'>
+        <label class="lb-label">Categories</label>
+        <div class="lb-multi-select-wrap"></div>
+        <span class="lb-field__hint">Pick one or more.</span>
+      </div>
+      <p class="gallery-section__desc" style="font-size: var(--lb-t-body-s-font-size); margin: 0;">Values: <span id="demo-default-feedback" style="font-family: var(--lb-font-family-3); color: var(--lb-fg-accent);">(none)</span></p>
+    </div>
+
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">With filter + sort-selected</h2>
+    <p class="gallery-section__desc">Long option set: enable search (<code class="lb-code">data-lb-filterable</code>) + selected-first sort (<code class="lb-code">data-lb-sort-selected</code>). Selected items rise to the top on open with a separator; order stays stable while you pick.</p>
+    <div style="max-width: 420px; display: flex; flex-direction: column; gap: var(--lb-size-4x);">
+      <div class="lb-multi-select-field"
+           id="demo-filter"
+           data-lb-multi-select
+           data-lb-filterable
+           data-lb-sort-selected
+           data-lb-placeholder="Select countries"
+           data-lb-value="de,fr,it"
+           data-lb-options='[
+             {"value":"at","label":"Austria"},
+             {"value":"be","label":"Belgium"},
+             {"value":"br","label":"Brazil"},
+             {"value":"ca","label":"Canada"},
+             {"value":"ch","label":"Switzerland"},
+             {"value":"cn","label":"China"},
+             {"value":"de","label":"Germany"},
+             {"value":"dk","label":"Denmark"},
+             {"value":"es","label":"Spain"},
+             {"value":"fi","label":"Finland"},
+             {"value":"fr","label":"France"},
+             {"value":"gb","label":"United Kingdom"},
+             {"value":"ie","label":"Ireland"},
+             {"value":"in","label":"India"},
+             {"value":"it","label":"Italy"},
+             {"value":"jp","label":"Japan"},
+             {"value":"kr","label":"South Korea"},
+             {"value":"mx","label":"Mexico"},
+             {"value":"nl","label":"Netherlands"},
+             {"value":"no","label":"Norway"},
+             {"value":"pl","label":"Poland"},
+             {"value":"pt","label":"Portugal"},
+             {"value":"se","label":"Sweden"},
+             {"value":"us","label":"United States"}
+           ]'>
+        <label class="lb-label">Markets</label>
+        <div class="lb-multi-select-wrap"></div>
+      </div>
+      <p class="gallery-section__desc" style="font-size: var(--lb-t-body-s-font-size); margin: 0;">Values: <span id="demo-filter-feedback" style="font-family: var(--lb-font-family-3); color: var(--lb-fg-accent);">de, fr, it</span></p>
+    </div>
+
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Small size</h2>
+    <p class="gallery-section__desc">Dense contexts — toolbars, filter bars, dashboard widgets.</p>
+    <div style="max-width: 420px;">
+      <div class="lb-multi-select-field"
+           id="demo-small"
+           data-lb-multi-select
+           data-lb-size="small"
+           data-lb-placeholder="Filter by status"
+           data-lb-options='[{"value":"active","label":"Active"},{"value":"pending","label":"Pending"},{"value":"archived","label":"Archived"}]'>
+        <label class="lb-label">Status</label>
+        <div class="lb-multi-select-wrap"></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script src="../js/lb.js"></script>
+<script src="../js/slot-engine.js"></script>
+<script src="../js/theme-editor.js"></script>
+<script src="../js/token-exporter.js"></script>
+<script src="../js/gallery-layout.js"></script>
+
+<script>
+  // MultiSelect demo feedback
+  document.addEventListener('DOMContentLoaded', () => {
+    const bindFeedback = (fieldId, feedbackId) => {
+      const field = document.getElementById(fieldId);
+      const fb = document.getElementById(feedbackId);
+      if (!field || !fb) return;
+      const update = () => {
+        const values = field._lbMultiSelect.getValue();
+        fb.textContent = values.length ? values.join(', ') : '(none)';
+      };
+      field.addEventListener('lb-multi-select-change', update);
+      update();
+    };
+    bindFeedback('demo-default', 'demo-default-feedback');
+    bindFeedback('demo-filter', 'demo-filter-feedback');
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <!-- theme-preamble:v1 -->
+  <script>(function(){try{var t=localStorage.getItem('letbe-ds-dark-mode');if(t==='1')document.documentElement.setAttribute('data-theme','dark');else if(t==='0')document.documentElement.setAttribute('data-theme','light');}catch(e){}})();</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta data-lb-page="kanban">
+  <title>Kanban — letbe-ds</title>
+  <link rel="stylesheet" href="../tokens/theme.css">
+  <link rel="stylesheet" href="../tokens/fonts.css">
+  <link rel="stylesheet" href="../components/components.css">
+  <link rel="stylesheet" href="../components/theme-editor.css">
+  <link rel="stylesheet" href="../components/gallery.css">
+</head>
+<body data-lb-base="..">
+
+<main class="gallery-main">
+  <section class="gallery-section" id="kanban">
+    <h1 class="gallery-section__title" style="font-size: var(--lb-t-heading-l-font-size); line-height: var(--lb-t-heading-l-line-height);">Kanban</h1>
+    <p class="gallery-section__desc">Board vocabulary for planning views — the <strong>projection model</strong>: columns are values of a field (status, assignee, priority…), the board owns zero data, and every move dispatches <code class="lb-code">lb-board-move</code> <code class="lb-code">{card, from, to, index}</code> for your store to persist. Cards keep a <strong>fixed slot layout</strong> (title → labels → assignee + due) so dense boards stay scannable. <strong>Menu-move first</strong>: each card's kebab carries auto-built "Move to <em>column</em>" items, so no move depends on dragging. Column counts self-maintain. Pointer drag works with mouse/pen (the live card is the drop preview; two-axis edge auto-scroll); touch uses the kebab menu. <strong>Keyboard</strong>: focus a card, <kbd>Space</kbd> or <kbd>Enter</kbd> grabs it, arrows move it (←→ across columns, ↑↓ within), a second <kbd>Space</kbd> or <kbd>Enter</kbd> drops it, <kbd>Esc</kbd> cancels and restores — every step announced.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>a11y (built in):</strong> cards are focusable grab targets (<code class="lb-code">tabindex="0"</code>) — <kbd>Space</kbd>/<kbd>Enter</kbd> grabs, arrows move (←→ across columns, ↑↓ within), <kbd>Space</kbd>/<kbd>Enter</kbd> drops, <kbd>Esc</kbd> restores the original column and index, and focus rides the card through every step. Menu, pointer drag and keyboard each announce their result through a single visually-hidden <code class="lb-code">aria-live="polite"</code> region — there is no ARIA drag-and-drop vocabulary, so authored announcements are the pattern. The card kebab is a real disclosure menu (<code class="lb-code">aria-haspopup=menu</code> + <code class="lb-code">aria-expanded</code>, <code class="lb-code">role=menuitem</code> items, arrows/<kbd>Home</kbd>/<kbd>End</kbd>, <kbd>Esc</kbd> closes and returns focus to the trigger) revealed on <code class="lb-code">:focus-within</code> as well as hover — it is the single-pointer non-drag path WCAG 2.5.7 requires, since pointer drag refuses touch and runs mouse/pen only.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>Usage:</strong> Load <code class="lb-code">js/lb.js</code> first, then <code class="lb-code">js/components/lb-board.js</code>; the board auto-inits on <code class="lb-code">data-lb-board</code>. Markup contract: columns are <code class="lb-code">.lb-board__column</code> with <code class="lb-code">data-lb-board-column="Name"</code> (that name is the vocabulary the move event speaks), each wrapping a <code class="lb-code">.lb-board__column-body</code> of cards carrying <code class="lb-code">data-lb-board-card tabindex="0"</code> — the tabindex is required for keyboard grab; a header badge with <code class="lb-code">data-lb-board-count</code> is auto-maintained and <code class="lb-code">data-lb-board-wip="n"</code> opts a column into the advisory limit. Kebab move-menus and counts are derived chrome rebuilt by <code class="lb-code">el._lbBoard.refresh()</code> — call it after adding or removing cards/columns yourself; programmatic moves go through <code class="lb-code">moveCard(card, column, index)</code>, the single mutation path shared with drag, keyboard and menu. When <code class="lb-code">lb-board-move</code> fires the DOM move has already happened — write it through to your store, or call <code class="lb-code">moveCard</code> back to revert a rejected save.</p>
+    <p class="gallery-section__desc"><strong>Consumed here:</strong> <a class="lb-link" href="../card/">Card</a> (<code class="lb-code">--sm --interactive</code>) · <a class="lb-link" href="../badge/">Badge</a> (labels + counts) · <a class="lb-link" href="../avatar/">Avatar</a> · <a class="lb-link" href="../menu/">Menu</a> (kebabs) · <a class="lb-link" href="../button/">Button</a> (add-card ghost) · <a class="lb-link" href="../empty-state/">Empty State</a>. Not bundled, by design: the data layer and realtime sync are yours — same engine boundary as the <a class="lb-link" href="../media-player/">Media Player</a>.</p>
+
+    <hr class="gallery-desc-divider">
+
+    <h2 class="gallery-section__title">Board</h2>
+    <p class="gallery-section__desc">Try it: open any card's kebab (appears on hover or keyboard focus) and move it — counts update, the move is announced, and <code class="lb-code">lb-board-move</code> fires (shown below the board).</p>
+
+    <div class="lb-board" data-lb-board id="demo-board" style="max-height: 560px;">
+      <div class="lb-board__column" data-lb-board-column="Backlog">
+        <div class="lb-board__column-header">
+          <span class="lb-board__column-title">Backlog</span>
+          <span class="lb-badge lb-badge--default lb-badge--small" data-lb-board-count>0</span>
+        </div>
+        <div class="lb-board__column-body">
+          <div class="lb-card lb-card--sm lb-card--interactive lb-board__card" data-lb-board-card tabindex="0">
+            <div class="lb-card__body">
+              <div class="lb-board__card-row"><span class="lb-board__card-title">Dashboard screen layout pass</span></div>
+              <div class="lb-board__card-meta"><span class="lb-badge lb-badge--default lb-badge--small">research</span></div>
+            </div>
+            <div class="lb-card__footer lb-card__footer--spread"><span class="lb-avatar lb-avatar--small" role="img" aria-label="Kai Tanaka" data-lb-initials="KT"></span><span class="lb-board__card-due">Aug 12</span></div>
+          </div>
+          <div class="lb-card lb-card--sm lb-card--interactive lb-board__card" data-lb-board-card tabindex="0">
+            <div class="lb-card__body">
+              <div class="lb-board__card-row"><span class="lb-board__card-title">Settings page template</span></div>
+              <div class="lb-board__card-meta"><span class="lb-badge lb-badge--default lb-badge--small">template</span></div>
+            </div>
+            <div class="lb-card__footer lb-card__footer--spread"><span class="lb-avatar lb-avatar--small" role="img" aria-label="Priya Shah" data-lb-initials="PS"></span><span class="lb-board__card-due">Aug 20</span></div>
+          </div>
+          <div class="lb-card lb-card--sm lb-card--interactive lb-board__card" data-lb-board-card tabindex="0">
+            <div class="lb-card__body">
+              <div class="lb-board__card-row"><span class="lb-board__card-title">Icon set: add table + board glyphs</span></div>
+              <div class="lb-board__card-meta"><span class="lb-badge lb-badge--default lb-badge--small">icons</span></div>
+            </div>
+            <div class="lb-card__footer lb-card__footer--spread"><span class="lb-avatar lb-avatar--small" role="img" aria-label="Ada Obi" data-lb-initials="AO"></span><span class="lb-board__card-due">Sep 2</span></div>
+          </div>
+        </div>
+        <div class="lb-board__column-footer"><button type="button" class="lb-btn lb-btn--ghost lb-btn--small"><span class="lb-btn__icon" aria-hidden="true" data-lb-icon="plus"></span> Add card</button></div>
+      </div>
+
+      <div class="lb-board__column" data-lb-board-column="In progress" data-lb-board-wip="2">
+        <div class="lb-board__column-header">
+          <span class="lb-board__column-title">In progress</span>
+          <span class="lb-badge lb-badge--default lb-badge--small" data-lb-board-count>0</span>
+        </div>
+        <div class="lb-board__column-body">
+          <div class="lb-card lb-card--sm lb-card--interactive lb-board__card" data-lb-board-card tabindex="0">
+            <div class="lb-card__body">
+              <div class="lb-board__card-row"><span class="lb-board__card-title">Kanban board — drag slice</span></div>
+              <div class="lb-board__card-meta"><span class="lb-badge lb-badge--warning lb-badge--small"><span class="lb-badge__dot"></span>blocked</span><span class="lb-badge lb-badge--default lb-badge--small">ds</span></div>
+            </div>
+            <div class="lb-card__footer lb-card__footer--spread"><span class="lb-avatar lb-avatar--small" role="img" aria-label="Avery Green" data-lb-initials="AG"></span><span class="lb-board__card-due">Aug 6</span></div>
+          </div>
+          <div class="lb-card lb-card--sm lb-card--interactive lb-board__card" data-lb-board-card tabindex="0">
+            <div class="lb-card__body">
+              <div class="lb-board__card-row"><span class="lb-board__card-title">Figma library re-binds (item 21)</span></div>
+              <div class="lb-board__card-meta"><span class="lb-badge lb-badge--default lb-badge--small">figma</span></div>
+            </div>
+            <div class="lb-card__footer lb-card__footer--spread"><span class="lb-avatar lb-avatar--small" role="img" aria-label="Noor Ibrahim" data-lb-initials="NI"></span><span class="lb-board__card-due">Aug 8</span></div>
+          </div>
+        </div>
+        <div class="lb-board__column-footer"><button type="button" class="lb-btn lb-btn--ghost lb-btn--small"><span class="lb-btn__icon" aria-hidden="true" data-lb-icon="plus"></span> Add card</button></div>
+      </div>
+
+      <div class="lb-board__column" data-lb-board-column="Review">
+        <div class="lb-board__column-header">
+          <span class="lb-board__column-title">Review</span>
+          <span class="lb-badge lb-badge--default lb-badge--small" data-lb-board-count>0</span>
+        </div>
+        <div class="lb-board__column-body">
+          <div class="lb-empty-state lb-empty-state--sm">
+            <span class="lb-empty-state__icon" aria-hidden="true" data-lb-icon="inbox"></span>
+            <h3 class="lb-empty-state__title">Nothing in review</h3>
+            <p class="lb-empty-state__description">Cards land here when work is ready.</p>
+          </div>
+        </div>
+        <div class="lb-board__column-footer"><button type="button" class="lb-btn lb-btn--ghost lb-btn--small"><span class="lb-btn__icon" aria-hidden="true" data-lb-icon="plus"></span> Add card</button></div>
+      </div>
+
+      <div class="lb-board__column" data-lb-board-column="Done">
+        <div class="lb-board__column-header">
+          <span class="lb-board__column-title">Done</span>
+          <span class="lb-badge lb-badge--default lb-badge--small" data-lb-board-count>0</span>
+        </div>
+        <div class="lb-board__column-body">
+          <div class="lb-card lb-card--sm lb-card--interactive lb-board__card" data-lb-board-card tabindex="0">
+            <div class="lb-card__body">
+              <div class="lb-board__card-row"><span class="lb-board__card-title">Data-table view S1–S11</span></div>
+              <div class="lb-board__card-meta"><span class="lb-badge lb-badge--success lb-badge--small"><span class="lb-badge__dot"></span>shipped</span></div>
+            </div>
+            <div class="lb-card__footer lb-card__footer--spread"><span class="lb-avatar lb-avatar--small" role="img" aria-label="Avery Green" data-lb-initials="AG"></span><span class="lb-board__card-due">Aug 4</span></div>
+          </div>
+        </div>
+        <div class="lb-board__column-footer"><button type="button" class="lb-btn lb-btn--ghost lb-btn--small"><span class="lb-btn__icon" aria-hidden="true" data-lb-icon="plus"></span> Add card</button></div>
+      </div>
+    </div>
+
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Card anatomy — the property vocabulary</h2>
+    <p class="gallery-section__desc">A board card is <strong>a title plus properties that render only when set</strong>. Every element below composes from existing pieces — cover (<code class="lb-code">.lb-card__media</code> + ratio variants), plain mono ID, priority badge, checklist progress (<code class="lb-code">.lb-progress-inline</code>), quiet icon+count stats, <code class="lb-code">.lb-avatar-group</code>, and <strong>due-date states</strong> (the one universally-shipped signal: <code class="lb-code">--overdue</code> danger · <code class="lb-code">--soon</code> warning · <code class="lb-code">--done</code> success — never red on completed cards — once work is done, a past due date is history, not a failure). The "In progress" column above also demos the <strong>advisory WIP limit</strong> (<code class="lb-code">data-lb-board-wip</code> — it communicates, never blocks; move a card in to see 3/2 flip to warning). Deliberate skips: watchers/votes, epic lozenges, inline editing, class-of-service card colors (labels carry that here), aging/time-in-status (needs data the DS doesn't own).</p>
+    <div style="display: flex; flex-wrap: wrap; gap: var(--lb-size-4x); align-items: flex-start;">
+      <div style="flex: 0 0 17rem;">
+        <div class="gallery-label">Full house</div>
+        <div class="lb-card lb-card--sm lb-board__card">
+          <div class="lb-card__media lb-card__media--top lb-card__media--16x9"><img src="../assets/media/letbe-profile-cover.jpg" alt=""></div>
+          <div class="lb-card__body">
+            <div class="lb-board__card-row"><span class="lb-board__card-id">LB-142</span><span style="flex:1"></span><span class="lb-badge lb-badge--danger lb-badge--small"><span class="lb-badge__icon" aria-hidden="true" data-lb-icon="flag"></span>High</span></div>
+            <div class="lb-board__card-row" style="margin-top: var(--lb-size-1x);"><span class="lb-board__card-title">Ship the card anatomy slice</span></div>
+            <div class="lb-board__card-meta"><span class="lb-badge lb-badge--default lb-badge--small">ds</span><span class="lb-badge lb-badge--default lb-badge--small">docs</span><span class="lb-progress-inline"><progress class="lb-progress" max="5" value="3"></progress><span class="lb-progress-value">3/5</span></span></div>
+          </div>
+          <div class="lb-card__footer lb-card__footer--spread">
+            <div class="lb-avatar-group lb-avatar-group--small"><span class="lb-avatar lb-avatar--small" role="img" aria-label="Avery Green" data-lb-initials="AG"></span><span class="lb-avatar lb-avatar--small" role="img" aria-label="Noor Ibrahim" data-lb-initials="NI"></span><span class="lb-avatar lb-avatar--small lb-avatar-group__count">+2</span></div>
+            <span class="lb-board__card-stats"><span class="lb-board__card-stat"><span data-lb-icon="message-square" aria-hidden="true"></span>4</span><span class="lb-board__card-stat"><span data-lb-icon="paperclip" aria-hidden="true"></span>2</span><span class="lb-board__card-due lb-board__card-due--overdue">Aug 2</span></span>
+          </div>
+        </div>
+      </div>
+      <div style="flex: 0 0 17rem;">
+        <div class="gallery-label">Minimal (the default set)</div>
+        <div class="lb-card lb-card--sm lb-board__card">
+          <div class="lb-card__body">
+            <div class="lb-board__card-row"><span class="lb-board__card-title">Quiet card — title, label, owner</span></div>
+            <div class="lb-board__card-meta"><span class="lb-badge lb-badge--default lb-badge--small">later</span></div>
+          </div>
+          <div class="lb-card__footer lb-card__footer--spread">
+            <span class="lb-avatar lb-avatar--small" role="img" aria-label="Kai Tanaka" data-lb-initials="KT"></span>
+            <span class="lb-board__card-due lb-board__card-due--soon">Tomorrow</span>
+          </div>
+        </div>
+      </div>
+      <div style="flex: 0 0 17rem;">
+        <div class="gallery-label">Blocked + done date</div>
+        <div class="lb-card lb-card--sm lb-board__card">
+          <div class="lb-card__body">
+            <div class="lb-board__card-row"><span class="lb-board__card-id">LB-137</span><span style="flex:1"></span><span class="lb-badge lb-badge--warning lb-badge--small"><span class="lb-badge__dot"></span>blocked</span></div>
+            <div class="lb-board__card-row" style="margin-top: var(--lb-size-1x);"><span class="lb-board__card-title">Waiting on the plugin import</span></div>
+            <div class="lb-board__card-meta"><span class="lb-progress-inline"><progress class="lb-progress" max="4" value="4"></progress><span class="lb-progress-value">4/4</span></span></div>
+          </div>
+          <div class="lb-card__footer lb-card__footer--spread">
+            <span class="lb-avatar lb-avatar--small" role="img" aria-label="Priya Shah" data-lb-initials="PS"></span>
+            <span class="lb-board__card-due lb-board__card-due--done">Done Aug 3</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p class="gallery-section__desc" style="margin-top: var(--lb-size-3x); font-size: var(--lb-t-body-s-font-size);">Last move: <span id="move-log" style="font-family: var(--lb-font-family-3); color: var(--lb-fg-muted);">—</span></p>
+  </section>
+</main>
+
+<script src="../js/lb.js"></script>
+<script src="../js/components/lb-board.js"></script>
+<script src="../js/slot-engine.js"></script>
+<script src="../js/theme-editor.js"></script>
+<script src="../js/token-exporter.js"></script>
+<script src="../js/gallery-layout.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const board = document.getElementById('demo-board');
+    const log = document.getElementById('move-log');
+    if (board && log) {
+      board.addEventListener('lb-board-move', (e) => {
+        const t = (e.detail.card.querySelector('.lb-board__card-title') || {}).textContent || 'card';
+        log.textContent = '"' + t + '" ' + (e.detail.from ? e.detail.from + ' → ' : '') + e.detail.to + ' @ ' + (e.detail.index + 1);
+      });
+    }
+  });
+</script>
+</body>
+</html>

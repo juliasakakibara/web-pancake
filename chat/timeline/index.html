@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <!-- theme-preamble:v1 -->
+  <script>(function(){try{var t=localStorage.getItem('letbe-ds-dark-mode');if(t==='1')document.documentElement.setAttribute('data-theme','dark');else if(t==='0')document.documentElement.setAttribute('data-theme','light');}catch(e){}})();</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta data-lb-page="chat-timeline">
+  <title>Chat × Timeline composition — letbe-ds</title>
+  <link rel="stylesheet" href="../../tokens/theme.css">
+  <link rel="stylesheet" href="../../tokens/fonts.css">
+  <link rel="stylesheet" href="../../components/components.css">
+  <link rel="stylesheet" href="../../components/theme-editor.css">
+  <link rel="stylesheet" href="../../components/gallery.css">
+</head>
+<body data-lb-base="../..">
+
+<main class="gallery-main">
+  <section class="gallery-section" id="chat-timeline">
+    <h1 class="gallery-section__title" style="font-size: var(--lb-t-heading-l-font-size); line-height: var(--lb-t-heading-l-line-height);">Chat &times; Timeline composition</h1>
+    <p class="gallery-section__desc">Slice 11 of the AI Chat arc. This page demonstrates the composition pattern: a compact composer summoned as a popover, anchored to a timeline selection. It drives generation against the currently-selected region.</p>
+
+    <p class="gallery-section__desc">Two pieces ship in this slice:</p>
+    <ul class="gallery-section__desc">
+      <li><strong><code class="lb-code">LB.Timeline</code></strong> gains a <code class="lb-code">lb-timeline-selection</code> event — fires on drag-end with the selection's viewport-relative rect plus <code class="lb-code">inSec / outSec / duration</code>.</li>
+      <li><strong><code class="lb-code">LB.openComposerPopover(opts)</code></strong> — new factory in <code class="lb-code">js/components/lb-chat-composer-popover.js</code>. Builds a compact <code class="lb-code">LB.Composer</code> inside an <code class="lb-code">.lb-popover</code> surface, anchored to a rect, with optional context chip + tools + models + prefill. Returns <code class="lb-code">{el, composer, close(), reposition(anchor)}</code>.</li>
+    </ul>
+
+    <p class="gallery-section__desc">Per the pluggable-engine rule, this module ships only the chrome + state machine. The consumer wires submissions to their own backend — stem generation, voice conversion, whatever the product does.</p>
+
+    <hr class="gallery-desc-divider">
+
+    <!-- ────────────────── Live demo ────────────────── -->
+    <h2 class="gallery-section__title">Live demo</h2>
+    <p class="gallery-section__desc">Drag the in/out handles to select a region. On drag-end, a compact composer popover appears anchored to the selection mid-point, with the selection range as a context chip. Type a prompt and submit — the demo logs the submission. The popover closes on Esc, outside click, or after submit.</p>
+
+    <div class="lb-stack" style="max-width: 48rem; gap: var(--lb-size-4x);">
+      <div data-lb-timeline data-lb-duration="180" data-lb-in="30" data-lb-out="60" data-lb-playhead="45" id="demo-timeline"></div>
+
+      <div class="lb-card lb-card--padded" style="background: var(--lb-bg-bolder);">
+        <div class="lb-card__title">Submission log</div>
+        <div id="demo-log" style="font-family: var(--lb-t-code-m-font-family); font-size: var(--lb-t-body-s-font-size); color: var(--lb-fg-muted); margin-top: var(--lb-size-2x); min-height: var(--lb-size-10x);"></div>
+      </div>
+    </div>
+
+    <!-- ────────────────── API ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Composer popover API</h2>
+    <p class="gallery-section__desc">A single factory. No auto-init &mdash; the popover is summoned imperatively in response to a selection event:</p>
+
+    <pre data-lb-code-block data-lb-lang="js"><code>const handle = LB.openComposerPopover({
+  anchor:        rect,                          // Element | DOMRect | {x,y,width,height}
+  placement:     'bottom',                      // or 'top'
+  prefill:       '',
+  placeholder:   'Ask about this selection…',
+  contextChip:   { label: '0:30 → 1:00', kind: 'context' },
+  tools:         [{ id: 'web', label: 'Web', icon: 'globe' }],
+  models:        [{ id: 'fast', label: 'Fast' }, { id: 'pro', label: 'Pro' }],
+  currentModel:  'fast',
+  commands:      [/* …same shape as composer.registerCommand */],
+  ariaLabel:     'Compose message about selection',
+  autoCloseOnSubmit: true,
+  onSubmit(value, ctx) {
+    // ctx = { contextChip, anchorRect, model }
+    callMyBackend(value, ctx);
+    // return false to keep the popover open
+  },
+  onClose() { /* cleanup */ },
+});
+
+// Imperative control
+handle.composer.setValue('Pre-fill more text');
+handle.reposition(newAnchor);
+handle.close();</code></pre>
+
+    <!-- ────────────────── Wiring — Timeline → Popover ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Wiring &mdash; Timeline &rarr; Popover</h2>
+    <p class="gallery-section__desc">~20 lines of glue &mdash; listen for the selection event, summon the popover with the rect as anchor, hand the submission off to your backend:</p>
+
+    <pre data-lb-code-block data-lb-lang="js"><code>const timeline = document.getElementById('demo-timeline');
+
+timeline.addEventListener('lb-timeline-selection', (e) =&gt; {
+  const { rect, inSec, outSec } = e.detail;
+  LB.openComposerPopover({
+    anchor: rect,
+    contextChip: {
+      label: fmt(inSec) + ' → ' + fmt(outSec),
+      kind: 'context',
+      data: { inSec, outSec },
+    },
+    placeholder: 'How should this region change?',
+    onSubmit(value, ctx) {
+      // Hand off to the consumer's backend. Selection range arrives
+      // in ctx.contextChip.data.
+      myStemGenerator.queue({
+        prompt:  value,
+        inSec:   ctx.contextChip.data.inSec,
+        outSec:  ctx.contextChip.data.outSec,
+      });
+    },
+  });
+});
+
+function fmt(sec) {
+  const m = Math.floor(sec / 60);
+  const s = Math.floor(sec % 60).toString().padStart(2, '0');
+  return m + ':' + s;
+}</code></pre>
+
+    <!-- ────────────────── Anchoring patterns ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Anchoring patterns</h2>
+    <p class="gallery-section__desc">The <code class="lb-code">anchor</code> option accepts three shapes:</p>
+    <ul class="gallery-section__desc">
+      <li><strong>Element</strong> &mdash; <code class="lb-code">getBoundingClientRect()</code> is read automatically. Use this when the anchor IS a real DOM node (a selected chip, a button).</li>
+      <li><strong>DOMRect</strong> &mdash; pass an existing rect (e.g., from <code class="lb-code">Selection.getRangeAt(0).getBoundingClientRect()</code> for a text selection on a canvas surface, or the rect carried by <code class="lb-code">lb-timeline-selection</code>).</li>
+      <li><strong>Plain object</strong> with <code class="lb-code">{x, y, width, height}</code> &mdash; useful when you want a virtual anchor (a pointer position on a custom canvas, an SVG coordinate translated to viewport coords).</li>
+    </ul>
+
+    <p class="gallery-section__desc">Placement is <code class="lb-code">'bottom'</code> by default (docks below the anchor with an 8px gap). Pass <code class="lb-code">'top'</code> to flip. The popover is clamped to the viewport &mdash; if it would overflow, it shifts inward with an 8px margin.</p>
+
+    <!-- ────────────────── Composer features inside the popover ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Composer features stay intact</h2>
+    <p class="gallery-section__desc">The popover hosts the SAME <code class="lb-code">LB.Composer</code> engine as the standalone composer &mdash; not a parallel reimplementation. So the slash command palette, the chips row, the tools strip, the model selector, the mic affordance, drag-and-drop file handling, autosize, ⌘/Ctrl + Enter to send &mdash; all of it is available. The popover variant just defaults to the slim layout (no footer when tools/models aren't configured) so it stays anchored without overwhelming the surface.</p>
+
+  </section>
+</main>
+
+<script src="../../js/lb.js"></script>
+<script src="../../js/components/lb-timeline.js"></script>
+<script src="../../js/components/lb-chat.js"></script>
+<script src="../../js/components/lb-chat-composer-popover.js"></script>
+<script src="../../js/slot-engine.js"></script>
+<script src="../../js/theme-editor.js"></script>
+<script src="../../js/token-exporter.js"></script>
+<script src="../../js/gallery-layout.js"></script>
+
+<script>
+  // Wire the demo: Timeline selection → Composer popover.
+  (function () {
+    function fmt(sec) {
+      var m = Math.floor(sec / 60);
+      var s = Math.floor(sec % 60).toString().padStart(2, '0');
+      return m + ':' + s;
+    }
+
+    function init() {
+      var timeline = document.getElementById('demo-timeline');
+      var log = document.getElementById('demo-log');
+      if (!timeline || !log) return setTimeout(init, 50);
+
+      function logLine(text) {
+        var entry = document.createElement('div');
+        entry.style.padding = 'var(--lb-size-1x) 0';
+        var ts = new Date().toLocaleTimeString();
+        entry.textContent = '[' + ts + '] ' + text;
+        log.insertBefore(entry, log.firstChild);
+        // Cap log entries.
+        while (log.children.length > 8) log.removeChild(log.lastChild);
+      }
+
+      timeline.addEventListener('lb-timeline-selection', function (e) {
+        var d = e.detail;
+        LB.openComposerPopover({
+          anchor: d.rect,
+          placement: 'bottom',
+          contextChip: {
+            id: 'selection',
+            label: fmt(d.inSec) + ' → ' + fmt(d.outSec) + ' · ' + fmt(d.outSec - d.inSec) + ' selected',
+            kind: 'context',
+            data: { inSec: d.inSec, outSec: d.outSec },
+            removable: false,
+          },
+          placeholder: 'How should this region change?',
+          tools: [
+            { id: 'voice',  label: 'Voice',  icon: 'mic-vocal' },
+            { id: 'remix',  label: 'Remix',  icon: 'shuffle' },
+          ],
+          models: [
+            { id: 'fast',   label: 'Fast'   },
+            { id: 'pro',    label: 'Pro'    },
+          ],
+          currentModel: 'fast',
+          ariaLabel: 'Compose prompt for selection',
+          onSubmit: function (value, ctx) {
+            var range = ctx.contextChip && ctx.contextChip.data;
+            logLine('Submit (' + (ctx.model || 'no-model') + '): "' + value + '"' +
+              (range ? ' on ' + fmt(range.inSec) + '–' + fmt(range.outSec) : ''));
+          },
+          onClose: function () {
+            // Optional: clear any "active selection" UI in the consumer.
+          },
+        });
+      });
+
+      // Seed the demo timeline duration so handles work immediately
+      // (the data-lb-duration attribute already provides it; nothing
+      // to do here unless consumer wants to load real audio).
+    }
+    init();
+  })();
+</script>
+</body>
+</html>

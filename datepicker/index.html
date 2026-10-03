@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <!-- theme-preamble:v1 -->
+  <script>(function(){try{var t=localStorage.getItem('letbe-ds-dark-mode');if(t==='1')document.documentElement.setAttribute('data-theme','dark');else if(t==='0')document.documentElement.setAttribute('data-theme','light');}catch(e){}})();</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta data-lb-page="datepicker">
+  <title>Date Picker — letbe-ds</title>
+  <link rel="stylesheet" href="../tokens/theme.css">
+  <link rel="stylesheet" href="../tokens/fonts.css">
+  <link rel="stylesheet" href="../components/components.css">
+  <link rel="stylesheet" href="../components/theme-editor.css">
+  <link rel="stylesheet" href="../components/gallery.css">
+</head>
+<body data-lb-base="..">
+
+<main class="gallery-main">
+  <section class="gallery-section" id="datepicker">
+    <h1 class="gallery-section__title" style="font-size: var(--lb-t-heading-l-font-size); line-height: var(--lb-t-heading-l-line-height);">Date Picker</h1>
+    <p class="gallery-section__desc">Calendar date selection. Supports single-date, range, week and month modes — plus the <code class="lb-code">time</code> mode documented on the Time Picker page; available inline or in a popover. Month/year navigation via prev/next arrow buttons plus custom month and year selects. Use when the user needs to pick a specific day (booking, scheduling, filtering). For less precise time inputs prefer a standard input with format hint.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>a11y (built in):</strong> the calendar is a real <code class="lb-code">&lt;table role="grid"&gt;</code> labelled with the month and year on screen, with <code class="lb-code">th scope="col"</code> weekday headers and <code class="lb-code">role="gridcell"</code> cells; each day is a <code class="lb-code">button</code> whose <code class="lb-code">aria-label</code> spells the full date (appending &ldquo;(today)&rdquo;), carries <code class="lb-code">aria-pressed</code> for selection, and drops out of the tab order with <code class="lb-code">tabindex="-1"</code> when it is out of month, adding <code class="lb-code">aria-disabled</code> when it is out of range. The input variant's trigger is a disclosure for a dialog (<code class="lb-code">aria-haspopup="dialog"</code> + <code class="lb-code">aria-expanded</code>; the panel is <code class="lb-code">role="dialog"</code> with its own <code class="lb-code">aria-label</code>), <kbd>Esc</kbd> closes it, and hint or error text is bound to the trigger with <code class="lb-code">aria-describedby</code>. The month and year pickers open a <code class="lb-code">role="listbox"</code> panel &mdash; <kbd>Enter</kbd>, <kbd>Space</kbd> or <kbd>&darr;</kbd> opens, <kbd>Esc</kbd> closes and returns focus to the trigger.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>Usage:</strong> Mount an empty <code class="lb-code">&lt;div class="lb-datepicker--inline"&gt;</code> (or <code class="lb-code">.lb-datepicker-field</code> for the input variant) carrying <code class="lb-code">data-lb-datepicker</code> — the controller renders all inner markup itself, configured by <code class="lb-code">data-lb-variant</code>, <code class="lb-code">data-lb-mode</code>, <code class="lb-code">data-lb-size</code>, <code class="lb-code">data-lb-label</code> / <code class="lb-code">data-lb-hint</code> / <code class="lb-code">data-lb-error</code> / <code class="lb-code">data-lb-placeholder</code>, <code class="lb-code">data-lb-week-start</code> and <code class="lb-code">data-lb-disabled</code>. It auto-inits on DOMContentLoaded (instance at <code class="lb-code">el._lbDatePicker</code>); options with no attribute form — <code class="lb-code">minDate</code>, <code class="lb-code">maxDate</code>, <code class="lb-code">formatDate</code>, <code class="lb-code">onChange</code> / <code class="lb-code">onRangeChange</code> callbacks — need the constructor form <code class="lb-code">new LB.DatePicker(el, options)</code>. Every mode dispatches the single event <code class="lb-code">lb-datepicker-change</code> on the host element (non-bubbling — listen on the element itself) with <code class="lb-code">detail.mode</code> and <code class="lb-code">detail.value</code>, plus <code class="lb-code">detail.rangeStart</code> / <code class="lb-code">rangeEnd</code> in range mode and <code class="lb-code">detail.weekStart</code> / <code class="lb-code">weekEnd</code> in week mode. Programmatic writes: <code class="lb-code">setValue(date)</code>, <code class="lb-code">setRange(start, end)</code>, <code class="lb-code">setTime({hours, minutes})</code>. <strong>Form-native:</strong> <code class="lb-code">data-lb-name</code> renders hidden input(s) that submit the picked value with the form — one input for single/month/time, <code class="lb-code">name-start</code>/<code class="lb-code">name-end</code> for range and week; <code class="lb-code">data-lb-format</code> picks the serialization (<code class="lb-code">iso</code> default — local <code class="lb-code">yyyy-mm-dd</code>, no UTC shift; <code class="lb-code">epoch</code>; or a <code class="lb-code">formatValue(date, mode)</code> constructor option). <code class="lb-code">data-lb-required</code> announces <code class="lb-code">aria-required</code>, and <code class="lb-code">getValue()</code> / <code class="lb-code">setError(msg)</code> / <code class="lb-code">clearError()</code> land on the instance — errors clear on the next pick, and the field follows its form's <code class="lb-code">reset</code> back to the placeholder.</p>
+
+<hr class="gallery-desc-divider">
+
+
+<h2 class="gallery-section__title">Date Picker Demo</h2>
+    <div class="gallery-label">Inline — Single Date</div>
+    <div class="gallery-row">
+      <div class="lb-datepicker--inline" data-lb-datepicker data-lb-variant="inline" data-lb-mode="single"></div>
+    </div>
+
+    <div class="gallery-label">Inline — Date Range</div>
+    <div class="gallery-row">
+      <div class="lb-datepicker--inline" data-lb-datepicker data-lb-variant="inline" data-lb-mode="range"></div>
+    </div>
+
+    <div class="gallery-label">Input Trigger — Single Date</div>
+    <div class="gallery-row">
+      <div class="lb-datepicker-field" data-lb-datepicker data-lb-variant="input" data-lb-mode="single" data-lb-label="Date" data-lb-hint="Click to select a date" style="width: 280px;"></div>
+    </div>
+
+    <div class="gallery-label">Input Trigger — Date Range</div>
+    <div class="gallery-row">
+      <div class="lb-datepicker-field" data-lb-datepicker data-lb-variant="input" data-lb-mode="range" data-lb-label="Trip dates" data-lb-placeholder="Select dates" data-lb-size="medium" style="width: 320px;"></div>
+    </div>
+
+    <div class="gallery-label">Size Variants (Small / Large)</div>
+    <div class="gallery-row">
+      <div class="lb-datepicker-field" data-lb-datepicker data-lb-variant="input" data-lb-mode="single" data-lb-size="small" data-lb-placeholder="Small" style="width: 220px;"></div>
+      <div class="lb-datepicker-field" data-lb-datepicker data-lb-variant="input" data-lb-mode="single" data-lb-size="large" data-lb-placeholder="Large" style="width: 280px;"></div>
+    </div>
+
+    <div class="gallery-label">With Error</div>
+    <div class="gallery-row">
+      <div class="lb-datepicker-field" data-lb-datepicker data-lb-variant="input" data-lb-mode="single" data-lb-label="Deadline" data-lb-error="Date is required" style="width: 280px;"></div>
+    </div>
+
+    <div class="gallery-label">Disabled</div>
+    <div class="gallery-row">
+      <div class="lb-datepicker-field" data-lb-datepicker data-lb-variant="input" data-lb-mode="single" data-lb-disabled data-lb-placeholder="Disabled" style="width: 280px;"></div>
+    </div>
+
+    <!-- ─────────────────────────── Week mode ─────────────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Week mode — <code class="lb-code">data-lb-mode="week"</code></h2>
+    <p class="gallery-section__desc">Select a whole week instead of a day. Same grid as single mode; hover highlights the row, click selects the week containing that day. Useful for date pickers in agile/sprint-style scheduling. Emits <code class="lb-code">lb-datepicker-change</code> with <code class="lb-code">detail.value</code> = week start, plus <code class="lb-code">detail.weekStart</code> and <code class="lb-code">detail.weekEnd</code>. Configure week start with <code class="lb-code">data-lb-week-start="0"</code> for Sunday-first; default is Monday (ISO).</p>
+    <div class="gallery-row">
+      <div class="lb-datepicker--inline" data-lb-datepicker data-lb-variant="inline" data-lb-mode="week" data-lb-week-start="0"></div>
+    </div>
+    <p class="gallery-section__desc" style="margin-top: var(--lb-size-2x); font-size: var(--lb-t-body-s-font-size);">Sunday-first shown above. For Monday-first (ISO), pass <code class="lb-code">data-lb-week-start="1"</code> — same component, just shifts which day starts the row.</p>
+
+    <!-- ─────────────────────────── Month mode ─────────────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Month mode — <code class="lb-code">data-lb-mode="month"</code></h2>
+    <p class="gallery-section__desc">Pick a month + year. Layout is a 4×3 grid of month cells; the header carries year navigation chevrons. Today's month is outlined in accent. Emits <code class="lb-code">lb-datepicker-change</code> with <code class="lb-code">detail.value</code> = first of selected month. Useful for navigation in calendars (e.g. Calendar component's month-view headline) and for monthly-cadence reports.</p>
+    <div class="gallery-row" style="gap: var(--lb-size-4x); flex-wrap: wrap;">
+      <div style="min-width: 0;"><!-- flex item: drop the automatic min so the picker's contained scroller can engage on narrow screens -->
+        <div class="gallery-label">Inline</div>
+        <div class="lb-datepicker--inline" data-lb-datepicker data-lb-variant="inline" data-lb-mode="month"></div>
+      </div>
+      <div>
+        <div class="gallery-label">Input variant</div>
+        <div class="lb-datepicker-field" data-lb-datepicker data-lb-variant="input" data-lb-mode="month" data-lb-label="Month" data-lb-placeholder="Select month" style="width: 280px;"></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script src="../js/lb.js"></script>
+<script src="../js/slot-engine.js"></script>
+<script src="../js/theme-editor.js"></script>
+<script src="../js/token-exporter.js"></script>
+<script src="../js/gallery-layout.js"></script>
+</body>
+</html>

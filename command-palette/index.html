@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <!-- theme-preamble:v1 -->
+  <script>(function(){try{var t=localStorage.getItem('letbe-ds-dark-mode');if(t==='1')document.documentElement.setAttribute('data-theme','dark');else if(t==='0')document.documentElement.setAttribute('data-theme','light');}catch(e){}})();</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta data-lb-page="command-palette">
+  <title>Command Palette — letbe-ds</title>
+  <link rel="stylesheet" href="../tokens/theme.css">
+  <link rel="stylesheet" href="../tokens/fonts.css">
+  <link rel="stylesheet" href="../components/components.css">
+  <link rel="stylesheet" href="../components/theme-editor.css">
+  <link rel="stylesheet" href="../components/gallery.css">
+</head>
+<body data-lb-base="..">
+
+<main class="gallery-main">
+  <section class="gallery-section" id="command-palette">
+    <h1 class="gallery-section__title" style="font-size: var(--lb-t-heading-l-font-size); line-height: var(--lb-t-heading-l-line-height);">Command Palette</h1>
+    <p class="gallery-section__desc">Global ⌘K / Ctrl+K launcher. Jump to any page, action, or setting without leaving the keyboard. Composes the <strong>List</strong> primitive, driving it from a search input the palette owns (type-to-search, arrow keys, Enter to execute), wrapped in a top-anchored modal shell.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>a11y (built in):</strong> the palette is a real modal (<code class="lb-code">role=dialog</code> + <code class="lb-code">aria-modal</code>) with a focus trap, scroll-lock, <kbd>Esc</kbd> to close, and focus returned to whatever was focused before it opened. Search follows the WAI-ARIA combobox pattern rather than roving focus: the input gets <code class="lb-code">role=combobox</code>, <code class="lb-code">aria-expanded</code>, <code class="lb-code">aria-autocomplete=list</code> and <code class="lb-code">aria-controls</code>, the command list is a <code class="lb-code">listbox</code> of <code class="lb-code">option</code>s with stable ids, and <kbd>↑</kbd><kbd>↓</kbd> move <code class="lb-code">aria-activedescendant</code> while focus stays in the field. Filtering announces its result count through a visually-hidden <code class="lb-code">aria-live=polite</code> region and re-seeds the active option to the first visible match; group headers are <code class="lb-code">role=separator aria-hidden</code>, and the unavailable command carries <code class="lb-code">aria-disabled</code> — visible but unreachable.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>Usage:</strong> One <code class="lb-code">.lb-cmdk-backdrop</code> per page with <code class="lb-code">data-lb-cmdk</code>. Inside: <code class="lb-code">.lb-cmdk</code> shell with <code class="lb-code">.lb-cmdk__search</code>, a <code class="lb-code">&lt;ul class="lb-list" data-lb-list data-lb-list-mode="single"&gt;</code> for commands (optionally with <code class="lb-code">.lb-cmdk__group-label</code> headers), optional <code class="lb-code">.lb-cmdk__footer</code> for kbd hints. Default hotkey <kbd>⌘K</kbd> / <kbd>Ctrl+K</kbd>; override with <code class="lb-code">data-lb-hotkey="/"</code>. Dispatches <code class="lb-code">lb-cmdk-select</code> on item activation.</p>
+
+    <hr class="gallery-desc-divider">
+
+    <h2 class="gallery-section__title">Try it</h2>
+    <p class="gallery-section__desc">Press <kbd>⌘K</kbd> (Mac) or <kbd>Ctrl+K</kbd> (Windows/Linux) anywhere on this page. Or click the search-bar trigger below — either way opens the palette with focus on the command search input inside.</p>
+    <div style="max-width: 420px;" onclick="document.getElementById('demo-cmdk')._lbCmdK.open()">
+      <div class="lb-input-wrap" style="cursor: pointer;">
+        <span class="lb-input-wrap__icon lb-input-wrap__icon--start" aria-hidden="true" data-lb-icon="search"></span>
+        <input class="lb-input lb-input--medium lb-input--has-start" type="text" placeholder="Search commands…" readonly style="cursor: pointer; padding-right: 4rem;" aria-label="Open command palette">
+        <kbd style="position:absolute; right: var(--lb-size-2x); display:inline-flex; align-items:center; padding: 0 var(--lb-size-1-5x); min-height: 1.125rem; border-radius: var(--lb-radius-interactive); background: var(--lb-bg-strong); color: var(--lb-fg-muted); font-family: var(--lb-t-caption-m-font-family); font-size: var(--lb-t-caption-m-font-size); pointer-events: none;">⌘ K</kbd>
+      </div>
+    </div>
+    <p class="gallery-section__desc" style="margin-top: var(--lb-size-3x); font-size: var(--lb-t-body-s-font-size);">This input is a <em>trigger</em>, not the real search — it's a read-only <code class="lb-code">.lb-input</code> that opens the palette on click. The real search lives inside the palette and auto-focuses when the palette opens.</p>
+    <p class="gallery-section__desc" style="margin-top: var(--lb-size-4x); font-size: var(--lb-t-body-s-font-size);">Last action: <span id="demo-cmdk-fb" style="font-family: var(--lb-font-family-3); color: var(--lb-fg-accent);">(nothing yet)</span></p>
+
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Patterns covered in this demo</h2>
+    <ul style="color: var(--lb-fg-muted); padding-left: var(--lb-size-5x); line-height: 1.6;">
+      <li>Three command groups: <strong>Navigate</strong>, <strong>Actions</strong>, <strong>Settings</strong></li>
+      <li>Icons + keyboard-shortcut hints (the <code class="lb-code">.lb-list__hint</code> slot from the List primitive)</li>
+      <li>Type-to-filter across all three groups at once</li>
+      <li>Arrow keys move the highlight while focus stays in the search field; Enter executes; Escape closes</li>
+      <li>Backdrop click closes</li>
+      <li>A disabled item to show unreachable-but-visible state</li>
+      <li>Destructive action styled with <code class="lb-code">--danger</code></li>
+    </ul>
+
+  </section>
+</main>
+
+<!-- ─── The actual command palette markup ─── -->
+<div class="lb-cmdk-backdrop" id="demo-cmdk" data-lb-cmdk hidden>
+  <div class="lb-cmdk" role="dialog" aria-modal="true" aria-label="Command palette">
+
+    <div class="lb-cmdk__search-wrap">
+      <div class="lb-input-wrap" style="flex: 1;">
+        <span class="lb-input-wrap__icon lb-input-wrap__icon--start" aria-hidden="true" data-lb-icon="search"></span>
+        <input class="lb-input lb-input--medium lb-input--has-start lb-cmdk__search" type="search" placeholder="Type a command or search…" autocomplete="off" style="border: none; background: transparent; padding-right: var(--lb-size-3x);">
+      </div>
+      <kbd class="lb-cmdk__escape-hint" aria-hidden="true">Esc</kbd>
+    </div>
+
+    <div class="lb-cmdk__results">
+      <ul class="lb-list" data-lb-list data-lb-list-mode="single" aria-label="Commands">
+
+        <li class="lb-cmdk__group-label" role="separator" aria-hidden="true">Navigate</li>
+        <li class="lb-list__item" data-lb-value="nav.home">
+          <span class="lb-list__icon" aria-hidden="true" data-lb-icon="home"></span>
+          <span class="lb-list__label">Go to Home</span>
+          <span class="lb-list__hint">G H</span>
+        </li>
+        <li class="lb-list__item" data-lb-value="nav.components">
+          <span class="lb-list__icon" aria-hidden="true" data-lb-icon="layout-grid"></span>
+          <span class="lb-list__label">Components gallery</span>
+          <span class="lb-list__hint">G C</span>
+        </li>
+        <li class="lb-list__item" data-lb-value="nav.tokens">
+          <span class="lb-list__icon" aria-hidden="true" data-lb-icon="palette"></span>
+          <span class="lb-list__label">Foundation tokens</span>
+          <span class="lb-list__hint">G T</span>
+        </li>
+
+        <li class="lb-cmdk__group-label" role="separator" aria-hidden="true">Actions</li>
+        <li class="lb-list__item" data-lb-value="new-file">
+          <span class="lb-list__icon" aria-hidden="true" data-lb-icon="file-text"></span>
+          <span class="lb-list__label">New file</span>
+          <span class="lb-list__hint">⌘ N</span>
+        </li>
+        <li class="lb-list__item" data-lb-value="import-tokens">
+          <span class="lb-list__icon" aria-hidden="true" data-lb-icon="download"></span>
+          <span class="lb-list__label">Import tokens from JSON</span>
+          <span class="lb-list__hint">⌘ I</span>
+        </li>
+        <li class="lb-list__item" data-lb-value="export-tokens">
+          <span class="lb-list__icon" aria-hidden="true" data-lb-icon="upload"></span>
+          <span class="lb-list__label">Export current theme as JSON</span>
+          <span class="lb-list__hint">⌘ E</span>
+        </li>
+        <li class="lb-list__item lb-list__item--disabled" data-lb-value="publish">
+          <span class="lb-list__icon" aria-hidden="true" data-lb-icon="refresh-cw"></span>
+          <span class="lb-list__label">Publish to npm (signed-in only)</span>
+        </li>
+
+        <li class="lb-cmdk__group-label" role="separator" aria-hidden="true">Settings</li>
+        <li class="lb-list__item" data-lb-value="theme.light">
+          <span class="lb-list__icon" aria-hidden="true" data-lb-icon="sun"></span>
+          <span class="lb-list__label">Switch to light mode</span>
+        </li>
+        <li class="lb-list__item" data-lb-value="theme.dark">
+          <span class="lb-list__icon" aria-hidden="true" data-lb-icon="moon"></span>
+          <span class="lb-list__label">Switch to dark mode</span>
+        </li>
+        <li class="lb-list__item" data-lb-value="theme.edit">
+          <span class="lb-list__icon" aria-hidden="true" data-lb-icon="settings"></span>
+          <span class="lb-list__label">Open theme editor</span>
+          <span class="lb-list__hint">⌘ .</span>
+        </li>
+        <li class="lb-list__item lb-list__item--danger" data-lb-value="reset">
+          <span class="lb-list__icon" aria-hidden="true" data-lb-icon="trash-2"></span>
+          <span class="lb-list__label">Reset all theme edits</span>
+        </li>
+
+        <li class="lb-list__no-results" hidden role="status">
+          <div class="lb-empty-state lb-empty-state--sm">
+            <span class="lb-empty-state__icon" aria-hidden="true" data-lb-icon="search"></span>
+            <h3 class="lb-empty-state__title">No commands match</h3>
+            <p class="lb-empty-state__description">Try a different search term.</p>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <div class="lb-cmdk__footer">
+      <span><kbd>↑</kbd><kbd>↓</kbd> navigate</span>
+      <span><kbd>↵</kbd> to select</span>
+      <span><kbd>Esc</kbd> to close</span>
+    </div>
+
+  </div>
+</div>
+
+<script src="../js/lb.js"></script>
+<script src="../js/slot-engine.js"></script>
+<script src="../js/theme-editor.js"></script>
+<script src="../js/token-exporter.js"></script>
+<script src="../js/gallery-layout.js"></script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const palette = document.getElementById('demo-cmdk');
+    const fb = document.getElementById('demo-cmdk-fb');
+    if (!palette || !fb) return;
+    palette.addEventListener('lb-cmdk-select', (e) => {
+      fb.textContent = e.detail.value || e.detail.item.textContent.trim();
+    });
+  });
+</script>
+</body>
+</html>

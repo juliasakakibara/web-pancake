@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <!-- theme-preamble:v1 -->
+  <script>(function(){try{var t=localStorage.getItem('letbe-ds-dark-mode');if(t==='1')document.documentElement.setAttribute('data-theme','dark');else if(t==='0')document.documentElement.setAttribute('data-theme','light');}catch(e){}})();</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta data-lb-page="lightbox">
+  <title>Lightbox — letbe-ds</title>
+  <link rel="stylesheet" href="../tokens/theme.css">
+  <link rel="stylesheet" href="../tokens/fonts.css">
+  <link rel="stylesheet" href="../components/components.css">
+  <link rel="stylesheet" href="../components/theme-editor.css">
+  <link rel="stylesheet" href="../components/gallery.css">
+  <style>
+    /* demo-local thumbnail grids */
+    .lbx-thumbs { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(11rem, 100%), 1fr)); gap: var(--lb-size-4x); }
+    .lbx-thumbs figure { margin: 0; display: flex; flex-direction: column; gap: var(--lb-size-1x); }
+    .lbx-thumbs img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: var(--lb-radius-surface); background: var(--lb-bg-strong); display: block; }
+    .lbx-thumbs figcaption { font-family: var(--lb-t-caption-m-font-family); font-size: var(--lb-t-caption-m-font-size); color: var(--lb-fg-muted); }
+  </style>
+</head>
+<body data-lb-base="..">
+
+<main class="gallery-main">
+  <section class="gallery-section" id="lightbox">
+    <h1 class="gallery-section__title" style="font-size: var(--lb-t-heading-l-font-size); line-height: var(--lb-t-heading-l-line-height);">Lightbox</h1>
+    <p class="gallery-section__desc">Image viewer built on the Modal — <code class="lb-code">LB.Lightbox</code>. Any <code class="lb-code">&lt;a href="image" data-lb-lightbox&gt;</code> opens in a dialog that hugs the image, with a caption headline + subline, a 1-of-N counter, previous/next buttons and arrow-key navigation through the group, cross-fades between steps, a blurred backdrop, and a full-screen layout on phones. It is the canonical <code class="lb-code">lb-modal</code> anatomy with lightbox chrome — LB.Modal owns focus trap, scroll lock, <kbd>Esc</kbd> and backdrop-click.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>a11y (built in):</strong> the viewer is a <code class="lb-code">role="dialog"</code> with <code class="lb-code">aria-modal</code> and a real labelled title; the thumbnails stay plain links, so without JavaScript (or with modifier clicks — cmd/ctrl/shift/middle) they open the image file itself; prev/next are labelled icon buttons; the counter is an <code class="lb-code">aria-live="polite"</code> region so step changes are announced; cross-fades are skipped under <code class="lb-code">prefers-reduced-motion</code>.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>Usage:</strong> Load <code class="lb-code">js/lb.js</code>, then <code class="lb-code">js/components/lb-lightbox.js</code> (opt-in module — a console warning names it if forgotten). Author plain thumbnail links: <code class="lb-code">&lt;a href="full.jpg" data-lb-lightbox&gt;&lt;img src="thumb.jpg" alt="…"&gt;&lt;/a&gt;</code>. <strong>Grouping:</strong> links sharing a <code class="lb-code">data-lb-lightbox="name"</code> value navigate together wherever they sit on the page; bare attributes group within their closest <code class="lb-code">[data-lb-gallery]</code> container (or the whole page with neither). <strong>Captions</strong> come from <code class="lb-code">data-lb-caption</code> + <code class="lb-code">data-lb-caption-sub</code> on the link, else the closest <code class="lb-code">&lt;figure&gt;</code>'s <code class="lb-code">&lt;figcaption&gt;</code>, else the thumbnail's <code class="lb-code">alt</code>. Programmatic: <code class="lb-code">LB.Lightbox.open(linkEl)</code>. Engine boundary: chrome + state only — images are plain links; bring your own loader or zoom if you need one.</p>
+
+    <hr class="gallery-desc-divider">
+
+    <h2 class="gallery-section__title">Gallery group — <code class="lb-code">[data-lb-gallery]</code></h2>
+    <p class="gallery-section__desc">Bare <code class="lb-code">data-lb-lightbox</code> links inside one <code class="lb-code">[data-lb-gallery]</code> container navigate as one group. Captions here come from the <code class="lb-code">&lt;figcaption&gt;</code>s.</p>
+    <div class="lbx-thumbs" data-lb-gallery>
+      <figure>
+        <a href="../assets/media/about/face-split.jpg" data-lb-lightbox><img src="../assets/media/about/face-split.jpg" alt="Gilded face, split composition"></a>
+        <figcaption>Face, split</figcaption>
+      </figure>
+      <figure>
+        <a href="../assets/media/about/skull-crown.jpg" data-lb-lightbox><img src="../assets/media/about/skull-crown.jpg" alt="Skull with crown"></a>
+        <figcaption>Skull, crowned</figcaption>
+      </figure>
+      <figure>
+        <a href="../assets/media/about/torso-split.jpg" data-lb-lightbox><img src="../assets/media/about/torso-split.jpg" alt="Torso, split composition"></a>
+        <figcaption>Torso, split</figcaption>
+      </figure>
+      <figure>
+        <a href="../assets/media/about/skeleton-side.jpg" data-lb-lightbox><img src="../assets/media/about/skeleton-side.jpg" alt="Skeleton in profile"></a>
+        <figcaption>Skeleton, profile</figcaption>
+      </figure>
+    </div>
+
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Named group + custom captions</h2>
+    <p class="gallery-section__desc">These two share <code class="lb-code">data-lb-lightbox="detail"</code> — they navigate together even though they sit apart — and carry <code class="lb-code">data-lb-caption</code> / <code class="lb-code">data-lb-caption-sub</code> for a headline + subline.</p>
+    <div class="lbx-thumbs" style="max-width: 24rem;">
+      <a href="../assets/media/about/mark-macro.jpg" data-lb-lightbox="detail" data-lb-caption="The mark" data-lb-caption-sub="Macro, brand study"><img src="../assets/media/about/mark-macro.jpg" alt="Brand mark macro"></a>
+      <a href="../assets/media/about/plugin-letbe-tokens.jpg" data-lb-lightbox="detail" data-lb-caption="letbe tokens" data-lb-caption-sub="The Figma plugin"><img src="../assets/media/about/plugin-letbe-tokens.jpg" alt="letbe tokens plugin"></a>
+    </div>
+
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Single image</h2>
+    <p class="gallery-section__desc">A group of one hides the prev/next controls; the counter reads 1 of 1.</p>
+    <div class="lbx-thumbs" style="max-width: 11rem;" data-lb-gallery>
+      <figure>
+        <a href="../assets/media/letbe-design-hero.jpg" data-lb-lightbox><img src="../assets/media/letbe-design-hero.jpg" alt="letbe design hero"></a>
+        <figcaption>Hero</figcaption>
+      </figure>
+    </div>
+  </section>
+</main>
+
+<script src="../js/lb.js"></script>
+<script src="../js/components/lb-lightbox.js"></script>
+<script src="../js/slot-engine.js"></script>
+<script src="../js/theme-editor.js"></script>
+<script src="../js/token-exporter.js"></script>
+<script src="../js/gallery-layout.js"></script>
+</body>
+</html>

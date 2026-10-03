@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <!-- theme-preamble:v1 -->
+  <script>(function(){try{var t=localStorage.getItem('letbe-ds-dark-mode');if(t==='1')document.documentElement.setAttribute('data-theme','dark');else if(t==='0')document.documentElement.setAttribute('data-theme','light');}catch(e){}})();</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta data-lb-page="typography">
+  <title>Typography — letbe-ds</title>
+  <link rel="stylesheet" href="../tokens/theme.css">
+  <link rel="stylesheet" href="../tokens/fonts.css">
+  <link rel="stylesheet" href="../components/components.css">
+  <link rel="stylesheet" href="../components/theme-editor.css">
+  <link rel="stylesheet" href="../components/gallery.css">
+</head>
+<body data-lb-base="..">
+
+<main class="gallery-main">
+  <section class="gallery-section" id="typography">
+    <h1 class="gallery-section__title" style="font-size: var(--lb-t-heading-l-font-size); line-height: var(--lb-t-heading-l-line-height);">Typography</h1>
+    <p class="gallery-section__desc">Seven semantic text roles — display, heading, body, action, label, caption, code — composed from a three-link token chain across L1 and L2. <strong>L1 font-family slots</strong> (numbered 1/2/3) hold the actual face. <strong>L2 family aliases</strong> (one per role) map each role to a slot. <strong>L2 composite tokens</strong> bake font-family + size + weight + line-height + letter-spacing into a single style. The brand swaps a slot's value and every role bound to it changes face — without touching any composite.</p>
+
+    <hr class="gallery-desc-divider">
+
+    <!-- ────────────────── Architecture overview ────────────────── -->
+    <h2 class="gallery-section__title">Architecture</h2>
+    <p class="gallery-section__desc">Three layers move together. Edit a slot at L1, every L2 role bound to it changes. Edit a role's family alias at L2, only that role swaps. Edit a composite directly only when a one-off needs to deviate (it shouldn't — that's an L3 component concern). The slot each role points at is set by the L2 family aliases in <code class="lb-code">tokens/source-tokens.json</code>; the map below shows the shipped mapping.</p>
+
+    <div class="type-family-map" role="group" aria-label="Role to family-slot map">
+      <div class="type-family-map__head">Role (L2)</div>
+      <div class="type-family-map__head">Family alias</div>
+      <div class="type-family-map__head">Slot (L1) → font</div>
+
+      <div class="type-family-map__role">display</div>
+      <div class="type-family-map__slot">typography.family.display</div>
+      <div class="type-family-map__font" data-slot-for="display">Slot 2 — <span data-slot-name="2"></span></div>
+
+      <div class="type-family-map__role">heading</div>
+      <div class="type-family-map__slot">typography.family.heading</div>
+      <div class="type-family-map__font" data-slot-for="heading">Slot 2 — <span data-slot-name="2"></span></div>
+
+      <div class="type-family-map__role">body</div>
+      <div class="type-family-map__slot">typography.family.body</div>
+      <div class="type-family-map__font" data-slot-for="body">Slot 1 — <span data-slot-name="1"></span></div>
+
+      <div class="type-family-map__role">action</div>
+      <div class="type-family-map__slot">typography.family.action</div>
+      <div class="type-family-map__font" data-slot-for="action">Slot 1 — <span data-slot-name="1"></span></div>
+
+      <div class="type-family-map__role">label</div>
+      <div class="type-family-map__slot">typography.family.label</div>
+      <div class="type-family-map__font" data-slot-for="label">Slot 1 — <span data-slot-name="1"></span></div>
+
+      <div class="type-family-map__role">caption</div>
+      <div class="type-family-map__slot">typography.family.caption</div>
+      <div class="type-family-map__font" data-slot-for="caption">Slot 1 — <span data-slot-name="1"></span></div>
+
+      <div class="type-family-map__role">code</div>
+      <div class="type-family-map__slot">typography.family.code</div>
+      <div class="type-family-map__font" data-slot-for="code">Slot 3 — <span data-slot-name="3"></span></div>
+    </div>
+    <p class="gallery-section__desc" style="margin-top: var(--lb-size-3x);">Overline has no family alias of its own — it follows <code class="lb-code">label</code>. The code role also styles monospace micro-UI (timestamps, hex inputs, calendar times), so remapping it moves those too.</p>
+
+    <!-- ────────────────── Mode preview controls ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Responsive modes — S / M / L</h2>
+    <p class="gallery-section__desc">Every L2 typography token declares three modes: <code class="lb-code">S</code> (mobile, ≤600px), <code class="lb-code">M</code> (tablet, 601–1023px), <code class="lb-code">L</code> (desktop, ≥1024px). Display and heading (xl/l/m) shrink at S; body, action, label, caption, overline and code stay constant across all three. Empty <code class="lb-code">$modes</code> blocks mean "inherit base" — they exist in the JSON so the Figma plugin can build variable modes from them.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x));"><strong>Preview a mode without resizing:</strong> open the <strong>Theme editor</strong> (cog icon in the header) — the Viewport switcher at the top has <em>Auto / S / M / L</em> buttons. Auto follows your real viewport; the others force a specific mode for visual review.</p>
+
+    <!-- ────────────────── Display ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Display</h2>
+    <p class="type-role-intro">The biggest type in the system — for hero sections, marketing moments, and impactful brand statements. Five sizes from xl (largest) to xs. Weight bold. All five shrink at S to keep mobile readable.</p>
+    <div class="type-specimen">
+      <div class="type-specimen__row type-specimen__row--responsive" data-typo-token="display-xl">
+        <div class="type-specimen__name">display-xl<span class="type-specimen__meta" data-typo-spec-mode="auto"></span></div>
+        <div class="type-specimen__sample" style="font: var(--lb-t-display-xl-font-weight) var(--lb-t-display-xl-font-size)/var(--lb-t-display-xl-line-height) var(--lb-t-display-xl-font-family); letter-spacing: var(--lb-t-display-xl-letter-spacing);">Display XL</div>
+      </div>
+      <div class="type-specimen__row type-specimen__row--responsive" data-typo-token="display-l">
+        <div class="type-specimen__name">display-l<span class="type-specimen__meta" data-typo-spec-mode="auto"></span></div>
+        <div class="type-specimen__sample" style="font: var(--lb-t-display-l-font-weight) var(--lb-t-display-l-font-size)/var(--lb-t-display-l-line-height) var(--lb-t-display-l-font-family); letter-spacing: var(--lb-t-display-l-letter-spacing);">Display L</div>
+      </div>
+      <div class="type-specimen__row type-specimen__row--responsive" data-typo-token="display-m">
+        <div class="type-specimen__name">display-m<span class="type-specimen__meta" data-typo-spec-mode="auto"></span></div>
+        <div class="type-specimen__sample" style="font: var(--lb-t-display-m-font-weight) var(--lb-t-display-m-font-size)/var(--lb-t-display-m-line-height) var(--lb-t-display-m-font-family); letter-spacing: var(--lb-t-display-m-letter-spacing);">Display M</div>
+      </div>
+      <div class="type-specimen__row type-specimen__row--responsive" data-typo-token="display-s">
+        <div class="type-specimen__name">display-s<span class="type-specimen__meta" data-typo-spec-mode="auto"></span></div>
+        <div class="type-specimen__sample" style="font: var(--lb-t-display-s-font-weight) var(--lb-t-display-s-font-size)/var(--lb-t-display-s-line-height) var(--lb-t-display-s-font-family); letter-spacing: var(--lb-t-display-s-letter-spacing);">Display S</div>
+      </div>
+      <div class="type-specimen__row type-specimen__row--responsive" data-typo-token="display-xs">
+        <div class="type-specimen__name">display-xs<span class="type-specimen__meta" data-typo-spec-mode="auto"></span></div>
+        <div class="type-specimen__sample" style="font: var(--lb-t-display-xs-font-weight) var(--lb-t-display-xs-font-size)/var(--lb-t-display-xs-line-height) var(--lb-t-display-xs-font-family); letter-spacing: var(--lb-t-display-xs-letter-spacing);">Display XS</div>
+      </div>
+    </div>
+
+    <!-- ────────────────── Heading ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Heading</h2>
+    <p class="type-role-intro">UI hierarchy headings for sections, cards, modals. Four sizes xl to s. Weight semibold (one step less weight than display). Heading-xl, l, and m shrink at S; heading-s stays fixed (already small enough for mobile).</p>
+    <div class="type-specimen">
+      <div class="type-specimen__row type-specimen__row--responsive" data-typo-token="heading-xl">
+        <div class="type-specimen__name">heading-xl<span class="type-specimen__meta" data-typo-spec-mode="auto"></span></div>
+        <div class="type-specimen__sample" style="font: var(--lb-t-heading-xl-font-weight) var(--lb-t-heading-xl-font-size)/var(--lb-t-heading-xl-line-height) var(--lb-t-heading-xl-font-family); letter-spacing: var(--lb-t-heading-xl-letter-spacing);">Heading XL</div>
+      </div>
+      <div class="type-specimen__row type-specimen__row--responsive" data-typo-token="heading-l">
+        <div class="type-specimen__name">heading-l<span class="type-specimen__meta" data-typo-spec-mode="auto"></span></div>
+        <div class="type-specimen__sample" style="font: var(--lb-t-heading-l-font-weight) var(--lb-t-heading-l-font-size)/var(--lb-t-heading-l-line-height) var(--lb-t-heading-l-font-family); letter-spacing: var(--lb-t-heading-l-letter-spacing);">Heading L</div>
+      </div>
+      <div class="type-specimen__row type-specimen__row--responsive" data-typo-token="heading-m">
+        <div class="type-specimen__name">heading-m<span class="type-specimen__meta" data-typo-spec-mode="auto"></span></div>
+        <div class="type-specimen__sample" style="font: var(--lb-t-heading-m-font-weight) var(--lb-t-heading-m-font-size)/var(--lb-t-heading-m-line-height) var(--lb-t-heading-m-font-family); letter-spacing: var(--lb-t-heading-m-letter-spacing);">Heading M</div>
+      </div>
+      <div class="type-specimen__row" data-typo-token="heading-s">
+        <div class="type-specimen__name">heading-s<span class="type-specimen__meta" data-typo-spec-mode="auto"></span></div>
+        <div class="type-specimen__sample" style="font: var(--lb-t-heading-s-font-weight) var(--lb-t-heading-s-font-size)/var(--lb-t-heading-s-line-height) var(--lb-t-heading-s-font-family); letter-spacing: var(--lb-t-heading-s-letter-spacing);">Heading S</div>
+      </div>
+      <div class="type-specimen__row" data-typo-token="heading-xs">
+        <div class="type-specimen__name">heading-xs<span class="type-specimen__meta" data-typo-spec-mode="auto"></span></div>
+        <div class="type-specimen__sample" style="font: var(--lb-t-heading-xs-font-weight) var(--lb-t-heading-xs-font-size)/var(--lb-t-heading-xs-line-height) var(--lb-t-heading-xs-font-family); letter-spacing: var(--lb-t-heading-xs-letter-spacing);">Heading XS — card titles, dense panels</div>
+      </div>
+      <div class="type-specimen__row" data-typo-token="heading-2xs">
+        <div class="type-specimen__name">heading-2xs<span class="type-specimen__meta" data-typo-spec-mode="auto"></span></div>
+        <div class="type-specimen__sample" style="font: var(--lb-t-heading-2xs-font-weight) var(--lb-t-heading-2xs-font-size)/var(--lb-t-heading-2xs-line-height) var(--lb-t-heading-2xs-font-family); letter-spacing: var(--lb-t-heading-2xs-letter-spacing);">Heading 2XS — sidebar groups, table headers</div>
+      </div>
+    </div>
+
+    <!-- ────────────────── Body ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Body</h2>
+    <p class="type-role-intro">Running text for paragraphs and prose. Five sizes xl to xs. Weight regular. Letter-spacing normal. Same values at every breakpoint — body never shrinks below readable.</p>
+    <div class="type-specimen">
+      <div class="type-specimen__row" data-typo-token="body-xl">
+        <div class="type-specimen__name">body-xl<span class="type-specimen__meta" data-typo-spec-mode="auto"></span></div>
+        <div class="type-specimen__sample" style="font: var(--lb-t-body-xl-font-weight) var(--lb-t-body-xl-font-size)/var(--lb-t-body-xl-line-height) var(--lb-t-body-xl-font-family); letter-spacing: var(--lb-t-body-xl-letter-spacing);">The quick brown fox jumps over the lazy dog</div>
+      </div>
+      <div class="type-specimen__row" data-typo-token="body-l">
+        <div class="type-specimen__name">body-l<span class="type-specimen__meta" data-typo-spec-mode="auto"></span></div>
+        <div class="type-specimen__sample" style="font: var(--lb-t-body-l-font-weight) var(--lb-t-body-l-font-size)/var(--lb-t-body-l-line-height) var(--lb-t-body-l-font-family); letter-spacing: var(--lb-t-body-l-letter-spacing);">The quick brown fox jumps over the lazy dog</div>
+      </div>
+      <div class="type-specimen__row" data-typo-token="body-m">
+        <div class="type-specimen__name">body-m<span class="type-specimen__meta" data-typo-spec-mode="auto"></span></div>
+        <div class="type-specimen__sample" style="font: var(--lb-t-body-m-font-weight) var(--lb-t-body-m-font-size)/var(--lb-t-body-m-line-height) var(--lb-t-body-m-font-family); letter-spacing: var(--lb-t-body-m-letter-spacing);">The quick brown fox jumps over the lazy dog</div>
+      </div>
+      <div class="type-specimen__row" data-typo-token="body-s">
+        <div class="type-specimen__name">body-s<span class="type-specimen__meta" data-typo-spec-mode="auto"></span></div>
+        <div class="type-specimen__sample" style="font: var(--lb-t-body-s-font-weight) var(--lb-t-body-s-font-size)/var(--lb-t-body-s-line-height) var(--lb-t-body-s-font-family); letter-spacing: var(--lb-t-body-s-letter-spacing);">The quick brown fox jumps over the lazy dog</div>
+      </div>
+      <div class="type-specimen__row" data-typo-token="body-xs">
+        <div class="type-specimen__name">body-xs<span class="type-specimen__meta" data-typo-spec-mode="auto"></span></div>
+        <div class="type-specimen__sample" style="font: var(--lb-t-body-xs-font-weight) var(--lb-t-body-xs-font-size)/var(--lb-t-body-xs-line-height) var(--lb-t-body-xs-font-family); letter-spacing: var(--lb-t-body-xs-letter-spacing);">The quick brown fox jumps over the lazy dog</div>
+      </div>
+    </div>
+
+    <!-- ────────────────── Action ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Action</h2>
+    <p class="type-role-intro">Interactive elements — buttons, tabs, links, breadcrumbs. Weight medium. Letter-spacing slightly-wide (action-s widens further at +0.02em). Action shares the text face (<code class="lb-code">font.family.1</code>) with body by default — the norm across brands and platforms, where buttons follow the body font and differentiate by weight and spacing. A brand that wants a distinct UI voice remaps the <code class="lb-code">action</code> role to its own slot in the theme editor's role map; the demo below previews what an action-only face swap looks like.</p>
+
+    <div class="type-swap-demo">
+      <span class="type-swap-demo__label">Try it</span>
+      <label for="action-swap-select" style="font-size: var(--lb-t-body-s-font-size); color: var(--lb-fg-default);">action face →</label>
+      <select id="action-swap-select" class="lb-input lb-input--small" style="max-width: 200px;">
+        <option value="Inter">Inter (default)</option>
+        <option value="DM Sans">DM Sans</option>
+        <option value="Plus Jakarta Sans">Plus Jakarta Sans</option>
+        <option value="Roboto">Roboto</option>
+        <option value="Roboto Mono">Roboto Mono</option>
+        <option value="Noto Serif">Noto Serif</option>
+      </select>
+      <span style="font-size: var(--lb-t-caption-m-font-size); color: var(--lb-fg-muted);">Only action specimens swap. Body stays Inter — proves per-role mapping works.</span>
+    </div>
+
+    <div class="type-specimen">
+      <div class="type-specimen__row" data-typo-token="action-l">
+        <div class="type-specimen__name">action-l<span class="type-specimen__meta" data-typo-spec-mode="auto"></span></div>
+        <div class="type-specimen__sample" style="font: var(--lb-t-action-l-font-weight) var(--lb-t-action-l-font-size)/var(--lb-t-action-l-line-height) var(--lb-t-action-l-font-family); letter-spacing: var(--lb-t-action-l-letter-spacing);">Action L — Buttons, Links, Tabs</div>
+      </div>
+      <div class="type-specimen__row" data-typo-token="action-m">
+        <div class="type-specimen__name">action-m<span class="type-specimen__meta" data-typo-spec-mode="auto"></span></div>
+        <div class="type-specimen__sample" style="font: var(--lb-t-action-m-font-weight) var(--lb-t-action-m-font-size)/var(--lb-t-action-m-line-height) var(--lb-t-action-m-font-family); letter-spacing: var(--lb-t-action-m-letter-spacing);">Action M — Buttons, Links, Tabs</div>
+      </div>
+      <div class="type-specimen__row" data-typo-token="action-s">
+        <div class="type-specimen__name">action-s<span class="type-specimen__meta" data-typo-spec-mode="auto"></span></div>
+        <div class="type-specimen__sample" style="font: var(--lb-t-action-s-font-weight) var(--lb-t-action-s-font-size)/var(--lb-t-action-s-line-height) var(--lb-t-action-s-font-family); letter-spacing: var(--lb-t-action-s-letter-spacing);">Action S — Buttons, Links, Tabs</div>
+      </div>
+    </div>
+
+    <!-- ────────────────── Label ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Label</h2>
+    <p class="type-role-intro">Static UI labels — form field labels, tags, chip text, badges. Same metrics as action (weight medium, slightly-wide letter-spacing) but semantically different: labels aren't interactive. Bound to slot 1 by default.</p>
+    <div class="type-specimen">
+      <div class="type-specimen__row" data-typo-token="label-l">
+        <div class="type-specimen__name">label-l<span class="type-specimen__meta" data-typo-spec-mode="auto"></span></div>
+        <div class="type-specimen__sample" style="font: var(--lb-t-label-l-font-weight) var(--lb-t-label-l-font-size)/var(--lb-t-label-l-line-height) var(--lb-t-label-l-font-family); letter-spacing: var(--lb-t-label-l-letter-spacing);">Form field label</div>
+      </div>
+      <div class="type-specimen__row" data-typo-token="label-m">
+        <div class="type-specimen__name">label-m<span class="type-specimen__meta" data-typo-spec-mode="auto"></span></div>
+        <div class="type-specimen__sample" style="font: var(--lb-t-label-m-font-weight) var(--lb-t-label-m-font-size)/var(--lb-t-label-m-line-height) var(--lb-t-label-m-font-family); letter-spacing: var(--lb-t-label-m-letter-spacing);">Form field label</div>
+      </div>
+      <div class="type-specimen__row" data-typo-token="label-s">
+        <div class="type-specimen__name">label-s<span class="type-specimen__meta" data-typo-spec-mode="auto"></span></div>
+        <div class="type-specimen__sample" style="font: var(--lb-t-label-s-font-weight) var(--lb-t-label-s-font-size)/var(--lb-t-label-s-line-height) var(--lb-t-label-s-font-family); letter-spacing: var(--lb-t-label-s-letter-spacing);">Form field label</div>
+      </div>
+    </div>
+
+    <!-- ────────────────── Caption ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Caption</h2>
+    <p class="type-role-intro">Helper text, metadata, fine print, image captions, timestamps. Two sizes m and s. Weight regular. Smaller than body-xs (caption-s = 11px) so it reads as supplementary, not primary.</p>
+    <div class="type-specimen">
+      <div class="type-specimen__row" data-typo-token="caption-m">
+        <div class="type-specimen__name">caption-m<span class="type-specimen__meta" data-typo-spec-mode="auto"></span></div>
+        <div class="type-specimen__sample" style="font: var(--lb-t-caption-m-font-weight) var(--lb-t-caption-m-font-size)/var(--lb-t-caption-m-line-height) var(--lb-t-caption-m-font-family); letter-spacing: var(--lb-t-caption-m-letter-spacing);">Caption M — helper text, metadata</div>
+      </div>
+      <div class="type-specimen__row" data-typo-token="caption-s">
+        <div class="type-specimen__name">caption-s<span class="type-specimen__meta" data-typo-spec-mode="auto"></span></div>
+        <div class="type-specimen__sample" style="font: var(--lb-t-caption-s-font-weight) var(--lb-t-caption-s-font-size)/var(--lb-t-caption-s-line-height) var(--lb-t-caption-s-font-family); letter-spacing: var(--lb-t-caption-s-letter-spacing);">Caption S — helper text, metadata</div>
+      </div>
+    </div>
+
+    <!-- ────────────────── Overline ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Overline</h2>
+    <p class="type-role-intro">Uppercase eyebrow above a heading — section markers, kickers, card categories. One size. Family follows the <code class="lb-code">label</code> role.</p>
+    <div class="type-specimen">
+      <div class="type-specimen__row" data-typo-token="overline">
+        <div class="type-specimen__name">overline<span class="type-specimen__meta" data-typo-spec-mode="auto"></span></div>
+        <div class="type-specimen__sample" style="font: var(--lb-t-overline-font-weight) var(--lb-t-overline-font-size)/var(--lb-t-overline-line-height) var(--lb-t-overline-font-family); letter-spacing: var(--lb-t-overline-letter-spacing); text-transform: uppercase;">Overline — section eyebrow</div>
+      </div>
+    </div>
+
+    <!-- ────────────────── Code ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Code</h2>
+    <p class="type-role-intro">Monospace text — code blocks, inline code, and the monospace micro-UI (timestamps, hex inputs, calendar times). Three sizes. The only role bound to slot 3 by default.</p>
+    <div class="type-specimen">
+      <div class="type-specimen__row" data-typo-token="code-l">
+        <div class="type-specimen__name">code-l<span class="type-specimen__meta" data-typo-spec-mode="auto"></span></div>
+        <div class="type-specimen__sample" style="font: var(--lb-t-code-l-font-weight) var(--lb-t-code-l-font-size)/var(--lb-t-code-l-line-height) var(--lb-t-code-l-font-family); letter-spacing: var(--lb-t-code-l-letter-spacing);">const theme = tokens.load()</div>
+      </div>
+      <div class="type-specimen__row" data-typo-token="code-m">
+        <div class="type-specimen__name">code-m<span class="type-specimen__meta" data-typo-spec-mode="auto"></span></div>
+        <div class="type-specimen__sample" style="font: var(--lb-t-code-m-font-weight) var(--lb-t-code-m-font-size)/var(--lb-t-code-m-line-height) var(--lb-t-code-m-font-family); letter-spacing: var(--lb-t-code-m-letter-spacing);">const theme = tokens.load()</div>
+      </div>
+      <div class="type-specimen__row" data-typo-token="code-s">
+        <div class="type-specimen__name">code-s<span class="type-specimen__meta" data-typo-spec-mode="auto"></span></div>
+        <div class="type-specimen__sample" style="font: var(--lb-t-code-s-font-weight) var(--lb-t-code-s-font-size)/var(--lb-t-code-s-line-height) var(--lb-t-code-s-font-family); letter-spacing: var(--lb-t-code-s-letter-spacing);">const theme = tokens.load()</div>
+      </div>
+    </div>
+
+    <!-- ────────────────── Retune it live ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Retune it live</h2>
+    <p class="gallery-section__desc">Everything on this page is editable in the <strong>Theme Editor</strong> (header button) → <em>Typo</em>: a Google Fonts picker per family slot, the role map that decides which slot each role wears (the slot captions update live as you remap), and per-mode base-size sliders that scale the whole ramp. Export carries the result as standard DTCG JSON; the letbe tokens plugin registers the same slots, roles and modes as Figma variables.</p>
+
+  </section>
+</main>
+
+<script src="../js/lb.js"></script>
+<script src="../js/slot-engine.js"></script>
+<script src="../js/theme-editor.js"></script>
+<script src="../js/token-exporter.js"></script>
+<script src="../js/gallery-layout.js"></script>
+
+<!-- Typography page wiring: live spec labels, mode preview toggle, action family-swap demo -->
+<script>
+(function () {
+  'use strict';
+
+  // ─── Live spec labels ─────────────────────────────────────
+  // Each .type-specimen__row carries data-typo-token="role-size".
+  // We read computed styles on the .type-specimen__sample inside,
+  // extract size/lh/weight/letter-spacing/family, and write the
+  // spec line into .type-specimen__meta. Re-runs on mode change.
+  function formatWeight(w) {
+    var n = parseInt(w, 10);
+    if (n <= 400) return 'regular';
+    if (n <= 500) return 'medium';
+    if (n <= 600) return 'semibold';
+    return 'bold';
+  }
+  function formatLetterSpacing(ls) {
+    if (!ls || ls === 'normal' || ls === '0px' || ls === '0em') return 'normal';
+    // Computed style returns px even for em authoring; if it's <2px, label as ~em
+    var n = parseFloat(ls);
+    if (!Number.isFinite(n) || n === 0) return 'normal';
+    var sign = n > 0 ? '+' : '';
+    return sign + n.toFixed(2).replace(/\.?0+$/, '') + 'px';
+  }
+  function familyShortName(family) {
+    if (!family) return '—';
+    // Computed style returns the resolved comma list; take the first quoted/unquoted name
+    var first = family.split(',')[0].trim().replace(/^["']|["']$/g, '');
+    return first;
+  }
+  function refreshSpecLabels() {
+    var rows = document.querySelectorAll('[data-typo-token]');
+    rows.forEach(function (row) {
+      var sample = row.querySelector('.type-specimen__sample');
+      var meta   = row.querySelector('.type-specimen__meta');
+      if (!sample || !meta) return;
+      var cs = window.getComputedStyle(sample);
+      var size   = Math.round(parseFloat(cs.fontSize));
+      var lh     = Math.round(parseFloat(cs.lineHeight));
+      var weight = formatWeight(cs.fontWeight);
+      var ls     = formatLetterSpacing(cs.letterSpacing);
+      var fam    = familyShortName(cs.fontFamily);
+      meta.textContent = size + '/' + lh + ' · ' + weight + ' · ' + ls + ' · ' + fam;
+    });
+  }
+
+  // ─── Family map: fill slot font names from L1 CSS variables ──
+  function refreshFamilyMap() {
+    var cs = window.getComputedStyle(document.documentElement);
+    [1, 2, 3].forEach(function (slot) {
+      var raw = cs.getPropertyValue('--lb-font-family-' + slot).trim();
+      var first = raw.split(',')[0].trim().replace(/^["']|["']$/g, '');
+      document.querySelectorAll('[data-slot-name="' + slot + '"]').forEach(function (el) {
+        el.textContent = first || '(unset)';
+      });
+    });
+  }
+
+  function init() {
+    refreshSpecLabels();
+    refreshFamilyMap();
+
+    // Action family-swap demo: change font-family on the action specimens
+    // only, so body/heading specimens stay Inter.
+    var swap = document.getElementById('action-swap-select');
+    if (swap) {
+      swap.addEventListener('change', function () {
+        var actionRows = document.querySelectorAll('[data-typo-token^="action-"] .type-specimen__sample');
+        var family = swap.value;
+        // Build a font-family value with sensible fallbacks
+        var stack = '"' + family + '", Inter, system-ui, sans-serif';
+        actionRows.forEach(function (el) {
+          el.style.setProperty('font-family', stack);
+        });
+        // Refresh spec labels so the family column reflects the swap
+        requestAnimationFrame(refreshSpecLabels);
+      });
+    }
+
+    // Refresh on viewport resize so spec labels stay truthful when the
+    // user resizes the window or the theme editor's Viewport switcher
+    // applies a force-mode override (which changes computed styles
+    // without firing resize — listen for attribute changes on <html>).
+    var resizeT;
+    window.addEventListener('resize', function () {
+      clearTimeout(resizeT);
+      resizeT = setTimeout(refreshSpecLabels, 100);
+    });
+    var attrObserver = new MutationObserver(function () {
+      requestAnimationFrame(refreshSpecLabels);
+    });
+    attrObserver.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['data-typo-preview'],
+    });
+  }
+
+  // Script is loaded at end of <body> after gallery-layout.js, lb.js etc.
+  // By the time we run here DOMContentLoaded has typically already fired,
+  // so addEventListener('DOMContentLoaded', ...) would never trigger.
+  // Run init() immediately if document is already interactive/complete;
+  // attach a listener as a safety net for the (rare) case it hasn't.
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+</script>
+</body>
+</html>

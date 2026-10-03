@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <!-- theme-preamble:v1 -->
+  <script>(function(){try{var t=localStorage.getItem('letbe-ds-dark-mode');if(t==='1')document.documentElement.setAttribute('data-theme','dark');else if(t==='0')document.documentElement.setAttribute('data-theme','light');}catch(e){}})();</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta data-lb-page="time-picker">
+  <title>Time Picker — letbe-ds</title>
+  <link rel="stylesheet" href="../tokens/theme.css">
+  <link rel="stylesheet" href="../tokens/fonts.css">
+  <link rel="stylesheet" href="../components/components.css">
+  <link rel="stylesheet" href="../components/theme-editor.css">
+  <link rel="stylesheet" href="../components/gallery.css">
+</head>
+<body data-lb-base="..">
+
+<main class="gallery-main">
+  <section class="gallery-section" id="time-picker">
+    <h1 class="gallery-section__title" style="font-size: var(--lb-t-heading-l-font-size); line-height: var(--lb-t-heading-l-line-height);">Time Picker</h1>
+    <p class="gallery-section__desc">Hours and minutes selection — built as a <code class="lb-code">data-lb-mode="time"</code> mode of the Date Picker so it inherits the same dialog chrome, keyboard handling, and trigger styling. Two formats: 24-hour (default) and 12-hour with AM/PM column. Minute granularity is configurable via <code class="lb-code">data-lb-time-step</code> (1, 5, 10, 15, 30 are common). Both inline and input-with-popover variants ship.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>a11y (built in):</strong> the input variant's trigger is a <code class="lb-code">button</code> with <code class="lb-code">aria-haspopup="dialog"</code> + <code class="lb-code">aria-expanded</code>, the panel is <code class="lb-code">role="dialog"</code> named <em>Time picker</em>, and <kbd>Esc</kbd> or a click outside closes it; the inline variant labels its own root instead (<code class="lb-code">role="application"</code> with the same <code class="lb-code">aria-label</code>). Hours, minutes and AM/PM are three separately labelled selects (<code class="lb-code">aria-label</code> <em>Hours</em> / <em>Minutes</em> / <em>AM or PM</em>, <code class="lb-code">aria-haspopup="listbox"</code> + <code class="lb-code">aria-expanded</code> on each trigger, <code class="lb-code">role="listbox"</code> with <code class="lb-code">role="option"</code> items) — <kbd>Enter</kbd>, <kbd>Space</kbd> or <kbd>↓</kbd> opens a column, <kbd>Esc</kbd> closes it. The <code class="lb-code">:</code> separator is <code class="lb-code">aria-hidden</code> decoration, <code class="lb-code">data-lb-hint</code> / <code class="lb-code">data-lb-error</code> text is tied to the trigger with <code class="lb-code">aria-describedby</code>, <code class="lb-code">data-lb-disabled</code> sets the native <code class="lb-code">disabled</code>, and every trigger carries a <code class="lb-code">:focus-visible</code> ring.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>Usage:</strong> Add <code class="lb-code">data-lb-mode="time"</code> to any <code class="lb-code">.lb-datepicker-field</code> (input variant) or <code class="lb-code">.lb-datepicker--inline</code> wrapper. Optional <code class="lb-code">data-lb-time-format="12h"</code> for AM/PM display, <code class="lb-code">data-lb-time-step="15"</code> for minute granularity. Dispatches <code class="lb-code">lb-datepicker-change</code> with <code class="lb-code">{mode: 'time', value: {hours, minutes}}</code>.</p>
+
+    <hr class="gallery-desc-divider">
+
+    <!-- ────────────────── Inline — 24h ────────────────── -->
+    <h2 class="gallery-section__title">Inline — 24-hour, 5-minute step</h2>
+    <p class="gallery-section__desc">Default format. Hours 00–23, minutes in 5-minute increments. The picker stays expanded as part of the page — no popover.</p>
+    <div class="gallery-row">
+      <div class="lb-datepicker--inline" data-lb-datepicker data-lb-variant="inline" data-lb-mode="time"></div>
+    </div>
+
+    <!-- ────────────────── Inline — 12h ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Inline — 12-hour with AM/PM</h2>
+    <p class="gallery-section__desc">Add <code class="lb-code">data-lb-time-format="12h"</code>. Hours read 1–12 with a separate AM/PM column.</p>
+    <div class="gallery-row">
+      <div class="lb-datepicker--inline" data-lb-datepicker data-lb-variant="inline" data-lb-mode="time" data-lb-time-format="12h"></div>
+    </div>
+
+    <!-- ────────────────── Input + popover — 24h ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Input — popover trigger</h2>
+    <p class="gallery-section__desc">Most common form-input pattern. Click the trigger to open the picker; selection updates the trigger text. Clock icon distinguishes it from a Date Picker at-a-glance.</p>
+    <div class="lb-stack" style="max-width: 18rem;">
+      <div class="lb-datepicker-field" data-lb-datepicker data-lb-variant="input" data-lb-mode="time" data-lb-label="Meeting time" data-lb-hint="Select a start time"></div>
+    </div>
+
+    <!-- ────────────────── Step variations ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Minute granularity — <code class="lb-code">data-lb-time-step</code></h2>
+    <p class="gallery-section__desc">Tune the minute step to match the use case: 1 for precision (alarms, timers), 15 or 30 for scheduling (calendars, bookings).</p>
+
+    <div class="gallery-label">1-minute step (precision)</div>
+    <div class="gallery-row">
+      <div class="lb-datepicker-field" data-lb-datepicker data-lb-variant="input" data-lb-mode="time" data-lb-time-step="1" data-lb-label="Alarm" data-lb-placeholder="Pick exact minute" style="width: 18rem;"></div>
+    </div>
+
+    <div class="gallery-label" style="margin-top: var(--lb-size-6x);">15-minute step (scheduling)</div>
+    <div class="gallery-row">
+      <div class="lb-datepicker-field" data-lb-datepicker data-lb-variant="input" data-lb-mode="time" data-lb-time-step="15" data-lb-label="Booking start" data-lb-placeholder="Choose a slot" style="width: 18rem;"></div>
+    </div>
+
+    <div class="gallery-label" style="margin-top: var(--lb-size-6x);">30-minute step (calendar)</div>
+    <div class="gallery-row">
+      <div class="lb-datepicker-field" data-lb-datepicker data-lb-variant="input" data-lb-mode="time" data-lb-time-step="30" data-lb-time-format="12h" data-lb-label="Meeting" data-lb-placeholder="Choose half-hour slot" style="width: 18rem;"></div>
+    </div>
+
+    <!-- ────────────────── Sizes ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Sizes</h2>
+    <p class="gallery-section__desc">Same size scale as Date Picker.</p>
+    <div class="lb-cluster">
+      <div class="lb-datepicker-field" data-lb-datepicker data-lb-variant="input" data-lb-mode="time" data-lb-size="small" data-lb-placeholder="Small" style="width: 12rem;"></div>
+      <div class="lb-datepicker-field" data-lb-datepicker data-lb-variant="input" data-lb-mode="time" data-lb-size="medium" data-lb-placeholder="Medium" style="width: 14rem;"></div>
+      <div class="lb-datepicker-field" data-lb-datepicker data-lb-variant="input" data-lb-mode="time" data-lb-size="large" data-lb-placeholder="Large" style="width: 16rem;"></div>
+    </div>
+
+    <!-- ────────────────── States ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">States</h2>
+    <div class="lb-stack" style="max-width: 18rem;">
+      <div class="lb-datepicker-field" data-lb-datepicker data-lb-variant="input" data-lb-mode="time" data-lb-label="Required time" data-lb-error="Please select a time"></div>
+      <div class="lb-datepicker-field" data-lb-datepicker data-lb-variant="input" data-lb-mode="time" data-lb-disabled data-lb-placeholder="Disabled"></div>
+    </div>
+
+    <!-- ────────────────── Form composition ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">In a form — date + time pair</h2>
+    <p class="gallery-section__desc">Most "datetime" needs are met by placing a Date Picker next to a Time Picker. Each component owns its concern, the consumer combines values on submit.</p>
+    <form class="lb-cluster" style="max-width: 36rem; --gap: var(--lb-size-3x);">
+      <div class="lb-datepicker-field" data-lb-datepicker data-lb-variant="input" data-lb-mode="single" data-lb-label="Date" data-lb-placeholder="Pick a date" style="flex: 1; min-width: 14rem;"></div>
+      <div class="lb-datepicker-field" data-lb-datepicker data-lb-variant="input" data-lb-mode="time" data-lb-time-step="15" data-lb-label="Time" data-lb-placeholder="Pick a time" style="flex: 1; min-width: 12rem;"></div>
+    </form>
+  </section>
+</main>
+
+<script src="../js/lb.js"></script>
+<script src="../js/slot-engine.js"></script>
+<script src="../js/theme-editor.js"></script>
+<script src="../js/token-exporter.js"></script>
+<script src="../js/gallery-layout.js"></script>
+</body>
+</html>

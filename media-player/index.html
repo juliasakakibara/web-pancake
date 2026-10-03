@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <!-- theme-preamble:v1 -->
+  <script>(function(){try{var t=localStorage.getItem('letbe-ds-dark-mode');if(t==='1')document.documentElement.setAttribute('data-theme','dark');else if(t==='0')document.documentElement.setAttribute('data-theme','light');}catch(e){}})();</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta data-lb-page="media-player">
+  <title>Media Player — letbe-ds</title>
+  <link rel="stylesheet" href="../tokens/theme.css">
+  <link rel="stylesheet" href="../tokens/fonts.css">
+  <link rel="stylesheet" href="../components/components.css">
+  <link rel="stylesheet" href="../components/theme-editor.css">
+  <link rel="stylesheet" href="../components/gallery.css">
+</head>
+<body data-lb-base="..">
+
+<main class="gallery-main">
+  <section class="gallery-section" id="media-player">
+    <h1 class="gallery-section__title" style="font-size: var(--lb-t-heading-l-font-size); line-height: var(--lb-t-heading-l-line-height);">Media Player</h1>
+    <p class="gallery-section__desc">Controls skin over a native <code class="lb-code">&lt;audio&gt;</code> / <code class="lb-code">&lt;video&gt;</code> element. letbe-ds owns the <strong>controls and layout</strong>; the playback engine stays native. Need HLS / DASH / DRM? Attach <code class="lb-code">hls.js</code> or <code class="lb-code">shaka-player</code> to the same media element — we never bundle a streaming engine. Every colour comes from existing design tokens (scrubber → <code class="lb-code">bg-accent</code>, buffered → <code class="lb-code">bg-bolder</code>, chrome → <code class="lb-code">surface-bg-elevated</code>).</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>a11y (built in):</strong> the engine stays native and so do the controls — scrubber and volume are <code class="lb-code">&lt;input type="range"&gt;</code> with <code class="lb-code">aria-label</code> and a <code class="lb-code">:focus-visible</code> ring on the thumb, subtitles are native <code class="lb-code">&lt;track kind="subtitles"&gt;</code> behind a CC language picker (Off plus every loaded track, rebuilt whenever a track is added). <code class="lb-code">LB.Media</code> rewrites accessible names as state changes (Play↔Pause, Mute↔Unmute, Fullscreen↔Exit fullscreen, "Playback speed 1.5x") and drives <code class="lb-code">aria-pressed</code> on the toggles (like/dislike, captions, PiP), <code class="lb-code">aria-expanded</code> on the playlist toggle, and <code class="lb-code">aria-current="true"</code> on the playing track. The player root takes <code class="lb-code">tabindex="0"</code> and owns the shortcut layer — <kbd>←</kbd>/<kbd>→</kbd> seek ±5s and <kbd>↑</kbd>/<kbd>↓</kbd> change volume from any control inside it (they <code class="lb-code">preventDefault</code> so a focused range cannot also move), <kbd>Space</kbd>/<kbd>K</kbd> plays unless a button has focus, <kbd>M</kbd> mutes; reorder grips are <code class="lb-code">aria-hidden</code>, and <code class="lb-code">prefers-reduced-motion</code> stops the title marquee and the inline track-panel transition.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>Usage:</strong> Load <code class="lb-code">js/lb.js</code>, then <code class="lb-code">js/components/lb-media.js</code> — it self-registers and every <code class="lb-code">[data-lb-media]</code> root auto-inits as <code class="lb-code">el._lbMedia</code> (<code class="lb-code">LB.Media</code>). You author the markup: a <code class="lb-code">.lb-media</code> wrapper holding the native <code class="lb-code">&lt;audio&gt;</code> / <code class="lb-code">&lt;video&gt;</code> plus a <code class="lb-code">.lb-media__controls</code> row whose controls the wire-up finds by attribute — <code class="lb-code">data-lb-media-playpause</code>, <code class="lb-code">-seek</code>, <code class="lb-code">-current</code> / <code class="lb-code">-duration</code>, <code class="lb-code">-mute</code> / <code class="lb-code">-volume</code>, and opt-ins (<code class="lb-code">-skip</code>, <code class="lb-code">-speed</code>, <code class="lb-code">-prev</code> / <code class="lb-code">-next</code>, <code class="lb-code">-pip</code>, <code class="lb-code">-fullscreen</code>, <code class="lb-code">-playlist</code>) — copy the full class combos from a demo; whatever you omit simply isn't wired. Playback state travels as the native media events on the inner element (<code class="lb-code">play</code>, <code class="lb-code">timeupdate</code>, <code class="lb-code">ended</code>…); the player's own events are <code class="lb-code">lb-media-quality-change</code> (bubbles, <code class="lb-code">detail.quality</code> / <code class="lb-code">detail.src</code>) and <code class="lb-code">lb-menu-select</code> from its menus. Drive it via <code class="lb-code">el._lbMedia.play()</code> / <code class="lb-code">pause()</code> / <code class="lb-code">toggle()</code>, <code class="lb-code">seekTo(sec)</code>, <code class="lb-code">setRate(r)</code>, <code class="lb-code">loadTrack(i, autoplay)</code>, <code class="lb-code">prevTrack()</code> / <code class="lb-code">nextTrack()</code>, <code class="lb-code">setLoop(on)</code>, <code class="lb-code">toggleCaptions()</code>, <code class="lb-code">togglePictureInPicture()</code>, <code class="lb-code">toggleFullscreen()</code>.</p>
+    <p class="gallery-section__desc">Demo audio is the <em>Letbe Design</em> sessions — original music, used with permission of the author.</p>
+
+    <hr class="gallery-desc-divider">
+
+    <h2 class="gallery-section__title">Audio</h2>
+    <p class="gallery-section__desc">The minimum pattern: <code class="lb-code">data-lb-media</code> on a wrapper containing a native <code class="lb-code">&lt;audio&gt;</code> + a <code class="lb-code">.lb-media__controls</code> row. The controller wires play/pause, seek (with buffered region), time, volume, and mute. Keyboard: focus any control inside the player, then <kbd>Space</kbd>/<kbd>K</kbd> (play), <kbd>←</kbd>/<kbd>→</kbd> (seek ±5s), <kbd>↑</kbd>/<kbd>↓</kbd> (volume), <kbd>M</kbd> (mute). <strong>Narrow players reflow automatically</strong> (container query at 480px of player width — per player, not per viewport): the scrubber takes its own full-width line while everything else keeps the desktop shape on one line below it — play + times on the left, mute + volume on the right, the volume slider the smallest piece (48px floor, growing into leftover space up to its desktop width). The <code class="lb-code">--video</code> variant hides the slider in this layout — its row can't hold one on a phone line — leaving the mute button as the sound control, the mobile-video norm. On touch screens (<code class="lb-code">pointer: coarse</code>) the transport buttons also grow to 48px targets. Resize this page (or the player's column) below 480px to see the reflow.</p>
+
+    <div style="max-width: 520px;">
+      <div class="lb-media" data-lb-media>
+        <audio src="https://cdn.jsdelivr.net/gh/m1ha1l0/letbe-media@v1.0.1/tracks/Letbe-Design-07-Funk.mp3" preload="metadata"></audio>
+        <div class="lb-media__controls">
+          <button type="button" class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--medium" data-lb-media-playpause data-lb-icon="play" aria-label="Play"></button>
+          <span class="lb-media__time" data-lb-media-current>0:00</span>
+          <div class="lb-media__scrubber" data-lb-media-seek>
+            <div class="lb-media__rail">
+              <div class="lb-media__buffered" data-lb-media-buffered></div>
+              <div class="lb-media__fill" data-lb-media-played></div>
+            </div>
+            <input type="range" class="lb-media__range" min="0" max="100" step="0.1" value="0" aria-label="Seek">
+          </div>
+          <span class="lb-media__time" data-lb-media-duration>0:00</span>
+          <button type="button" class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--medium" data-lb-media-mute data-lb-icon="volume-2" aria-label="Mute"></button>
+          <div class="lb-media__volume" data-lb-media-volume>
+            <div class="lb-media__rail">
+              <div class="lb-media__fill" data-lb-media-volume-fill></div>
+            </div>
+            <input type="range" class="lb-media__range" min="0" max="1" step="0.01" value="1" aria-label="Volume">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Speed &amp; skip</h2>
+    <p class="gallery-section__desc">Optional transport controls. <strong>Skip</strong> buttons use <code class="lb-code">data-lb-media-skip="-10"</code> / <code class="lb-code">"10"</code> (seconds, relative). The <strong>speed</strong> control (<code class="lb-code">data-lb-media-speed</code>) cycles the playback rate 0.5×–2× and shows the current value. Drop either anywhere in the controls row.</p>
+
+    <div style="max-width: 560px;">
+      <div class="lb-media" data-lb-media>
+        <audio src="https://cdn.jsdelivr.net/gh/m1ha1l0/letbe-media@v1.0.1/tracks/Letbe-Design-07-Funk.mp3" preload="metadata"></audio>
+        <div class="lb-media__controls">
+          <button type="button" class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--medium" data-lb-media-skip="-10" data-lb-icon="skip-back" aria-label="Back 10 seconds"></button>
+          <button type="button" class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--medium" data-lb-media-playpause data-lb-icon="play" aria-label="Play"></button>
+          <button type="button" class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--medium" data-lb-media-skip="10" data-lb-icon="skip-forward" aria-label="Forward 10 seconds"></button>
+          <span class="lb-media__time" data-lb-media-current>0:00</span>
+          <div class="lb-media__scrubber" data-lb-media-seek>
+            <div class="lb-media__rail">
+              <div class="lb-media__buffered" data-lb-media-buffered></div>
+              <div class="lb-media__fill" data-lb-media-played></div>
+            </div>
+            <input type="range" class="lb-media__range" min="0" max="100" step="0.1" value="0" aria-label="Seek">
+          </div>
+          <span class="lb-media__time" data-lb-media-duration>0:00</span>
+          <button type="button" class="lb-media__speed" data-lb-media-speed aria-label="Playback speed">1×</button>
+        </div>
+      </div>
+    </div>
+
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">With album art &amp; playlist</h2>
+    <p class="gallery-section__desc">Album art and now-playing title are <strong>opt-in</strong> — add a <code class="lb-code">.lb-media__now</code> block with <code class="lb-code">data-lb-media-art</code> (an <code class="lb-code">&lt;img&gt;</code>) and <code class="lb-code">data-lb-media-title</code> / <code class="lb-code">data-lb-media-artist</code> text. Omit the block for a controls-only player (above). The playlist is a <code class="lb-code">data-lb-media-playlist</code> list of <code class="lb-code">data-lb-media-track</code> buttons carrying <code class="lb-code">data-src</code> / <code class="lb-code">data-title</code>; clicking loads + plays + highlights, and the now-playing block updates. Playback auto-advances on track end. <strong>Repeat-all</strong> is opt-in via <code class="lb-code">data-lb-media-loop</code> on the root (this demo has it) — when the last track ends, playback wraps back to track 1; <em>Next</em> on the last track wraps too. Runtime toggle: <code class="lb-code">el._lbMedia.setLoop(true|false)</code>.</p>
+    <p class="gallery-section__desc"><strong>Hover any row</strong> — the duration fades and per-row actions appear: <em>favourite</em>, <em>share</em>, and a <em>three-dots</em> menu (uses <code class="lb-code">LB.Menu</code> + the shared <code class="lb-code">.lb-list</code> primitive) with playlist actions (Add to playlist, Remove from playlist) and links (Go to album / artist, Copy link, Download). Actions are opt-in: add a <code class="lb-code">.lb-media__track-actions</code> sibling to each track button. (Injected at runtime in this demo for brevity.) This playlist also uses <strong>inline actions mode</strong> (<code class="lb-code">data-lb-media-playlist-actions-mode="inline"</code>) — clicking the three-dots <em>expands</em> a panel below the row instead of popping a dropdown, so it never overflows the container and works cleanly on touch. Default mode is dropdown.</p>
+
+    <div style="max-width: 520px;">
+      <div class="lb-media lb-media--with-art" data-lb-media data-lb-media-loop>
+        <audio src="https://cdn.jsdelivr.net/gh/m1ha1l0/letbe-media@v1.0.1/tracks/Letbe-Design-01-Old-School.mp3" preload="metadata"></audio>
+
+        <div class="lb-media__now">
+          <img class="lb-media__art" data-lb-media-art src="../assets/media/letbe-profile-cover.jpg" alt="Letbe Design — cover art" width="64" height="64">
+          <div class="lb-media__meta">
+            <span class="lb-media__title"><span class="lb-media__title-text" data-lb-media-title>Old School</span></span>
+            <span class="lb-media__artist" data-lb-media-artist>Letbe Design</span>
+          </div>
+          <div class="lb-media__now-actions">
+            <button type="button" class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--small" data-lb-icon="share-2" aria-label="Share playlist"></button>
+            <div class="lb-menu-wrapper" data-lb-menu>
+              <button type="button" class="lb-menu__trigger lb-icon-btn lb-icon-btn--ghost lb-icon-btn--small" aria-label="Playlist options">
+                <span class="lb-icon-btn__icon" data-lb-icon="more-vertical"></span>
+              </button>
+              <ul class="lb-menu lb-list">
+                <li><button type="button" class="lb-list__item" data-lb-id="save"><span class="lb-list__icon" data-lb-icon="save"></span><span class="lb-list__label">Save as playlist</span></button></li>
+                <li><button type="button" class="lb-list__item" data-lb-id="library"><span class="lb-list__icon" data-lb-icon="bookmark"></span><span class="lb-list__label">Add to library</span></button></li>
+                <li><button type="button" class="lb-list__item" data-lb-id="copy-link"><span class="lb-list__icon" data-lb-icon="link"></span><span class="lb-list__label">Copy share link</span></button></li>
+                <li><button type="button" class="lb-list__item" data-lb-id="download-all"><span class="lb-list__icon" data-lb-icon="download"></span><span class="lb-list__label">Download all</span></button></li>
+                <li class="lb-list__separator"></li>
+                <li><button type="button" class="lb-list__item lb-list__item--danger" data-lb-id="clear"><span class="lb-list__icon" data-lb-icon="trash-2"></span><span class="lb-list__label">Clear playlist</span></button></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="lb-media__controls">
+          <button type="button" class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--medium" data-lb-media-playpause data-lb-icon="play" aria-label="Play"></button>
+          <span class="lb-media__time" data-lb-media-current>0:00</span>
+          <div class="lb-media__scrubber" data-lb-media-seek>
+            <div class="lb-media__rail">
+              <div class="lb-media__buffered" data-lb-media-buffered></div>
+              <div class="lb-media__fill" data-lb-media-played></div>
+            </div>
+            <input type="range" class="lb-media__range" min="0" max="100" step="0.1" value="0" aria-label="Seek">
+          </div>
+          <span class="lb-media__time" data-lb-media-duration>0:00</span>
+          <button type="button" class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--medium" data-lb-media-mute data-lb-icon="volume-2" aria-label="Mute"></button>
+          <div class="lb-media__volume" data-lb-media-volume>
+            <div class="lb-media__rail">
+              <div class="lb-media__fill" data-lb-media-volume-fill></div>
+            </div>
+            <input type="range" class="lb-media__range" min="0" max="1" step="0.01" value="1" aria-label="Volume">
+          </div>
+        </div>
+
+        <ul class="lb-media__playlist lb-media__playlist--scroll" data-lb-media-playlist data-lb-media-playlist-reorderable data-lb-media-playlist-actions-mode="inline">
+          <!-- album playlist uses INLINE actions mode: 3-dots expands a panel below the row -->
+          <li><button type="button" class="lb-media__track lb-media__track--active" data-lb-media-track data-src="https://cdn.jsdelivr.net/gh/m1ha1l0/letbe-media@v1.0.1/tracks/Letbe-Design-01-Old-School.mp3" data-title="Old School" data-artist="Letbe Design" aria-current="true"><span class="lb-media__track-index">1</span><span class="lb-media__track-title">Old School</span><span class="lb-media__track-dur">3:32</span></button></li>
+          <li><button type="button" class="lb-media__track" data-lb-media-track data-src="https://cdn.jsdelivr.net/gh/m1ha1l0/letbe-media@v1.0.1/tracks/Letbe-Design-02-Hip-Hop.mp3" data-title="Hip Hop" data-artist="Letbe Design"><span class="lb-media__track-index">2</span><span class="lb-media__track-title">Hip Hop</span><span class="lb-media__track-dur">2:09</span></button></li>
+          <li><button type="button" class="lb-media__track" data-lb-media-track data-src="https://cdn.jsdelivr.net/gh/m1ha1l0/letbe-media@v1.0.1/tracks/Letbe-Design-03-Country.mp3" data-title="Country" data-artist="Letbe Design"><span class="lb-media__track-index">3</span><span class="lb-media__track-title">Country</span><span class="lb-media__track-dur">3:04</span></button></li>
+          <li><button type="button" class="lb-media__track" data-lb-media-track data-src="https://cdn.jsdelivr.net/gh/m1ha1l0/letbe-media@v1.0.1/tracks/Letbe-Design-04-Reggae.mp3" data-title="Reggae" data-artist="Letbe Design"><span class="lb-media__track-index">4</span><span class="lb-media__track-title">Reggae</span><span class="lb-media__track-dur">3:57</span></button></li>
+          <li><button type="button" class="lb-media__track" data-lb-media-track data-src="https://cdn.jsdelivr.net/gh/m1ha1l0/letbe-media@v1.0.1/tracks/Letbe-Design-05-Metal.mp3" data-title="Metal" data-artist="Letbe Design"><span class="lb-media__track-index">5</span><span class="lb-media__track-title">Metal</span><span class="lb-media__track-dur">3:32</span></button></li>
+          <li><button type="button" class="lb-media__track" data-lb-media-track data-src="https://cdn.jsdelivr.net/gh/m1ha1l0/letbe-media@v1.0.1/tracks/Letbe-Design-06-Techno.mp3" data-title="Techno" data-artist="Letbe Design"><span class="lb-media__track-index">6</span><span class="lb-media__track-title">Techno</span><span class="lb-media__track-dur">4:00</span></button></li>
+          <li><button type="button" class="lb-media__track" data-lb-media-track data-src="https://cdn.jsdelivr.net/gh/m1ha1l0/letbe-media@v1.0.1/tracks/Letbe-Design-07-Funk.mp3" data-title="Funk" data-artist="Letbe Design"><span class="lb-media__track-index">7</span><span class="lb-media__track-title">Funk</span><span class="lb-media__track-dur">3:46</span></button></li>
+          <li><button type="button" class="lb-media__track" data-lb-media-track data-src="https://cdn.jsdelivr.net/gh/m1ha1l0/letbe-media@v1.0.1/tracks/Letbe-Design-08-Electronic.mp3" data-title="Electronic" data-artist="Letbe Design"><span class="lb-media__track-index">8</span><span class="lb-media__track-title">Electronic</span><span class="lb-media__track-dur">4:19</span></button></li>
+          <li><button type="button" class="lb-media__track" data-lb-media-track data-src="https://cdn.jsdelivr.net/gh/m1ha1l0/letbe-media@v1.0.1/tracks/Letbe-Design-09-Dubstep.mp3" data-title="Dubstep" data-artist="Letbe Design"><span class="lb-media__track-index">9</span><span class="lb-media__track-title">Dubstep</span><span class="lb-media__track-dur">4:06</span></button></li>
+          <li><button type="button" class="lb-media__track" data-lb-media-track data-src="https://cdn.jsdelivr.net/gh/m1ha1l0/letbe-media@v1.0.1/tracks/Letbe-Design-10-Turbo-Folk.mp3" data-title="Turbo Folk" data-artist="Letbe Design"><span class="lb-media__track-index">10</span><span class="lb-media__track-title">Turbo Folk</span><span class="lb-media__track-dur">3:58</span></button></li>
+          <li><button type="button" class="lb-media__track" data-lb-media-track data-src="https://cdn.jsdelivr.net/gh/m1ha1l0/letbe-media@v1.0.1/tracks/Letbe-Design-11-Epic.mp3" data-title="Epic" data-artist="Letbe Design"><span class="lb-media__track-index">11</span><span class="lb-media__track-title">Epic</span><span class="lb-media__track-dur">3:42</span></button></li>
+          <li><button type="button" class="lb-media__track" data-lb-media-track data-src="https://cdn.jsdelivr.net/gh/m1ha1l0/letbe-media@v1.0.1/tracks/Letbe-Design-12-Grunge.mp3" data-title="Grunge" data-artist="Letbe Design"><span class="lb-media__track-index">12</span><span class="lb-media__track-title">Grunge</span><span class="lb-media__track-dur">3:44</span></button></li>
+          <li><button type="button" class="lb-media__track" data-lb-media-track data-src="https://cdn.jsdelivr.net/gh/m1ha1l0/letbe-media@v1.0.1/tracks/Letbe-Design-13-Latina.mp3" data-title="Latina" data-artist="Letbe Design"><span class="lb-media__track-index">13</span><span class="lb-media__track-title">Latina</span><span class="lb-media__track-dur">2:09</span></button></li>
+          <li><button type="button" class="lb-media__track" data-lb-media-track data-src="https://cdn.jsdelivr.net/gh/m1ha1l0/letbe-media@v1.0.1/tracks/Letbe-Design-14-East.mp3" data-title="East" data-artist="Letbe Design"><span class="lb-media__track-index">14</span><span class="lb-media__track-title">East</span><span class="lb-media__track-dur">3:29</span></button></li>
+          <li><button type="button" class="lb-media__track" data-lb-media-track data-src="https://cdn.jsdelivr.net/gh/m1ha1l0/letbe-media@v1.0.1/tracks/Letbe-Design-15-Hindu.mp3" data-title="Hindu" data-artist="Letbe Design"><span class="lb-media__track-index">15</span><span class="lb-media__track-title">Hindu</span><span class="lb-media__track-dur">3:29</span></button></li>
+          <li><button type="button" class="lb-media__track" data-lb-media-track data-src="https://cdn.jsdelivr.net/gh/m1ha1l0/letbe-media@v1.0.1/tracks/Letbe-Design-16-Ambient.mp3" data-title="Ambient" data-artist="Letbe Design"><span class="lb-media__track-index">16</span><span class="lb-media__track-title">Ambient</span><span class="lb-media__track-dur">4:18</span></button></li>
+          <li><button type="button" class="lb-media__track" data-lb-media-track data-src="https://cdn.jsdelivr.net/gh/m1ha1l0/letbe-media@v1.0.1/tracks/Letbe-Design-17-Asia.mp3" data-title="Asia" data-artist="Letbe Design"><span class="lb-media__track-index">17</span><span class="lb-media__track-title">Asia</span><span class="lb-media__track-dur">3:16</span></button></li>
+          <li><button type="button" class="lb-media__track" data-lb-media-track data-src="https://cdn.jsdelivr.net/gh/m1ha1l0/letbe-media@v1.0.1/tracks/Letbe-Design-18-Pop.mp3" data-title="Pop" data-artist="Letbe Design"><span class="lb-media__track-index">18</span><span class="lb-media__track-title">Pop</span><span class="lb-media__track-dur">3:01</span></button></li>
+        </ul>
+      </div>
+    </div>
+
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Compact — play on cover, single-line transport</h2>
+    <p class="gallery-section__desc">The <code class="lb-code">--compact</code> layout overlays the play button on the cover and keeps the transport on one line: current time · scrubber · total time. (The play button can live anywhere in the player — the controller finds it by data attribute — so here it sits inside the cover.)</p>
+    <p class="gallery-section__desc">Also shown: title truncation + hover reveal. In a narrow layout both the now-playing title <strong>and the playlist row titles</strong> truncate with an ellipsis. <strong>Hover a title (or a playlist row)</strong> and it slides left to reveal the rest, then slides back on leave — one marquee mechanism the player applies everywhere (playlist titles are auto-wrapped, so the markup stays plain). Uses the design system's <code class="lb-code">--lb-ease-linear</code> at a distance-scaled multiple of <code class="lb-code">--lb-duration-500</code> (longer titles scroll for longer, so the speed stays constant). Respects <code class="lb-code">prefers-reduced-motion</code>; full title also exposed as a native tooltip.</p>
+
+    <div style="max-width: 220px;">
+      <div class="lb-media lb-media--with-art lb-media--compact" data-lb-media>
+        <audio src="https://cdn.jsdelivr.net/gh/m1ha1l0/letbe-media@v1.0.1/tracks/Letbe-Design-03-Country.mp3" preload="metadata"></audio>
+        <div class="lb-media__now">
+          <div class="lb-media__art-wrap">
+            <img class="lb-media__art" data-lb-media-art src="../assets/media/letbe-profile-cover.jpg" alt="Letbe Design — cover art">
+            <button type="button" class="lb-icon-btn lb-media__art-play" data-lb-media-playpause data-lb-icon="play" aria-label="Play"></button>
+          </div>
+          <div class="lb-media__meta">
+            <span class="lb-media__title"><span class="lb-media__title-text" data-lb-media-title>Country</span></span>
+            <span class="lb-media__artist" data-lb-media-artist>Letbe Design</span>
+          </div>
+        </div>
+        <div class="lb-media__controls">
+          <span class="lb-media__time" data-lb-media-current>0:00</span>
+          <div class="lb-media__scrubber" data-lb-media-seek>
+            <div class="lb-media__rail">
+              <div class="lb-media__buffered" data-lb-media-buffered></div>
+              <div class="lb-media__fill" data-lb-media-played></div>
+            </div>
+            <input type="range" class="lb-media__range" min="0" max="100" step="0.1" value="0" aria-label="Seek">
+          </div>
+          <span class="lb-media__time" data-lb-media-duration>0:00</span>
+        </div>
+
+        <ul class="lb-media__playlist" data-lb-media-playlist>
+          <li><button type="button" class="lb-media__track lb-media__track--active" data-lb-media-track data-src="https://cdn.jsdelivr.net/gh/m1ha1l0/letbe-media@v1.0.1/tracks/Letbe-Design-03-Country.mp3" data-title="Country" data-artist="Letbe Design" aria-current="true"><span class="lb-media__track-index">3</span><span class="lb-media__track-title">Country</span><span class="lb-media__track-dur">3:04</span></button></li>
+          <li><button type="button" class="lb-media__track" data-lb-media-track data-src="https://cdn.jsdelivr.net/gh/m1ha1l0/letbe-media@v1.0.1/tracks/Letbe-Design-08-Electronic.mp3" data-title="Electronic" data-artist="Letbe Design"><span class="lb-media__track-index">8</span><span class="lb-media__track-title">Electronic</span><span class="lb-media__track-dur">4:19</span></button></li>
+          <li><button type="button" class="lb-media__track" data-lb-media-track data-src="https://cdn.jsdelivr.net/gh/m1ha1l0/letbe-media@v1.0.1/tracks/Letbe-Design-10-Turbo-Folk.mp3" data-title="Turbo Folk" data-artist="Letbe Design"><span class="lb-media__track-index">10</span><span class="lb-media__track-title">Turbo Folk</span><span class="lb-media__track-dur">3:58</span></button></li>
+          <li><button type="button" class="lb-media__track" data-lb-media-track data-src="https://cdn.jsdelivr.net/gh/m1ha1l0/letbe-media@v1.0.1/tracks/Letbe-Design-05-Metal.mp3" data-title="Metal" data-artist="Letbe Design"><span class="lb-media__track-index">5</span><span class="lb-media__track-title">Metal</span><span class="lb-media__track-dur">3:32</span></button></li>
+        </ul>
+      </div>
+    </div>
+
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Card — now-playing layout</h2>
+    <p class="gallery-section__desc">A focal "now-playing" arrangement: add <code class="lb-code">lb-media--card</code>. Same markup and controls as any player — the variant just rearranges them into two stacked rows: large cover on top, centred title + artist, a progress row (current time · scrubber · total time), then a transport row (previous · play · next).</p>
+    <p class="gallery-section__desc"><strong>Art ratio</strong> — square is the default; root modifiers mirror the card component's media ratio set: <code class="lb-code">lb-media--art-16x9</code> · <code class="lb-code">lb-media--art-4x3</code> · <code class="lb-code">lb-media--art-1x1</code> · <code class="lb-code">lb-media--art-3x4</code>. Landscape ratios span the card width (banner/thumb treatment); square and portrait keep the focal cap. The corner actions sit on a translucent scrim pill (same recipe as the video scrims) so they stay readable over any artwork.</p>
+
+    <div style="display: flex; flex-wrap: wrap; gap: var(--lb-size-6x); align-items: flex-start;">
+    <div style="flex: 0 1 300px;">
+      <div class="lb-media lb-media--with-art lb-media--card" data-lb-media>
+        <audio src="https://cdn.jsdelivr.net/gh/m1ha1l0/letbe-media@v1.0.1/tracks/Letbe-Design-01-Old-School.mp3" preload="metadata"></audio>
+        <div class="lb-media__now-actions">
+          <button type="button" class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--small" data-lb-icon="share-2" aria-label="Share track"></button>
+          <div class="lb-menu-wrapper" data-lb-menu>
+            <button type="button" class="lb-menu__trigger lb-icon-btn lb-icon-btn--ghost lb-icon-btn--small" aria-label="Track options">
+              <span class="lb-icon-btn__icon" data-lb-icon="more-vertical"></span>
+            </button>
+            <ul class="lb-menu lb-list">
+              <li><button type="button" class="lb-list__item" data-lb-id="favourite"><span class="lb-list__icon" data-lb-icon="heart"></span><span class="lb-list__label">Add to favourites</span></button></li>
+              <li><button type="button" class="lb-list__item" data-lb-id="add"><span class="lb-list__icon" data-lb-icon="list-plus"></span><span class="lb-list__label">Add to playlist</span></button></li>
+              <li><button type="button" class="lb-list__item" data-lb-id="copy"><span class="lb-list__icon" data-lb-icon="link"></span><span class="lb-list__label">Copy link</span></button></li>
+              <li class="lb-list__separator"></li>
+              <li><button type="button" class="lb-list__item" data-lb-id="artist"><span class="lb-list__icon" data-lb-icon="user"></span><span class="lb-list__label">Go to artist</span></button></li>
+              <li><button type="button" class="lb-list__item" data-lb-id="album"><span class="lb-list__icon" data-lb-icon="external-link"></span><span class="lb-list__label">Go to album</span></button></li>
+            </ul>
+          </div>
+        </div>
+        <div class="lb-media__now">
+          <img class="lb-media__art" data-lb-media-art src="../assets/media/letbe-profile-cover.jpg" alt="Letbe Design — cover art">
+          <div class="lb-media__meta">
+            <span class="lb-media__title"><span class="lb-media__title-text" data-lb-media-title>Old School</span></span>
+            <span class="lb-media__artist" data-lb-media-artist>Letbe Design</span>
+          </div>
+        </div>
+        <div class="lb-media__controls">
+          <div class="lb-media__progress-row">
+            <span class="lb-media__time" data-lb-media-current>0:00</span>
+            <div class="lb-media__scrubber" data-lb-media-seek>
+              <div class="lb-media__rail">
+                <div class="lb-media__buffered" data-lb-media-buffered></div>
+                <div class="lb-media__fill" data-lb-media-played></div>
+              </div>
+              <input type="range" class="lb-media__range" min="0" max="100" step="0.1" value="0" aria-label="Seek">
+            </div>
+            <span class="lb-media__time" data-lb-media-duration>0:00</span>
+          </div>
+          <div class="lb-media__transport-row">
+            <button type="button" class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--medium" data-lb-media-prev data-lb-icon="skip-back" aria-label="Previous track"></button>
+            <button type="button" class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--medium" data-lb-media-playpause data-lb-icon="play" aria-label="Play"></button>
+            <button type="button" class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--medium" data-lb-media-next data-lb-icon="skip-forward" aria-label="Next track"></button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="flex: 0 1 300px;">
+      <div class="lb-media lb-media--with-art lb-media--card lb-media--art-16x9" data-lb-media>
+        <audio src="https://cdn.jsdelivr.net/gh/m1ha1l0/letbe-media@v1.0.1/tracks/Letbe-Design-18-Pop.mp3" preload="metadata"></audio>
+        <div class="lb-media__now-actions">
+          <button type="button" class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--small" data-lb-icon="share-2" aria-label="Share track"></button>
+          <div class="lb-menu-wrapper" data-lb-menu>
+            <button type="button" class="lb-menu__trigger lb-icon-btn lb-icon-btn--ghost lb-icon-btn--small" aria-label="Track options">
+              <span class="lb-icon-btn__icon" data-lb-icon="more-vertical"></span>
+            </button>
+            <ul class="lb-menu lb-list">
+              <li><button type="button" class="lb-list__item" data-lb-id="favourite"><span class="lb-list__icon" data-lb-icon="heart"></span><span class="lb-list__label">Add to favourites</span></button></li>
+              <li><button type="button" class="lb-list__item" data-lb-id="add"><span class="lb-list__icon" data-lb-icon="list-plus"></span><span class="lb-list__label">Add to playlist</span></button></li>
+              <li><button type="button" class="lb-list__item" data-lb-id="copy"><span class="lb-list__icon" data-lb-icon="link"></span><span class="lb-list__label">Copy link</span></button></li>
+              <li class="lb-list__separator"></li>
+              <li><button type="button" class="lb-list__item" data-lb-id="artist"><span class="lb-list__icon" data-lb-icon="user"></span><span class="lb-list__label">Go to artist</span></button></li>
+              <li><button type="button" class="lb-list__item" data-lb-id="album"><span class="lb-list__icon" data-lb-icon="external-link"></span><span class="lb-list__label">Go to album</span></button></li>
+            </ul>
+          </div>
+        </div>
+        <div class="lb-media__now">
+          <img class="lb-media__art" data-lb-media-art src="../assets/media/letbe-profile-cover.jpg" alt="Letbe Design — cover art">
+          <div class="lb-media__meta">
+            <span class="lb-media__title"><span class="lb-media__title-text" data-lb-media-title>Pop</span></span>
+            <span class="lb-media__artist" data-lb-media-artist>Letbe Design</span>
+          </div>
+        </div>
+        <div class="lb-media__controls">
+          <div class="lb-media__progress-row">
+            <span class="lb-media__time" data-lb-media-current>0:00</span>
+            <div class="lb-media__scrubber" data-lb-media-seek>
+              <div class="lb-media__rail">
+                <div class="lb-media__buffered" data-lb-media-buffered></div>
+                <div class="lb-media__fill" data-lb-media-played></div>
+              </div>
+              <input type="range" class="lb-media__range" min="0" max="100" step="0.1" value="0" aria-label="Seek">
+            </div>
+            <span class="lb-media__time" data-lb-media-duration>0:00</span>
+          </div>
+          <div class="lb-media__transport-row">
+            <button type="button" class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--medium" data-lb-media-prev data-lb-icon="skip-back" aria-label="Previous track"></button>
+            <button type="button" class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--medium" data-lb-media-playpause data-lb-icon="play" aria-label="Play"></button>
+            <button type="button" class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--medium" data-lb-media-next data-lb-icon="skip-forward" aria-label="Next track"></button>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Video</h2>
+    <p class="gallery-section__desc">When the player wraps a <code class="lb-code">&lt;video&gt;</code> instead of <code class="lb-code">&lt;audio&gt;</code>, the <code class="lb-code">--video</code> layout is applied automatically: the video fills the frame, scrims top + bottom render light controls that read on any footage, and the engine stays native — same controller as audio.</p>
+    <p class="gallery-section__desc">Demo features: <strong>top bar</strong> with like / dislike (left) and speed · captions · share · more (right); <strong>bottom transport</strong> with scrubber, mute, volume (half-width), <strong>Picture-in-Picture</strong> (<code class="lb-code">data-lb-media-pip</code>), and fullscreen; <strong>video playlist</strong> below the controls with drag-to-reorder (grip handle appears on row hover; quick clicks still play the track) and a scrollable list (<code class="lb-code">.lb-media__playlist--scroll</code>). Native HTML5 subtitles via <code class="lb-code">&lt;track kind="subtitles"&gt;</code> — the CC button is a <strong>language picker</strong> (Off + every available track); the trigger lights up while a track is showing. <em>Upload subtitles</em> in the three-dots menu adds a new track and it appears in the CC picker automatically.</p>
+    <p class="gallery-section__desc"><strong>Hold-to-skip (opt-in via <code class="lb-code">data-lb-media-hold-to-skip</code>):</strong> short click toggles play/pause; <strong>hold the left half for ~0.5s</strong> to start skipping backward in 10s steps, <strong>right half</strong> to skip forward. A small badge appears on the active side and accumulates the total skipped (<code class="lb-code">10s ⟪</code> / <code class="lb-code">⟫ 10s</code>). Idle auto-hide still applies during playback.</p>
+    <p class="gallery-section__desc"><strong>Quality picker</strong> — plain multi-source switching: declare one file per quality in <code class="lb-code">data-lb-media-qualities</code> (JSON of <code class="lb-code">{label, src}</code>) and add a <code class="lb-code">data-lb-media-quality</code> menu; switching preserves position, speed and play state (this demo ships 720p + 480p). <em>For adaptive bitrate streaming (auto-switching 1080p/2K/4K ladders) attach <code class="lb-code">hls.js</code> or <code class="lb-code">shaka-player</code> to the same <code class="lb-code">&lt;video&gt;</code> — per the pluggable-engines rule the DS ships the picker chrome, you bring the streaming engine.</em></p>
+
+    <div style="max-width: 560px;">
+      <div class="lb-media lb-media--video" data-lb-media data-lb-media-hold-to-skip data-lb-media-qualities='[{"label":"720p","src":"https://cdn.jsdelivr.net/gh/m1ha1l0/letbe-media@v1.0.1/video/letbe-video-web.mp4"},{"label":"480p","src":"https://cdn.jsdelivr.net/gh/m1ha1l0/letbe-media@v1.0.1/video/letbe-video-web-480.mp4"}]'>
+        <div class="lb-media__stage">
+        <video src="https://cdn.jsdelivr.net/gh/m1ha1l0/letbe-media@v1.0.1/video/letbe-video-web.mp4" preload="metadata" playsinline poster="../assets/media/letbe-profile-cover.jpg">
+          <track kind="subtitles" src="https://cdn.jsdelivr.net/gh/m1ha1l0/letbe-media@v1.0.1/video/letbe-video.en.vtt" srclang="en" label="English">
+          <track kind="subtitles" src="https://cdn.jsdelivr.net/gh/m1ha1l0/letbe-media@v1.0.1/video/letbe-video.es.vtt" srclang="es" label="Español">
+        </video>
+
+        <div class="lb-media__top">
+          <div class="lb-media__top-left">
+            <button type="button" class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--medium" data-lb-media-like data-lb-icon="thumbs-up" aria-label="Like" aria-pressed="false"></button>
+            <button type="button" class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--medium" data-lb-media-dislike data-lb-icon="thumbs-down" aria-label="Dislike" aria-pressed="false"></button>
+          </div>
+          <div class="lb-media__top-right">
+            <button type="button" class="lb-media__speed" data-lb-media-speed aria-label="Playback speed">1×</button>
+            <div class="lb-menu-wrapper" data-lb-media-quality data-lb-menu>
+              <button type="button" class="lb-menu__trigger lb-media__speed" aria-label="Video quality">720p</button>
+              <ul class="lb-menu lb-list" data-lb-media-quality-list></ul>
+            </div>
+            <div class="lb-menu-wrapper" data-lb-media-captions data-lb-menu>
+              <button type="button" class="lb-menu__trigger lb-icon-btn lb-icon-btn--ghost lb-icon-btn--medium" aria-label="Subtitles" aria-pressed="false">
+                <span class="lb-icon-btn__icon" data-lb-icon="captions"></span>
+              </button>
+              <ul class="lb-menu lb-list" data-lb-media-captions-list></ul>
+            </div>
+            <button type="button" class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--medium" data-lb-icon="share-2" aria-label="Share"></button>
+            <div class="lb-menu-wrapper" data-lb-menu>
+              <button type="button" class="lb-menu__trigger lb-icon-btn lb-icon-btn--ghost lb-icon-btn--medium" aria-label="More">
+                <span class="lb-icon-btn__icon" data-lb-icon="more-vertical"></span>
+              </button>
+              <ul class="lb-menu lb-list">
+                <li><button type="button" class="lb-list__item" data-lb-id="upload-subtitles"><span class="lb-list__icon" data-lb-icon="upload"></span><span class="lb-list__label">Upload subtitles</span></button></li>
+                <li class="lb-list__separator"></li>
+                <li><button type="button" class="lb-list__item" data-lb-id="open"><span class="lb-list__icon" data-lb-icon="external-link"></span><span class="lb-list__label">Open in new tab</span></button></li>
+                <li><button type="button" class="lb-list__item" data-lb-id="copy"><span class="lb-list__icon" data-lb-icon="link"></span><span class="lb-list__label">Copy link</span></button></li>
+                <li><button type="button" class="lb-list__item" data-lb-id="download"><span class="lb-list__icon" data-lb-icon="download"></span><span class="lb-list__label">Download</span></button></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="lb-media__controls">
+          <button type="button" class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--medium" data-lb-media-playpause data-lb-icon="play" aria-label="Play"></button>
+          <span class="lb-media__time" data-lb-media-current>0:00</span>
+          <div class="lb-media__scrubber" data-lb-media-seek>
+            <div class="lb-media__rail">
+              <div class="lb-media__buffered" data-lb-media-buffered></div>
+              <div class="lb-media__fill" data-lb-media-played></div>
+            </div>
+            <input type="range" class="lb-media__range" min="0" max="100" step="0.1" value="0" aria-label="Seek">
+          </div>
+          <span class="lb-media__time" data-lb-media-duration>0:00</span>
+          <button type="button" class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--medium" data-lb-media-mute data-lb-icon="volume-2" aria-label="Mute"></button>
+          <div class="lb-media__volume" data-lb-media-volume>
+            <div class="lb-media__rail">
+              <div class="lb-media__fill" data-lb-media-volume-fill></div>
+            </div>
+            <input type="range" class="lb-media__range" min="0" max="1" step="0.01" value="1" aria-label="Volume">
+          </div>
+          <button type="button" class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--medium" data-lb-media-pip data-lb-icon="picture-in-picture-2" aria-label="Picture-in-Picture" aria-pressed="false"></button>
+          <button type="button" class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--medium lb-media__playlist-toggle" data-lb-media-playlist-toggle data-lb-icon="list" aria-label="Toggle playlist"></button>
+          <button type="button" class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--medium" data-lb-media-fullscreen data-lb-icon="maximize" aria-label="Fullscreen"></button>
+        </div>
+        </div><!-- /.lb-media__stage -->
+
+        <ul class="lb-media__playlist lb-media__playlist--scroll" data-lb-media-playlist data-lb-media-playlist-reorderable>
+          <li><button type="button" class="lb-media__track lb-media__track--active" data-lb-media-track data-src="https://cdn.jsdelivr.net/gh/m1ha1l0/letbe-media@v1.0.1/video/letbe-video-web.mp4" data-title="Old School (video)" aria-current="true"><span class="lb-media__track-index">1</span><span class="lb-media__track-title">Old School (video)</span><span class="lb-media__track-dur">3:32</span></button></li>
+          <li><button type="button" class="lb-media__track" data-lb-media-track data-src="https://cdn.jsdelivr.net/gh/m1ha1l0/letbe-media@v1.0.1/tracks/Letbe-Design-02-Hip-Hop.mp3" data-title="Hip Hop"><span class="lb-media__track-index">2</span><span class="lb-media__track-title">Hip Hop</span><span class="lb-media__track-dur">2:09</span></button></li>
+          <li><button type="button" class="lb-media__track" data-lb-media-track data-src="https://cdn.jsdelivr.net/gh/m1ha1l0/letbe-media@v1.0.1/tracks/Letbe-Design-03-Country.mp3" data-title="Country"><span class="lb-media__track-index">3</span><span class="lb-media__track-title">Country</span><span class="lb-media__track-dur">3:04</span></button></li>
+          <li><button type="button" class="lb-media__track" data-lb-media-track data-src="https://cdn.jsdelivr.net/gh/m1ha1l0/letbe-media@v1.0.1/tracks/Letbe-Design-04-Reggae.mp3" data-title="Reggae"><span class="lb-media__track-index">4</span><span class="lb-media__track-title">Reggae</span><span class="lb-media__track-dur">3:57</span></button></li>
+          <li><button type="button" class="lb-media__track" data-lb-media-track data-src="https://cdn.jsdelivr.net/gh/m1ha1l0/letbe-media@v1.0.1/tracks/Letbe-Design-05-Metal.mp3" data-title="Metal"><span class="lb-media__track-index">5</span><span class="lb-media__track-title">Metal</span><span class="lb-media__track-dur">3:32</span></button></li>
+          <li><button type="button" class="lb-media__track" data-lb-media-track data-src="https://cdn.jsdelivr.net/gh/m1ha1l0/letbe-media@v1.0.1/tracks/Letbe-Design-06-Techno.mp3" data-title="Techno"><span class="lb-media__track-index">6</span><span class="lb-media__track-title">Techno</span><span class="lb-media__track-dur">4:00</span></button></li>
+          <li><button type="button" class="lb-media__track" data-lb-media-track data-src="https://cdn.jsdelivr.net/gh/m1ha1l0/letbe-media@v1.0.1/tracks/Letbe-Design-07-Funk.mp3" data-title="Funk"><span class="lb-media__track-index">7</span><span class="lb-media__track-title">Funk</span><span class="lb-media__track-dur">3:46</span></button></li>
+          <li><button type="button" class="lb-media__track" data-lb-media-track data-src="https://cdn.jsdelivr.net/gh/m1ha1l0/letbe-media@v1.0.1/tracks/Letbe-Design-08-Electronic.mp3" data-title="Electronic"><span class="lb-media__track-index">8</span><span class="lb-media__track-title">Electronic</span><span class="lb-media__track-dur">4:19</span></button></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script src="../js/lb.js"></script>
+<script src="../js/components/lb-media.js"></script>
+<script src="../js/slot-engine.js"></script>
+<script src="../js/theme-editor.js"></script>
+<script src="../js/token-exporter.js"></script>
+<script src="../js/gallery-layout.js"></script>
+
+<script>
+  // Demo-only: inject per-row hover actions into the album playlist so the
+  // gallery shows the pattern without 11 copies of the same markup in the
+  // HTML. Runs synchronously during parsing; LB.init() then wires the
+  // per-row LB.Menu instances on its DOMContentLoaded sweep.
+  (function () {
+    var playlist = document.querySelector('.lb-media--with-art:not(.lb-media--compact):not(.lb-media--card) [data-lb-media-playlist]');
+    if (!playlist) return;
+    var rows = playlist.querySelectorAll(':scope > li');
+    var html = ''
+      + '<div class="lb-media__track-actions">'
+      +   '<button type="button" class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--small" data-lb-icon="heart" aria-label="Add to favourites"></button>'
+      +   '<button type="button" class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--small" data-lb-icon="share-2" aria-label="Share"></button>'
+      +   '<div class="lb-menu-wrapper" data-lb-menu>'
+      +     '<button type="button" class="lb-menu__trigger lb-icon-btn lb-icon-btn--ghost lb-icon-btn--small" aria-label="More actions">'
+      +       '<span class="lb-icon-btn__icon" data-lb-icon="more-vertical"></span>'
+      +     '</button>'
+      +     '<ul class="lb-menu lb-list">'
+      +       '<li><button type="button" class="lb-list__item" data-lb-id="add"><span class="lb-list__icon" data-lb-icon="list-plus"></span><span class="lb-list__label">Add to playlist</span></button></li>'
+      +       '<li><button type="button" class="lb-list__item lb-list__item--danger" data-lb-id="remove"><span class="lb-list__icon" data-lb-icon="list-minus"></span><span class="lb-list__label">Remove from playlist</span></button></li>'
+      +       '<li class="lb-list__separator"></li>'
+      +       '<li><button type="button" class="lb-list__item" data-lb-id="album"><span class="lb-list__icon" data-lb-icon="external-link"></span><span class="lb-list__label">Go to album</span></button></li>'
+      +       '<li><button type="button" class="lb-list__item" data-lb-id="artist"><span class="lb-list__icon" data-lb-icon="user"></span><span class="lb-list__label">Go to artist</span></button></li>'
+      +       '<li><button type="button" class="lb-list__item" data-lb-id="copy"><span class="lb-list__icon" data-lb-icon="link"></span><span class="lb-list__label">Copy link</span></button></li>'
+      +       '<li><button type="button" class="lb-list__item" data-lb-id="download"><span class="lb-list__icon" data-lb-icon="download"></span><span class="lb-list__label">Download</span></button></li>'
+      +     '</ul>'
+      +   '</div>'
+      + '</div>';
+    for (var i = 0; i < rows.length; i++) {
+      if (!rows[i].querySelector('.lb-media__track-actions')) rows[i].insertAdjacentHTML('beforeend', html);
+    }
+  })();
+
+  // Wire the video player's "Upload subtitles" menu item to a file picker
+  // — adds the chosen .vtt as a new track and turns it on. Consumers in
+  // real apps wire their own handlers via the same lb-menu-select event.
+  (function () {
+    var video = document.querySelector('.lb-media--video');
+    if (!video) return;
+    video.addEventListener('lb-menu-select', function (e) {
+      var item = e.detail && e.detail.item;
+      var id = item && item.getAttribute && item.getAttribute('data-lb-id');
+      if (id !== 'upload-subtitles') return;
+      var input = document.createElement('input');
+      input.type = 'file';
+      input.accept = '.vtt,text/vtt';
+      input.onchange = function () {
+        var file = input.files && input.files[0];
+        if (!file) return;
+        var vid = video.querySelector('video');
+        var track = document.createElement('track');
+        track.kind = 'subtitles';
+        track.label = file.name.replace(/\.vtt$/i, '');
+        track.srclang = 'en';
+        track.src = URL.createObjectURL(file);
+        vid.appendChild(track);
+        // Give the browser a tick to register the new track, then enable
+        // it via the controller (which also syncs the CC button state).
+        setTimeout(function () {
+          var tracks = vid.textTracks;
+          var t = tracks[tracks.length - 1];
+          if (!t) return;
+          t.mode = 'showing';
+          var inst = video._lbMedia;
+          if (inst && inst._populateCaptionsMenu) inst._populateCaptionsMenu();
+          else {
+            var btn = video.querySelector('[data-lb-media-captions]');
+            if (btn) btn.setAttribute('aria-pressed', 'true');
+            video.classList.add('lb-media--captions-on');
+          }
+        }, 80);
+      };
+      input.click();
+    });
+  })();
+</script>
+</body>
+</html>

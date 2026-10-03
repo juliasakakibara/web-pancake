@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <!-- theme-preamble:v1 -->
+  <script>(function(){try{var t=localStorage.getItem('letbe-ds-dark-mode');if(t==='1')document.documentElement.setAttribute('data-theme','dark');else if(t==='0')document.documentElement.setAttribute('data-theme','light');}catch(e){}})();</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta data-lb-page="file-uploader">
+  <title>File Uploader — letbe-ds</title>
+  <link rel="stylesheet" href="../tokens/theme.css">
+  <link rel="stylesheet" href="../tokens/fonts.css">
+  <link rel="stylesheet" href="../components/components.css">
+  <link rel="stylesheet" href="../components/theme-editor.css">
+  <link rel="stylesheet" href="../components/gallery.css">
+</head>
+<body data-lb-base="..">
+
+<main class="gallery-main">
+  <section class="gallery-section" id="file-uploader">
+    <h1 class="gallery-section__title" style="font-size: var(--lb-t-heading-l-font-size); line-height: var(--lb-t-heading-l-line-height);">File Uploader</h1>
+    <p class="gallery-section__desc">Drag-drop zone + click-to-browse + uploaded-files list. The component is presentational — it holds selected <code class="lb-code">File</code> objects and renders rows with progress bars and remove controls. The consumer drives actual uploads (XHR/fetch) and calls <code class="lb-code">setProgress(id, pct)</code>, <code class="lb-code">markDone(id)</code>, <code class="lb-code">markError(id, msg)</code> to update the UI.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>a11y (built in):</strong> the dropzone is a keyboard-operable button — the controller adds <code class="lb-code">role=button</code> and <code class="lb-code">tabindex=0</code> when the markup omits them, <kbd>Enter</kbd>/<kbd>Space</kbd> opens the file picker, and the real <code class="lb-code">&lt;input type="file"&gt;</code> stays in the DOM with its author-supplied <code class="lb-code">aria-label</code>. Every file renders as an <code class="lb-code">&lt;li&gt;</code> whose controls are named per file: a native <code class="lb-code">&lt;progress&gt;</code> labelled <em>Uploading {name}</em> and a remove button labelled <em>Remove {name}</em>; rejection reasons are written into the row as text, never signalled by colour alone. There is no live region — announcing "3 files added" after a drop is the consumer's job.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>Usage:</strong> <code class="lb-code">&lt;div class="lb-uploader" data-lb-uploader data-lb-accept="image/*" data-lb-max-size="5242880" data-lb-max-files="5"&gt;</code> wrapping <code class="lb-code">.lb-uploader__dropzone</code> (with hidden <code class="lb-code">.lb-uploader__input</code>) + <code class="lb-code">&lt;ul class="lb-uploader__files"&gt;</code>. Events: <code class="lb-code">lb-file-added</code>, <code class="lb-code">lb-file-removed</code>, <code class="lb-code">lb-file-error</code>. API: <code class="lb-code">el._lbUploader.getFiles() / .setProgress(id, pct) / .markDone(id) / .markError(id, msg) / .clear()</code>.</p>
+
+    <hr class="gallery-desc-divider">
+
+    <!-- ────────────────── Default (multiple, no constraints) ────────────────── -->
+    <h2 class="gallery-section__title">Default — multiple files, no constraints</h2>
+    <p class="gallery-section__desc">Drag one or several files onto the zone, or click to browse. This demo simulates a fake upload (2s per file) after each file is added, so you can see the progress bar flow and the done state.</p>
+    <div style="max-width: 520px;">
+      <div class="lb-uploader" data-lb-uploader id="demo-default">
+        <div class="lb-uploader__dropzone">
+          <span class="lb-uploader__icon" aria-hidden="true" data-lb-icon="upload"></span>
+          <p class="lb-uploader__title">Drag files here, or click to browse</p>
+          <p class="lb-uploader__hint">Any file type · any size</p>
+          <input class="lb-uploader__input" type="file" multiple aria-label="Choose files">
+        </div>
+        <ul class="lb-uploader__files"></ul>
+      </div>
+    </div>
+
+    <!-- ────────────────── Constrained — images only, max 2 MB, max 3 files ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Constrained — images only, max 2&nbsp;MB, max 3 files</h2>
+    <p class="gallery-section__desc">Rejection reasons are shown inline on the file row (wrong type / too large / count exceeded). Consumer also receives <code class="lb-code">lb-file-error</code> events.</p>
+    <div style="max-width: 520px;">
+      <div class="lb-uploader" data-lb-uploader
+           data-lb-accept="image/*"
+           data-lb-max-size="2097152"
+           data-lb-max-files="3"
+           id="demo-constrained">
+        <div class="lb-uploader__dropzone">
+          <span class="lb-uploader__icon" aria-hidden="true" data-lb-icon="image"></span>
+          <p class="lb-uploader__title">Drop images here</p>
+          <p class="lb-uploader__hint">PNG, JPG, WebP · up to 2 MB each · max 3 files</p>
+          <input class="lb-uploader__input" type="file" multiple accept="image/*" aria-label="Choose images">
+        </div>
+        <ul class="lb-uploader__files"></ul>
+      </div>
+    </div>
+
+    <!-- ────────────────── Single file ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Single file — replaces on new pick</h2>
+    <p class="gallery-section__desc">Single-file mode is the absence of both <code class="lb-code">data-lb-multiple</code> on the wrapper and native <code class="lb-code">multiple</code> on the input — either one turns multi-file mode on. Picking a new file replaces the previous one.</p>
+    <div style="max-width: 520px;">
+      <div class="lb-uploader" data-lb-uploader id="demo-single">
+        <div class="lb-uploader__dropzone">
+          <span class="lb-uploader__icon" aria-hidden="true" data-lb-icon="user-circle"></span>
+          <p class="lb-uploader__title">Upload profile picture</p>
+          <p class="lb-uploader__hint">One image, replaces on re-pick</p>
+          <input class="lb-uploader__input" type="file" accept="image/*" aria-label="Choose profile picture">
+        </div>
+        <ul class="lb-uploader__files"></ul>
+      </div>
+    </div>
+
+    <!-- ────────────────── Compact variant ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Compact variant — inline for settings rows</h2>
+    <p class="gallery-section__desc">Smaller footprint with icon + text side-by-side, tighter padding.</p>
+    <div style="max-width: 480px;">
+      <div class="lb-uploader lb-uploader--compact" data-lb-uploader id="demo-compact">
+        <div class="lb-uploader__dropzone">
+          <span class="lb-uploader__icon" aria-hidden="true" data-lb-icon="file-text"></span>
+          <div class="lb-uploader__text">
+            <p class="lb-uploader__title">Attach documents</p>
+            <p class="lb-uploader__hint">PDF, DOCX · up to 10 MB each</p>
+          </div>
+          <input class="lb-uploader__input" type="file" multiple accept=".pdf,.docx" aria-label="Attach documents">
+        </div>
+        <ul class="lb-uploader__files"></ul>
+      </div>
+    </div>
+
+    <!-- ────────────────── Disabled ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Disabled</h2>
+    <p class="gallery-section__desc">Add <code class="lb-code">--disabled</code> to the dropzone when uploads shouldn't be accepted (e.g. form is saving, user has hit their quota).</p>
+    <div style="max-width: 520px;">
+      <div class="lb-uploader">
+        <div class="lb-uploader__dropzone lb-uploader__dropzone--disabled">
+          <span class="lb-uploader__icon" aria-hidden="true" data-lb-icon="upload"></span>
+          <p class="lb-uploader__title">Storage full</p>
+          <p class="lb-uploader__hint">Upgrade your plan to add more files</p>
+        </div>
+      </div>
+    </div>
+
+  </section>
+</main>
+
+<script src="../js/lb.js"></script>
+<script src="../js/slot-engine.js"></script>
+<script src="../js/theme-editor.js"></script>
+<script src="../js/token-exporter.js"></script>
+<script src="../js/gallery-layout.js"></script>
+
+<script>
+  // Simulated upload — wire lb-file-added to drive progress/done on the
+  // demo uploaders. In real apps, this is where you'd call XHR/fetch
+  // with the File object and forward progress events.
+  document.addEventListener('DOMContentLoaded', () => {
+    function wireFakeUpload(id) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.addEventListener('lb-file-added', (e) => {
+        const { id: fileId } = e.detail;
+        const inst = el._lbUploader;
+        let pct = 0;
+        const interval = setInterval(() => {
+          pct += 7 + Math.random() * 10;
+          if (pct >= 100) {
+            inst.setProgress(fileId, 100);
+            inst.markDone(fileId);
+            clearInterval(interval);
+          } else {
+            inst.setProgress(fileId, pct);
+          }
+        }, 140);
+      });
+    }
+    ['demo-default', 'demo-constrained', 'demo-single', 'demo-compact'].forEach(wireFakeUpload);
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <!-- theme-preamble:v1 -->
+  <script>(function(){try{var t=localStorage.getItem('letbe-ds-dark-mode');if(t==='1')document.documentElement.setAttribute('data-theme','dark');else if(t==='0')document.documentElement.setAttribute('data-theme','light');}catch(e){}})();</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta data-lb-page="stepper">
+  <title>Stepper — letbe-ds</title>
+  <link rel="stylesheet" href="../tokens/theme.css">
+  <link rel="stylesheet" href="../tokens/fonts.css">
+  <link rel="stylesheet" href="../components/components.css">
+  <link rel="stylesheet" href="../components/theme-editor.css">
+  <link rel="stylesheet" href="../components/gallery.css">
+</head>
+<body data-lb-base="..">
+
+<main class="gallery-main">
+  <section class="gallery-section" id="stepper">
+    <h1 class="gallery-section__title" style="font-size: var(--lb-t-heading-l-font-size); line-height: var(--lb-t-heading-l-line-height);">Stepper</h1>
+    <p class="gallery-section__desc">Multi-step progress indicator for signup flows, checkouts, onboarding wizards, multi-part forms. Horizontal (default) for compact flows, vertical when each step needs a description. Three states per step: <code class="lb-code">--complete</code>, <code class="lb-code">--active</code>, default (upcoming). Optional <code class="lb-code">--error</code> state for steps that failed validation.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>a11y (built in):</strong> the stepper is an ordered list — <code class="lb-code">&lt;ol class="lb-stepper"&gt;</code> with <code class="lb-code">aria-label</code> — so step position and total come from the markup, and the current step carries <code class="lb-code">aria-current="step"</code>. Glyph indicator bubbles — the <code class="lb-code">check</code> and <code class="lb-code">x</code> marks — are <code class="lb-code">aria-hidden</code> and the connector lines are <code class="lb-code">::after</code> pseudo-elements, so completed/error state is announced by a <code class="lb-code">.lb-visually-hidden</code> state span after each step label — "(completed)", "(has an error)" — the pattern every demo on this page ships; numeric indicators stay plain text beside the step label. Clickable steps are real <code class="lb-code">&lt;button class="lb-stepper__trigger"&gt;</code> elements with their own <code class="lb-code">aria-label</code> and native <code class="lb-code">disabled</code> for steps that aren't reachable yet; the focus ring lands on the indicator.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>Usage:</strong> <code class="lb-code">&lt;ol class="lb-stepper"&gt;</code> (horizontal default, add <code class="lb-code">--vertical</code> for stacked). Each <code class="lb-code">&lt;li class="lb-stepper__step"&gt;</code> holds a <code class="lb-code">.lb-stepper__indicator</code> (number or check SVG) and a <code class="lb-code">.lb-stepper__label</code>. Wrap the step in a <code class="lb-code">.lb-stepper__trigger</code> button if steps are clickable (e.g. letting users revisit completed steps).</p>
+
+    <hr class="gallery-desc-divider">
+
+    <!-- ────────────────── Horizontal — 4 steps ────────────────── -->
+    <h2 class="gallery-section__title">Horizontal — 4 steps</h2>
+    <p class="gallery-section__desc">Account setup flow. Two complete, one active, one upcoming.</p>
+    <div style="max-width: 640px;">
+      <ol class="lb-stepper lb-stepper--horizontal" aria-label="Account setup progress">
+        <li class="lb-stepper__step lb-stepper__step--complete">
+          <span class="lb-stepper__indicator" aria-hidden="true"><span data-lb-icon="check"></span></span>
+          <span class="lb-stepper__label">Account</span><span class="lb-visually-hidden"> (completed)</span>
+        </li>
+        <li class="lb-stepper__step lb-stepper__step--complete">
+          <span class="lb-stepper__indicator" aria-hidden="true"><span data-lb-icon="check"></span></span>
+          <span class="lb-stepper__label">Organization</span><span class="lb-visually-hidden"> (completed)</span>
+        </li>
+        <li class="lb-stepper__step lb-stepper__step--active" aria-current="step">
+          <span class="lb-stepper__indicator">3</span>
+          <span class="lb-stepper__label">Plan</span>
+        </li>
+        <li class="lb-stepper__step">
+          <span class="lb-stepper__indicator">4</span>
+          <span class="lb-stepper__label">Invite</span>
+        </li>
+      </ol>
+    </div>
+
+    <!-- ────────────────── Horizontal — 3 steps, short ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Horizontal — 3 steps</h2>
+    <p class="gallery-section__desc">Checkout flow, first step active.</p>
+    <div style="max-width: 480px;">
+      <ol class="lb-stepper lb-stepper--horizontal" aria-label="Checkout progress">
+        <li class="lb-stepper__step lb-stepper__step--active" aria-current="step">
+          <span class="lb-stepper__indicator">1</span>
+          <span class="lb-stepper__label">Shipping</span>
+        </li>
+        <li class="lb-stepper__step">
+          <span class="lb-stepper__indicator">2</span>
+          <span class="lb-stepper__label">Payment</span>
+        </li>
+        <li class="lb-stepper__step">
+          <span class="lb-stepper__indicator">3</span>
+          <span class="lb-stepper__label">Review</span>
+        </li>
+      </ol>
+    </div>
+
+    <!-- ────────────────── Vertical — with descriptions ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Vertical — with descriptions</h2>
+    <p class="gallery-section__desc">Use when each step benefits from explanation. Label sits next to the indicator; optional description on a second line.</p>
+    <div style="max-width: 480px;">
+      <ol class="lb-stepper lb-stepper--vertical" aria-label="Workspace setup">
+        <li class="lb-stepper__step lb-stepper__step--complete">
+          <span class="lb-stepper__indicator" aria-hidden="true"><span data-lb-icon="check"></span></span>
+          <div class="lb-stepper__content">
+            <p class="lb-stepper__label">Create account</p>
+            <p class="lb-stepper__description">Signed up with work email on April 22.</p>
+          </div>
+        </li>
+        <li class="lb-stepper__step lb-stepper__step--complete">
+          <span class="lb-stepper__indicator" aria-hidden="true"><span data-lb-icon="check"></span></span>
+          <div class="lb-stepper__content">
+            <p class="lb-stepper__label">Connect design tool</p>
+            <p class="lb-stepper__description">Figma plugin authorised and synced.</p>
+          </div>
+        </li>
+        <li class="lb-stepper__step lb-stepper__step--active" aria-current="step">
+          <span class="lb-stepper__indicator">3</span>
+          <div class="lb-stepper__content">
+            <p class="lb-stepper__label">Import your first tokens</p>
+            <p class="lb-stepper__description">Export `source-tokens.json` from the letbe plugin and upload it here to see your brand applied across every component.</p>
+          </div>
+        </li>
+        <li class="lb-stepper__step">
+          <span class="lb-stepper__indicator">4</span>
+          <div class="lb-stepper__content">
+            <p class="lb-stepper__label">Invite your team</p>
+            <p class="lb-stepper__description">Share the workspace with designers and engineers.</p>
+          </div>
+        </li>
+        <li class="lb-stepper__step">
+          <span class="lb-stepper__indicator">5</span>
+          <div class="lb-stepper__content">
+            <p class="lb-stepper__label">Deploy</p>
+            <p class="lb-stepper__description">Publish to npm or host the gallery on your CDN.</p>
+          </div>
+        </li>
+      </ol>
+    </div>
+
+    <!-- ────────────────── Error state ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Error state</h2>
+    <p class="gallery-section__desc">Signal that a step failed validation — e.g. form submission came back with errors from the server.</p>
+    <div style="max-width: 520px;">
+      <ol class="lb-stepper lb-stepper--horizontal" aria-label="Onboarding with error">
+        <li class="lb-stepper__step lb-stepper__step--complete">
+          <span class="lb-stepper__indicator" aria-hidden="true"><span data-lb-icon="check"></span></span>
+          <span class="lb-stepper__label">Basics</span><span class="lb-visually-hidden"> (completed)</span>
+        </li>
+        <li class="lb-stepper__step lb-stepper__step--error">
+          <span class="lb-stepper__indicator" aria-hidden="true"><span data-lb-icon="x"></span></span>
+          <span class="lb-stepper__label">Payment</span><span class="lb-visually-hidden"> (has an error)</span>
+        </li>
+        <li class="lb-stepper__step">
+          <span class="lb-stepper__indicator">3</span>
+          <span class="lb-stepper__label">Confirm</span>
+        </li>
+      </ol>
+    </div>
+
+    <!-- ────────────────── Clickable steps ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Clickable steps</h2>
+    <p class="gallery-section__desc">Wrap a step in a <code class="lb-code">&lt;button class="lb-stepper__trigger"&gt;</code> to let users jump back to a previous step. Focus ring + hover halo appear. Future upcoming steps should remain <code class="lb-code">disabled</code> to prevent skipping.</p>
+    <div style="max-width: 640px;">
+      <ol class="lb-stepper lb-stepper--horizontal" aria-label="Clickable progress" id="demo-clickable">
+        <li class="lb-stepper__step lb-stepper__step--complete">
+          <button type="button" class="lb-stepper__trigger" aria-label="Go to Account">
+            <span class="lb-stepper__indicator" aria-hidden="true"><span data-lb-icon="check"></span></span>
+            <span class="lb-stepper__label">Account</span>
+          </button>
+        </li>
+        <li class="lb-stepper__step lb-stepper__step--complete">
+          <button type="button" class="lb-stepper__trigger" aria-label="Go to Organization">
+            <span class="lb-stepper__indicator" aria-hidden="true"><span data-lb-icon="check"></span></span>
+            <span class="lb-stepper__label">Organization</span>
+          </button>
+        </li>
+        <li class="lb-stepper__step lb-stepper__step--active" aria-current="step">
+          <button type="button" class="lb-stepper__trigger" aria-label="Current step: Plan">
+            <span class="lb-stepper__indicator">3</span>
+            <span class="lb-stepper__label">Plan</span>
+          </button>
+        </li>
+        <li class="lb-stepper__step">
+          <button type="button" class="lb-stepper__trigger" aria-label="Invite step (not available yet)" disabled>
+            <span class="lb-stepper__indicator">4</span>
+            <span class="lb-stepper__label">Invite</span>
+          </button>
+        </li>
+      </ol>
+    </div>
+
+    <!-- ────────────────── Small size ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Small — dense contexts</h2>
+    <p class="gallery-section__desc">Smaller indicators for inline / compact placements (inside a toolbar, sidebar widget).</p>
+    <div style="max-width: 360px;">
+      <ol class="lb-stepper lb-stepper--horizontal lb-stepper--sm" aria-label="Onboarding">
+        <li class="lb-stepper__step lb-stepper__step--complete">
+          <span class="lb-stepper__indicator" aria-hidden="true"><span data-lb-icon="check"></span></span>
+          <span class="lb-stepper__label">Profile</span><span class="lb-visually-hidden"> (completed)</span>
+        </li>
+        <li class="lb-stepper__step lb-stepper__step--active" aria-current="step">
+          <span class="lb-stepper__indicator">2</span>
+          <span class="lb-stepper__label">Team</span>
+        </li>
+        <li class="lb-stepper__step">
+          <span class="lb-stepper__indicator">3</span>
+          <span class="lb-stepper__label">Done</span>
+        </li>
+      </ol>
+    </div>
+
+    <!-- ────────────────── Dots ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Dots — <code class="lb-code">.lb-stepper--dots</code></h2>
+    <p class="gallery-section__desc">12px content-free dots for cards and tight tracks: filled for complete and active, outlined for upcoming, caption-size labels, no number or icon. The dot's corner binds <code class="lb-code">radius.interactive</code>, so it follows the theme's square or round preset instead of staying a circle. The label carries the step's meaning — keep labels in the markup (or <code class="lb-code">aria-label</code> each step) and mark the active one <code class="lb-code">aria-current="step"</code>. Descriptions are hidden in this variant.</p>
+    <div style="max-width: 360px;">
+      <ol class="lb-stepper lb-stepper--horizontal lb-stepper--dots" aria-label="Release track">
+        <li class="lb-stepper__step lb-stepper__step--complete">
+          <span class="lb-stepper__indicator" aria-hidden="true"></span>
+          <span class="lb-stepper__label">Draft</span><span class="lb-visually-hidden"> (completed)</span>
+        </li>
+        <li class="lb-stepper__step lb-stepper__step--complete">
+          <span class="lb-stepper__indicator" aria-hidden="true"></span>
+          <span class="lb-stepper__label">Review</span><span class="lb-visually-hidden"> (completed)</span>
+        </li>
+        <li class="lb-stepper__step lb-stepper__step--active" aria-current="step">
+          <span class="lb-stepper__indicator" aria-hidden="true"></span>
+          <span class="lb-stepper__label">Mix</span>
+        </li>
+        <li class="lb-stepper__step">
+          <span class="lb-stepper__indicator" aria-hidden="true"></span>
+          <span class="lb-stepper__label">Master</span>
+        </li>
+        <li class="lb-stepper__step">
+          <span class="lb-stepper__indicator" aria-hidden="true"></span>
+          <span class="lb-stepper__label">Release</span>
+        </li>
+      </ol>
+    </div>
+
+  </section>
+</main>
+
+<script src="../js/lb.js"></script>
+<script src="../js/slot-engine.js"></script>
+<script src="../js/theme-editor.js"></script>
+<script src="../js/token-exporter.js"></script>
+<script src="../js/gallery-layout.js"></script>
+</body>
+</html>

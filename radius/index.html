@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <!-- theme-preamble:v1 -->
+  <script>(function(){try{var t=localStorage.getItem('letbe-ds-dark-mode');if(t==='1')document.documentElement.setAttribute('data-theme','dark');else if(t==='0')document.documentElement.setAttribute('data-theme','light');}catch(e){}})();</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta data-lb-page="radius">
+  <title>Radius — letbe-ds</title>
+  <link rel="stylesheet" href="../tokens/theme.css">
+  <link rel="stylesheet" href="../tokens/fonts.css">
+  <link rel="stylesheet" href="../components/components.css">
+  <link rel="stylesheet" href="../components/theme-editor.css">
+  <link rel="stylesheet" href="../components/gallery.css">
+  <style>
+    .radius-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: var(--lb-size-3x); }
+    .radius-card { display: flex; flex-direction: column; align-items: center; gap: var(--lb-size-2x); padding: var(--lb-size-4x); background: var(--lb-surface-bg-default); border: var(--lb-border-width-thin) solid var(--lb-border-muted); border-radius: var(--lb-radius-surface); }
+    .radius-sample { width: 64px; height: 64px; background: var(--lb-fg-accent); }
+    .radius-card__token { font-family: 'Roboto Mono', monospace; font-size: var(--lb-font-size-xs); color: var(--lb-fg-default); word-break: break-all; text-align: center; line-height: 1.3; }
+    .radius-card__value { font-family: 'Roboto Mono', monospace; font-size: var(--lb-font-size-2xs); color: var(--lb-fg-muted); }
+  </style>
+</head>
+<body data-lb-base="..">
+
+<main class="gallery-main">
+  <section class="gallery-section" id="radius">
+    <h1 class="gallery-section__title" style="font-size: var(--lb-t-heading-l-font-size); line-height: var(--lb-t-heading-l-line-height);">Radius</h1>
+    <p class="gallery-section__desc">Corner radius primitives (L1) and semantic aliases (L2) for interactive, field, surface, overlay, badge, and full/pill shapes. The theme editor's radius control is a four-option segmented picker (Square, Soft, Rounded, Pill) that remaps the L2 aliases to different L1 primitives, so every component changes shape together.</p>
+    <hr class="gallery-desc-divider">
+    <h2 class="gallery-section__title">Radius Demo</h2>
+
+    <div class="gallery-label">L1 primitives (primitives.radius.*)</div>
+    <div class="radius-grid">
+      <div class="radius-card"><div class="radius-sample" style="border-radius: var(--lb-radius-0);"></div><div class="radius-card__token">--lb-radius-0</div><div class="radius-card__value">0px</div></div>
+      <div class="radius-card"><div class="radius-sample" style="border-radius: var(--lb-radius-2);"></div><div class="radius-card__token">--lb-radius-2</div><div class="radius-card__value">2px</div></div>
+      <div class="radius-card"><div class="radius-sample" style="border-radius: var(--lb-radius-4);"></div><div class="radius-card__token">--lb-radius-4</div><div class="radius-card__value">4px</div></div>
+      <div class="radius-card"><div class="radius-sample" style="border-radius: var(--lb-radius-8);"></div><div class="radius-card__token">--lb-radius-8</div><div class="radius-card__value">8px</div></div>
+      <div class="radius-card"><div class="radius-sample" style="border-radius: var(--lb-radius-12);"></div><div class="radius-card__token">--lb-radius-12</div><div class="radius-card__value">12px</div></div>
+      <div class="radius-card"><div class="radius-sample" style="border-radius: var(--lb-radius-16);"></div><div class="radius-card__token">--lb-radius-16</div><div class="radius-card__value">16px</div></div>
+      <div class="radius-card"><div class="radius-sample" style="border-radius: var(--lb-radius-9999);"></div><div class="radius-card__token">--lb-radius-9999</div><div class="radius-card__value">pill / 9999px</div></div>
+    </div>
+
+    <div class="gallery-label">L2 semantic aliases (semantic.radius.*)</div>
+    <div class="radius-grid">
+      <div class="radius-card"><div class="radius-sample" style="border-radius: var(--lb-radius-none);"></div><div class="radius-card__token">--lb-radius-none</div><div class="radius-card__value">→ radius-0</div></div>
+      <div class="radius-card"><div class="radius-sample" style="border-radius: var(--lb-radius-interactive);"></div><div class="radius-card__token">--lb-radius-interactive</div><div class="radius-card__value">→ radius-4</div></div>
+      <div class="radius-card"><div class="radius-sample" style="border-radius: var(--lb-radius-field);"></div><div class="radius-card__token">--lb-radius-field</div><div class="radius-card__value">→ radius-4</div></div>
+      <div class="radius-card"><div class="radius-sample" style="border-radius: var(--lb-radius-surface);"></div><div class="radius-card__token">--lb-radius-surface</div><div class="radius-card__value">→ radius-8</div></div>
+      <div class="radius-card"><div class="radius-sample" style="border-radius: var(--lb-radius-overlay);"></div><div class="radius-card__token">--lb-radius-overlay</div><div class="radius-card__value">→ radius-12</div></div>
+      <div class="radius-card"><div class="radius-sample" style="border-radius: var(--lb-radius-badge);"></div><div class="radius-card__token">--lb-radius-badge</div><div class="radius-card__value">→ radius-9999</div></div>
+      <div class="radius-card"><div class="radius-sample" style="border-radius: var(--lb-radius-media);"></div><div class="radius-card__token">--lb-radius-media</div><div class="radius-card__value">→ radius-8</div></div>
+      <div class="radius-card"><div class="radius-sample" style="border-radius: var(--lb-radius-full);"></div><div class="radius-card__token">--lb-radius-full</div><div class="radius-card__value">→ radius-9999</div></div>
+    </div>
+  </section>
+</main>
+
+<script src="../js/lb.js"></script>
+<script src="../js/slot-engine.js"></script>
+<script src="../js/theme-editor.js"></script>
+<script src="../js/token-exporter.js"></script>
+<script src="../js/gallery-layout.js"></script>
+</body>
+</html>

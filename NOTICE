@@ -1,0 +1,18 @@
+# NOTICE — what the MIT license does and does not cover
+
+The MIT license in LICENSE covers the letbe-ds SOURCE — all CSS, JavaScript,
+JSON tokens, build scripts, HTML gallery pages, and documentation — AND the
+demo media: the audio tracks, video files, photographs, and cover art under
+`assets/media/` are © letbe.design and released under the same MIT terms.
+Use them, remix them, ship them — commercially too. Keeping the copyright
+notice with substantial portions (per MIT) is all that's asked.
+
+It does NOT cover:
+
+1. **The letbe brand** — the letbe name, logo, and mark under `assets/brand/`
+   identify letbe.design and are not licensed for use in derived projects.
+   Fork the code freely; ship it under your own name.
+
+2. **Third-party assets** — icons and flags carry their own (permissive)
+   licenses, unchanged: see THIRD-PARTY-LICENSES.md. Keep the LICENSE.txt
+   files inside `assets/icons/` and `assets/flags/` intact when vendoring.

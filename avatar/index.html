@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <!-- theme-preamble:v1 -->
+  <script>(function(){try{var t=localStorage.getItem('letbe-ds-dark-mode');if(t==='1')document.documentElement.setAttribute('data-theme','dark');else if(t==='0')document.documentElement.setAttribute('data-theme','light');}catch(e){}})();</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta data-lb-page="avatar">
+  <title>Avatar — letbe-ds</title>
+  <link rel="stylesheet" href="../tokens/theme.css">
+  <link rel="stylesheet" href="../tokens/fonts.css">
+  <link rel="stylesheet" href="../components/components.css">
+  <link rel="stylesheet" href="../components/theme-editor.css">
+  <link rel="stylesheet" href="../components/gallery.css">
+</head>
+<body data-lb-base="..">
+
+<main class="gallery-main">
+  <section class="gallery-section" id="avatar">
+    <h1 class="gallery-section__title" style="font-size: var(--lb-t-heading-l-font-size); line-height: var(--lb-t-heading-l-line-height);">Avatar</h1>
+    <p class="gallery-section__desc">User or entity representation with image fallback to initials. Three sizes: small, medium, large. Use in user lists, comments, nav user-menus, chat messages. Initials render automatically when the image fails to load, or when the avatar has no <code class="lb-code">&lt;img&gt;</code> at all.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>a11y (built in):</strong> each person avatar is a <code class="lb-code">role="img"</code> node named by <code class="lb-code">aria-label</code>, with the inner <code class="lb-code">&lt;img alt=""&gt;</code> left decorative — one accessible name, announced once. The initials fallback swaps only the element's children, so the role and the name survive whether the photo loads, fails late, or had already failed before init ran.</p>
+
+<hr class="gallery-desc-divider">
+
+
+<h2 class="gallery-section__title">Sizes</h2>
+    <p class="gallery-section__desc">Three sizes — large (3rem), medium (2.5rem), small (2rem). Match the size to the surrounding type and density.</p>
+    <div class="gallery-row">
+      <div class="lb-avatar lb-avatar--large" role="img" aria-label="Jane Doe" data-lb-initials="JD"><img class="lb-avatar__img" src="../assets/avatars/avatar-01.jpg" alt=""></div>
+      <div class="lb-avatar lb-avatar--medium" role="img" aria-label="John Smith" data-lb-initials="JS"><img class="lb-avatar__img" src="../assets/avatars/avatar-02.jpg" alt=""></div>
+      <div class="lb-avatar lb-avatar--small" role="img" aria-label="Alex Kim" data-lb-initials="AK"><img class="lb-avatar__img" src="../assets/avatars/avatar-03.jpg" alt=""></div>
+    </div>
+
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Initials fallback</h2>
+    <p class="gallery-section__desc">If <code class="lb-code">data-lb-initials</code> is set and the <code class="lb-code">&lt;img&gt;</code> fails to load (404, network error, missing CDN), the avatar automatically falls back to rendering the initials. The example below points at a deliberately broken path to demonstrate.</p>
+    <div class="gallery-row">
+      <div class="lb-avatar lb-avatar--large" role="img" aria-label="Broken Kennedy (image fails to load)" data-lb-initials="BK"><img class="lb-avatar__img" src="/intentionally-missing.jpg" alt=""></div>
+      <div class="lb-avatar lb-avatar--medium" role="img" aria-label="No image, just initials" data-lb-initials="MZ"></div>
+      <div class="lb-avatar lb-avatar--small" role="img" aria-label="No image" data-lb-initials="LR"></div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════════════════
+       AVATAR GROUP — composition over Avatar, no new JS
+       ══════════════════════════════════════════════════════════════════════ -->
+  <section class="gallery-section" id="avatar-group" style="margin-top: var(--lb-size-16x);">
+    <h2 class="gallery-section__title">Avatar Group</h2>
+    <p class="gallery-section__desc">Stacked overlapping avatars for team UIs, collaborators, assignees, attendees. Optional "+N more" counter at the tail for truncated lists. Pure composition over the Avatar component above — no new JS.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>Usage:</strong> <code class="lb-code">&lt;div class="lb-avatar-group lb-avatar-group--medium"&gt;</code> holds regular <code class="lb-code">.lb-avatar</code> children. Group size modifier should match the avatar size. Add a <code class="lb-code">.lb-avatar.lb-avatar-group__count</code> at the tail for a "+N" chip. Optional <code class="lb-code">--hover-expand</code> fans the group apart on hover.</p>
+
+    <hr class="gallery-desc-divider">
+
+    <!-- ────────────────── Sizes ────────────────── -->
+    <h2 class="gallery-section__title">Sizes</h2>
+    <p class="gallery-section__desc">Three sizes matching the Avatar component. Overlap scales proportionally.</p>
+    <div class="gallery-label">Small — <code class="lb-code">lb-avatar-group--small</code> + <code class="lb-code">lb-avatar--small</code></div>
+    <div class="lb-avatar-group lb-avatar-group--small">
+      <div class="lb-avatar lb-avatar--small" role="img" aria-label="Avery Green">AG</div>
+      <div class="lb-avatar lb-avatar--small" role="img" aria-label="Noor Ibrahim">NI</div>
+      <div class="lb-avatar lb-avatar--small" role="img" aria-label="Kai Tanaka">KT</div>
+      <div class="lb-avatar lb-avatar--small" role="img" aria-label="Luca Rossi">LR</div>
+    </div>
+
+    <div class="gallery-label" style="margin-top: var(--lb-size-6x);">Medium (default)</div>
+    <div class="lb-avatar-group lb-avatar-group--medium">
+      <div class="lb-avatar lb-avatar--medium" role="img" aria-label="Avery Green">AG</div>
+      <div class="lb-avatar lb-avatar--medium" role="img" aria-label="Noor Ibrahim">NI</div>
+      <div class="lb-avatar lb-avatar--medium" role="img" aria-label="Kai Tanaka">KT</div>
+      <div class="lb-avatar lb-avatar--medium" role="img" aria-label="Luca Rossi">LR</div>
+    </div>
+
+    <div class="gallery-label" style="margin-top: var(--lb-size-6x);">Large — <code class="lb-code">lb-avatar-group--large</code> + <code class="lb-code">lb-avatar--large</code></div>
+    <div class="lb-avatar-group lb-avatar-group--large">
+      <div class="lb-avatar lb-avatar--large" role="img" aria-label="Avery Green">AG</div>
+      <div class="lb-avatar lb-avatar--large" role="img" aria-label="Noor Ibrahim">NI</div>
+      <div class="lb-avatar lb-avatar--large" role="img" aria-label="Kai Tanaka">KT</div>
+      <div class="lb-avatar lb-avatar--large" role="img" aria-label="Luca Rossi">LR</div>
+    </div>
+
+    <!-- ────────────────── With images ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">With images</h2>
+    <p class="gallery-section__desc">Same structure, real images via <code class="lb-code">.lb-avatar__img</code>. Fallback to initials via <code class="lb-code">data-lb-initials</code> if the image fails.</p>
+    <div class="lb-avatar-group lb-avatar-group--medium">
+      <div class="lb-avatar lb-avatar--medium" role="img" aria-label="Avery Green" data-lb-initials="AG"><img class="lb-avatar__img" src="../assets/avatars/avatar-04.jpg" alt=""></div>
+      <div class="lb-avatar lb-avatar--medium" role="img" aria-label="Noor Ibrahim" data-lb-initials="NI"><img class="lb-avatar__img" src="../assets/avatars/avatar-05.jpg" alt=""></div>
+      <div class="lb-avatar lb-avatar--medium" role="img" aria-label="Kai Tanaka" data-lb-initials="KT"><img class="lb-avatar__img" src="../assets/avatars/avatar-06.jpg" alt=""></div>
+      <div class="lb-avatar lb-avatar--medium" role="img" aria-label="Luca Rossi" data-lb-initials="LR"><img class="lb-avatar__img" src="../assets/avatars/avatar-07.jpg" alt=""></div>
+    </div>
+
+    <!-- ────────────────── With "+N" counter ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">With overflow counter</h2>
+    <p class="gallery-section__desc">Show the first N avatars + a count chip for the rest. The counter is just a regular Avatar with the <code class="lb-code">__count</code> modifier class — it inherits the same size automatically.</p>
+
+    <div class="gallery-label">Team of 12 — showing 4 + "+8"</div>
+    <div class="lb-avatar-group lb-avatar-group--medium">
+      <div class="lb-avatar lb-avatar--medium" role="img" aria-label="Avery Green" data-lb-initials="AG"><img class="lb-avatar__img" src="../assets/avatars/avatar-04.jpg" alt=""></div>
+      <div class="lb-avatar lb-avatar--medium" role="img" aria-label="Noor Ibrahim" data-lb-initials="NI"><img class="lb-avatar__img" src="../assets/avatars/avatar-05.jpg" alt=""></div>
+      <div class="lb-avatar lb-avatar--medium" role="img" aria-label="Kai Tanaka" data-lb-initials="KT"><img class="lb-avatar__img" src="../assets/avatars/avatar-06.jpg" alt=""></div>
+      <div class="lb-avatar lb-avatar--medium" role="img" aria-label="Luca Rossi" data-lb-initials="LR"><img class="lb-avatar__img" src="../assets/avatars/avatar-07.jpg" alt=""></div>
+      <span class="lb-avatar lb-avatar--medium lb-avatar-group__count" role="img" aria-label="8 more people">+8</span>
+    </div>
+
+    <div class="gallery-label" style="margin-top: var(--lb-size-6x);">Small team — all initials</div>
+    <div class="lb-avatar-group lb-avatar-group--small">
+      <div class="lb-avatar lb-avatar--small" role="img" aria-label="Priya Shah">PS</div>
+      <div class="lb-avatar lb-avatar--small" role="img" aria-label="Sam Lee">SL</div>
+      <div class="lb-avatar lb-avatar--small" role="img" aria-label="Mei Zhao">MZ</div>
+      <span class="lb-avatar lb-avatar--small lb-avatar-group__count" role="img" aria-label="24 more people">+24</span>
+    </div>
+
+    <!-- ────────────────── Hover expand ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Hover to expand</h2>
+    <p class="gallery-section__desc">Add <code class="lb-code">--hover-expand</code> to fan the group apart on hover — useful when avatars are small and users want to see all faces at once. Hover the group below:</p>
+    <div class="lb-avatar-group lb-avatar-group--medium lb-avatar-group--hover-expand">
+      <div class="lb-avatar lb-avatar--medium" role="img" aria-label="Avery Green" data-lb-initials="AG"><img class="lb-avatar__img" src="../assets/avatars/avatar-04.jpg" alt=""></div>
+      <div class="lb-avatar lb-avatar--medium" role="img" aria-label="Noor Ibrahim" data-lb-initials="NI"><img class="lb-avatar__img" src="../assets/avatars/avatar-05.jpg" alt=""></div>
+      <div class="lb-avatar lb-avatar--medium" role="img" aria-label="Kai Tanaka" data-lb-initials="KT"><img class="lb-avatar__img" src="../assets/avatars/avatar-06.jpg" alt=""></div>
+      <div class="lb-avatar lb-avatar--medium" role="img" aria-label="Luca Rossi" data-lb-initials="LR"><img class="lb-avatar__img" src="../assets/avatars/avatar-07.jpg" alt=""></div>
+      <div class="lb-avatar lb-avatar--medium" role="img" aria-label="Priya Shah" data-lb-initials="PS"><img class="lb-avatar__img" src="../assets/avatars/avatar-08.jpg" alt=""></div>
+    </div>
+
+    <!-- ────────────────── In-context — table ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">In a table row</h2>
+    <p class="gallery-section__desc">Common use case: "Assignees" or "Reviewers" column. Small size fits comfortably in a 40px row.</p>
+    <div class="lb-table-wrap" style="max-width: 640px;">
+      <table class="lb-table">
+        <thead>
+          <tr>
+            <th class="lb-table__cell" scope="col">Project</th>
+            <th class="lb-table__cell" scope="col">Assignees</th>
+            <th class="lb-table__cell" scope="col">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="lb-table__cell">Design system rollout</td>
+            <td class="lb-table__cell">
+              <div class="lb-avatar-group lb-avatar-group--small">
+                <div class="lb-avatar lb-avatar--small" role="img" aria-label="Avery Green">AG</div>
+                <div class="lb-avatar lb-avatar--small" role="img" aria-label="Noor Ibrahim">NI</div>
+                <div class="lb-avatar lb-avatar--small" role="img" aria-label="Kai Tanaka">KT</div>
+              </div>
+            </td>
+            <td class="lb-table__cell"><span class="lb-badge lb-badge--small lb-badge--success"><span class="lb-badge__dot"></span>On track</span></td>
+          </tr>
+          <tr>
+            <td class="lb-table__cell">Q2 marketing site</td>
+            <td class="lb-table__cell">
+              <div class="lb-avatar-group lb-avatar-group--small">
+                <div class="lb-avatar lb-avatar--small" role="img" aria-label="Luca Rossi">LR</div>
+                <div class="lb-avatar lb-avatar--small" role="img" aria-label="Priya Shah">PS</div>
+                <span class="lb-avatar lb-avatar--small lb-avatar-group__count" role="img" aria-label="4 more people">+4</span>
+              </div>
+            </td>
+            <td class="lb-table__cell"><span class="lb-badge lb-badge--small lb-badge--warning"><span class="lb-badge__dot"></span>At risk</span></td>
+          </tr>
+          <tr>
+            <td class="lb-table__cell">Mobile app v2</td>
+            <td class="lb-table__cell">
+              <div class="lb-avatar-group lb-avatar-group--small">
+                <div class="lb-avatar lb-avatar--small" role="img" aria-label="Mei Zhao">MZ</div>
+              </div>
+            </td>
+            <td class="lb-table__cell"><span class="lb-badge lb-badge--small lb-badge--success"><span class="lb-badge__dot"></span>Active</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</main>
+
+<script src="../js/lb.js"></script>
+<script src="../js/slot-engine.js"></script>
+<script src="../js/theme-editor.js"></script>
+<script src="../js/token-exporter.js"></script>
+<script src="../js/gallery-layout.js"></script>
+</body>
+</html>

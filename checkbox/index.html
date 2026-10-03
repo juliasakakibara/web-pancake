@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <!-- theme-preamble:v1 -->
+  <script>(function(){try{var t=localStorage.getItem('letbe-ds-dark-mode');if(t==='1')document.documentElement.setAttribute('data-theme','dark');else if(t==='0')document.documentElement.setAttribute('data-theme','light');}catch(e){}})();</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta data-lb-page="checkbox">
+  <title>Checkbox — letbe-ds</title>
+  <link rel="stylesheet" href="../tokens/theme.css">
+  <link rel="stylesheet" href="../tokens/fonts.css">
+  <link rel="stylesheet" href="../components/components.css">
+  <link rel="stylesheet" href="../components/theme-editor.css">
+  <link rel="stylesheet" href="../components/gallery.css">
+</head>
+<body data-lb-base="..">
+
+<main class="gallery-main">
+  <section class="gallery-section" id="checkbox">
+    <h1 class="gallery-section__title" style="font-size: var(--lb-t-heading-l-font-size); line-height: var(--lb-t-heading-l-line-height);">Checkbox</h1>
+    <p class="gallery-section__desc">Binary or ternary selection control. Supports checked, unchecked, indeterminate, and disabled states. Use for multi-select lists, settings, and form agreements. For a single boolean with immediate effect, prefer Switch.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>a11y (built in):</strong> the control is a real <code class="lb-code">&lt;input type="checkbox"&gt;</code> restyled with <code class="lb-code">appearance: none</code>, never a div — <code class="lb-code">:checked</code>, <code class="lb-code">:indeterminate</code> and <code class="lb-code">disabled</code> stay native state, so role and keyboard toggling come from the platform rather than from ARIA. Input and <code class="lb-code">.lb-checkbox__label</code> sit inside one wrapping <code class="lb-code">&lt;label&gt;</code>, which supplies the accessible name and makes the text a click target; the check/minus glyphs injected at init are <code class="lb-code">aria-hidden</code> decoration shown by CSS sibling combinators, and focus draws the system <code class="lb-code">:focus-visible</code> outline.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>Usage:</strong> Author only the bare control — <code class="lb-code">&lt;label class="lb-checkbox-wrap"&gt;&lt;input type="checkbox" class="lb-checkbox"&gt;&lt;span class="lb-checkbox__label"&gt;…&lt;/span&gt;&lt;/label&gt;</code>; with <code class="lb-code">js/lb.js</code> loaded, <code class="lb-code">LB.init()</code> (self-runs on <code class="lb-code">DOMContentLoaded</code>) wraps the input in a <code class="lb-code">.lb-checkbox-frame</code> and injects the glyph spans — never hand-write the frame or glyphs. Wiring stays native: listen for <code class="lb-code">change</code>, read <code class="lb-code">input.checked</code>, and set <code class="lb-code">input.indeterminate = true</code> from JS for the ternary state (a DOM property, not an attribute). No custom events and no instance handle; for checkboxes injected after boot, run the exported <code class="lb-code">LB.initCheckboxGlyphs(root)</code> and then <code class="lb-code">LB.initIcons(root)</code> on the new subtree — the injected glyphs are empty <code class="lb-code">data-lb-icon</code> slots until the icon pass fills them; both calls are idempotent.</p>
+
+<hr class="gallery-desc-divider">
+
+
+<h2 class="gallery-section__title">Checkbox Demo</h2>
+    <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+      <label class="lb-checkbox-wrap"><input type="checkbox" class="lb-checkbox" checked><span class="lb-checkbox__label">Checked option</span></label>
+      <label class="lb-checkbox-wrap"><input type="checkbox" class="lb-checkbox"><span class="lb-checkbox__label">Unchecked option</span></label>
+      <label class="lb-checkbox-wrap"><input type="checkbox" class="lb-checkbox" id="cb-indeterminate"><span class="lb-checkbox__label">Indeterminate</span></label>
+      <label class="lb-checkbox-wrap lb-checkbox-wrap--disabled"><input type="checkbox" class="lb-checkbox" disabled><span class="lb-checkbox__label">Disabled</span></label>
+    </div>
+    <script>
+      // indeterminate is a DOM property, not an attribute — it can only be set in JS.
+      document.getElementById('cb-indeterminate').indeterminate = true;
+    </script>
+  </section>
+</main>
+
+<script src="../js/lb.js"></script>
+<script src="../js/slot-engine.js"></script>
+<script src="../js/theme-editor.js"></script>
+<script src="../js/token-exporter.js"></script>
+<script src="../js/gallery-layout.js"></script>
+</body>
+</html>

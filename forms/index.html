@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <!-- theme-preamble:v1 -->
+  <script>(function(){try{var t=localStorage.getItem('letbe-ds-dark-mode');if(t==='1')document.documentElement.setAttribute('data-theme','dark');else if(t==='0')document.documentElement.setAttribute('data-theme','light');}catch(e){}})();</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta data-lb-page="forms">
+  <title>Forms — letbe-ds</title>
+  <link rel="stylesheet" href="../tokens/theme.css">
+  <link rel="stylesheet" href="../tokens/fonts.css">
+  <link rel="stylesheet" href="../components/components.css">
+  <link rel="stylesheet" href="../components/theme-editor.css">
+  <link rel="stylesheet" href="../components/gallery.css">
+</head>
+<body data-lb-base="..">
+
+<main class="gallery-main">
+  <section class="gallery-section" id="forms">
+    <h1 class="gallery-section__title" style="font-size: var(--lb-t-heading-l-font-size); line-height: var(--lb-t-heading-l-line-height);">Forms</h1>
+    <p class="gallery-section__desc">Layout primitives for building forms. Composes the existing field components (Input, Select, Checkbox, Radio, Switch, DatePicker, Phone, Dropdown, MultiSelect) with consistent spacing, labels, hints, errors, required indicators. Four building blocks: <strong>Field</strong>, <strong>Field Group</strong> (fieldset + legend), <strong>Form</strong> (parent shell), and <strong>Horizontal layout</strong> variant for settings-style layouts.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>a11y (built in):</strong> every native control is bound to its <code class="lb-code">&lt;label for&gt;</code>, and checkbox/radio/switch rows wrap the input inside the label itself; <code class="lb-code">.lb-checkbox</code>, <code class="lb-code">.lb-radio</code> and <code class="lb-code">.lb-switch</code> are real inputs restyled with <code class="lb-code">appearance: none</code>, so keyboard behaviour, grouping by <code class="lb-code">name</code> and the focus ring all stay native. Related fields sit in a real <code class="lb-code">&lt;fieldset&gt;</code> + <code class="lb-code">&lt;legend&gt;</code>, and an invalid field carries <code class="lb-code">aria-invalid</code> plus <code class="lb-code">aria-describedby</code> pointing at its <code class="lb-code">.lb-field__error</code>. The required marker is a CSS <code class="lb-code">::after</code> glyph, so set <code class="lb-code">required</code> or <code class="lb-code">aria-required</code> on the control as well — the asterisk alone is styling.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>Usage:</strong> Wrap fields in <code class="lb-code">.lb-field</code> (vertical default, <code class="lb-code">--horizontal</code> for label-left). Group related fields with <code class="lb-code">&lt;fieldset class="lb-field-group"&gt;</code> + <code class="lb-code">&lt;legend class="lb-field-group__legend"&gt;</code>. Parent with <code class="lb-code">&lt;form class="lb-form"&gt;</code>; put submit/cancel in <code class="lb-code">.lb-form__actions</code>.</p>
+
+    <hr class="gallery-desc-divider">
+
+    <!-- ────────────────── Basic field ────────────────── -->
+    <h2 class="gallery-section__title">Single field — anatomy</h2>
+    <p class="gallery-section__desc">Label, optional required marker, input, optional hint or error/success message. Consistent spacing + typography across every input type.</p>
+    <div style="max-width: 420px; display: flex; flex-direction: column; gap: var(--lb-size-6x);">
+      <div class="lb-field">
+        <label class="lb-label" for="demo-name">Display name</label>
+        <input class="lb-input lb-input--medium" id="demo-name" type="text" placeholder="Jane Doe" aria-describedby="demo-name-hint">
+        <span class="lb-field__hint" id="demo-name-hint">Shown to teammates in this workspace.</span>
+      </div>
+
+      <div class="lb-field">
+        <label class="lb-label lb-label--required" for="demo-email">Email</label>
+        <input class="lb-input lb-input--medium lb-input--error" id="demo-email" type="email" value="not-an-email" aria-invalid="true" aria-describedby="demo-email-err">
+        <span class="lb-field__error" id="demo-email-err">Enter a valid email address.</span>
+      </div>
+
+      <div class="lb-field">
+        <label class="lb-label" for="demo-url">Website</label>
+        <input class="lb-input lb-input--medium lb-input--success" id="demo-url" type="url" value="https://letbe.design" aria-describedby="demo-url-ok">
+        <span class="lb-field__success" id="demo-url-ok">Looks good.</span>
+      </div>
+    </div>
+
+    <!-- ────────────────── Horizontal layout ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Horizontal layout</h2>
+    <p class="gallery-section__desc">Label column left (fixed 10rem), input column right. Good for settings pages and admin panels. Collapses to vertical on narrow screens (&lt;640px).</p>
+    <div style="max-width: 640px; display: flex; flex-direction: column; gap: var(--lb-size-6x);">
+      <div class="lb-field lb-field--horizontal">
+        <label class="lb-label" for="h-workspace">Workspace name</label>
+        <input class="lb-input lb-input--medium" id="h-workspace" type="text" value="letbe.design" aria-describedby="h-workspace-hint">
+        <span class="lb-field__hint" id="h-workspace-hint">Appears in your URL and billing.</span>
+      </div>
+
+      <div class="lb-field lb-field--horizontal">
+        <label class="lb-label lb-label--required" for="h-plan">Plan</label>
+        <div class="lb-select-field" id="h-plan" data-lb-select data-lb-value="pro" data-lb-options='[{"value":"free","label":"Free"},{"value":"pro","label":"Pro"},{"value":"team","label":"Team"},{"value":"enterprise","label":"Enterprise"}]'>
+          <div class="lb-select-wrap"></div>
+        </div>
+      </div>
+
+      <div class="lb-field lb-field--horizontal">
+        <label class="lb-label" for="h-notif">Email notifications</label>
+        <label class="lb-switch-wrap"><input type="checkbox" class="lb-switch" role="switch" id="h-notif" checked><span class="lb-switch__label">Daily digest + mentions</span></label>
+      </div>
+    </div>
+
+    <!-- ────────────────── Field group ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Field group</h2>
+    <p class="gallery-section__desc">Semantic <code class="lb-code">&lt;fieldset&gt;</code> with <code class="lb-code">&lt;legend&gt;</code> for related fields. Screen readers announce the legend before each field inside.</p>
+    <div style="max-width: 520px;">
+      <fieldset class="lb-field-group">
+        <legend class="lb-field-group__legend">Shipping address</legend>
+        <p class="lb-field-group__description">Where should we deliver your order?</p>
+
+        <div class="lb-field">
+          <label class="lb-label lb-label--required" for="fg-street">Street address</label>
+          <input class="lb-input lb-input--medium" id="fg-street" type="text" placeholder="123 Design Way">
+        </div>
+
+        <div class="lb-field-row">
+          <div class="lb-field">
+            <label class="lb-label lb-label--required" for="fg-city">City</label>
+            <input class="lb-input lb-input--medium" id="fg-city" type="text">
+          </div>
+          <div class="lb-field">
+            <label class="lb-label lb-label--required" for="fg-zip">Postal code</label>
+            <input class="lb-input lb-input--medium" id="fg-zip" type="text">
+          </div>
+        </div>
+
+        <div class="lb-field">
+          <label class="lb-label lb-label--required" for="fg-country">Country</label>
+          <div class="lb-select-field" id="fg-country" data-lb-select data-lb-placeholder="Choose country" data-lb-options='[{"value":"de","label":"Germany"},{"value":"fr","label":"France"},{"value":"it","label":"Italy"},{"value":"nl","label":"Netherlands"},{"value":"us","label":"United States"}]'>
+            <div class="lb-select-wrap"></div>
+          </div>
+        </div>
+      </fieldset>
+    </div>
+
+    <!-- ────────────────── Full form ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Full form</h2>
+    <p class="gallery-section__desc">End-to-end example with multiple field groups + actions row. <code class="lb-code">.lb-form</code> provides consistent 24px vertical rhythm; <code class="lb-code">.lb-form__actions</code> right-aligns the submit/cancel buttons.</p>
+    <form class="lb-form" style="max-width: 560px;" onsubmit="event.preventDefault(); alert('Submit fired — in real usage, validate + send here.');">
+      <fieldset class="lb-field-group">
+        <legend class="lb-field-group__legend">About you</legend>
+
+        <div class="lb-field-row">
+          <div class="lb-field">
+            <label class="lb-label lb-label--required" for="full-first">First name</label>
+            <input class="lb-input lb-input--medium" id="full-first" type="text" required>
+          </div>
+          <div class="lb-field">
+            <label class="lb-label lb-label--required" for="full-last">Last name</label>
+            <input class="lb-input lb-input--medium" id="full-last" type="text" required>
+          </div>
+        </div>
+
+        <div class="lb-field">
+          <label class="lb-label lb-label--required" for="full-email">Work email</label>
+          <input class="lb-input lb-input--medium" id="full-email" type="email" required aria-describedby="full-email-hint">
+          <span class="lb-field__hint" id="full-email-hint">We'll send workspace invites here.</span>
+        </div>
+
+        <div class="lb-field">
+          <label class="lb-label" for="full-phone">Phone</label>
+          <div class="lb-phone" data-lb-phone id="full-phone-wrap">
+            <input id="full-phone" type="tel" class="lb-phone__input" placeholder="Phone number">
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset class="lb-field-group">
+        <legend class="lb-field-group__legend">Preferences</legend>
+
+        <div class="lb-field">
+          <label class="lb-label" for="full-role">Role</label>
+          <div class="lb-select-field" id="full-role" data-lb-select data-lb-placeholder="Pick one" data-lb-options='[{"value":"design","label":"Designer"},{"value":"eng","label":"Engineer"},{"value":"pm","label":"Product manager"},{"value":"ops","label":"Operations"},{"value":"other","label":"Other"}]'>
+            <div class="lb-select-wrap"></div>
+          </div>
+        </div>
+
+        <div class="lb-field">
+          <label class="lb-label">Newsletter</label>
+          <div style="display: flex; flex-direction: column; gap: var(--lb-size-2x);">
+            <label class="lb-checkbox-wrap"><input type="checkbox" class="lb-checkbox" checked><span class="lb-checkbox__label">Product updates (monthly)</span></label>
+            <label class="lb-checkbox-wrap"><input type="checkbox" class="lb-checkbox"><span class="lb-checkbox__label">Design tips &amp; tutorials (weekly)</span></label>
+            <label class="lb-checkbox-wrap"><input type="checkbox" class="lb-checkbox"><span class="lb-checkbox__label">Community digest (occasional)</span></label>
+          </div>
+        </div>
+      </fieldset>
+
+      <div class="lb-field">
+        <label class="lb-checkbox-wrap">
+          <input type="checkbox" class="lb-checkbox" required>
+          <span class="lb-checkbox__label">I agree to the <a href="#" class="lb-link">Terms of Service</a> and <a href="#" class="lb-link">Privacy Policy</a>.</span>
+        </label>
+      </div>
+
+      <div class="lb-form__actions">
+        <button type="button" class="lb-btn lb-btn--ghost lb-btn--medium">Cancel</button>
+        <button type="submit" class="lb-btn lb-btn--primary lb-btn--medium">Create workspace</button>
+      </div>
+    </form>
+
+    <!-- ────────────────── Spacing variants ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Validation — <code class="lb-code">LB.Form</code></h2>
+    <p class="gallery-section__desc">Add <code class="lb-code">data-lb-validate</code> to a <code class="lb-code">&lt;form&gt;</code> and the DS owns the validation <em>behaviour</em> on submit: required, email and URL formats on native inputs, 6–15 digits on the phone composition, and required state on DS selects and datepickers (via their own <code class="lb-code">setError</code> APIs). Errors render with the existing skin — error border, <code class="lb-code">.lb-field__error</code> message with the alert icon, <code class="lb-code">aria-invalid</code> + <code class="lb-code">aria-describedby</code> — the first invalid field is focused and scrolled into view, and each field clears live as the user types or picks. Browser bubbles are suppressed (<code class="lb-code">novalidate</code>). Per-field copy via <code class="lb-code">data-lb-error-required</code> / <code class="lb-code">-email</code> / <code class="lb-code">-url</code> / <code class="lb-code">-phone</code>; form-wide defaults via <code class="lb-code">new LB.Form(el, { messages })</code>, and <code class="lb-code">onValid</code> receives the passing submit. What happens on success — sanitization, sending — stays yours.</p>
+    <form class="lb-form" data-lb-validate id="validate-demo" style="max-width: 560px;">
+      <div class="lb-field-row">
+        <div class="lb-field">
+          <label class="lb-label lb-label--required" for="val-name">Name</label>
+          <input class="lb-input lb-input--medium" id="val-name" name="name" type="text" required data-lb-error-required="Tell us your name">
+        </div>
+        <div class="lb-field">
+          <label class="lb-label lb-label--required" for="val-email">Email</label>
+          <input class="lb-input lb-input--medium" id="val-email" name="email" type="email" required>
+        </div>
+      </div>
+      <div class="lb-field">
+        <label class="lb-label" for="val-site">Website</label>
+        <input class="lb-input lb-input--medium" id="val-site" name="site" type="url" placeholder="https://…">
+      </div>
+      <div class="lb-field">
+        <label class="lb-label lb-label--required" for="val-phone">Phone</label>
+        <div class="lb-phone" data-lb-phone data-lb-required id="val-phone-wrap">
+          <input id="val-phone" type="tel" class="lb-phone__input" placeholder="Phone number">
+        </div>
+      </div>
+      <div class="lb-field-row">
+        <div class="lb-field">
+          <label class="lb-label lb-label--required" for="val-plan">Plan</label>
+          <div class="lb-select-field" id="val-plan" data-lb-select data-lb-name="plan" data-lb-required data-lb-placeholder="Choose a plan" data-lb-error-required="Pick a plan to continue" data-lb-options='[{"value":"free","label":"Free"},{"value":"pro","label":"Pro"},{"value":"team","label":"Team"}]'></div>
+        </div>
+        <div class="lb-field">
+          <label class="lb-label lb-label--required" for="val-start">Start date</label>
+          <div class="lb-datepicker-field" id="val-start" data-lb-datepicker data-lb-variant="input" data-lb-mode="single" data-lb-name="start" data-lb-required data-lb-placeholder="Pick a date"></div>
+        </div>
+      </div>
+      <div class="lb-form__actions">
+        <button type="reset" class="lb-btn lb-btn--ghost lb-btn--medium"><span class="lb-btn__label">Reset</span></button>
+        <button type="submit" class="lb-btn lb-btn--primary lb-btn--medium"><span class="lb-btn__label">Submit</span></button>
+      </div>
+    </form>
+    <script>
+      // Demo-only: show what a passing submit looks like. Real consumers
+      // send the FormData here instead. Safe by construction: LB.Form
+      // validates in the document capture phase and stops an invalid
+      // submit's propagation, so listeners like this one only ever run
+      // for submits that passed.
+      document.getElementById('validate-demo').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const fd = new FormData(e.target);
+        new LB.ToastManager().show({ variant: 'success', title: 'Valid', message: `Would submit: ${[...fd.keys()].join(', ')}` });
+      });
+    </script>
+
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Form spacing</h2>
+    <p class="gallery-section__desc">Three density levels via form modifiers. Default (24px between fields), <code class="lb-code">--compact</code> (16px, settings panels), <code class="lb-code">--loose</code> (32px, marketing signup).</p>
+    <div class="gallery-label">Default</div>
+    <form class="lb-form" style="max-width: 360px;">
+      <div class="lb-field"><label class="lb-label" for="sp-d1">Field one</label><input class="lb-input lb-input--medium" id="sp-d1"></div>
+      <div class="lb-field"><label class="lb-label" for="sp-d2">Field two</label><input class="lb-input lb-input--medium" id="sp-d2"></div>
+    </form>
+    <div class="gallery-label" style="margin-top: var(--lb-size-6x);">Compact — <code class="lb-code">.lb-form--compact</code></div>
+    <form class="lb-form lb-form--compact" style="max-width: 360px;">
+      <div class="lb-field"><label class="lb-label" for="sp-c1">Field one</label><input class="lb-input lb-input--medium" id="sp-c1"></div>
+      <div class="lb-field"><label class="lb-label" for="sp-c2">Field two</label><input class="lb-input lb-input--medium" id="sp-c2"></div>
+    </form>
+    <div class="gallery-label" style="margin-top: var(--lb-size-6x);">Loose — <code class="lb-code">.lb-form--loose</code></div>
+    <form class="lb-form lb-form--loose" style="max-width: 360px;">
+      <div class="lb-field"><label class="lb-label" for="sp-l1">Field one</label><input class="lb-input lb-input--medium" id="sp-l1"></div>
+      <div class="lb-field"><label class="lb-label" for="sp-l2">Field two</label><input class="lb-input lb-input--medium" id="sp-l2"></div>
+    </form>
+
+  </section>
+</main>
+
+<script src="../js/lb.js"></script>
+<script src="../js/slot-engine.js"></script>
+<script src="../js/theme-editor.js"></script>
+<script src="../js/token-exporter.js"></script>
+<script src="../js/gallery-layout.js"></script>
+</body>
+</html>

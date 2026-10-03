@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <!-- theme-preamble:v1 -->
+  <script>(function(){try{var t=localStorage.getItem('letbe-ds-dark-mode');if(t==='1')document.documentElement.setAttribute('data-theme','dark');else if(t==='0')document.documentElement.setAttribute('data-theme','light');}catch(e){}})();</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta data-lb-page="calendar">
+  <title>Calendar — letbe-ds</title>
+  <link rel="stylesheet" href="../tokens/theme.css">
+  <link rel="stylesheet" href="../tokens/fonts.css">
+  <link rel="stylesheet" href="../components/components.css">
+  <link rel="stylesheet" href="../components/theme-editor.css">
+  <link rel="stylesheet" href="../components/gallery.css">
+</head>
+<body data-lb-base="..">
+
+<main class="gallery-main">
+  <section class="gallery-section" id="calendar">
+
+    <h1 class="gallery-section__title" style="font-size: var(--lb-t-heading-l-font-size); line-height: var(--lb-t-heading-l-line-height);">Calendar</h1>
+    <p class="gallery-section__desc">Event &amp; booking calendar with three views: <strong>Month</strong>, <strong>Week</strong>, <strong>List</strong>. Two intents: <strong>browse</strong> (see what's happening) and <strong>book</strong> (pick a slot). Different from <code class="lb-code">Datepicker</code> which is the input control — Calendar is the schedule surface.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>a11y (built in):</strong> event pills, "+N more" and booking slots are real <code class="lb-code">&lt;button&gt;</code>s — the slots carry an <code class="lb-code">aria-label</code> naming the slot's time range (plus "(unavailable)") and take the native <code class="lb-code">disabled</code> attribute when blocked or past. The view switcher is a <code class="lb-code">role=radiogroup</code> segmented control with roving <code class="lb-code">tabindex</code> and <kbd>←</kbd>/<kbd>→</kbd>, <kbd>Home</kbd>/<kbd>End</kbd>, <kbd>Enter</kbd>/<kbd>Space</kbd>; prev/next are labelled icon buttons; List view is an Accordion (<code class="lb-code">button[aria-expanded][aria-controls]</code> + <code class="lb-code">role=region</code> panel). Today's cell gets <code class="lb-code">aria-current="date"</code>, week numbers and booking counts get spelled-out <code class="lb-code">aria-label</code>s ("Week 22", "3 slots available"), and dots, past-overlays and the grid corner are <code class="lb-code">aria-hidden</code>.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>Usage:</strong> <code class="lb-code">&lt;div data-lb-calendar&gt;&lt;/div&gt;</code> — auto-init on page load. Mutate via <code class="lb-code">el._lbCalendar.setEvents([...])</code>, <code class="lb-code">setView('week')</code>, etc. Fires <code class="lb-code">lb-calendar-event-click</code>, <code class="lb-code">lb-calendar-date-click</code>, <code class="lb-code">lb-calendar-slot-click</code> and <code class="lb-code">lb-calendar-view-change</code> — the consumer listens.</p>
+
+    <hr class="gallery-desc-divider">
+
+    <!-- ─────────────────────────── Month view ─────────────────────────── -->
+    <h2 class="gallery-section__title">Month view</h2>
+    <p class="gallery-section__desc">The headline view. ISO week numbers in the left column (toggle off with <code class="lb-code">data-lb-no-week-numbers</code>). Today's date underlined in accent. Past days dim slightly so it's clear what's happened vs. what's ahead. Events use the L2 categorical palette (<code class="lb-code">data.1..8</code>) — pass <code class="lb-code">category: 1..8</code> per event.</p>
+    <div data-lb-calendar id="cal-month-demo"></div>
+
+    <!-- ─────────────────────────── Week numbers (closer look) ─────────────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Week numbers — ISO 8601</h2>
+    <p class="gallery-section__desc">Each row in the month grid shows its ISO 8601 week number — week 1 is the week containing the first Thursday of the year. Common in Sweden, Germany and other EU contexts; agile/sprint teams reference work by week (e.g. "ship in W22"). Toggle off with <code class="lb-code">data-lb-no-week-numbers</code> if you don't need it.</p>
+    <div class="gallery-row" style="gap: var(--lb-size-4x); flex-wrap: wrap; align-items: stretch;">
+      <div style="flex: 1 1 360px; min-width: min(320px, 100%);">
+        <div class="gallery-label">With week numbers (default)</div>
+        <div data-lb-calendar id="cal-weeknum-on"></div>
+      </div>
+      <div style="flex: 1 1 360px; min-width: min(320px, 100%);">
+        <div class="gallery-label">Without week numbers</div>
+        <div data-lb-calendar data-lb-no-week-numbers id="cal-weeknum-off"></div>
+      </div>
+    </div>
+
+    <!-- ─────────────────────────── Categories ─────────────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Event categories</h2>
+    <p class="gallery-section__desc">Events colour by <code class="lb-code">category: 1..8</code> which maps to the L2 categorical palette (<code class="lb-code">--lb-data-1</code> … <code class="lb-code">--lb-data-8</code>). Same eight hues used by Bar Chart and other data-viz components, so categorical identity is consistent across surfaces. Light/dark theming is automatic.</p>
+    <div data-lb-calendar id="cal-categories"></div>
+
+    <!-- ─────────────────────────── Density overflow ─────────────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Density overflow — "+N more"</h2>
+    <p class="gallery-section__desc">Month cells render up to 3 events per day. When more events land on the same day, a "+N more" link replaces the overflow. Click → opens a popover with the full day's list. Click an event in the popover → fires <code class="lb-code">lb-calendar-event-click</code>. Click outside → closes. Capping the list keeps day cells a predictable height, so the month grid stays scannable in dense calendars.</p>
+    <div data-lb-calendar id="cal-density"></div>
+
+    <!-- ─────────────────────────── Slot duration (Week view) ─────────────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Slot duration &amp; default scroll</h2>
+    <p class="gallery-section__desc">Week view's hour grid uses <strong>30-minute slots by default</strong> — each slot is a fixed <code class="lb-code">2.5rem</code> tall, so a 30-min meeting fills one row (40px), a 1-hour meeting fills two (80px). Override per-instance with <code class="lb-code">data-lb-slot-duration="15|30|60"</code>. The scroll position lands at <strong>08:00 by default</strong> (override with <code class="lb-code">data-lb-scroll-hour</code>). The header + all-day strip stay sticky as you scroll the hours. We deliberately do <em>not</em> auto-track the clock — the view opens at that hour and never re-scrolls itself as time passes.</p>
+    <div class="gallery-row" style="gap: var(--lb-size-4x); flex-wrap: wrap; align-items: stretch;">
+      <div style="flex: 1 1 360px; min-width: min(320px, 100%);">
+        <div class="gallery-label">30-min slots (default)</div>
+        <div data-lb-calendar data-lb-view="week" id="cal-slot-30"></div>
+      </div>
+      <div style="flex: 1 1 360px; min-width: min(320px, 100%);">
+        <div class="gallery-label">15-min slots — for booking precision</div>
+        <div data-lb-calendar data-lb-view="week" data-lb-slot-duration="15" id="cal-slot-15"></div>
+      </div>
+    </div>
+
+    <!-- ─────────────────────────── Booking intent ─────────────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Booking intent — slot picker</h2>
+    <p class="gallery-section__desc">Set <code class="lb-code">data-lb-intent="book"</code> and pass <code class="lb-code">bookingSlots</code> to render a slot picker on the time grid. Each slot is <code class="lb-code">{ id, start, end, available, selected? }</code>. Available slots are clickable and fire <code class="lb-code">lb-calendar-slot-click</code>; blocked slots render greyed (the user sees the slot exists but can't pick it); selected slots fill solid. Clamp to working hours via <code class="lb-code">data-lb-min-time</code> / <code class="lb-code">data-lb-max-time</code> — typical for a doctor's office, sales calls, gym classes.</p>
+    <div data-lb-calendar data-lb-view="week" data-lb-intent="book" data-lb-min-time="09:00" data-lb-max-time="18:00" id="cal-booking"></div>
+    <p class="gallery-section__desc" style="margin-top: var(--lb-size-2x); font-size: var(--lb-t-body-s-font-size);">Output: <span id="booking-log" style="font-family: var(--lb-font-family-3); color: var(--lb-fg-accent);">click an available slot</span></p>
+
+    <!-- ─────────────────────────── Working-hours config ─────────────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Working hours — <code class="lb-code">data-lb-min-time</code> / <code class="lb-code">data-lb-max-time</code></h2>
+    <p class="gallery-section__desc">Clamp the visible hour range so the calendar stops wasting screen on midnight. Hours outside the range simply don't render — the grid is shorter, no scroll past the configured edges. Useful for booking flows but works for any view. Side-by-side: a wider 06–22 slot vs a tighter 09–17 office-hours slot.</p>
+    <div class="gallery-row" style="gap: var(--lb-size-4x); flex-wrap: wrap; align-items: stretch;">
+      <div style="flex: 1 1 360px; min-width: min(320px, 100%);">
+        <div class="gallery-label">06:00 – 22:00 (extended)</div>
+        <div data-lb-calendar data-lb-view="week" data-lb-min-time="06:00" data-lb-max-time="22:00" id="cal-hours-wide"></div>
+      </div>
+      <div style="flex: 1 1 360px; min-width: min(320px, 100%);">
+        <div class="gallery-label">09:00 – 17:00 (office hours)</div>
+        <div data-lb-calendar data-lb-view="week" data-lb-min-time="09:00" data-lb-max-time="17:00" id="cal-hours-tight"></div>
+      </div>
+    </div>
+
+    <!-- ─────────────────────────── Booking — Month overview ─────────────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Booking — Month overview</h2>
+    <p class="gallery-section__desc">In Month view, days with available slots get a small accent count badge next to the date showing how many slots are open. Uses the shared <a class="lb-link" href="../counter/"><code class="lb-code">.lb-counter</code></a> component (small size). Click any day → switches to Week view focused on that day so the user can see + pick the slots. Past days don't show the indicator (the slots are gone).</p>
+    <div data-lb-calendar data-lb-view="month" data-lb-intent="book" data-lb-min-time="09:00" data-lb-max-time="18:00" id="cal-booking-month"></div>
+
+    <!-- ─────────────────────────── Empty state ─────────────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Empty state</h2>
+    <p class="gallery-section__desc">When no events are scheduled, all three views read calmly. List view is the most explicit ("No events" per day). Month and Week views just show empty cells.</p>
+    <div data-lb-calendar data-lb-view="list" id="cal-empty"></div>
+
+    <!-- ─────────────────────────── Programmatic API ─────────────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Programmatic API</h2>
+    <p class="gallery-section__desc">Mutate at runtime via <code class="lb-code">el._lbCalendar</code>. Useful for jumping to a specific date, swapping views, or pushing new events as they arrive from a backend.</p>
+    <div class="lb-stack" style="max-width: 40rem; margin-bottom: var(--lb-size-4x);">
+      <div class="lb-cluster">
+        <button class="lb-btn lb-btn--secondary lb-btn--small" id="api-jan">Jump to Jan 2026</button>
+        <button class="lb-btn lb-btn--secondary lb-btn--small" id="api-jun">Jump to Jun 2026</button>
+        <button class="lb-btn lb-btn--secondary lb-btn--small" id="api-today">Today</button>
+        <button class="lb-btn lb-btn--secondary lb-btn--small" id="api-add">Add random event</button>
+      </div>
+    </div>
+    <div data-lb-calendar id="cal-api"></div>
+    <p class="gallery-section__desc" style="margin-top: var(--lb-size-2x); font-size: var(--lb-t-body-s-font-size);">Output: <span id="api-log" style="font-family: var(--lb-font-family-3); color: var(--lb-fg-accent);">click an event or date</span></p>
+
+  </section>
+</main>
+
+<script src="../js/lb.js"></script>
+<script src="../js/slot-engine.js"></script>
+<script src="../js/theme-editor.js"></script>
+<script src="../js/token-exporter.js"></script>
+<script src="../js/gallery-layout.js"></script>
+
+<script>
+  // Demo data — events span the current month so the live page is
+  // always meaningful regardless of when it loads. Categories rotate
+  // through the data.1..8 palette to show colour variety out of the box.
+  (function () {
+    function nDaysFromToday(n) {
+      const d = new Date(); d.setDate(d.getDate() + n); return d;
+    }
+    // Single-day events default to a 1-hour block in mid-morning so
+    // they render sensibly in Week view (which positions by start/end
+    // time of day). durationDays > 0 produces multi-day all-day events.
+    function makeEvent(id, offsetDays, title, category, durationDays = 0) {
+      if (durationDays > 0) {
+        const start = nDaysFromToday(offsetDays);
+        const end   = nDaysFromToday(offsetDays + durationDays);
+        return { id, start, end, title, category };
+      }
+      const start = nDaysFromToday(offsetDays);
+      start.setHours(10, 0, 0, 0);
+      const end = new Date(start);
+      end.setHours(11, 0, 0, 0);
+      return { id, start, end, title, category };
+    }
+
+    const SAMPLE = [
+      makeEvent('e1',  -7, 'Sprint planning',  1),
+      makeEvent('e2',  -5, 'Retro',            6),
+      makeEvent('e3',  -3, 'Design review',    4),
+      makeEvent('e4',  -1, 'Standup',          1),
+      makeEvent('e5',   0, 'All-hands',        2),
+      makeEvent('e6',   1, '1:1 with manager', 6),
+      makeEvent('e7',   2, 'Customer demo',    3),
+      makeEvent('e8',   2, 'Code freeze',      5),
+      makeEvent('e9',   4, 'Release Q2',       3, 1),
+      makeEvent('e10',  6, 'Workshop',         4),
+      makeEvent('e11',  9, 'Conference talk',  7),
+      makeEvent('e12', 11, 'Team offsite',     8, 2),
+      makeEvent('e13', 14, 'Roadmap review',   2),
+    ];
+
+    function init(id, events, opts) {
+      const el = document.getElementById(id);
+      if (!el || !el._lbCalendar) return null;
+      el._lbCalendar.setEvents(events || SAMPLE);
+      return el._lbCalendar;
+    }
+
+    // Wait for auto-init to finish, then push events.
+    function whenReady(cb) {
+      if (document.readyState === 'complete') cb();
+      else window.addEventListener('load', cb);
+    }
+
+    whenReady(() => {
+      init('cal-month-demo', SAMPLE);
+      init('cal-weeknum-on', SAMPLE.slice(0, 8));
+      init('cal-weeknum-off', SAMPLE.slice(0, 8));
+
+      // Categories demo — one event per category so the eight colours show.
+      const cats = [];
+      for (let i = 0; i < 8; i++) {
+        cats.push(makeEvent('c' + (i + 1), i, ['Marketing', 'Engineering', 'Sales', 'Design', 'Ops', 'Finance', 'HR', 'Legal'][i], i + 1));
+      }
+      init('cal-categories', cats);
+
+      // Density demo — pile 7 events on one day so "+N more" appears
+      const denseDay = [];
+      for (let i = 0; i < 7; i++) {
+        denseDay.push(makeEvent('d' + i, 0, ['Standup','Triage','1:1 Anna','1:1 Ben','Demo','Review','Retro'][i], (i % 8) + 1));
+      }
+      init('cal-density', denseDay.concat(SAMPLE.slice(0, 4)));
+
+      // Slot-duration demos — Week view at 30-min and 15-min slot sizes
+      const meetingDay = [];
+      meetingDay.push(makeEvent('m1', 0, '30-min standup',  1));
+      // Tweak times so they land in working hours
+      meetingDay[0].start = nDaysFromToday(0); meetingDay[0].start.setHours(9, 0, 0, 0);
+      meetingDay[0].end   = nDaysFromToday(0); meetingDay[0].end.setHours(9, 30, 0, 0);
+      const m2 = makeEvent('m2', 0, '1-hour design review', 4);
+      m2.start = nDaysFromToday(0); m2.start.setHours(11, 0, 0, 0);
+      m2.end   = nDaysFromToday(0); m2.end.setHours(12, 0, 0, 0);
+      meetingDay.push(m2);
+      const m3 = makeEvent('m3', 0, '15-min sync', 3);
+      m3.start = nDaysFromToday(0); m3.start.setHours(14, 0, 0, 0);
+      m3.end   = nDaysFromToday(0); m3.end.setHours(14, 15, 0, 0);
+      meetingDay.push(m3);
+      const m4 = makeEvent('m4', 1, 'Workshop', 7);
+      m4.start = nDaysFromToday(1); m4.start.setHours(13, 0, 0, 0);
+      m4.end   = nDaysFromToday(1); m4.end.setHours(15, 30, 0, 0);
+      meetingDay.push(m4);
+      init('cal-slot-30', meetingDay);
+      init('cal-slot-15', meetingDay);
+
+      // Empty calendar — no events
+      init('cal-empty', []);
+
+      // ─── Booking demos ───
+      // Generate slots for the next 14 days, 09:00–18:00, 30-min each.
+      // Roughly 60% available, 40% blocked — and one pre-selected slot
+      // tomorrow at 11:00 to show the "locked-in" state.
+      function generateSlots(days, fromHour, toHour, slotMin, availabilityRate) {
+        const slots = [];
+        const today = new Date(); today.setHours(0,0,0,0);
+        for (let d = 0; d < days; d++) {
+          const day = new Date(today); day.setDate(today.getDate() + d);
+          const dow = day.getDay();
+          // Skip weekends in the booking demo so it reads more like a
+          // typical office-hours booking flow
+          if (dow === 0 || dow === 6) continue;
+          for (let m = fromHour * 60; m < toHour * 60; m += slotMin) {
+            const start = new Date(day);
+            start.setHours(0, m, 0, 0);
+            const end = new Date(start);
+            end.setMinutes(start.getMinutes() + slotMin);
+            // Deterministic-ish pseudo-random so the same demo data
+            // shows the same pattern (looks more designed)
+            const seed = (d * 100 + m / slotMin) % 7;
+            const available = (seed / 7) < availabilityRate;
+            slots.push({
+              id: `slot-d${d}-m${m}`,
+              start, end,
+              available,
+            });
+          }
+        }
+        return slots;
+      }
+      const bookingSlots = generateSlots(14, 9, 18, 30, 0.6);
+      // Pre-select tomorrow 11:00 if it exists
+      const tomorrow = new Date(); tomorrow.setDate(tomorrow.getDate() + 1); tomorrow.setHours(11,0,0,0);
+      const preSelected = bookingSlots.find(s => s.start.getTime() === tomorrow.getTime());
+      if (preSelected && preSelected.available) preSelected.selected = true;
+
+      const bookingCal = document.getElementById('cal-booking');
+      if (bookingCal && bookingCal._lbCalendar) {
+        bookingCal._lbCalendar.setBookingSlots(bookingSlots);
+        const bookingLog = document.getElementById('booking-log');
+        bookingCal.addEventListener('lb-calendar-slot-click', (e) => {
+          const slot = e.detail.slot;
+          const t = (d) => d.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
+          if (bookingLog) bookingLog.textContent = `slot-click: ${slot.start.toDateString()} ${t(slot.start)} – ${t(slot.end)}`;
+        });
+      }
+      // Working-hours demo calendars — no slots, just show the clamp
+      ['cal-hours-wide', 'cal-hours-tight'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el && el._lbCalendar) el._lbCalendar.setEvents(SAMPLE.slice(0, 6));
+      });
+      // Booking month overview — uses the same slot data
+      const bookingMonth = document.getElementById('cal-booking-month');
+      if (bookingMonth && bookingMonth._lbCalendar) {
+        bookingMonth._lbCalendar.setBookingSlots(bookingSlots);
+      }
+
+      // Programmatic API — wire buttons + log
+      const cal = init('cal-api', SAMPLE.slice(0, 6));
+      const log = document.getElementById('api-log');
+      const setLog = (msg) => { if (log) log.textContent = msg; };
+      const apiEl = document.getElementById('cal-api');
+      apiEl.addEventListener('lb-calendar-event-click', (e) => setLog('event-click: ' + e.detail.event.title));
+      apiEl.addEventListener('lb-calendar-date-click',  (e) => setLog('date-click: ' + e.detail.date.toDateString()));
+      apiEl.addEventListener('lb-calendar-view-change', (e) => setLog('view-change: ' + e.detail.view));
+
+      document.getElementById('api-jan')?.addEventListener('click', () => cal.setDate(new Date(2026, 0, 15)));
+      document.getElementById('api-jun')?.addEventListener('click', () => cal.setDate(new Date(2026, 5, 15)));
+      document.getElementById('api-today')?.addEventListener('click', () => cal.today());
+      document.getElementById('api-add')?.addEventListener('click', () => {
+        const offset = Math.floor(Math.random() * 21) - 7;
+        const cat = (Math.floor(Math.random() * 8)) + 1;
+        const id = 'rand-' + Date.now();
+        const ev = makeEvent(id, offset, 'New event', cat);
+        cal.setEvents([...cal.events, ev]);
+        setLog('added event ' + ev.title + ' (cat ' + cat + ')');
+      });
+    });
+  })();
+</script>
+</body>
+</html>

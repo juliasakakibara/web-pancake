@@ -1,0 +1,437 @@
+/* ═══════════════════════════════════════════════════════════
+   THEME EDITOR (side panel)
+   ═══════════════════════════════════════════════════════════ */
+
+.theme-editor {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  /* Fluid on large screens (24vw ≈ 400px at 1667px, capped 460px);
+     floors at the classic 320px, mobile override below unchanged. */
+  width: clamp(320px, 24vw, 460px);
+  background: var(--lb-surface-bg-overlay);
+  border-left: var(--lb-border-width-thin) solid var(--lb-surface-border-overlay);
+  box-shadow: var(--lb-shadow-modal);
+  z-index: 9999;
+  transform: translateX(100%);
+  transition: transform 240ms cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: column;
+  font-family: var(--lb-t-body-m-font-family);
+}
+
+.theme-editor--open {
+  transform: translateX(0);
+}
+
+.theme-editor__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--lb-size-4x) var(--lb-size-4x) var(--lb-size-3x);
+  border-bottom: var(--lb-border-width-thin) solid var(--lb-border-muted);
+  flex-shrink: 0;
+}
+
+.theme-editor__title {
+  margin: 0;
+  font: var(--lb-t-heading-s-font-weight) var(--lb-t-heading-s-font-size)/var(--lb-t-heading-s-line-height) var(--lb-t-heading-s-font-family);
+  color: var(--lb-fg-default);
+}
+
+/* Viewport switcher strip — sits between header and body. Global preview
+   tool: forces a responsive mode on the whole gallery so the user can
+   see how every component looks at S / M / L without resizing the browser
+   window. Indicator shows the actual viewport class so 'Auto' is verifiable. */
+.theme-editor__viewport {
+  display: flex;
+  align-items: center;
+  gap: var(--lb-size-2x);
+  padding: var(--lb-size-3x) var(--lb-size-4x);
+  border-bottom: var(--lb-border-width-thin) solid var(--lb-border-muted);
+  flex-shrink: 0;
+}
+.theme-editor__viewport-label {
+  font-family: var(--lb-t-label-s-font-family);
+  font-size: var(--lb-t-label-s-font-size);
+  font-weight: var(--lb-t-label-s-font-weight);
+  letter-spacing: var(--lb-t-label-s-letter-spacing);
+  color: var(--lb-fg-muted);
+  text-transform: uppercase;
+}
+.theme-editor__viewport-group {
+  display: inline-flex;
+  gap: var(--lb-size-1x);
+}
+.theme-editor__viewport-group .lb-btn[aria-pressed="true"] {
+  background: var(--lb-action-bg-primary-default);
+  border-color: var(--lb-action-border-primary-default);
+  color: var(--lb-action-fg-primary-default);
+}
+.theme-editor__viewport-indicator {
+  margin-left: auto;
+  font-family: var(--lb-font-family-3);
+  font-size: var(--lb-t-caption-m-font-size);
+  color: var(--lb-fg-muted);
+  background: var(--lb-bg-strong);
+  padding: var(--lb-size-0-5x) var(--lb-size-1-5x);
+  border-radius: var(--lb-radius-badge);
+}
+
+.theme-editor__body {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--lb-size-4x);
+}
+
+/* Import / Export row at the top of the editor body — sits above the
+   accordions. Both buttons stretch so the row reads as a paired action.
+   No divider — the accordions own their own dividers, repeating it
+   here read as visual noise. */
+.theme-editor__io {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--lb-size-2x);
+}
+.theme-editor__io + .theme-editor__io { margin-top: var(--lb-size-2x); }
+.theme-editor__io .lb-btn { flex: 1; }
+/* Help toggle uses margin-inline-start: auto inline so it floats to the
+   right of the I/O row without growing. The icon-button itself has a
+   fixed footprint; no flex stretch. */
+.theme-editor__io .lb-icon-btn { flex: 0 0 auto; }
+
+/* Help body — collapsible explanation panel above the accordion stack.
+   Hidden by default via the [hidden] attribute; the toggle flips that.
+   Visual treatment: subtle bg + border so it reads as informational
+   (not interactive) and offsets clearly from the accordions below. */
+.theme-editor__help {
+  margin-bottom: var(--lb-size-4x);
+  padding: var(--lb-size-3x) var(--lb-size-4x);
+  background: var(--lb-surface-bg-subtle);
+  border: var(--lb-border-width-thin) solid var(--lb-surface-border-default);
+  border-radius: var(--lb-radius-overlay);
+  font-size: var(--lb-t-body-s-font-size);
+  line-height: var(--lb-t-body-s-line-height);
+  color: var(--lb-fg-muted);
+}
+.theme-editor__help-title {
+  margin: 0 0 var(--lb-size-2x);
+  font-size: var(--lb-t-body-m-font-size);
+  font-weight: var(--lb-font-weight-semibold);
+  color: var(--lb-fg-default);
+}
+.theme-editor__help p { margin: var(--lb-size-2x) 0; }
+.theme-editor__help p:first-of-type { margin-top: 0; }
+.theme-editor__help-list {
+  margin: var(--lb-size-1x) 0;
+  padding-inline-start: var(--lb-size-4x);
+  display: flex;
+  flex-direction: column;
+  gap: var(--lb-size-1x);
+}
+.theme-editor__help-list li { margin: 0; }
+.theme-editor__help strong { color: var(--lb-fg-default); font-weight: var(--lb-font-weight-semibold); }
+.theme-editor__help code {
+  font-family: var(--lb-font-family-3);
+  font-size: 0.92em;
+  padding: 0 var(--lb-size-0-5x);
+  background: var(--lb-bg-default);
+  border-radius: var(--lb-radius-badge);
+  color: var(--lb-fg-default);
+}
+.theme-editor__help-note {
+  margin-top: var(--lb-size-3x) !important;
+  padding-top: var(--lb-size-2x);
+  border-top: var(--lb-border-width-thin) solid var(--lb-surface-border-default);
+  font-size: var(--lb-t-body-xs-font-size);
+}
+
+/* Sections inside an accordion item — vertical rhythm between knobs in
+   the same group (e.g. font-family + base size + density inside Typography). */
+.theme-editor__section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--lb-size-2x);
+}
+.theme-editor__section + .theme-editor__section {
+  margin-top: var(--lb-size-5x);
+}
+
+/* Accordion-panel content: tighter top padding so the first knob doesn't
+   feel detached from the trigger; same bottom rhythm. Uses flex column
+   so the per-group Reset button can right-align with align-self. */
+.theme-editor__body .lb-accordion__panel-inner {
+  padding: var(--lb-size-2x) 0 var(--lb-size-6x);
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Accordion item dividers run edge-to-edge across the panel for cleaner
+   architecture. The panel already provides side padding. */
+.theme-editor__body .lb-accordion__item {
+  margin: 0 calc(-1 * var(--lb-size-4x));
+  padding: 0 var(--lb-size-4x);
+}
+
+/* Per-group Reset button — sits at the bottom of an open accordion
+   panel, right-aligned, with breathing room above the knobs. Hidden
+   by [hidden] (set via JS) when the group has no overrides. */
+.theme-editor__group-reset {
+  align-self: flex-end;
+  margin-top: var(--lb-size-4x);
+}
+
+
+.theme-editor__label {
+  margin: 0;
+  font: var(--lb-t-label-m-font-weight) var(--lb-t-label-m-font-size)/var(--lb-t-label-m-line-height) var(--lb-t-label-m-font-family);
+  letter-spacing: var(--lb-t-label-m-letter-spacing);
+  color: var(--lb-fg-default);
+}
+
+.theme-editor__row {
+  display: flex;
+  align-items: center;
+  gap: var(--lb-size-2x);
+}
+
+.theme-editor__row > input[type="range"] {
+  flex: 1;
+  accent-color: var(--lb-action-bg-primary-default);
+}
+
+.theme-editor__value {
+  font-family: 'Roboto Mono', monospace;
+  font-size: var(--lb-font-size-xs);
+  color: var(--lb-fg-muted);
+  min-width: 3.5rem;
+  text-align: right;
+}
+
+.theme-editor__hint {
+  font-size: var(--lb-font-size-xs);
+  color: var(--lb-fg-muted);
+  line-height: 1.4;
+}
+
+.theme-editor__hint code {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 0.95em;
+  background: var(--lb-bg-strong);
+  padding: 1px 4px;
+  border-radius: 3px;
+}
+
+/* Phase 2.1 typography UI — sublabel for slot/mode/role rows */
+.theme-editor__sublabel {
+  font-family: var(--lb-t-label-s-font-family);
+  font-size: var(--lb-t-label-s-font-size);
+  font-weight: var(--lb-font-weight-semibold);
+  color: var(--lb-fg-default);
+  letter-spacing: var(--lb-t-label-s-letter-spacing);
+}
+.theme-editor__hint-inline {
+  font-weight: var(--lb-font-weight-regular);
+  color: var(--lb-fg-muted);
+  margin-left: var(--lb-size-1x);
+  font-size: var(--lb-t-caption-m-font-size);
+}
+/* Stack row — label on top, control underneath. Used by family
+   pickers where the role hint is too long for a side-by-side row. */
+.theme-editor__row--stack {
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--lb-size-1x);
+}
+.theme-editor__row--stack + .theme-editor__row--stack {
+  margin-top: var(--lb-size-2x);
+}
+/* Role-map row — tighter than a stack, label sits left of the select */
+.theme-editor__row--rolemap {
+  margin-top: var(--lb-size-1x);
+}
+.theme-editor__row--rolemap:first-of-type {
+  margin-top: 0;
+}
+
+/* Collapsible advanced section (role-map) */
+.theme-editor__section--collapsible {
+  border-top: var(--lb-border-width-thin) solid var(--lb-border-muted);
+  padding-top: var(--lb-size-3x);
+}
+.theme-editor__collapse-trigger {
+  display: flex;
+  align-items: center;
+  gap: var(--lb-size-1x);
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: var(--lb-t-label-m-font-family);
+  font-size: var(--lb-t-label-m-font-size);
+  font-weight: var(--lb-t-label-m-font-weight);
+  color: var(--lb-fg-default);
+  text-align: left;
+}
+.theme-editor__collapse-trigger:hover {
+  color: var(--lb-fg-accent);
+}
+.theme-editor__collapse-chevron {
+  transition: transform 150ms ease;
+  color: var(--lb-fg-muted);
+}
+.theme-editor__collapse-body {
+  margin-top: var(--lb-size-2x);
+}
+
+/* Swatches */
+.theme-editor__swatches {
+  display: flex;
+  gap: var(--lb-size-1x);
+  flex: 1;
+}
+
+.theme-editor__swatch {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  padding: 0;
+  cursor: pointer;
+  transition: transform 120ms ease, border-color 120ms ease;
+}
+
+.theme-editor__swatch:hover {
+  transform: scale(1.1);
+}
+
+.theme-editor__swatch--active {
+  border-color: var(--lb-fg-default);
+  transform: scale(1.1);
+}
+
+.theme-editor__swatch:focus-visible {
+  outline: var(--lb-border-width-thin) solid var(--lb-border-focus);
+  outline-offset: 2px;
+}
+
+.theme-editor__color {
+  width: 36px;
+  height: 28px;
+  padding: 0;
+  border: var(--lb-border-width-thin) solid var(--lb-border-default);
+  border-radius: var(--lb-radius-interactive);
+  background: none;
+  cursor: pointer;
+}
+.theme-editor__color::-webkit-color-swatch-wrapper { padding: 2px; }
+.theme-editor__color::-webkit-color-swatch { border: none; border-radius: 3px; }
+
+/* Feedback panel (shown after picking a brand color) */
+.theme-editor__feedback {
+  margin-top: var(--lb-size-2x);
+  padding: var(--lb-size-2x) var(--lb-size-3x);
+  background: var(--lb-bg-strong);
+  border-radius: var(--lb-radius-field);
+  font-size: var(--lb-t-body-s-font-size);
+  color: var(--lb-fg-default);
+}
+
+.theme-editor__feedback-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--lb-size-2x);
+  line-height: 1.5;
+}
+
+.theme-editor__feedback-row strong {
+  font-weight: var(--lb-font-weight-semibold);
+}
+
+.theme-editor__feedback-row span + span {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--lb-size-1x);
+}
+
+.theme-editor__badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0 var(--lb-size-1-5x);
+  border-radius: var(--lb-radius-interactive);
+  font-size: var(--lb-font-size-xs);
+  font-weight: var(--lb-font-weight-semibold);
+  line-height: 1.6;
+  border: var(--lb-border-width-thin) solid transparent;
+}
+
+/* Status text on its own SUBTLE tint — the audited banner/badge pair
+   ("… text on … tint" in CONTRAST.md). The old solid bg-success/bg-danger
+   fills date from before the item-24 retune made status fills solid,
+   which left same-hue text at ~1:1 on them. */
+.theme-editor__badge--ok   { background: var(--lb-bg-success-subtle); color: var(--lb-fg-success); border-color: var(--lb-border-success); }
+.theme-editor__badge--warn { background: var(--lb-bg-warning-subtle); color: var(--lb-fg-warning); border-color: var(--lb-border-warning); }
+.theme-editor__badge--fail { background: var(--lb-bg-danger-subtle);  color: var(--lb-fg-danger);  border-color: var(--lb-border-danger); }
+
+/* Footer */
+.theme-editor__footer {
+  padding: var(--lb-size-3x) var(--lb-size-4x);
+  border-top: var(--lb-border-width-thin) solid var(--lb-border-muted);
+  flex-shrink: 0;
+}
+
+/* Mobile */
+@media (max-width: 500px) {
+  .theme-editor {
+    width: 100vw;
+  }
+}
+
+
+/* ── Presets ── */
+.theme-editor__presets {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--lb-size-1x);
+}
+.theme-editor__preset {
+  display: flex;
+  align-items: center;
+  gap: var(--lb-size-1-5x);
+  padding: var(--lb-size-1-5x) var(--lb-size-2x);
+  background: var(--lb-bg-default);
+  border: var(--lb-border-width-thin) solid var(--lb-border-muted);
+  border-radius: var(--lb-radius-field);
+  cursor: pointer;
+  font: inherit;
+  color: var(--lb-fg-default);
+}
+.theme-editor__preset:hover { border-color: var(--lb-border-strong); background: var(--lb-bg-strong); }
+.theme-editor__preset:focus-visible { outline: var(--lb-border-width-medium) solid var(--lb-border-focus); outline-offset: var(--lb-size-0-5x); }
+.theme-editor__preset--active { border-color: var(--lb-border-accent); background: var(--lb-bg-accent-subtle); }
+.theme-editor__preset-dot { width: var(--lb-size-3x); height: var(--lb-size-3x); border-radius: var(--lb-radius-full); flex-shrink: 0; border: var(--lb-border-width-thin) solid var(--lb-surface-border-default); }
+.theme-editor__preset-name { font-size: var(--lb-t-label-s-font-size); font-weight: var(--lb-t-label-s-font-weight); }
+
+
+
+/* ── Help link (opens the How-it-works modal) ── */
+.theme-editor__help-link-row { margin-top: var(--lb-size-3x); }
+.theme-editor__io-note {
+  margin: var(--lb-size-2x) 0 0;
+  font-size: var(--lb-t-caption-m-font-size);
+  line-height: var(--lb-t-caption-m-line-height);
+  color: var(--lb-fg-subtle);
+}
+.theme-editor__help-link {
+  background: none;
+  border: 0;
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
+}

@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <!-- theme-preamble:v1 -->
+  <script>(function(){try{var t=localStorage.getItem('letbe-ds-dark-mode');if(t==='1')document.documentElement.setAttribute('data-theme','dark');else if(t==='0')document.documentElement.setAttribute('data-theme','light');}catch(e){}})();</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta data-lb-page="chat">
+  <title>Chat — letbe-ds</title>
+  <link rel="stylesheet" href="../tokens/theme.css">
+  <link rel="stylesheet" href="../tokens/fonts.css">
+  <link rel="stylesheet" href="../components/components.css">
+  <link rel="stylesheet" href="../components/theme-editor.css">
+  <link rel="stylesheet" href="../components/gallery.css">
+</head>
+<body data-lb-base="..">
+
+<main class="gallery-main">
+  <section class="gallery-section" id="chat">
+    <h1 class="gallery-section__title" style="font-size: var(--lb-t-heading-l-font-size); line-height: var(--lb-t-heading-l-line-height);">Chat</h1>
+    <p class="gallery-section__desc">AI Chat component set &mdash; the building blocks for assistant interfaces. letbe-ds owns the <strong>chrome, layout, and state machine</strong>; consumers bring the model API, the streaming source, and any tools. Per the pluggable-engine HARD rule, nothing in this module wraps an LLM SDK or markdown engine. See <code class="lb-code">js/components/README.md</code> for the module pattern.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>a11y (built in):</strong> the Thread is a live region (<code class="lb-code">role="log"</code> + <code class="lb-code">aria-live="polite"</code> + <code class="lb-code">aria-relevant="additions text"</code>) and a streaming bubble sets <code class="lb-code">aria-busy="true"</code>, so assistive tech gets one announcement of the finished message instead of every token — and the caret drops its blink under <code class="lb-code">prefers-reduced-motion</code>. The composer textarea carries <code class="lb-code">aria-label="Message"</code>, <kbd>Enter</kbd> sends and <kbd>Shift</kbd>+<kbd>Enter</kbd> newlines behind an <code class="lb-code">isComposing</code> guard so IME commits never send mid-word; the slash palette is a <code class="lb-code">role=listbox</code> driven by <kbd>↑</kbd>/<kbd>↓</kbd>, <kbd>Enter</kbd>, <kbd>Esc</kbd>, and inline edit takes <kbd>Esc</kbd> to cancel or <kbd>⌘/Ctrl</kbd>+<kbd>Enter</kbd> to save. ConvList is a plain <code class="lb-code">role=list</code> — each row's title is the real <code class="lb-code">button</code> (<code class="lb-code">aria-current</code> marks the open conversation, so the kebab is a legitimate sibling control, not a nested one), navigated with <kbd>↑</kbd>/<kbd>↓</kbd>, <kbd>Home</kbd>/<kbd>End</kbd>, <kbd>Enter</kbd>/<kbd>Space</kbd>, its kebab is a <code class="lb-code">role=menu</code> with roving <code class="lb-code">tabindex</code> that closes on <kbd>Esc</kbd> and returns focus to the trigger, and every ToolCall head is a <code class="lb-code">button[aria-expanded]</code>.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>Usage:</strong> Load <code class="lb-code">js/lb.js</code> first, then <code class="lb-code">js/components/lb-chat.js</code> — the module registers on <code class="lb-code">window.LB</code> and bails without it, and lb.js console-warns if it sees chat markup with no module loaded. Elements carrying <code class="lb-code">data-lb-bubble</code> / <code class="lb-code">data-lb-thread</code> / <code class="lb-code">data-lb-composer</code> / <code class="lb-code">data-lb-tool-call</code> / <code class="lb-code">data-lb-conv-list</code> auto-init; instances land at <code class="lb-code">el._lbBubble</code>, <code class="lb-code">el._lbThread</code>, <code class="lb-code">el._lbComposer</code>, <code class="lb-code">el._lbToolCall</code> and <code class="lb-code">el._lbConvList</code>, and a ToolCall can also be built on demand via <code class="lb-code">new LB.ToolCall(el)</code>. The model loop is yours: on <code class="lb-code">lb-composer-submit</code> (<code class="lb-code">{value, chips, tools, model}</code>) call your API, append with <code class="lb-code">appendBubble({…})</code>, push tokens through <code class="lb-code">appendText()</code>, finish with <code class="lb-code">setState('done')</code> — and treat <code class="lb-code">lb-composer-stop</code> as halt-your-stream. ConvList never fetches: feed it with <code class="lb-code">setConvs([…])</code> and route <code class="lb-code">lb-conv-select</code> / <code class="lb-code">lb-conv-action</code> to your backend.</p>
+    <p class="gallery-section__desc">This page documents the <strong>primitives</strong> — Bubble, Thread, Composer, branching, ToolCall, and ConvList. For the composed workspace that mounts them, see the <a class="lb-link" href="../ai-chat/">AI Chat template</a> (App Shell + Composer Dock).</p>
+
+    <p class="gallery-section__desc">Everything here works standalone in any layout you build: Bubble (assistant/user/system), Thread with visible branching, the Composer (Enter to send · footer action bar · chips · slash commands), ToolCall, dual-format code block, and the ConvList sidebar — plus the module pattern in <code class="lb-code">js/components/README.md</code>.</p>
+
+    <hr class="gallery-desc-divider">
+
+    <!-- ─────────────────────────────────────────────────── -->
+    <!-- Bubble — Assistant variant                         -->
+    <!-- ─────────────────────────────────────────────────── -->
+
+    <h2 class="gallery-section__title">Bubble &mdash; Assistant</h2>
+    <p class="gallery-section__desc">Flat text body, full content width, no card. The default variant for assistant messages. Avatar slot holds a small mark or icon; footer holds the action row (Copy / Like / Dislike / Regenerate) revealed on hover.</p>
+
+    <div style="max-width: 720px;">
+      <div class="lb-bubble lb-bubble--assistant" data-lb-bubble>
+        <div class="lb-bubble__avatar">
+          <span class="lb-avatar lb-avatar--small" style="background: var(--lb-bg-accent-muted); color: var(--lb-fg-accent);">AI</span>
+        </div>
+        <div class="lb-bubble__content">
+          <div class="lb-bubble__header">
+            <span class="lb-bubble__sender">Assistant</span>
+            <span class="lb-bubble__timestamp">2:34 PM</span>
+          </div>
+          <div class="lb-bubble__body">
+            <p>The sky looks blue because sunlight scatters as it passes through the atmosphere &mdash; shorter blue wavelengths scatter far more than the longer red ones, so blue light reaches your eyes from every direction.</p>
+            <p>At sunrise and sunset the light crosses far more air, the blue is scattered away before it reaches you, and the reds and oranges are what remain.</p>
+          </div>
+          <div class="lb-bubble__footer">
+            <button type="button" class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--small" data-lb-icon="copy" aria-label="Copy"></button>
+            <button type="button" class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--small" data-lb-icon="thumbs-up" aria-label="Helpful"></button>
+            <button type="button" class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--small" data-lb-icon="thumbs-down" aria-label="Not helpful"></button>
+            <button type="button" class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--small" data-lb-icon="refresh-cw" aria-label="Regenerate"></button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─────────────────────────────────────────────────── -->
+    <!-- Bubble — User variant                              -->
+    <!-- ─────────────────────────────────────────────────── -->
+
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Bubble &mdash; User</h2>
+    <p class="gallery-section__desc">Right-aligned with a subtly tinted card body. Avatar appears on the right. Footer row holds Edit (which creates a branch) and a kebab for share / fork / delete. Long user messages cap at 75% width so they don&rsquo;t span the full thread.</p>
+
+    <div style="max-width: 720px;">
+      <div class="lb-bubble lb-bubble--user" data-lb-bubble>
+        <div class="lb-bubble__avatar">
+          <span class="lb-avatar lb-avatar--small">JS</span>
+        </div>
+        <div class="lb-bubble__content">
+          <div class="lb-bubble__header">
+            <span class="lb-bubble__sender">You</span>
+            <span class="lb-bubble__timestamp">2:33 PM</span>
+          </div>
+          <div class="lb-bubble__body">Why is the sky blue?</div>
+          <div class="lb-bubble__footer">
+            <button type="button" class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--small" data-lb-icon="pencil" aria-label="Edit message (creates branch)"></button>
+            <button type="button" class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--small" data-lb-icon="copy" aria-label="Copy"></button>
+            <button type="button" class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--small" data-lb-icon="more-horizontal" aria-label="More actions"></button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─────────────────────────────────────────────────── -->
+    <!-- Bubble — System variant                            -->
+    <!-- ─────────────────────────────────────────────────── -->
+
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Bubble &mdash; System</h2>
+    <p class="gallery-section__desc">Centred caption, no avatar, no actions. Used for status messages: <em>&ldquo;Chat title updated&rdquo;</em>, <em>&ldquo;Memory updated&rdquo;</em>, <em>&ldquo;Connection lost &mdash; reconnecting&rdquo;</em>, or day separators. Minimal visual weight so it doesn&rsquo;t compete with the actual conversation.</p>
+
+    <div style="max-width: 720px;">
+      <div class="lb-bubble lb-bubble--system" data-lb-bubble>
+        <div class="lb-bubble__content">
+          <div class="lb-bubble__body">Conversation started &middot; June 2, 2026</div>
+        </div>
+      </div>
+    </div>
+
+    <hr class="gallery-desc-divider" style="margin-top: var(--lb-size-12x);">
+
+    <!-- ─────────────────────────────────────────────────── -->
+    <!-- States                                              -->
+    <!-- ─────────────────────────────────────────────────── -->
+
+    <h2 class="gallery-section__title">States</h2>
+    <p class="gallery-section__desc">Four states via the <code class="lb-code">data-state</code> attribute. Programmatic: <code class="lb-code">el._lbBubble.setState('streaming')</code>. Emits <code class="lb-code">lb-bubble-state-change</code> with <code class="lb-code">{ state, prev }</code>.</p>
+
+    <h3 class="gallery-section__title">Streaming</h3>
+    <p class="gallery-section__desc">Blinking caret at the end of the body. The push streaming API &mdash; <code class="lb-code">bubble.appendText(token)</code> &mdash; auto-transitions the bubble into this state. Respects <code class="lb-code">prefers-reduced-motion</code> (caret stays dim, no blink).</p>
+
+    <div style="max-width: 720px;">
+      <div class="lb-bubble lb-bubble--assistant" data-lb-bubble data-state="streaming" id="demo-stream">
+        <div class="lb-bubble__avatar">
+          <span class="lb-avatar lb-avatar--small" style="background: var(--lb-bg-accent-muted); color: var(--lb-fg-accent);">AI</span>
+        </div>
+        <div class="lb-bubble__content">
+          <div class="lb-bubble__header">
+            <span class="lb-bubble__sender">Assistant</span>
+            <span class="lb-bubble__timestamp">just now</span>
+          </div>
+          <div class="lb-bubble__body"></div>
+        </div>
+      </div>
+    </div>
+
+    <h3 class="gallery-section__title">Error</h3>
+    <p class="gallery-section__desc">Danger-tinted border on the body. Used when the model errors or the stream drops. The consumer drives the state change in response to their own error handler.</p>
+
+    <div style="max-width: 720px;">
+      <div class="lb-bubble lb-bubble--assistant" data-lb-bubble data-state="error">
+        <div class="lb-bubble__avatar">
+          <span class="lb-avatar lb-avatar--small" style="background: var(--lb-bg-accent-muted); color: var(--lb-fg-accent);">AI</span>
+        </div>
+        <div class="lb-bubble__content">
+          <div class="lb-bubble__header">
+            <span class="lb-bubble__sender">Assistant</span>
+            <span class="lb-bubble__timestamp">2:36 PM</span>
+          </div>
+          <div class="lb-bubble__body">The connection to the model dropped. Please retry.</div>
+          <div class="lb-bubble__footer">
+            <button type="button" class="lb-btn lb-btn--small lb-btn--secondary"><span class="lb-btn__icon" data-lb-icon="refresh-cw"></span>Retry</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h3 class="gallery-section__title">Edited</h3>
+    <p class="gallery-section__desc">Appends <em>&ldquo;(edited)&rdquo;</em> to the timestamp. Edits always create a branch in the data model &mdash; the prev/next arrow affordances ship in Slice 3 (message actions row).</p>
+
+    <div style="max-width: 720px;">
+      <div class="lb-bubble lb-bubble--user" data-lb-bubble data-state="edited">
+        <div class="lb-bubble__avatar">
+          <span class="lb-avatar lb-avatar--small">JS</span>
+        </div>
+        <div class="lb-bubble__content">
+          <div class="lb-bubble__header">
+            <span class="lb-bubble__sender">You</span>
+            <span class="lb-bubble__timestamp">2:33 PM</span>
+          </div>
+          <div class="lb-bubble__body">Why is the sky blue, and does it look different from space?</div>
+          <div class="lb-bubble__footer">
+            <button type="button" class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--small" data-lb-icon="pencil" aria-label="Edit message (creates branch)"></button>
+            <button type="button" class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--small" data-lb-icon="copy" aria-label="Copy"></button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <hr class="gallery-desc-divider" style="margin-top: var(--lb-size-12x);">
+
+    <!-- ─────────────────────────────────────────────────── -->
+    <!-- Public API                                          -->
+    <!-- ─────────────────────────────────────────────────── -->
+
+    <h2 class="gallery-section__title">Public API</h2>
+    <p class="gallery-section__desc">Consumers reach the instance at <code class="lb-code">el._lbBubble</code>. All methods are stable.</p>
+
+    <pre data-lb-code-block data-lb-lang="js"><code>// Read
+bubble.getRole();                // 'user' | 'assistant' | 'system'
+bubble.getState();               // 'done' | 'streaming' | 'error' | 'edited'
+
+// Write — state transition emits lb-bubble-state-change
+bubble.setState('streaming');
+
+// Streaming push API — consumer drives it (no LLM SDK bundled)
+bubble.appendText('Token by ');
+bubble.appendText('token, ');
+bubble.appendText('appended.');
+// Auto-transitions to 'streaming' on the first call.
+// Consumer calls bubble.setState('done') when the stream ends.
+
+// Escape hatch for consumer-rendered HTML (full markdown engine,
+// math, mermaid diagrams, etc.). Per Q1 alignment, letbe-ds ships
+// minimal regex-based markdown for plain bodies; setBodyHtml is
+// the consumer override.
+bubble.setBodyHtml('&lt;p&gt;Rendered by &lt;strong&gt;marked&lt;/strong&gt;.&lt;/p&gt;');
+
+// Replace body with plain text
+bubble.setBodyText('Reset.');</code></pre>
+
+    <h2 class="gallery-section__title">Loading the module</h2>
+    <p class="gallery-section__desc">Chat lives in a separate module under <code class="lb-code">js/components/lb-chat.js</code>, following the JS modularization pattern from roadmap item J. Include after <code class="lb-code">lb.js</code>:</p>
+
+    <pre data-lb-code-block data-lb-lang="html"><code>&lt;script src="../js/lb.js"&gt;&lt;/script&gt;
+&lt;script src="../js/components/lb-chat.js"&gt;&lt;/script&gt;</code></pre>
+
+    <p class="gallery-section__desc">Pages that don&rsquo;t use Chat skip the second line and get a smaller JS payload.</p>
+
+    <hr class="gallery-desc-divider" style="margin-top: var(--lb-size-12x);">
+
+    <!-- ─────────────────────────────────────────────────── -->
+    <!-- Message actions + branching (Slice 3)              -->
+    <!-- ─────────────────────────────────────────────────── -->
+
+    <h2 class="gallery-section__title">Message actions &amp; branching</h2>
+    <p class="gallery-section__desc">When Thread creates a bubble programmatically via <code class="lb-code">appendBubble({...})</code>, role-appropriate actions auto-inject into the footer: <strong>assistant</strong> gets Copy / Like / Dislike / Regenerate; <strong>user</strong> gets Edit / Copy / More. Action clicks emit <code class="lb-code">lb-bubble-action {action, bubble}</code> for the consumer to wire model-side concerns. The Edit action additionally creates an inline editor inside the bubble; saving emits <code class="lb-code">lb-bubble-edit-save {oldValue, newValue}</code> AND creates a sibling branch in the data model.</p>
+
+    <p class="gallery-section__desc"><strong>Every edit creates a branch</strong>. The original message is preserved; the new sibling becomes the active path. Bubbles after the inactive sibling auto-hide. Prev/next arrows on the edited bubble flip between siblings; switching restores the descendant chain of whichever sibling is active.</p>
+
+    <p class="gallery-section__desc">Override the auto-injected actions by passing <code class="lb-code">footerHtml: '...'</code> to <code class="lb-code">appendBubble</code>. Set <code class="lb-code">footerHtml: ''</code> to suppress the action row entirely.</p>
+
+    <hr class="gallery-desc-divider" style="margin-top: var(--lb-size-12x);">
+
+    <!-- ─────────────────────────────────────────────────── -->
+    <!-- Composer workbench (Slice 4)                       -->
+    <!-- ─────────────────────────────────────────────────── -->
+
+    <h2 class="gallery-section__title">Composer workbench</h2>
+    <p class="gallery-section__desc">The composer is a workbench, not just a textarea and a send button. Five new pieces:</p>
+
+    <ol class="gallery-section__desc">
+      <li><strong>Attach button</strong> (leading <code class="lb-code">+</code>) opens a file picker. Drag-and-drop anywhere on the composer card also works &mdash; including <strong>folders</strong> (uses <code class="lb-code">webkitGetAsEntry()</code>). The whole card highlights on drag-over.</li>
+      <li><strong>Context chips</strong> appear above the textarea. Each is removable; clicking the &times; removes the chip and emits <code class="lb-code">lb-composer-chip-remove</code>. Programmatic API: <code class="lb-code">composer.addChip({label, kind, data})</code> / <code class="lb-code">removeChip(id)</code> / <code class="lb-code">getChips()</code> / <code class="lb-code">clearChips()</code>.</li>
+      <li><strong>Tool toggle chips</strong> below the input. Consumer registers tools with <code class="lb-code">composer.setTools([...])</code> &mdash; pass <code class="lb-code">{id, label, icon, active}</code>. Each click toggles <code class="lb-code">aria-pressed</code> and emits <code class="lb-code">lb-composer-tool-toggle</code>. <code class="lb-code">composer.getTools()</code> returns the active IDs.</li>
+      <li><strong>Model picker</strong> right-side dropdown. <code class="lb-code">composer.setModels([...], defaultId)</code>; emits <code class="lb-code">lb-composer-model-change</code>.</li>
+      <li><strong>Slash command palette</strong> &mdash; type <code class="lb-code">/</code> in an empty composer to open. Filter by typing. <kbd>&uarr;/&darr;</kbd> navigates, <kbd>Enter</kbd> selects, <kbd>Esc</kbd> closes. Consumer registers commands with <code class="lb-code">composer.registerCommand({id, label, hint, run})</code>. Commands either run a callback or just emit <code class="lb-code">lb-composer-command</code> for the consumer to handle.</li>
+      <li><strong>Mic button</strong> (per Q8) emits <code class="lb-code">lb-composer-voice-request</code>. No voice handling shipped &mdash; consumer wires speech recognition (web Speech API, whisper, etc.).</li>
+    </ol>
+
+    <p class="gallery-section__desc">The expanded submit event detail now carries everything the consumer needs to call their model: <code class="lb-code">{value, chips, tools, model}</code>.</p>
+
+    <hr class="gallery-desc-divider" style="margin-top: var(--lb-size-12x);">
+
+    <!-- ─────────────────────────────────────────────────── -->
+    <!-- Tool call (Slice 5)                                -->
+    <!-- ─────────────────────────────────────────────────── -->
+
+    <h2 class="gallery-section__title">Tool call</h2>
+    <p class="gallery-section__desc"><code class="lb-code">LB.ToolCall</code> &mdash; collapsible card for showing one tool invocation by the assistant. Shows both a compact summary and the raw I/O the tool received and returned. Each card has:</p>
+
+    <ol class="gallery-section__desc">
+      <li><strong>Compact header</strong>: tool icon &middot; tool name &middot; one-line verb &middot; status pill &middot; chevron. One-click expand/collapse.</li>
+      <li><strong>Formatted tab</strong>: pretty Input / Output sections the consumer fills with HTML (citation chips, file diffs, syntax-highlighted code, whatever).</li>
+      <li><strong>Raw I/O tab</strong>: pre-formatted JSON of <code class="lb-code">rawInput</code> / <code class="lb-code">rawOutput</code>. The "you can debug what the tool actually saw" affordance users keep asking for.</li>
+      <li><strong>Confirm gate</strong> for risky ops (shell, file write, network calls). Pass <code class="lb-code">risky: true</code> in <code class="lb-code">setData</code> &mdash; card auto-expands, the gate appears, and the user must Continue or Cancel. Emits <code class="lb-code">lb-tool-call-confirm</code> / <code class="lb-code">lb-tool-call-cancel</code> for the consumer.</li>
+      <li><strong>Status colours</strong>: pending / running (accent) / success (success) / error (danger border + tint) / awaiting-confirm (warning). The card border + background updates with status so failed calls stand out at a glance.</li>
+    </ol>
+
+    <p class="gallery-section__desc">API: <code class="lb-code">setData({icon, name, summary, status, inputHtml, outputHtml, rawInput, rawOutput, risky})</code> for declarative bulk-state (per Q4 alignment); <code class="lb-code">appendOutputHtml(html)</code> for imperative streaming additions during a running tool call; <code class="lb-code">setStatus(s)</code>, <code class="lb-code">expand()</code> / <code class="lb-code">collapse()</code> / <code class="lb-code">toggle()</code>. Mount inside a Bubble&rsquo;s body, between two bubbles, or in any thread position the consumer wants.</p>
+
+    <p class="gallery-section__desc"><strong>Try it:</strong> use the slash palette below &mdash; <code class="lb-code">/tool web</code>, <code class="lb-code">/tool code</code>, <code class="lb-code">/tool file</code>, or <code class="lb-code">/tool risky</code> &mdash; to inject example tool calls into the thread.</p>
+
+    <h3 class="gallery-section__title">Static examples</h3>
+
+    <div style="max-width: 720px; display: flex; flex-direction: column; gap: var(--lb-size-2x);">
+      <!-- Done web search -->
+      <div class="lb-tool-call" data-lb-tool-call data-expanded="false" data-status="success">
+        <button type="button" class="lb-tool-call__head" data-lb-tool-call-toggle aria-expanded="false">
+          <span class="lb-tool-call__icon" data-lb-icon="globe" data-lb-tool-call-icon></span>
+          <span class="lb-tool-call__summary">
+            <span class="lb-tool-call__name" data-lb-tool-call-name>web_search</span>
+            <span class="lb-tool-call__verb" data-lb-tool-call-verb>Searched 3 sources for &ldquo;letbe-ds chat component patterns&rdquo;</span>
+          </span>
+          <span class="lb-badge lb-badge--small lb-badge--success" data-lb-tool-call-status>
+            <span class="lb-badge__icon" data-lb-icon="circle-check-filled" aria-hidden="true"></span>Done
+          </span>
+          <span class="lb-tool-call__chevron" data-lb-icon="chevron-down" aria-hidden="true"></span>
+        </button>
+        <div class="lb-tool-call__body">
+          <div class="lb-tool-call__tabs" role="tablist">
+            <button type="button" class="lb-tool-call__tab lb-tool-call__tab--active" data-lb-tool-call-tab="formatted" role="tab">Formatted</button>
+            <button type="button" class="lb-tool-call__tab" data-lb-tool-call-tab="raw" role="tab">Raw I/O</button>
+          </div>
+          <div class="lb-tool-call__formatted" role="tabpanel">
+            <div class="lb-tool-call__section">
+              <div class="lb-tool-call__section-label">Input</div>
+              <div class="lb-tool-call__section-body">Query: &ldquo;letbe-ds chat component patterns&rdquo;<br>Max results: 5</div>
+            </div>
+            <div class="lb-tool-call__section">
+              <div class="lb-tool-call__section-label">Output</div>
+              <div class="lb-tool-call__section-body">
+                <ul>
+                  <li><a class="lb-link" href="#">letbe-ds documentation &mdash; chat primitives</a></li>
+                  <li><a class="lb-link" href="#">Pluggable engine HARD rule reference</a></li>
+                  <li><a class="lb-link" href="#">letbe-ds gallery &mdash; AI Chat template</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="lb-tool-call__raw" role="tabpanel" hidden>
+            <div class="lb-tool-call__section">
+              <div class="lb-tool-call__section-label">Raw input</div>
+              <pre class="lb-tool-call__raw-block">{
+  "query": "letbe-ds chat component patterns",
+  "max_results": 5,
+  "engine": "duckduckgo"
+}</pre>
+            </div>
+            <div class="lb-tool-call__section">
+              <div class="lb-tool-call__section-label">Raw output</div>
+              <pre class="lb-tool-call__raw-block">{
+  "results": [
+    { "url": "https://example.com/letbe-ds-chat", "title": "letbe-ds — chat primitives" },
+    { "url": "https://example.com/pluggable-engines", "title": "Pluggable engine HARD rule" }
+  ],
+  "fetched_at": "2026-06-02T15:42:11Z"
+}</pre>
+            </div>
+          </div>
+          <div class="lb-tool-call__confirm" hidden></div>
+        </div>
+      </div>
+
+      <!-- Running code execution -->
+      <div class="lb-tool-call" data-lb-tool-call data-expanded="true" data-status="running">
+        <button type="button" class="lb-tool-call__head" data-lb-tool-call-toggle aria-expanded="true">
+          <span class="lb-tool-call__icon" data-lb-icon="code" data-lb-tool-call-icon></span>
+          <span class="lb-tool-call__summary">
+            <span class="lb-tool-call__name" data-lb-tool-call-name>python_exec</span>
+            <span class="lb-tool-call__verb" data-lb-tool-call-verb>Running pandas summary on uploads/sales.csv</span>
+          </span>
+          <span class="lb-badge lb-badge--small lb-badge--default" data-lb-tool-call-status>
+            <span class="lb-badge__icon" data-lb-icon="circle-dot" aria-hidden="true"></span>Running
+          </span>
+          <span class="lb-tool-call__chevron" data-lb-icon="chevron-down" aria-hidden="true"></span>
+        </button>
+        <div class="lb-tool-call__body">
+          <div class="lb-tool-call__tabs" role="tablist">
+            <button type="button" class="lb-tool-call__tab lb-tool-call__tab--active" data-lb-tool-call-tab="formatted" role="tab">Formatted</button>
+            <button type="button" class="lb-tool-call__tab" data-lb-tool-call-tab="raw" role="tab">Raw I/O</button>
+          </div>
+          <div class="lb-tool-call__formatted" role="tabpanel">
+            <div class="lb-tool-call__section">
+              <div class="lb-tool-call__section-label">Input</div>
+              <div class="lb-tool-call__section-body">
+                <pre class="lb-tool-call__raw-block">import pandas as pd
+df = pd.read_csv("uploads/sales.csv")
+df.describe()</pre>
+              </div>
+            </div>
+            <div class="lb-tool-call__section">
+              <div class="lb-tool-call__section-label">Output</div>
+              <div class="lb-tool-call__section-body">
+                <em>Streaming…</em>
+              </div>
+            </div>
+          </div>
+          <div class="lb-tool-call__raw" role="tabpanel" hidden></div>
+          <div class="lb-tool-call__confirm" hidden></div>
+        </div>
+      </div>
+
+      <!-- Risky shell — awaiting confirm -->
+      <div class="lb-tool-call" data-lb-tool-call data-expanded="true" data-status="awaiting-confirm">
+        <button type="button" class="lb-tool-call__head" data-lb-tool-call-toggle aria-expanded="true">
+          <span class="lb-tool-call__icon" data-lb-icon="terminal" data-lb-tool-call-icon></span>
+          <span class="lb-tool-call__summary">
+            <span class="lb-tool-call__name" data-lb-tool-call-name>shell_exec</span>
+            <span class="lb-tool-call__verb" data-lb-tool-call-verb>rm -rf /tmp/build-cache</span>
+          </span>
+          <span class="lb-badge lb-badge--small lb-badge--warning" data-lb-tool-call-status>
+            <span class="lb-badge__icon" data-lb-icon="alert-triangle-filled" aria-hidden="true"></span>Awaiting confirm
+          </span>
+          <span class="lb-tool-call__chevron" data-lb-icon="chevron-down" aria-hidden="true"></span>
+        </button>
+        <div class="lb-tool-call__body">
+          <div class="lb-tool-call__confirm">
+            <p class="lb-tool-call__confirm-msg">This will delete <code class="lb-code">/tmp/build-cache</code> recursively. Continue?</p>
+            <div class="lb-tool-call__confirm-actions">
+              <button type="button" class="lb-btn lb-btn--small lb-btn--secondary" data-lb-tool-call-cancel>Cancel</button>
+              <button type="button" class="lb-btn lb-btn--small lb-btn--primary" data-lb-tool-call-confirm>Continue</button>
+            </div>
+          </div>
+          <div class="lb-tool-call__tabs" role="tablist">
+            <button type="button" class="lb-tool-call__tab lb-tool-call__tab--active" data-lb-tool-call-tab="formatted" role="tab">Formatted</button>
+            <button type="button" class="lb-tool-call__tab" data-lb-tool-call-tab="raw" role="tab">Raw I/O</button>
+          </div>
+          <div class="lb-tool-call__formatted" role="tabpanel">
+            <div class="lb-tool-call__section">
+              <div class="lb-tool-call__section-label">Command</div>
+              <div class="lb-tool-call__section-body"><pre class="lb-tool-call__raw-block">rm -rf /tmp/build-cache</pre></div>
+            </div>
+          </div>
+          <div class="lb-tool-call__raw" role="tabpanel" hidden></div>
+        </div>
+      </div>
+
+      <!-- Errored file read -->
+      <div class="lb-tool-call" data-lb-tool-call data-expanded="false" data-status="error">
+        <button type="button" class="lb-tool-call__head" data-lb-tool-call-toggle aria-expanded="false">
+          <span class="lb-tool-call__icon" data-lb-icon="file" data-lb-tool-call-icon></span>
+          <span class="lb-tool-call__summary">
+            <span class="lb-tool-call__name" data-lb-tool-call-name>file_read</span>
+            <span class="lb-tool-call__verb" data-lb-tool-call-verb>Could not read /etc/secrets &mdash; permission denied</span>
+          </span>
+          <span class="lb-badge lb-badge--small lb-badge--danger" data-lb-tool-call-status>
+            <span class="lb-badge__icon" data-lb-icon="x-circle-filled" aria-hidden="true"></span>Failed
+          </span>
+          <span class="lb-tool-call__chevron" data-lb-icon="chevron-down" aria-hidden="true"></span>
+        </button>
+        <div class="lb-tool-call__body">
+          <div class="lb-tool-call__tabs" role="tablist">
+            <button type="button" class="lb-tool-call__tab lb-tool-call__tab--active" data-lb-tool-call-tab="formatted" role="tab">Formatted</button>
+            <button type="button" class="lb-tool-call__tab" data-lb-tool-call-tab="raw" role="tab">Raw I/O</button>
+          </div>
+          <div class="lb-tool-call__formatted" role="tabpanel">
+            <div class="lb-tool-call__section">
+              <div class="lb-tool-call__section-label">Error</div>
+              <div class="lb-tool-call__section-body">EACCES: permission denied, open '/etc/secrets'</div>
+            </div>
+          </div>
+          <div class="lb-tool-call__raw" role="tabpanel" hidden></div>
+          <div class="lb-tool-call__confirm" hidden></div>
+        </div>
+      </div>
+    </div>
+
+    <hr class="gallery-desc-divider" style="margin-top: var(--lb-size-12x);">
+
+    <!-- ─────────────────────────────────────────────────── -->
+    <!-- Working chat — Thread + Composer composition       -->
+    <!-- ─────────────────────────────────────────────────── -->
+
+    <h2 class="gallery-section__title">Working chat &mdash; <code class="lb-code">LB.Thread</code> + <code class="lb-code">LB.Composer</code></h2>
+    <p class="gallery-section__desc">A complete chat surface composed of Thread + Composer. Type a message, hit <strong>Send</strong> (or <kbd>&#8984;/Ctrl + Enter</kbd>) to see a fake assistant response stream in. The composer&rsquo;s send button morphs to a stop button while the assistant streams &mdash; click <strong>Stop</strong> to halt the stream early. Scroll up while a response is streaming to surface the jump-to-bottom pill at the bottom-right of the thread.</p>
+
+    <p class="gallery-section__desc"><strong>Try the branching:</strong> after a few exchanges, hover one of your user messages and click the pencil icon. Edit the text and click <em>Save &amp; submit</em>. A sibling branch is created &mdash; prev/next arrows appear on the user message, and the assistant streams a fresh response. Flip between branches with the arrows; descendants of the inactive sibling hide automatically.</p>
+
+    <p class="gallery-section__desc"><strong>Try the workbench:</strong> drop a file (or folder!) onto the composer card &mdash; chip appears above the textarea. Toggle a tool chip (Web / Code / Image) to mark it active. Click the model picker to swap models. Type <code class="lb-code">/</code> at an empty composer to open the slash palette &mdash; try <code class="lb-code">/clear</code> to wipe the thread, <code class="lb-code">/system</code> to insert a system note, or <code class="lb-code">/mock</code> to stream a fake assistant reply with no user message.</p>
+
+    <p class="gallery-section__desc">This is what arrives at end-of-Slice-2: a working chat that any consumer can wire to their own model API by listening for <code class="lb-code">lb-composer-submit</code> and calling <code class="lb-code">thread._lbThread.appendBubble({...})</code> plus <code class="lb-code">bubble._lbBubble.appendText(token)</code> as their stream arrives.</p>
+
+    <div style="max-width: 720px; display: flex; flex-direction: column; gap: var(--lb-size-3x); height: 520px;">
+      <div class="lb-thread" data-lb-thread id="demo-thread" style="flex: 1; border: var(--lb-border-width-thin) solid var(--lb-surface-border-default); border-radius: var(--lb-radius-card); background: var(--lb-surface-bg-default);">
+        <div class="lb-bubble lb-bubble--system" data-lb-bubble>
+          <div class="lb-bubble__content">
+            <div class="lb-bubble__body">Conversation started &middot; June 2, 2026</div>
+          </div>
+        </div>
+        <div class="lb-bubble lb-bubble--assistant" data-lb-bubble>
+          <div class="lb-bubble__avatar">
+            <span class="lb-avatar lb-avatar--small" style="background: var(--lb-bg-accent-muted); color: var(--lb-fg-accent);">AI</span>
+          </div>
+          <div class="lb-bubble__content">
+            <div class="lb-bubble__header">
+              <span class="lb-bubble__sender">Assistant</span>
+              <span class="lb-bubble__timestamp">just now</span>
+            </div>
+            <div class="lb-bubble__body">Hi! Type a message below to start. This demo uses a mock stream &mdash; the actual model integration is consumer-supplied.</div>
+          </div>
+        </div>
+      </div>
+      <div class="lb-composer" data-lb-composer id="demo-composer">
+        <div class="lb-composer__chips lb-composer__chips--empty" data-lb-composer-chips></div>
+        <div class="lb-composer__row">
+          <textarea data-lb-composer-input placeholder="Send a message…  (Enter to send · Shift+Enter = new line · / for commands · drop files anywhere)" rows="1"></textarea>
+        </div>
+        <div class="lb-composer__footer">
+          <div class="lb-composer__tools" data-lb-composer-tools>
+            <button type="button" data-lb-composer-attach aria-label="Attach files">
+              <span data-lb-icon="plus" aria-hidden="true"></span>
+            </button>
+            <button type="button" data-lb-composer-mic aria-label="Voice">
+              <span data-lb-icon="mic" aria-hidden="true"></span>
+            </button>
+          </div>
+          <div class="lb-composer__end">
+            <div class="lb-composer__model" data-lb-composer-model></div>
+            <div class="lb-composer__actions">
+            <button type="button" data-lb-composer-send aria-label="Send">
+              <span data-lb-icon="send" aria-hidden="true"></span>
+            </button>
+            <button type="button" data-lb-composer-stop aria-label="Stop" hidden>
+              <span data-lb-icon="square-rounded" aria-hidden="true"></span>
+            </button>
+          </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Thread + Composer API</h2>
+    <p class="gallery-section__desc">Below is the actual wiring code from the working demo above. About 30 lines of glue. A real consumer replaces the <code class="lb-code">mockStream()</code> call with their own fetch / EventSource / Anthropic SDK / OpenAI SDK stream.</p>
+
+    <pre data-lb-code-block data-lb-lang="js"><code>const thread = document.getElementById('demo-thread');
+const composer = document.getElementById('demo-composer');
+
+composer.addEventListener('lb-composer-submit', (e) =&gt; {
+  // 1. Append the user's message
+  thread._lbThread.appendBubble({
+    role: 'user',
+    sender: 'You',
+    timestamp: 'just now',
+    avatarHtml: '&lt;span class="lb-avatar lb-avatar--small"&gt;YOU&lt;/span&gt;',
+    body: e.detail.value,
+  });
+  composer._lbComposer.clear();
+  composer._lbComposer.setState('sending');
+
+  // 2. Append a streaming assistant bubble + start streaming
+  const reply = thread._lbThread.appendBubble({
+    role: 'assistant',
+    state: 'streaming',
+    sender: 'Assistant',
+    timestamp: 'just now',
+    avatarHtml: '&lt;span class="lb-avatar lb-avatar--small"&gt;AI&lt;/span&gt;',
+  });
+  composer._lbComposer.setState('streaming');
+
+  mockStream(reply._lbBubble, () =&gt; {
+    composer._lbComposer.setState('idle');
+  });
+});
+
+composer.addEventListener('lb-composer-stop', () =&gt; {
+  // Consumer halts their own stream here, then:
+  composer._lbComposer.setState('idle');
+});</code></pre>
+
+    <!-- ────────────────── Conversation list (sidebar) ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Conversation list &mdash; <code class="lb-code">LB.ConvList</code></h2>
+    <p class="gallery-section__desc">Sidebar primitive for chat history. Date-grouped automatically (Today / Yesterday / Previous 7 / 30 Days / month buckets), pinned bucket on top, opt-in search filter, opt-in color tag stripe per conversation, unread badge, kebab popover for per-row actions. Emits <code class="lb-code">lb-conv-select</code> on row activation and <code class="lb-code">lb-conv-action</code> on kebab choice (rename / pin&middot;unpin / share / move / delete) so the consumer wires their own backend.</p>
+
+    <div style="display: grid; grid-template-columns: 18rem 1fr; gap: var(--lb-size-4x); max-width: 48rem; border: var(--lb-border-width-thin) solid var(--lb-border-muted); border-radius: var(--lb-radius-overlay); overflow: hidden; height: 32rem;">
+      <div data-lb-conv-list id="demo-conv-list" style="height: 100%; min-height: 0;"></div>
+      <div id="demo-conv-active" style="padding: var(--lb-size-4x); color: var(--lb-fg-muted); font-family: var(--lb-t-body-m-font-family); font-size: var(--lb-t-body-m-font-size); line-height: var(--lb-t-body-m-line-height);">Select a conversation from the sidebar…</div>
+    </div>
+
+    <p class="gallery-section__desc" style="margin-top: var(--lb-size-4x);">Wiring &mdash; the consumer is the source of truth for conversation data, and reacts to events to update its own state:</p>
+
+    <pre data-lb-code-block data-lb-lang="js"><code>const listEl = document.getElementById('my-conv-list');
+const list   = listEl._lbConvList;
+
+list.setConvs([
+  { id: 'c1', title: 'Quick refactor question',  timestamp: Date.now(),                  unread: 2 },
+  { id: 'c2', title: 'Onboarding flow review',   timestamp: Date.now() - 36e5,           colorTag: '#8b5cf6' },
+  { id: 'c3', title: 'Design system migration',  timestamp: Date.now() - 26e5 * 24,      pinned: true },
+  // …
+]);
+list.setActive('c1');
+
+listEl.addEventListener('lb-conv-select', (e) =&gt; {
+  loadConversation(e.detail.id);
+});
+
+listEl.addEventListener('lb-conv-action', (e) =&gt; {
+  if (e.detail.action === 'rename') openRenameDialog(e.detail.id);
+  else if (e.detail.action === 'delete') confirmDelete(e.detail.id);
+  // pin / unpin / share / move handled similarly
+});</code></pre>
+
+  </section>
+</main>
+
+<script src="../js/lb.js"></script>
+<script src="../js/components/lb-chat.js"></script>
+<script src="../js/slot-engine.js"></script>
+<script src="../js/theme-editor.js"></script>
+<script src="../js/token-exporter.js"></script>
+<script src="../js/gallery-layout.js"></script>
+
+<script>
+  // Demo: drive the streaming bubble with a fake token stream so
+  // visitors see the caret blink + text accumulate. Restart every
+  // ~12s for the page-stays-open case.
+  (function () {
+    var STREAM_TEXT = "Seen from orbit, Earth has no visible borders \u2014 just one thin blue atmosphere wrapped around everything that has ever lived. Astronauts call that shift in perspective the overview effect.";
+    var TOKENS = STREAM_TEXT.split(/(\s+)/); // split on whitespace, keep separators
+    var bubbleEl = document.getElementById('demo-stream');
+    if (!bubbleEl) return;
+
+    function reset() {
+      var body = bubbleEl.querySelector('.lb-bubble__body');
+      if (body) body.textContent = '';
+      if (bubbleEl._lbBubble) bubbleEl._lbBubble.setState('streaming');
+    }
+
+    function play(i) {
+      if (!bubbleEl._lbBubble) return setTimeout(function () { play(i); }, 100);
+      if (i >= TOKENS.length) {
+        bubbleEl._lbBubble.setState('done');
+        // Loop after a pause so the demo keeps explaining itself.
+        setTimeout(function () { reset(); play(0); }, 6000);
+        return;
+      }
+      bubbleEl._lbBubble.appendText(TOKENS[i]);
+      // Tokens flow ~12/sec, like a slow model. Spaces are instant.
+      var isSpace = /^\s+$/.test(TOKENS[i]);
+      setTimeout(function () { play(i + 1); }, isSpace ? 20 : 70);
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', function () { play(0); });
+    } else {
+      play(0);
+    }
+  })();
+
+  // Working-chat demo wiring — Thread + Composer + mock stream
+  (function () {
+    var RESPONSES = [
+      "Great question. Streaming responses arrive token by token via the appendText API. Each call to appendText auto-transitions the bubble's state to 'streaming', which shows the blinking caret. When the stream completes, the consumer calls setState('done') to clear the caret.",
+      "Sure — the Thread component handles scrolling automatically. If you scroll up while I'm streaming, you'll see the jump-to-bottom pill appear in the bottom-right corner. Clicking it returns you to the latest message. If you stay at the bottom, the thread auto-sticks while content grows.",
+      "Composer wiring is simple: listen for lb-composer-submit, append a user bubble with the message, append a streaming assistant bubble, then push tokens into it. The send button morphs to a stop button while streaming. Stop emits lb-composer-stop so the consumer can halt their own stream.",
+      "Each Bubble carries its own state machine — done, streaming, error, edited. You can inspect or change state via bubble._lbBubble.getState() / setState(). The body slot accepts plain text via appendText, or full HTML via setBodyHtml — that's the escape hatch for consumers that want a richer markdown engine than the minimal subset letbe-ds ships.",
+    ];
+
+    function init() {
+      var thread = document.getElementById('demo-thread');
+      var composer = document.getElementById('demo-composer');
+      if (!thread || !composer) return setTimeout(init, 50);
+      if (!thread._lbThread || !composer._lbComposer) return setTimeout(init, 50);
+
+      // Workbench demo config — tools, models, slash commands.
+      composer._lbComposer.setTools([
+        { id: 'web',   label: 'Web',   icon: 'globe', active: false },
+        { id: 'code',  label: 'Code',  icon: 'code', active: false },
+        { id: 'image', label: 'Image', icon: 'image', active: false },
+      ]);
+      composer._lbComposer.setModels([
+        { id: 'fast',     label: 'Fast (small model)' },
+        { id: 'balanced', label: 'Balanced' },
+        { id: 'thinking', label: 'Thinking (slow)' },
+      ], 'balanced');
+      composer._lbComposer.registerCommand({
+        id: 'clear', label: 'Clear conversation', hint: 'Remove all messages from this thread',
+        run: function () { thread._lbThread.clear(); },
+      });
+      composer._lbComposer.registerCommand({
+        id: 'system', label: 'Insert system message', hint: 'Add a centred system note',
+        run: function () {
+          thread._lbThread.appendBubble({
+            role: 'system',
+            body: 'System note inserted via /system command · ' + new Date().toLocaleTimeString(),
+          });
+        },
+      });
+      composer._lbComposer.registerCommand({
+        id: 'mock',  label: 'Mock assistant reply', hint: 'Stream a fake reply without sending a user message',
+        run: function () {
+          var replyEl = thread._lbThread.appendBubble({
+            role: 'assistant',
+            state: 'streaming',
+            sender: 'Assistant',
+            timestamp: 'just now',
+            avatarHtml: '<span class="lb-avatar lb-avatar--small" style="background: var(--lb-bg-accent-muted); color: var(--lb-fg-accent);">AI</span>',
+          });
+          composer._lbComposer.setState('streaming');
+          activeStreamCancel = mockStream(replyEl._lbBubble, function () {
+            composer._lbComposer.setState('idle');
+            activeStreamCancel = null;
+          });
+        },
+      });
+      composer._lbComposer.registerCommand({
+        id: 'tool', label: 'Inject example tool call', hint: 'Append a LB.ToolCall into the thread',
+        keywords: ['toolcall'],
+        run: function () { injectToolCall('done'); },
+      });
+      composer._lbComposer.registerCommand({
+        id: 'tool-running', label: 'Tool call — running', hint: 'Streams output and resolves',
+        run: function () { injectToolCall('running'); },
+      });
+      composer._lbComposer.registerCommand({
+        id: 'tool-risky', label: 'Tool call — risky (confirm gate)', hint: 'Awaiting-confirm state',
+        run: function () { injectToolCall('risky'); },
+      });
+      composer._lbComposer.registerCommand({
+        id: 'tool-error', label: 'Tool call — error', hint: 'Failed state with red border',
+        run: function () { injectToolCall('error'); },
+      });
+
+      function injectToolCall(mode) {
+        // Append a bare div, init LB.ToolCall on it, then setData.
+        var slot = document.createElement('div');
+        slot.setAttribute('data-lb-tool-call', '');
+        // Insert before the jump pill to stay in the chat scroll flow.
+        var jump = thread.querySelector('.lb-thread__jump-pill');
+        if (jump) thread.insertBefore(slot, jump);
+        else thread.appendChild(slot);
+        slot._lbToolCall = new window.LB.ToolCall(slot);
+
+        if (mode === 'done') {
+          slot._lbToolCall.setData({
+            icon: 'globe',
+            name: 'web_search',
+            summary: 'Searched 3 sources for "letbe-ds chat patterns"',
+            status: 'success',
+            inputHtml: 'Query: <em>letbe-ds chat patterns</em><br>Max results: 5',
+            outputHtml: '<ul><li>letbe-ds docs</li><li>Pluggable engine HARD rule</li><li>AI Chat template</li></ul>',
+            rawInput: { query: 'letbe-ds chat patterns', max_results: 5 },
+            rawOutput: { results: [{ url: 'https://example.com/letbe-ds', title: 'letbe-ds chat' }], fetched_at: new Date().toISOString() },
+          });
+        } else if (mode === 'running') {
+          slot._lbToolCall.setData({
+            icon: 'code', name: 'python_exec', summary: 'Running pandas summary',
+            status: 'running', inputHtml: '<pre class="lb-tool-call__raw-block">df.describe()</pre>',
+          });
+          slot._lbToolCall.expand();
+          // Stream output then mark done
+          var output = '';
+          var fragments = ['count    100\n', 'mean      42\n', 'std       12\n', 'min        7\n', 'max       99\n'];
+          var i = 0;
+          var iv = setInterval(function () {
+            if (i >= fragments.length) {
+              clearInterval(iv);
+              slot._lbToolCall.setData({
+                status: 'success',
+                rawOutput: { rows: 100, cols: 5 },
+              });
+              return;
+            }
+            output += fragments[i++];
+            slot._lbToolCall.setData({
+              outputHtml: '<pre class="lb-tool-call__raw-block">' + output + '</pre>',
+            });
+          }, 500);
+        } else if (mode === 'risky') {
+          slot._lbToolCall.setData({
+            icon: 'code', name: 'shell_exec', summary: 'rm -rf /tmp/build-cache',
+            inputHtml: '<pre class="lb-tool-call__raw-block">rm -rf /tmp/build-cache</pre>',
+            risky: true,
+          });
+          slot.addEventListener('lb-tool-call-confirm', function () {
+            slot._lbToolCall.setData({ status: 'success', outputHtml: '<em>Removed /tmp/build-cache</em>' });
+          });
+          slot.addEventListener('lb-tool-call-cancel', function () {
+            // Status auto-set to error by the cancel handler
+          });
+        } else if (mode === 'error') {
+          slot._lbToolCall.setData({
+            icon: 'file', name: 'file_read', summary: "Could not read /etc/secrets — permission denied",
+            status: 'error',
+            inputHtml: 'Path: /etc/secrets',
+            outputHtml: '<em>EACCES: permission denied</em>',
+            rawInput: { path: '/etc/secrets' },
+            rawOutput: { error: 'EACCES', code: 13 },
+          });
+        }
+      }
+
+      var activeStreamCancel = null;
+
+      function mockStream(bubble, onDone) {
+        var text = RESPONSES[Math.floor(Math.random() * RESPONSES.length)];
+        var tokens = text.split(/(\s+)/);
+        var i = 0;
+        var stopped = false;
+        function tick() {
+          if (stopped) return;
+          if (i >= tokens.length) {
+            bubble.setState('done');
+            if (onDone) onDone();
+            return;
+          }
+          bubble.appendText(tokens[i]);
+          var isSpace = /^\s+$/.test(tokens[i]);
+          i++;
+          setTimeout(tick, isSpace ? 20 : 60);
+        }
+        tick();
+        return function cancel() {
+          stopped = true;
+          bubble.setState('done');
+          if (onDone) onDone();
+        };
+      }
+
+      composer.addEventListener('lb-composer-submit', function (e) {
+        // 1. Append the user's message
+        thread._lbThread.appendBubble({
+          role: 'user',
+          sender: 'You',
+          timestamp: 'just now',
+          avatarHtml: '<span class="lb-avatar lb-avatar--small">YOU</span>',
+          body: e.detail.value,
+        });
+        composer._lbComposer.clear();
+        composer._lbComposer.setState('sending');
+
+        // 2. Small delay before assistant "starts thinking"
+        setTimeout(function () {
+          var replyEl = thread._lbThread.appendBubble({
+            role: 'assistant',
+            state: 'streaming',
+            sender: 'Assistant',
+            timestamp: 'just now',
+            avatarHtml: '<span class="lb-avatar lb-avatar--small" style="background: var(--lb-bg-accent-muted); color: var(--lb-fg-accent);">AI</span>',
+          });
+          composer._lbComposer.setState('streaming');
+          activeStreamCancel = mockStream(replyEl._lbBubble, function () {
+            composer._lbComposer.setState('idle');
+            activeStreamCancel = null;
+          });
+        }, 300);
+      });
+
+      composer.addEventListener('lb-composer-stop', function () {
+        if (activeStreamCancel) activeStreamCancel();
+      });
+
+      // Branch created via edit → mock-stream a fresh assistant reply
+      // on the new branch. Real consumers would call their model API
+      // here with the new user-message text.
+      thread.addEventListener('lb-thread-branch-created', function (e) {
+        composer._lbComposer.setState('sending');
+        setTimeout(function () {
+          var replyEl = thread._lbThread.appendBubble({
+            role: 'assistant',
+            state: 'streaming',
+            sender: 'Assistant',
+            timestamp: 'just now',
+            avatarHtml: '<span class="lb-avatar lb-avatar--small" style="background: var(--lb-bg-accent-muted); color: var(--lb-fg-accent);">AI</span>',
+          });
+          composer._lbComposer.setState('streaming');
+          activeStreamCancel = mockStream(replyEl._lbBubble, function () {
+            composer._lbComposer.setState('idle');
+            activeStreamCancel = null;
+          });
+        }, 300);
+      });
+
+      // Optional: log other action events so consumers can see what
+      // fires (only in the demo — comment out in production).
+      thread.addEventListener('lb-bubble-action', function (e) {
+        // console.log('bubble action:', e.detail.action);
+      });
+    }
+    init();
+  })();
+
+  // Conversation-list demo wiring — preset history + event hookup.
+  (function () {
+    var DAY = 24 * 60 * 60 * 1000;
+
+    function init() {
+      var listEl = document.getElementById('demo-conv-list');
+      var pane   = document.getElementById('demo-conv-active');
+      if (!listEl || !pane) return setTimeout(init, 50);
+      if (!listEl._lbConvList) return setTimeout(init, 50);
+
+      var now = Date.now();
+      listEl._lbConvList.setConvs([
+        // Today
+        { id: 'c1', title: 'Quick refactor question',            timestamp: now - 30 * 60 * 1000,        unread: 2 },
+        { id: 'c2', title: 'Why is the build failing?',          timestamp: now - 3 * 60 * 60 * 1000 },
+        // Yesterday
+        { id: 'c3', title: 'Onboarding flow review',             timestamp: now - 1 * DAY - 2 * 60 * 60 * 1000, colorTag: '#8b5cf6' },
+        // Previous 7 Days
+        { id: 'c4', title: 'Design system migration plan',       timestamp: now - 3 * DAY,                pinned: true },
+        { id: 'c5', title: 'PostgreSQL replica lag debugging',   timestamp: now - 4 * DAY,                colorTag: '#10b981' },
+        { id: 'c6', title: 'Email notification copy draft',      timestamp: now - 6 * DAY },
+        // Previous 30 Days
+        { id: 'c7', title: 'Q3 roadmap brainstorm',              timestamp: now - 12 * DAY,               colorTag: '#f59e0b' },
+        { id: 'c8', title: 'Pricing page A/B test setup',        timestamp: now - 18 * DAY },
+        { id: 'c9', title: 'Customer interview synthesis',       timestamp: now - 25 * DAY,               unread: 5 },
+        // Older — month bucket
+        { id: 'c10', title: 'Initial system prompt iteration',   timestamp: now - 65 * DAY },
+        { id: 'c11', title: 'Brand voice exploration',           timestamp: now - 80 * DAY },
+      ]);
+      listEl._lbConvList.setActive('c1');
+
+      pane.textContent = 'Conversation c1 — Quick refactor question';
+
+      listEl.addEventListener('lb-conv-select', function (e) {
+        pane.textContent = 'Conversation ' + e.detail.id + ' — ' + (e.detail.conv && e.detail.conv.title);
+      });
+
+      listEl.addEventListener('lb-conv-action', function (e) {
+        // Real consumer would route this to their backend / open dialogs / etc.
+        // For the demo we just narrate.
+        pane.textContent = 'Action “' + e.detail.action + '” on ' + e.detail.id
+          + (e.detail.conv ? ' (' + e.detail.conv.title + ')' : '');
+      });
+
+      listEl.addEventListener('lb-conv-list-filter', function (e) {
+        // console.log('filter changed:', e.detail.filter);
+      });
+    }
+    init();
+  })();
+</script>
+</body>
+</html>

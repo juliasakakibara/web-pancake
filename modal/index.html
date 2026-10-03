@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <!-- theme-preamble:v1 -->
+  <script>(function(){try{var t=localStorage.getItem('letbe-ds-dark-mode');if(t==='1')document.documentElement.setAttribute('data-theme','dark');else if(t==='0')document.documentElement.setAttribute('data-theme','light');}catch(e){}})();</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta data-lb-page="modal">
+  <title>Modal — letbe-ds</title>
+  <link rel="stylesheet" href="../tokens/theme.css">
+  <link rel="stylesheet" href="../tokens/fonts.css">
+  <link rel="stylesheet" href="../components/components.css">
+  <link rel="stylesheet" href="../components/theme-editor.css">
+  <link rel="stylesheet" href="../components/gallery.css">
+</head>
+<body data-lb-base="..">
+
+<main class="gallery-main">
+  <section class="gallery-section" id="modal">
+    <h1 class="gallery-section__title" style="font-size: var(--lb-t-heading-l-font-size); line-height: var(--lb-t-heading-l-line-height);">Modal</h1>
+    <p class="gallery-section__desc">Overlay dialog that covers the page and holds focus until dismissed. Three sizes: small (24rem), medium (36rem), large (52rem). The <strong>Alert Dialog</strong> variant (further down) is a focused confirmation style — same component, different role + trimmed structure — for destructive or irreversible actions. Use modals sparingly; for longer flows prefer a route or inline panel.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>a11y (built in):</strong> the backdrop carries <code class="lb-code">role="dialog"</code> (or <code class="lb-code">role="alertdialog"</code>) + <code class="lb-code">aria-modal="true"</code> + <code class="lb-code">aria-labelledby</code> / <code class="lb-code">aria-describedby</code> pointing at the real title and body, and the close X is labelled. <code class="lb-code">open()</code> stores <code class="lb-code">document.activeElement</code>, cycles <kbd>Tab</kbd> / <kbd>Shift</kbd>+<kbd>Tab</kbd> inside <code class="lb-code">.lb-modal</code>, and locks body scroll; <code class="lb-code">close()</code> releases both and returns focus to the opener. <kbd>Esc</kbd> always closes, a backdrop click closes everything except <code class="lb-code">.lb-modal--alert</code>, and <code class="lb-code">LB.alert()</code> mints its own id wiring, escapes the strings it renders, and lands focus on the confirm button.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>Usage:</strong> Drop the <code class="lb-code">.lb-modal-backdrop</code> block anywhere in <code class="lb-code">&lt;body&gt;</code> with inline <code class="lb-code">display:none</code>; <code class="lb-code">data-lb-modal</code> auto-inits on DOMContentLoaded (run <code class="lb-code">LB.init()</code> again for markup injected later — it's idempotent). Drive it with <code class="lb-code">el._lbModal.open()</code> / <code class="lb-code">.close()</code> or construct <code class="lb-code">new LB.Modal(el, { onClose })</code>; the backdrop dispatches <code class="lb-code">lb-modal-open</code> and <code class="lb-code">lb-modal-close</code> on every transition. For one-off confirmations skip the markup entirely — <code class="lb-code">LB.alert(options)</code> mints, opens and disposes its own dialog and resolves its <code class="lb-code">Promise&lt;boolean&gt;</code> with <code class="lb-code">true</code> only on confirm (full options in the API card below).</p>
+
+    <hr class="gallery-desc-divider">
+
+    <!-- ────────────────── Default ────────────────── -->
+    <h2 class="gallery-section__title">Default</h2>
+    <p class="gallery-section__desc">Standard modal: backdrop, header with close X, body, footer with Cancel/Confirm. Open via <code class="lb-code">el._lbModal.open()</code>, close via <code class="lb-code">.close()</code> or the X button. <kbd>Esc</kbd> and backdrop click both dismiss.</p>
+    <div class="gallery-row">
+      <button class="lb-btn lb-btn--primary lb-btn--medium" onclick="document.getElementById('demo-modal')._lbModal.open()">Open Modal</button>
+    </div>
+
+    <div class="lb-modal-backdrop" id="demo-modal" data-lb-modal style="display:none;" role="dialog" aria-modal="true" aria-labelledby="modal-title-1">
+      <div class="lb-modal lb-modal--medium">
+        <div class="lb-modal__header">
+          <div class="lb-modal__header-title"><h3 class="lb-modal__title" id="modal-title-1">Confirm Action</h3></div>
+          <button class="lb-modal__close" aria-label="Close"><span data-lb-icon="x" style="width: 1.5rem; height: 1.5rem;"></span></button>
+        </div>
+        <div class="lb-modal__body">Are you sure you want to proceed? This action cannot be undone.</div>
+        <div class="lb-modal__footer">
+          <button class="lb-btn lb-btn--secondary lb-btn--medium" onclick="document.getElementById('demo-modal')._lbModal.close()">Cancel</button>
+          <button class="lb-btn lb-btn--primary lb-btn--medium" onclick="document.getElementById('demo-modal')._lbModal.close()">Confirm</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ────────────────── Alert dialog — programmatic ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Alert dialog — programmatic <code class="lb-code">LB.alert()</code></h2>
+    <p class="gallery-section__desc"><strong>Alert dialog</strong> is the focused confirmation variant — for destructive or irreversible actions (delete, discard, revoke, force-logout). Smaller and more pointed than a general-purpose Modal: one question, two buttons, no X to close by mistake. ARIA role <code class="lb-code">alertdialog</code> (not <code class="lb-code">dialog</code>) so screen readers announce it as a blocking alert. Backdrop click does not dismiss while the dialog carries <code class="lb-code">.lb-modal--alert</code> — users must pick.</p>
+    <p class="gallery-section__desc">Programmatic short form — builds, opens, disposes the dialog. Returns a Promise resolving to <code class="lb-code">true</code> on confirm, <code class="lb-code">false</code> on cancel or Escape.</p>
+    <div class="gallery-row" style="flex-wrap: wrap; gap: var(--lb-size-2x);">
+      <button type="button" class="lb-btn lb-btn--danger lb-btn--medium" onclick="LB.alert({ title: 'Delete 3 selected members?', message: 'This removes their access, history, and cannot be undone.', confirmText: 'Delete', danger: true }).then(ok => document.getElementById('demo-prog-fb').textContent = ok ? '✓ confirmed delete' : '× cancelled');">Delete…</button>
+      <button type="button" class="lb-btn lb-btn--primary lb-btn--medium" onclick="LB.alert({ title: 'Publish workspace?', message: 'Teammates will be notified by email once published.', confirmText: 'Publish' }).then(ok => document.getElementById('demo-prog-fb').textContent = ok ? '✓ confirmed publish' : '× cancelled');">Publish…</button>
+      <button type="button" class="lb-btn lb-btn--secondary lb-btn--medium" onclick="LB.alert({ title: 'Discard unsaved changes?', message: 'Your edits from the last 10 minutes will be lost.', confirmText: 'Discard', cancelText: 'Keep editing', danger: true }).then(ok => document.getElementById('demo-prog-fb').textContent = ok ? '✓ confirmed discard' : '× kept editing');">Discard changes…</button>
+    </div>
+    <p class="gallery-section__desc" style="margin-top: var(--lb-size-3x); font-size: var(--lb-t-body-s-font-size);">Last result: <span id="demo-prog-fb" style="font-family: var(--lb-font-family-3); color: var(--lb-fg-accent);">(click a button)</span></p>
+
+    <!-- ────────────────── Alert dialog — declarative destructive ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Alert dialog — declarative, destructive</h2>
+    <p class="gallery-section__desc">Write the markup yourself when you need custom content (long messages, inline forms, links). Use <code class="lb-code">role="alertdialog"</code> + <code class="lb-code">.lb-modal--alert</code> + <code class="lb-code">.lb-btn--danger</code>.</p>
+    <button type="button" class="lb-btn lb-btn--danger lb-btn--medium" onclick="document.getElementById('demo-alert-delete')._lbModal.open()">Delete workspace…</button>
+
+    <div class="lb-modal-backdrop" id="demo-alert-delete" data-lb-modal style="display:none;" role="alertdialog" aria-modal="true" aria-labelledby="alert-delete-title" aria-describedby="alert-delete-body">
+      <div class="lb-modal lb-modal--small lb-modal--alert">
+        <div class="lb-modal__header">
+          <div class="lb-modal__header-title">
+            <span class="lb-modal__alert-icon" data-lb-icon="circle-alert" style="width: 1.5rem; height: 1.5rem;"></span>
+            <h3 class="lb-modal__title" id="alert-delete-title">Delete workspace?</h3>
+          </div>
+        </div>
+        <div class="lb-modal__body" id="alert-delete-body">
+          <p style="margin: 0 0 var(--lb-size-2x);">You're about to permanently delete <strong>letbe.design</strong>. This will:</p>
+          <ul style="margin: 0; padding-left: var(--lb-size-4x); color: var(--lb-fg-muted); line-height: var(--lb-t-body-m-line-height);">
+            <li>Remove all 24 projects and their data</li>
+            <li>Cancel outstanding invites to 8 teammates</li>
+            <li>Revoke all API tokens issued from this workspace</li>
+          </ul>
+          <p style="margin: var(--lb-size-3x) 0 0;">This action <strong>cannot be undone</strong>.</p>
+        </div>
+        <div class="lb-modal__footer">
+          <button class="lb-btn lb-btn--secondary lb-btn--medium" onclick="document.getElementById('demo-alert-delete')._lbModal.close()">Cancel</button>
+          <button class="lb-btn lb-btn--danger lb-btn--medium" onclick="document.getElementById('demo-alert-delete')._lbModal.close()">Delete workspace</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ────────────────── Alert dialog — declarative non-destructive ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Alert dialog — declarative, non-destructive</h2>
+    <p class="gallery-section__desc">For confirmations that aren't destructive (sign out, publish, enable, etc.), skip the danger icon/button but keep the <code class="lb-code">alertdialog</code> role, the <code class="lb-code">.lb-modal--alert</code> class and the compact size.</p>
+    <button type="button" class="lb-btn lb-btn--primary lb-btn--medium" onclick="document.getElementById('demo-alert-signout')._lbModal.open()">Sign out…</button>
+
+    <div class="lb-modal-backdrop" id="demo-alert-signout" data-lb-modal style="display:none;" role="alertdialog" aria-modal="true" aria-labelledby="alert-signout-title" aria-describedby="alert-signout-body">
+      <div class="lb-modal lb-modal--small">
+        <div class="lb-modal__header">
+          <div class="lb-modal__header-title">
+            <h3 class="lb-modal__title" id="alert-signout-title">Sign out of letbe.design?</h3>
+          </div>
+        </div>
+        <div class="lb-modal__body" id="alert-signout-body">You'll need to enter your credentials again to get back in. Offline drafts on this device will be kept.</div>
+        <div class="lb-modal__footer">
+          <button class="lb-btn lb-btn--secondary lb-btn--medium" onclick="document.getElementById('demo-alert-signout')._lbModal.close()">Cancel</button>
+          <button class="lb-btn lb-btn--primary lb-btn--medium" onclick="document.getElementById('demo-alert-signout')._lbModal.close()">Sign out</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ────────────────── API reference ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">API — <code class="lb-code">LB.alert(options)</code></h2>
+    <p class="gallery-section__desc">Full options reference for the programmatic helper.</p>
+    <div class="lb-card" style="padding: var(--lb-size-4x); font-family: var(--lb-font-family-3); font-size: var(--lb-t-body-s-font-size); background: var(--lb-bg-strong); white-space: pre-wrap; overflow-x: auto;"><code>const ok = await LB.alert({
+  title: 'Delete item?',        // required-ish; defaults to "Are you sure?"
+  message: 'Cannot be undone.', // optional body text
+  confirmText: 'Delete',        // default 'Confirm'
+  cancelText: 'Cancel',         // default 'Cancel'
+  danger: true,                 // makes confirm button red + adds alert icon
+  icon: 'circle-alert' | 'triangle' | false | '&lt;svg>...&lt;/svg>',
+});
+if (ok) { /* user confirmed */ }</code></div>
+
+  </section>
+</main>
+
+<script src="../js/lb.js"></script>
+<script src="../js/slot-engine.js"></script>
+<script src="../js/theme-editor.js"></script>
+<script src="../js/token-exporter.js"></script>
+<script src="../js/gallery-layout.js"></script>
+</body>
+</html>

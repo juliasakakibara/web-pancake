@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <!-- theme-preamble:v1 -->
+  <script>(function(){try{var t=localStorage.getItem('letbe-ds-dark-mode');if(t==='1')document.documentElement.setAttribute('data-theme','dark');else if(t==='0')document.documentElement.setAttribute('data-theme','light');}catch(e){}})();</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta data-lb-page="link">
+  <title>Link — letbe-ds</title>
+  <link rel="stylesheet" href="../tokens/theme.css">
+  <link rel="stylesheet" href="../tokens/fonts.css">
+  <link rel="stylesheet" href="../components/components.css">
+  <link rel="stylesheet" href="../components/theme-editor.css">
+  <link rel="stylesheet" href="../components/gallery.css">
+</head>
+<body data-lb-base="..">
+
+<main class="gallery-main">
+  <section class="gallery-section" id="link">
+    <h1 class="gallery-section__title" style="font-size: var(--lb-t-heading-l-font-size); line-height: var(--lb-t-heading-l-line-height);">Link</h1>
+    <p class="gallery-section__desc">Inline text link. Use for navigation between pages, external references, or in-paragraph actions that take the user somewhere. For actions that mutate state (submit, delete), use Button. Subtle variant for low-emphasis links. Optional <code class="lb-code">.lb-link__icon</code> slot for trailing icons that signal destination type — external-link, arrow-right (continue), download.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>a11y (built in):</strong> <code class="lb-code">.lb-link</code> is styling only — every link is a real <code class="lb-code">&lt;a href&gt;</code> and no JS controller binds to it. The underline is permanent (<code class="lb-code">text-decoration: underline</code>, kept by <code class="lb-code">--subtle</code>, which changes colour only), so a link is never signalled by colour alone, and <code class="lb-code">:focus-visible</code> draws the shared focus outline (<code class="lb-code">--lb-border-focus</code>) offset clear of the text. The trailing icon is decoration — <code class="lb-code">aria-hidden="true"</code>, sized in <code class="lb-code">1em</code> so it tracks the size variant — which means destination meaning has to live in the link text, not the glyph.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>Usage:</strong> Copy the full combo — base plus size, <code class="lb-code">lb-link lb-link--medium</code>: <code class="lb-code">--small</code>/<code class="lb-code">--large</code> swap the action type ramp (the bare base falls back to the medium scale) and <code class="lb-code">--subtle</code> stacks on any size. The base is <code class="lb-code">inline-flex</code> with a built-in gap, so the trailing <code class="lb-code">.lb-link__icon</code> needs no margin — it is an empty <code class="lb-code">&lt;span data-lb-icon="…"&gt;</code> hydrated by <code class="lb-code">LB.initIcons()</code>, which <code class="lb-code">LB.init()</code> runs automatically at <code class="lb-code">DOMContentLoaded</code>: load <code class="lb-code">js/lb.js</code> when you use the icon slot, and for links injected later call <code class="lb-code">LB.initIcons(root)</code> again (idempotent — hydrated spans are skipped). No events, no per-element JS handle.</p>
+
+    <hr class="gallery-desc-divider">
+
+    <h2 class="gallery-section__title">Sizes &amp; variants</h2>
+    <div class="gallery-row">
+      <a class="lb-link lb-link--small" href="#">Small link</a>
+      <a class="lb-link lb-link--medium" href="#">Medium link</a>
+      <a class="lb-link lb-link--large" href="#">Large link</a>
+      <a class="lb-link lb-link--medium lb-link--subtle" href="#">Subtle link</a>
+    </div>
+
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">With trailing icon</h2>
+    <p class="gallery-section__desc">Add a <code class="lb-code">.lb-link__icon</code> after the text to signal the destination type. Three conventions ship in our icon library: <code class="lb-code">external-link</code> (opens new tab/leaves the site), <code class="lb-code">arrow-right</code> (continue / read more), <code class="lb-code">download</code> (file download). Pair external links with <code class="lb-code">target="_blank"</code> + <code class="lb-code">rel="noopener noreferrer"</code> for security; append <code class="lb-code">&lt;span class="lb-visually-hidden"&gt;(opens in new tab)&lt;/span&gt;</code> inside the link if the surrounding text doesn't already say so — an <code class="lb-code">aria-label</code> would replace the visible text rather than add to it.</p>
+
+    <div class="gallery-label">External link — leaves the site</div>
+    <div class="gallery-row">
+      <a class="lb-link lb-link--small" href="https://lucide.dev" target="_blank" rel="noopener noreferrer">
+        Lucide icons
+        <span class="lb-link__icon" aria-hidden="true" data-lb-icon="external-link"></span>
+      </a>
+      <a class="lb-link lb-link--medium" href="https://lucide.dev" target="_blank" rel="noopener noreferrer">
+        Lucide icons
+        <span class="lb-link__icon" aria-hidden="true" data-lb-icon="external-link"></span>
+      </a>
+      <a class="lb-link lb-link--large" href="https://lucide.dev" target="_blank" rel="noopener noreferrer">
+        Lucide icons
+        <span class="lb-link__icon" aria-hidden="true" data-lb-icon="external-link"></span>
+      </a>
+    </div>
+
+    <div class="gallery-label" style="margin-top: var(--lb-size-6x);">Continue — direction of progression</div>
+    <div class="gallery-row">
+      <a class="lb-link lb-link--small" href="#">
+        Read more
+        <span class="lb-link__icon" aria-hidden="true" data-lb-icon="arrow-right"></span>
+      </a>
+      <a class="lb-link lb-link--medium" href="#">
+        Continue to checkout
+        <span class="lb-link__icon" aria-hidden="true" data-lb-icon="arrow-right"></span>
+      </a>
+      <a class="lb-link lb-link--large" href="#">
+        Learn more
+        <span class="lb-link__icon" aria-hidden="true" data-lb-icon="arrow-right"></span>
+      </a>
+    </div>
+
+    <div class="gallery-label" style="margin-top: var(--lb-size-6x);">Download — file action</div>
+    <div class="gallery-row">
+      <a class="lb-link lb-link--medium" href="#" download>
+        Annual report.pdf
+        <span class="lb-link__icon" aria-hidden="true" data-lb-icon="download"></span>
+      </a>
+      <a class="lb-link lb-link--medium lb-link--subtle" href="#" download>
+        Spreadsheet (CSV)
+        <span class="lb-link__icon" aria-hidden="true" data-lb-icon="download"></span>
+      </a>
+    </div>
+
+    <div class="gallery-label" style="margin-top: var(--lb-size-6x);">In a paragraph</div>
+    <p class="gallery-section__desc" style="margin-bottom: 0;">
+      We use icons from
+      <a class="lb-link lb-link--medium" href="https://lucide.dev" target="_blank" rel="noopener noreferrer">Lucide
+        <span class="lb-link__icon" aria-hidden="true" data-lb-icon="external-link"></span>
+      </a>,
+      vendored locally for offline use. Read the
+      <a class="lb-link lb-link--medium" href="#">licensing notes
+        <span class="lb-link__icon" aria-hidden="true" data-lb-icon="arrow-right"></span>
+      </a>
+      to confirm attribution.
+    </p>
+  </section>
+</main>
+
+<script src="../js/lb.js"></script>
+<script src="../js/slot-engine.js"></script>
+<script src="../js/theme-editor.js"></script>
+<script src="../js/token-exporter.js"></script>
+<script src="../js/gallery-layout.js"></script>
+</body>
+</html>

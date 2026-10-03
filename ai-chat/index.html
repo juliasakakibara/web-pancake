@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <!-- theme-preamble:v1 -->
+  <script>(function(){try{var t=localStorage.getItem('letbe-ds-dark-mode');if(t==='1')document.documentElement.setAttribute('data-theme','dark');else if(t==='0')document.documentElement.setAttribute('data-theme','light');}catch(e){}})();</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta data-lb-page="ai-chat">
+  <title>AI Chat — letbe-ds</title>
+  <link rel="stylesheet" href="../tokens/theme.css">
+  <link rel="stylesheet" href="../tokens/fonts.css">
+  <link rel="stylesheet" href="../components/components.css">
+  <link rel="stylesheet" href="../components/theme-editor.css">
+  <link rel="stylesheet" href="../components/gallery.css">
+</head>
+<body data-lb-base="..">
+
+<main class="gallery-main">
+  <section class="gallery-section" id="ai-chat">
+    <h1 class="gallery-section__title" style="font-size: var(--lb-t-heading-l-font-size); line-height: var(--lb-t-heading-l-line-height);">AI Chat</h1>
+    <p class="gallery-section__desc">The AI-chat workspace <strong>template</strong> — Stage 5 opener, and the successor to the retired ChatWorkspace dashboard (/chat/workspace/ now redirects here). Primitives live on the <a class="lb-link" href="../chat/">Chat page</a>; the frame is the <a class="lb-link" href="../app-shell/">App Shell</a>. Pure composition: <code class="lb-code">LB.Shell</code> frame · <code class="lb-code">LB.ConvList</code> in the sidebar (auto Pinned + date-grouped buckets) · <code class="lb-code">.lb-thread</code> capped at <code class="lb-code">48rem</code> (~768px at the default root size) · the <a class="lb-link" href="../dock/">Composer Dock</a> docked at the bottom · <code class="lb-code">ContextBudgetBar</code> in the topbar · optional artifacts rail. The AI <em>engine</em> is yours — wire the composer/thread events to your provider. Consumed here: <a class="lb-link" href="../app-shell/">App Shell</a> · <a class="lb-link" href="../chat/">Chat primitives</a> · <a class="lb-link" href="../dock/">Composer Dock</a> · <a class="lb-link" href="../popover/">Popover</a> · <a class="lb-link" href="../banner/">Banner</a> · <a class="lb-link" href="../avatar/">Avatar</a> · <a class="lb-link" href="../segmented/">Segmented</a> · <a class="lb-link" href="../progress/">Progress</a>.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>a11y (built in):</strong> a clip-hidden <code class="lb-code">.lb-shell__skip</code> link leads the frame and lands on <code class="lb-code">&lt;main tabindex="-1"&gt;</code>; the sidebar toggle is a disclosure (<code class="lb-code">aria-expanded</code> + <code class="lb-code">aria-controls</code>, <kbd>Ctrl/Cmd</kbd>+<kbd>B</kbd>) and the drag handle is a focusable <code class="lb-code">role=separator</code> resized with <kbd>←</kbd>/<kbd>→</kbd>. Below 768px the sidebar becomes a real modal — <code class="lb-code">role=dialog</code> + <code class="lb-code">aria-modal</code> + focus trap + scroll-lock, <kbd>Esc</kbd> closes it and focus returns to the toggle. Streaming bubbles carry <code class="lb-code">aria-busy="true"</code> so the thread's <code class="lb-code">role=log</code> stays quiet until the reply lands, and every icon-only action carries an <code class="lb-code">aria-label</code>.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>Usage:</strong> Load three scripts in order — <code class="lb-code">js/lb.js</code>, <code class="lb-code">js/components/lb-chat.js</code>, <code class="lb-code">js/components/lb-shell.js</code> — and every piece auto-inits from its data attribute (<code class="lb-code">data-lb-shell</code>, <code class="lb-code">data-lb-thread</code>, <code class="lb-code">data-lb-composer</code>, <code class="lb-code">data-lb-conv-list</code>, <code class="lb-code">data-lb-context-budget-bar</code>). The wiring you own: populate the sidebar via <code class="lb-code">listEl._lbConvList.setConvs([…])</code> + <code class="lb-code">setActive(id)</code>, handle <code class="lb-code">lb-composer-submit</code> / <code class="lb-code">lb-composer-stop</code> by streaming your model's reply into <code class="lb-code">thread._lbThread.appendBubble({…})</code> + <code class="lb-code">appendText()</code>, and report tokens with <code class="lb-code">budgetEl._lbContextBudgetBar.setBudget({used, total})</code>. Sidebar collapse/width persists in <code class="lb-code">localStorage</code> under <code class="lb-code">data-lb-shell-key</code> — give the workspace its own key per app.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>Conventions baked in:</strong> assistant messages render <strong>flat/document-style</strong> (bubble shapes signal casual messaging — only the user side keeps the tinted bubble; this is our bubble default already); focus does <em>not</em> jump when a stream completes; per-response thumbs-up / thumbs-down buttons in the bubble footer.</p>
+
+    <hr class="gallery-desc-divider">
+
+    <!-- ────────────────── The template ────────────────── -->
+    <h2 class="gallery-section__title">The workspace</h2>
+    <p class="gallery-section__desc">Everything wired: collapse the sidebar (<kbd>Ctrl/Cmd+B</kbd>, drag-resize enabled), pick conversations, open the model tray in the dock, watch the context bar. The artifacts rail is the shell's <code class="lb-code">aside</code> slot — transient by convention, shown here open.</p>
+    <div style="border: var(--lb-border-width-thin) solid var(--lb-border-muted); border-radius: var(--lb-radius-overlay); overflow: hidden; position: relative;">
+      <div class="lb-shell" data-lb-shell data-lb-shell-collapse="icon" data-lb-shell-resizable data-lb-shell-key="lb-aichat-demo" style="height: 560px;">
+        <a class="lb-shell__skip" href="#aichat-main">Skip to conversation</a>
+        <div class="lb-shell__sidebar">
+          <div class="lb-shell__sidebar-head">
+            <a class="lb-shell__brand" href="#"><span class="lb-shell__logo" data-lb-icon="letbe"></span><span class="lb-shell__brand-name">letbe chat</span></a>
+          </div>
+          <nav class="lb-shell__nav" aria-label="Conversations" style="padding: 0;">
+            <div class="lb-shell__group" data-lb-shell-rail-only style="padding: var(--lb-size-2x);">
+              <button class="lb-shell__item" type="button" aria-label="New chat"><span class="lb-shell__item-icon" data-lb-icon="plus"></span><span class="lb-shell__item-label">New chat</span></button>
+              <button class="lb-shell__item" type="button" aria-label="Search conversations"><span class="lb-shell__item-icon" data-lb-icon="search"></span><span class="lb-shell__item-label">Search</span></button>
+            </div>
+            <div data-lb-conv-list id="aichat-convs" data-lb-shell-expanded-only style="height: 100%; min-height: 0;"></div>
+          </nav>
+          <div class="lb-shell__sidebar-foot">
+            <button class="lb-shell__item lb-shell__item--user" type="button"><span class="lb-avatar lb-avatar--small" role="img" aria-label="Vatroslav K" data-lb-initials="VK"></span><span class="lb-shell__item-label">v.kova@letbe.art</span></button>
+          </div>
+        </div>
+        <div class="lb-shell__main">
+          <div class="lb-shell__topbar">
+            <button class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--medium" data-lb-shell-toggle aria-label="Toggle sidebar"><span data-lb-icon="panel-left"></span></button>
+            <strong style="font-size: var(--lb-t-body-s-font-size);">Why is the sky blue?</strong>
+            <div class="lb-shell__topbar-actions">
+              <button class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--medium" aria-label="New chat"><span data-lb-icon="plus"></span></button>
+            </div>
+          </div>
+          <div class="lb-shell__content" id="aichat-main" tabindex="-1" style="padding: 0; display: flex; flex-direction: column;">
+            <div style="flex: 1; overflow-y: auto; overscroll-behavior: contain;">
+              <div class="lb-thread" data-lb-thread style="max-width: 48rem; margin: 0 auto; padding: var(--lb-size-6x) var(--lb-size-4x); display: flex; flex-direction: column; gap: var(--lb-size-6x);">
+                <div class="lb-bubble lb-bubble--system" data-lb-bubble>
+                  <div class="lb-bubble__content"><div class="lb-bubble__body">Conversation started &middot; today</div></div>
+                </div>
+                <div class="lb-bubble lb-bubble--user" data-lb-bubble>
+                  <div class="lb-bubble__content">
+                    <div class="lb-bubble__header"><span class="lb-bubble__sender">You</span><span class="lb-bubble__timestamp">2 min ago</span></div>
+                    <div class="lb-bubble__body">Why is the sky blue?</div>
+                    <div class="lb-bubble__footer">
+                      <button type="button" class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--small" data-lb-icon="pencil" aria-label="Edit message (creates branch)"></button>
+                      <button type="button" class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--small" data-lb-icon="copy" aria-label="Copy"></button>
+                    </div>
+                  </div>
+                </div>
+                <div class="lb-bubble" data-lb-bubble>
+                  <div class="lb-bubble__content">
+                    <div class="lb-bubble__header"><span class="lb-bubble__sender">Assistant</span><span class="lb-bubble__timestamp">1 min ago</span></div>
+                    <div class="lb-bubble__body">
+                      <p>The sky looks blue because sunlight scatters as it passes through the atmosphere &mdash; shorter blue wavelengths scatter far more than the longer red ones, so blue light reaches your eyes from every direction.</p>
+                      <p>At sunrise and sunset the light crosses far more air, the blue is scattered away before it reaches you, and the reds and oranges are what remain.</p>
+                    </div>
+                    <div class="lb-bubble__footer">
+                      <button type="button" class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--small" data-lb-icon="copy" aria-label="Copy"></button>
+                      <button type="button" class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--small" data-lb-icon="thumbs-up" aria-label="Good response"></button>
+                      <button type="button" class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--small" data-lb-icon="thumbs-down" aria-label="Bad response"></button>
+                      <button type="button" class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--small" data-lb-icon="refresh-cw" aria-label="Regenerate"></button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="lb-dock">
+              <div class="lb-dock__inner">
+                <div class="lb-dock__notice">
+                  <div class="lb-banner lb-banner--info lb-banner--s"><span class="lb-banner__icon" data-lb-icon="info" aria-hidden="true"></span> A new model is rolling out — responses may take a little longer while we scale up. <button class="lb-banner__close" aria-label="Dismiss"><span data-lb-icon="x" style="width: 1rem; height: 1rem;"></span></button></div>
+                </div>
+                <div class="lb-composer" data-lb-composer>
+                  <div class="lb-composer__chips lb-composer__chips--empty" data-lb-composer-chips></div>
+                  <div class="lb-composer__row">
+                    <textarea data-lb-composer-input placeholder="Reply…" rows="1"></textarea>
+</div>
+                  <div class="lb-composer__footer">
+                    <!-- footer = modular bar: tools left · context center · model+send right -->
+                    <div class="lb-composer__tools" data-lb-composer-tools>
+<button type="button" data-lb-composer-attach aria-label="Attach files"><span data-lb-icon="plus" aria-hidden="true"></span></button><button type="button" data-lb-composer-mic aria-label="Voice"><span data-lb-icon="mic" aria-hidden="true"></span></button></div>
+                    <div class="lb-composer__end"><div class="lb-context-budget-bar--compact" data-lb-context-budget-bar id="aichat-budget"></div><div class="lb-composer__model">
+                      <div class="lb-popover-host" data-lb-popover>
+                        <button type="button" class="lb-popover-trigger lb-btn lb-btn--ghost lb-btn--small">Fable 5 <span class="lb-btn__icon" aria-hidden="true" data-lb-icon="chevron-down"></span></button>
+                        <div class="lb-popover lb-popover--top lb-popover--tray" style="display:none;">
+                          <div class="lb-dock__tray-row">
+                            <span class="lb-dock__tray-label">Model</span>
+                            <div class="lb-segmented lb-segmented--full-width" data-lb-segmented aria-label="Model">
+                              <button type="button" class="lb-segmented__item" data-lb-value="fast">Fast</button>
+                              <button type="button" class="lb-segmented__item" aria-checked="true" data-lb-value="smart">Smart</button>
+                            </div>
+                          </div>
+                          <div class="lb-dock__tray-row">
+                            <span class="lb-dock__tray-label">Effort</span>
+                            <div class="lb-segmented lb-segmented--full-width" data-lb-segmented aria-label="Effort">
+                              <button type="button" class="lb-segmented__item" data-lb-value="low">Low</button>
+                              <button type="button" class="lb-segmented__item" aria-checked="true" data-lb-value="med">Medium</button>
+                              <button type="button" class="lb-segmented__item" data-lb-value="high">High</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div><div class="lb-composer__actions">
+                      
+                      <button type="button" data-lb-composer-send aria-label="Send"><span data-lb-icon="send" aria-hidden="true"></span></button>
+                      <button type="button" data-lb-composer-stop aria-label="Stop" hidden><span data-lb-icon="square-rounded" aria-hidden="true"></span></button>
+                    </div></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <aside class="lb-shell__panel" aria-label="Artifacts">
+          <div style="display: flex; flex-direction: column; gap: var(--lb-size-3x);">
+            <div class="lb-stat">
+              <span class="lb-stat__label">Artifact</span>
+              <div class="lb-stat__sub"><span style="font-size: var(--lb-t-body-s-font-size);">sky-scattering.svg</span></div>
+            </div>
+            <div class="lb-card lb-card--padded" style="aspect-ratio: 4/3; display: grid; place-items: center; color: var(--lb-fg-muted); font-size: var(--lb-t-body-xs-font-size);">preview</div>
+            <button class="lb-btn lb-btn--secondary lb-btn--small"><span class="lb-btn__icon" aria-hidden="true" data-lb-icon="download"></span> Download</button>
+          </div>
+        </aside>
+      </div>
+    </div>
+
+    <!-- ────────────────── Notes ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Composition notes</h2>
+    <p class="gallery-section__desc">This page is assembly only — every part is an existing component: <code class="lb-code">LB.Shell</code> (collapse/peek/resize/drawer), <code class="lb-code">LB.ConvList</code> (pinned + date buckets, search, kebab actions — consumer owns the data via <code class="lb-code">setConvs()</code>), <code class="lb-code">.lb-thread</code> + <code class="lb-code">.lb-bubble</code> (flat assistant default, <code class="lb-code">--user</code> tinted, branching + streaming built in), the <code class="lb-code">.lb-dock</code> module with its Popover tray, and <code class="lb-code">ContextBudgetBar</code>. Replaces the ChatWorkspace dashboard chrome — the chat primitives are unchanged. On a real page the shell is the body's only child at <code class="lb-code">100dvh</code>.</p>
+
+  </section>
+</main>
+
+<script src="../js/lb.js"></script>
+<script src="../js/components/lb-chat.js"></script>
+
+<script src="../js/components/lb-shell.js"></script>
+<script src="../js/slot-engine.js"></script>
+<script src="../js/theme-editor.js"></script>
+<script src="../js/token-exporter.js"></script>
+<script src="../js/gallery-layout.js"></script>
+<script>
+  // Template demo data — the consumer is the source of truth.
+  document.addEventListener('DOMContentLoaded', () => {
+    const DAY = 24 * 60 * 60 * 1000;
+    const now = Date.now();
+    function init() {
+      const listEl = document.getElementById('aichat-convs');
+      if (!listEl || !listEl._lbConvList) return setTimeout(init, 50);
+      listEl._lbConvList.setConvs([
+        { id: 'c1', title: 'Why is the sky blue?',            timestamp: now - 2 * 60 * 1000 },
+        { id: 'c2', title: 'Overview effect notes',           timestamp: now - 5 * 60 * 60 * 1000, pinned: true },
+        { id: 'c3', title: 'Design tokens deep dive',         timestamp: now - 1 * DAY, colorTag: '#8b5cf6' },
+        { id: 'c4', title: 'Album cover moodboard',           timestamp: now - 3 * DAY },
+        { id: 'c5', title: 'Lyrics — inner sight draft',      timestamp: now - 9 * DAY, unread: 1 },
+        { id: 'c6', title: 'Q3 release plan',                 timestamp: now - 20 * DAY },
+      ]);
+      listEl._lbConvList.setActive('c1');
+      // Demo engine: Enter (or send) appends your message to the thread.
+      const composer = document.querySelector('#aichat-main [data-lb-composer]');
+      const thread = document.querySelector('#aichat-main .lb-thread');
+      if (composer && thread) {
+        composer.addEventListener('lb-composer-submit', (e) => {
+          const b = document.createElement('div');
+          b.className = 'lb-bubble lb-bubble--user';
+          b.innerHTML = '<div class="lb-bubble__content"><div class="lb-bubble__header"><span class="lb-bubble__sender">You</span><span class="lb-bubble__timestamp">now</span></div><div class="lb-bubble__body"></div></div>';
+          b.querySelector('.lb-bubble__body').textContent = e.detail.value;
+          thread.appendChild(b);
+          // Scroll ONLY the thread's own scroll container — scrollIntoView
+          // also scrolls ancestor scrollers (the page jumps).
+          const scroller = thread.parentElement;
+          scroller.scrollTop = scroller.scrollHeight;
+        });
+      }
+      const budgetEl = document.getElementById('aichat-budget');
+      if (budgetEl && budgetEl._lbContextBudgetBar) {
+        budgetEl._lbContextBudgetBar.setBudget({ used: 38_000, total: 200_000 });
+      }
+    }
+    init();
+  });
+</script>
+</body>
+</html>

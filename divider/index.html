@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <!-- theme-preamble:v1 -->
+  <script>(function(){try{var t=localStorage.getItem('letbe-ds-dark-mode');if(t==='1')document.documentElement.setAttribute('data-theme','dark');else if(t==='0')document.documentElement.setAttribute('data-theme','light');}catch(e){}})();</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta data-lb-page="divider">
+  <title>Divider — letbe-ds</title>
+  <link rel="stylesheet" href="../tokens/theme.css">
+  <link rel="stylesheet" href="../tokens/fonts.css">
+  <link rel="stylesheet" href="../components/components.css">
+  <link rel="stylesheet" href="../components/theme-editor.css">
+  <link rel="stylesheet" href="../components/gallery.css">
+</head>
+<body data-lb-base="..">
+
+<main class="gallery-main">
+  <section class="gallery-section" id="divider">
+    <h1 class="gallery-section__title" style="font-size: var(--lb-t-heading-l-font-size); line-height: var(--lb-t-heading-l-line-height);">Divider</h1>
+    <p class="gallery-section__desc">Horizontal or vertical rule separating content. Use between logically distinct sections or between items in a list. Prefer whitespace over dividers when the layout makes groupings clear on its own. Add <code class="lb-code">--strong</code> when the rule needs more contrast than the default muted border.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>a11y (built in):</strong> the horizontal rule is a native <code class="lb-code">&lt;hr&gt;</code>, so it keeps its implicit <code class="lb-code">separator</code> role for free; the inline vertical variant is an empty decorative <code class="lb-code">&lt;span&gt;</code> that contributes nothing to the accessibility tree. Pure CSS either way &mdash; no script, no state.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>Usage:</strong> Always pair base and orientation — <code class="lb-code">lb-divider lb-divider--horizontal</code> on an <code class="lb-code">&lt;hr&gt;</code>, <code class="lb-code">lb-divider lb-divider--vertical</code> on an empty inline <code class="lb-code">&lt;span&gt;</code>; the base class alone only paints a background and carries no dimensions, so it renders collapsed. The horizontal rule ships with <code class="lb-code">margin: 0</code> — vertical rhythm comes from the parent layout, not the divider. The vertical variant is <code class="lb-code">1em</code> tall and middle-aligned, so it sizes off the surrounding text and sits directly between inline content with no extra wiring.</p>
+
+<hr class="gallery-desc-divider">
+
+
+<h2 class="gallery-section__title">Divider Demo</h2>
+    <p>Horizontal:</p>
+    <hr class="lb-divider lb-divider--horizontal">
+    <p>Inline vertical: Left <span class="lb-divider lb-divider--vertical"></span> Right</p>
+  </section>
+</main>
+
+<script src="../js/lb.js"></script>
+<script src="../js/slot-engine.js"></script>
+<script src="../js/theme-editor.js"></script>
+<script src="../js/token-exporter.js"></script>
+<script src="../js/gallery-layout.js"></script>
+</body>
+</html>

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <!-- theme-preamble:v1 -->
+  <script>(function(){try{var t=localStorage.getItem('letbe-ds-dark-mode');if(t==='1')document.documentElement.setAttribute('data-theme','dark');else if(t==='0')document.documentElement.setAttribute('data-theme','light');}catch(e){}})();</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta data-lb-page="line-chart">
+  <title>Line Chart — letbe-ds</title>
+  <link rel="stylesheet" href="../tokens/theme.css">
+  <link rel="stylesheet" href="../tokens/fonts.css">
+  <link rel="stylesheet" href="../components/components.css">
+  <link rel="stylesheet" href="../components/theme-editor.css">
+  <link rel="stylesheet" href="../components/gallery.css">
+</head>
+<body data-lb-base="..">
+
+<main class="gallery-main">
+  <section class="gallery-section" id="line-chart">
+    <h1 class="gallery-section__title" style="font-size: var(--lb-t-heading-l-font-size); line-height: var(--lb-t-heading-l-line-height);">Line Chart</h1>
+    <p class="gallery-section__desc">Time-series chart — single or multi-series, line or area fill. Hand-rolled SVG. Round-number axis ticks (shared with Bar Chart), per-point hover dots, unified multi-series tooltip showing all series at the hovered x position. Auto legend for multi-series.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>a11y (built in):</strong> each chart's <code class="lb-code">&lt;svg&gt;</code> is <code class="lb-code">role="img"</code> carrying a generated <code class="lb-code">aria-label</code> summary ("Line chart over N points — series names"), rewritten on every render and on every <code class="lb-code">ResizeObserver</code> pass. Hover targets are transparent 24px circles (<code class="lb-code">--lb-size-6x</code>, the WCAG 2.5.8 minimum) sitting under the 8px visible dot, which is <code class="lb-code">pointer-events: none</code> so events fall through. A comparison series is distinguished by a dash pattern (<code class="lb-code">"dashed": true</code>), not colour alone; the tooltip itself is pointer-only, so the <code class="lb-code">aria-label</code> summary is the assistive-tech route to the data.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>Usage:</strong> <code class="lb-code">&lt;div data-lb-line-chart&gt;</code> with a JSON config in <code class="lb-code">&lt;script type="application/json"&gt;</code>. Keys: <code class="lb-code">x</code>, <code class="lb-code">series</code>, <code class="lb-code">area</code> (bool), <code class="lb-code">colors</code>, <code class="lb-code">legend</code>.</p>
+
+    <hr class="gallery-desc-divider">
+
+    <!-- ────────────────── Single line ────────────────── -->
+    <h2 class="gallery-section__title">Single series</h2>
+    <p class="gallery-section__desc">One line, no legend. Hover a dot for the value at that point.</p>
+    <div data-lb-line-chart>
+      <script type="application/json">
+        {"x":["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"series":[{"name":"Revenue","data":[120,140,135,180,210,195,230,265,278,310,295,340]}]}
+      </script>
+    </div>
+
+    <!-- ────────────────── Area variant ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Area fill</h2>
+    <p class="gallery-section__desc">Set <code class="lb-code">"area": true</code> for a filled area below the line. Same data, more visual weight — useful when the chart is a focal point.</p>
+    <div data-lb-line-chart>
+      <script type="application/json">
+        {"area":true,"x":["W1","W2","W3","W4","W5","W6","W7","W8","W9","W10"],"series":[{"name":"Sessions","data":[1240,1380,1520,1480,1620,1810,1740,1950,2080,2240]}]}
+      </script>
+    </div>
+
+    <!-- ────────────────── Multi-series ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Comparison series (dashed)</h2>
+    <p class="gallery-section__desc">The industry-standard period-comparison idiom: <code class="lb-code">"dashed": true</code> on a series renders it with a dashed stroke — pair it with a muted color so "previous period" reads as context, not competition. The tooltip still lists both series at the hovered point.</p>
+    <div data-lb-line-chart>
+      <script type="application/json">
+        {"x":["Mon","Tue","Wed","Thu","Fri","Sat","Sun"],"series":[{"name":"This week","data":[420,485,510,478,560,610,590]},{"name":"Last week","data":[390,440,465,452,505,540,520],"dashed":true}],"colors":["var(--lb-data-1)","var(--lb-fg-muted)"],"legend":true}
+      </script>
+    </div>
+
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Multi-series</h2>
+    <p class="gallery-section__desc">Add more series for a comparison view. Hover anywhere on the line to see all series at that x position in one tooltip.</p>
+    <div data-lb-line-chart>
+      <script type="application/json">
+        {"x":["Mon","Tue","Wed","Thu","Fri","Sat","Sun"],"series":[
+          {"name":"Web","data":[2400,2600,2480,2900,3200,2100,1800]},
+          {"name":"Mobile","data":[1800,1900,2050,2200,2400,2700,2500]},
+          {"name":"API","data":[600,650,580,720,810,540,490]}
+        ]}
+      </script>
+    </div>
+
+    <!-- ────────────────── Multi-series area ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Multi-series area</h2>
+    <p class="gallery-section__desc">Layer the area fills for a "stacked feel" without true stacking — each series stays at its own absolute level, but the soft fill helps the eye trace volume over time.</p>
+    <div data-lb-line-chart>
+      <script type="application/json">
+        {"area":true,"x":["Q1","Q2","Q3","Q4","Q5","Q6","Q7","Q8"],"series":[
+          {"name":"Free","data":[3200,3450,3680,3920,4180,4380,4540,4720]},
+          {"name":"Pro","data":[1840,1920,2080,2240,2410,2580,2750,2900]}
+        ]}
+      </script>
+    </div>
+
+    <!-- ────────────────── In a Card ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">In a Card</h2>
+    <p class="gallery-section__desc">Wrap in a Card with a heading + caption. The chart sits inside the standard padded surface and inherits theme-aware colors.</p>
+    <div class="lb-card lb-card--padded">
+      <div class="lb-card__heading">
+        <div class="lb-card__title">MRR — last 90 days</div>
+        <div class="lb-card__subtitle">Free vs Pro vs Enterprise — daily snapshot</div>
+      </div>
+      <div data-lb-line-chart style="margin-top: var(--lb-size-4x); --line-chart-height: 16rem;">
+        <script type="application/json">
+          {"x":["Mar 1","Mar 8","Mar 15","Mar 22","Mar 29","Apr 5","Apr 12","Apr 19","Apr 26"],"series":[
+            {"name":"Free","data":[42,44,46,49,51,53,55,58,62]},
+            {"name":"Pro","data":[112,118,124,131,138,146,152,160,168]},
+            {"name":"Enterprise","data":[18,19,20,22,23,25,27,28,30]}
+          ]}
+        </script>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script src="../js/lb.js"></script>
+<script src="../js/slot-engine.js"></script>
+<script src="../js/theme-editor.js"></script>
+<script src="../js/token-exporter.js"></script>
+<script src="../js/gallery-layout.js"></script>
+</body>
+</html>

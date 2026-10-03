@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <!-- theme-preamble:v1 -->
+  <script>(function(){try{var t=localStorage.getItem('letbe-ds-dark-mode');if(t==='1')document.documentElement.setAttribute('data-theme','dark');else if(t==='0')document.documentElement.setAttribute('data-theme','light');}catch(e){}})();</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta data-lb-page="auth">
+  <title>Auth — letbe-ds</title>
+  <link rel="stylesheet" href="../tokens/theme.css">
+  <link rel="stylesheet" href="../tokens/fonts.css">
+  <link rel="stylesheet" href="../components/components.css">
+  <link rel="stylesheet" href="../components/theme-editor.css">
+  <link rel="stylesheet" href="../components/gallery.css">
+</head>
+<body data-lb-base="..">
+
+<main class="gallery-main">
+  <section class="gallery-section" id="auth">
+    <h1 class="gallery-section__title" style="font-size: var(--lb-t-heading-l-font-size); line-height: var(--lb-t-heading-l-line-height);">Auth</h1>
+    <p class="gallery-section__desc">Composed authentication <strong>templates</strong> — screens, not primitives. Six flows: <strong>login</strong>, <strong>signup</strong>, <strong>forgot password</strong>, <strong>reset password</strong>, <strong>verify</strong> (OTP code · magic-link-sent), and <strong>MFA code</strong>. Two layouts each: centered card (default, SaaS apps) and <code class="lb-code">--split</code> with a swappable brand panel (marketing-led products). Pure CSS scaffolding — every control is an existing primitive (<code class="lb-code">.lb-field</code>, <code class="lb-code">.lb-input</code>, <code class="lb-code">.lb-btn</code>, <code class="lb-code">.lb-checkbox</code>, <code class="lb-code">.lb-link</code>, brand icons). The auth <em>engine</em> is yours — Clerk, Supabase, or your own; forms ship unwired. Consumed here: <a class="lb-link" href="../card/">Card</a> · <a class="lb-link" href="../forms/">Forms</a> · <a class="lb-link" href="../input/">Input</a> · <a class="lb-link" href="../checkbox/">Checkbox</a> · <a class="lb-link" href="../button/">Button</a> · <a class="lb-link" href="../link/">Link</a> · <a class="lb-link" href="../icons/">brand Icons</a>.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>a11y &amp; 2026 patterns (built in):</strong> visible labels on every field — never placeholder-only; full <code class="lb-code">autocomplete</code> set (WCAG 1.3.5): <code class="lb-code">username webauthn</code> on the login email (passkey autofill, the FIDO-primary pattern), <code class="lb-code">current-password</code> / <code class="lb-code">new-password</code>, <code class="lb-code">one-time-code</code>. OTP entry is a <strong>single input</strong> — six separate boxes break SMS autofill and screen readers. A passkey button is an optional secondary slot, never the signup credential (enrollment is post-signup).</p>
+
+    <hr class="gallery-desc-divider">
+
+    <!-- ────────────────── A. Login — centered card ────────────────── -->
+    <h2 class="gallery-section__title">A · Login — centered card</h2>
+    <p class="gallery-section__desc">Social row trailing (below the form fields it's leading — flip by markup order around the divider). Email carries <code class="lb-code">autocomplete="username webauthn"</code>; the fingerprint button is the optional passkey slot.</p>
+    <div style="border: var(--lb-border-width-thin) solid var(--lb-border-muted); border-radius: var(--lb-radius-overlay); overflow: hidden;">
+      <div class="lb-auth">
+        <div class="lb-card lb-card--padded lb-card--elevated lb-auth__card">
+          <div class="lb-auth__head">
+            <span class="lb-auth__logo" data-lb-icon="letbe"></span>
+            <h2 class="lb-auth__title">Welcome back</h2>
+            <p class="lb-auth__subtitle">Log in to your account to continue.</p>
+          </div>
+          <div class="lb-auth__social">
+            <button class="lb-btn lb-btn--secondary lb-btn--medium" type="button"><span class="lb-btn__icon" aria-hidden="true" data-lb-icon="google"></span> Continue with Google</button>
+            <button class="lb-btn lb-btn--secondary lb-btn--medium" type="button"><span class="lb-btn__icon" aria-hidden="true" data-lb-icon="apple"></span> Continue with Apple</button>
+          </div>
+          <div class="lb-auth__divider">or</div>
+          <form class="lb-form lb-form--compact">
+            <div class="lb-field">
+              <label class="lb-label" for="authA-email">Email</label>
+              <div class="lb-input-wrap"><input class="lb-input lb-input--medium" id="authA-email" type="email" name="email" autocomplete="username webauthn" placeholder="you@example.com"></div>
+            </div>
+            <div class="lb-field" data-lb-password>
+              <label class="lb-label" for="authA-password">Password</label>
+              <div class="lb-input-wrap"><input class="lb-input lb-input--medium" id="authA-password" type="password" name="password" autocomplete="current-password" placeholder="Your password"></div>
+            </div>
+            <div class="lb-auth__row">
+              <label class="lb-checkbox-wrap"><input type="checkbox" class="lb-checkbox"><span class="lb-checkbox__label">Remember me</span></label>
+              <a class="lb-link" href="#authD">Forgot password?</a>
+            </div>
+            <button class="lb-btn lb-btn--primary lb-btn--medium" type="submit">Log in</button>
+            <button class="lb-btn lb-btn--ghost lb-btn--medium" type="button"><span class="lb-btn__icon" aria-hidden="true" data-lb-icon="fingerprint"></span> Sign in with a passkey</button>
+          </form>
+          <p class="lb-auth__meta">No account? <a class="lb-link" href="#authC">Sign up</a></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ────────────────── B. Login — split screen ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">B · Login — <code class="lb-code">--split</code> with brand panel</h2>
+    <p class="gallery-section__desc">Same card, second layout. The left panel is a <strong>slot</strong> — drop in a product shot, testimonial, or brand art. Collapses to form-only below 768px. Applies identically to every screen on this page.</p>
+    <div style="border: var(--lb-border-width-thin) solid var(--lb-border-muted); border-radius: var(--lb-radius-overlay); overflow: hidden;">
+      <div class="lb-auth lb-auth--split">
+        <div class="lb-auth__panel">
+          <div style="display: flex; flex-direction: column; align-items: center; gap: var(--lb-size-4x); text-align: center; max-width: 20rem;">
+            <span style="display: flex; width: var(--lb-size-16x);" data-lb-icon="letbe"></span>
+            <p style="margin: 0; font-family: var(--lb-t-heading-s-font-family); font-size: var(--lb-t-heading-s-font-size); font-weight: var(--lb-t-heading-s-font-weight); line-height: var(--lb-t-heading-s-line-height);">Design once, theme forever.</p>
+            <p style="margin: 0; font-size: var(--lb-t-body-s-font-size); opacity: 0.8;">Token-driven components for people who ship.</p>
+          </div>
+        </div>
+        <div class="lb-auth__main">
+          <div class="lb-card lb-card--padded lb-auth__card">
+            <div class="lb-auth__head">
+              <h2 class="lb-auth__title">Welcome back</h2>
+              <p class="lb-auth__subtitle">Log in to your account to continue.</p>
+            </div>
+            <form class="lb-form lb-form--compact">
+              <div class="lb-field">
+                <label class="lb-label" for="authB-email">Email</label>
+                <div class="lb-input-wrap"><input class="lb-input lb-input--medium" id="authB-email" type="email" name="email" autocomplete="username webauthn" placeholder="you@example.com"></div>
+              </div>
+              <div class="lb-field" data-lb-password>
+                <label class="lb-label" for="authB-password">Password</label>
+                <div class="lb-input-wrap"><input class="lb-input lb-input--medium" id="authB-password" type="password" name="password" autocomplete="current-password" placeholder="Your password"></div>
+              </div>
+              <button class="lb-btn lb-btn--primary lb-btn--medium" type="submit">Log in</button>
+            </form>
+            <div class="lb-auth__divider">or</div>
+            <div class="lb-auth__social lb-auth__social--row">
+              <button class="lb-btn lb-btn--secondary lb-btn--medium" type="button" aria-label="Continue with Google"><span class="lb-btn__icon" aria-hidden="true" data-lb-icon="google"></span></button>
+              <button class="lb-btn lb-btn--secondary lb-btn--medium" type="button" aria-label="Continue with Apple"><span class="lb-btn__icon" aria-hidden="true" data-lb-icon="apple"></span></button>
+              <button class="lb-btn lb-btn--secondary lb-btn--medium" type="button" aria-label="Continue with GitHub"><span class="lb-btn__icon" aria-hidden="true" data-lb-icon="github"></span></button>
+            </div>
+            <p class="lb-auth__meta">No account? <a class="lb-link" href="#authC">Sign up</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ────────────────── C. Signup ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);" id="authC">C · Signup — social leading</h2>
+    <p class="gallery-section__desc">Social row <em>leading</em> (before the form). Password uses <code class="lb-code">autocomplete="new-password"</code>; no password-confirm field — the eye toggle covers verification. Terms consent is a required checkbox. Passkey enrollment happens <em>after</em> signup, never here.</p>
+    <div style="border: var(--lb-border-width-thin) solid var(--lb-border-muted); border-radius: var(--lb-radius-overlay); overflow: hidden;">
+      <div class="lb-auth">
+        <div class="lb-card lb-card--padded lb-card--elevated lb-auth__card">
+          <div class="lb-auth__head">
+            <span class="lb-auth__logo" data-lb-icon="letbe"></span>
+            <h2 class="lb-auth__title">Create your account</h2>
+            <p class="lb-auth__subtitle">Start your 14-day free trial. No card required.</p>
+          </div>
+          <div class="lb-auth__social">
+            <button class="lb-btn lb-btn--secondary lb-btn--medium" type="button"><span class="lb-btn__icon" aria-hidden="true" data-lb-icon="google"></span> Sign up with Google</button>
+          </div>
+          <div class="lb-auth__divider">or</div>
+          <form class="lb-form lb-form--compact">
+            <div class="lb-field">
+              <label class="lb-label" for="authC-name">Name</label>
+              <div class="lb-input-wrap"><input class="lb-input lb-input--medium" id="authC-name" type="text" name="name" autocomplete="name" placeholder="Your name"></div>
+            </div>
+            <div class="lb-field">
+              <label class="lb-label" for="authC-email">Email</label>
+              <div class="lb-input-wrap"><input class="lb-input lb-input--medium" id="authC-email" type="email" name="email" autocomplete="username" placeholder="you@example.com"></div>
+            </div>
+            <div class="lb-field" data-lb-password>
+              <label class="lb-label" for="authC-password">Password</label>
+              <div class="lb-input-wrap"><input class="lb-input lb-input--medium" id="authC-password" type="password" name="new-password" autocomplete="new-password" placeholder="8+ characters"></div>
+              <span class="lb-field__hint">Use 8 or more characters.</span>
+            </div>
+            <label class="lb-checkbox-wrap"><input type="checkbox" class="lb-checkbox" required><span class="lb-checkbox__label">I agree to the <a class="lb-link" href="#">Terms</a> and <a class="lb-link" href="#">Privacy Policy</a></span></label>
+            <button class="lb-btn lb-btn--primary lb-btn--medium" type="submit">Create account</button>
+          </form>
+          <p class="lb-auth__meta">Already have an account? <a class="lb-link" href="#auth">Log in</a></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ────────────────── D. Forgot + Reset ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);" id="authD">D · Forgot password — request + reset</h2>
+    <p class="gallery-section__desc">Two separate screens, per the production flow: request (email only) → email link/code → reset (new password only, shown after identity is verified).</p>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(20rem, 100%), 1fr)); gap: var(--lb-size-4x);">
+      <div style="border: var(--lb-border-width-thin) solid var(--lb-border-muted); border-radius: var(--lb-radius-overlay); overflow: hidden;">
+        <div class="lb-auth">
+          <div class="lb-card lb-card--padded lb-card--elevated lb-auth__card">
+            <div class="lb-auth__head">
+              <span class="lb-auth__logo" data-lb-icon="letbe"></span>
+              <h2 class="lb-auth__title">Reset your password</h2>
+              <p class="lb-auth__subtitle">Enter your email and we'll send you a reset link.</p>
+            </div>
+            <form class="lb-form lb-form--compact">
+              <div class="lb-field">
+                <label class="lb-label" for="authD-email">Email</label>
+                <div class="lb-input-wrap"><input class="lb-input lb-input--medium" id="authD-email" type="email" name="email" autocomplete="username" placeholder="you@example.com"></div>
+              </div>
+              <button class="lb-btn lb-btn--primary lb-btn--medium" type="submit">Send reset link</button>
+            </form>
+            <p class="lb-auth__meta"><a class="lb-link" href="#auth">← Back to login</a></p>
+          </div>
+        </div>
+      </div>
+      <div style="border: var(--lb-border-width-thin) solid var(--lb-border-muted); border-radius: var(--lb-radius-overlay); overflow: hidden;">
+        <div class="lb-auth">
+          <div class="lb-card lb-card--padded lb-card--elevated lb-auth__card">
+            <div class="lb-auth__head">
+              <span class="lb-auth__logo" data-lb-icon="letbe"></span>
+              <h2 class="lb-auth__title">Choose a new password</h2>
+              <p class="lb-auth__subtitle">You're signed in as <strong>you@example.com</strong>.</p>
+            </div>
+            <form class="lb-form lb-form--compact">
+              <div class="lb-field" data-lb-password>
+                <label class="lb-label" for="authD-new">New password</label>
+                <div class="lb-input-wrap"><input class="lb-input lb-input--medium" id="authD-new" type="password" name="new-password" autocomplete="new-password" placeholder="8+ characters"></div>
+                <span class="lb-field__hint">Use 8 or more characters.</span>
+              </div>
+              <button class="lb-btn lb-btn--primary lb-btn--medium" type="submit">Update password</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ────────────────── E. Verify ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">E · Verify — OTP code · magic-link sent</h2>
+    <p class="gallery-section__desc">Two variants of one skeleton, because providers ship both strategies. The code field is <strong>one input</strong> with <code class="lb-code">autocomplete="one-time-code"</code> + <code class="lb-code">inputmode="numeric"</code> — SMS/email autofill just works.</p>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(20rem, 100%), 1fr)); gap: var(--lb-size-4x);">
+      <div style="border: var(--lb-border-width-thin) solid var(--lb-border-muted); border-radius: var(--lb-radius-overlay); overflow: hidden;">
+        <div class="lb-auth">
+          <div class="lb-card lb-card--padded lb-card--elevated lb-auth__card">
+            <div class="lb-auth__head">
+              <span class="lb-auth__logo" data-lb-icon="mail"></span>
+              <h2 class="lb-auth__title">Check your email</h2>
+              <p class="lb-auth__subtitle">We sent a 6-digit code to <strong>you@example.com</strong>.</p>
+            </div>
+            <form class="lb-form lb-form--compact">
+              <div class="lb-field lb-auth__code">
+                <label class="lb-label" for="authE-code">Verification code</label>
+                <div class="lb-input-wrap"><input class="lb-input lb-input--medium" id="authE-code" type="text" name="code" inputmode="numeric" pattern="\d{6}" maxlength="6" autocomplete="one-time-code" placeholder="••••••"></div>
+              </div>
+              <button class="lb-btn lb-btn--primary lb-btn--medium" type="submit">Verify</button>
+            </form>
+            <p class="lb-auth__meta">Didn't get it? <a class="lb-link" href="#">Resend code</a></p>
+          </div>
+        </div>
+      </div>
+      <div style="border: var(--lb-border-width-thin) solid var(--lb-border-muted); border-radius: var(--lb-radius-overlay); overflow: hidden;">
+        <div class="lb-auth">
+          <div class="lb-card lb-card--padded lb-card--elevated lb-auth__card">
+            <div class="lb-auth__head">
+              <span class="lb-auth__logo" data-lb-icon="mail"></span>
+              <h2 class="lb-auth__title">Check your email</h2>
+              <p class="lb-auth__subtitle">We sent a sign-in link to <strong>you@example.com</strong>. It expires in 10 minutes.</p>
+            </div>
+            <p class="lb-auth__meta">Didn't get it? <a class="lb-link" href="#">Resend link</a> · <a class="lb-link" href="#auth">Back to login</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ────────────────── F. MFA ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">F · MFA — two-factor code</h2>
+    <p class="gallery-section__desc">Reuses the verify skeleton — authenticator-app flavor, with the backup-code escape hatch.</p>
+    <div style="border: var(--lb-border-width-thin) solid var(--lb-border-muted); border-radius: var(--lb-radius-overlay); overflow: hidden;">
+      <div class="lb-auth">
+        <div class="lb-card lb-card--padded lb-card--elevated lb-auth__card">
+          <div class="lb-auth__head">
+            <span class="lb-auth__logo" data-lb-icon="shield-check"></span>
+            <h2 class="lb-auth__title">Two-factor authentication</h2>
+            <p class="lb-auth__subtitle">Enter the 6-digit code from your authenticator app.</p>
+          </div>
+          <form class="lb-form lb-form--compact">
+            <div class="lb-field lb-auth__code">
+              <label class="lb-label" for="authF-code">Authentication code</label>
+              <div class="lb-input-wrap"><input class="lb-input lb-input--medium" id="authF-code" type="text" name="code" inputmode="numeric" pattern="\d{6}" maxlength="6" autocomplete="one-time-code" placeholder="••••••"></div>
+            </div>
+            <button class="lb-btn lb-btn--primary lb-btn--medium" type="submit">Verify</button>
+          </form>
+          <p class="lb-auth__meta"><a class="lb-link" href="#">Use a backup code</a></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ────────────────── Usage ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Usage</h2>
+    <p class="gallery-section__desc">Pure CSS — nothing to init (the password eye-toggle comes from the existing <code class="lb-code">data-lb-password</code> field behavior). Forms ship unwired: attach your own submit handlers to your auth provider. On a real page, <code class="lb-code">.lb-auth</code> fills the viewport (<code class="lb-code">min-height: 100vh</code> on the host or body-level layout).</p>
+    <pre data-lb-code-block data-lb-lang="html"><code>&lt;div class="lb-auth"&gt;                             &lt;!-- or .lb-auth.lb-auth--split --&gt;
+  &lt;!-- split layout only: --&gt;
+  &lt;!-- &lt;div class="lb-auth__panel"&gt;…brand slot…&lt;/div&gt; &lt;div class="lb-auth__main"&gt; --&gt;
+  &lt;div class="lb-card lb-card--padded lb-card--elevated lb-auth__card"&gt;
+    &lt;div class="lb-auth__head"&gt;
+      &lt;span class="lb-auth__logo" data-lb-icon="letbe"&gt;&lt;/span&gt;
+      &lt;h1 class="lb-auth__title"&gt;Welcome back&lt;/h1&gt;
+      &lt;p class="lb-auth__subtitle"&gt;Log in to continue.&lt;/p&gt;
+    &lt;/div&gt;
+    &lt;div class="lb-auth__social"&gt;                   &lt;!-- optional; --row for icon-only --&gt;
+      &lt;button class="lb-btn lb-btn--secondary lb-btn--medium"&gt;&lt;span class="lb-btn__icon" data-lb-icon="google"&gt;&lt;/span&gt; Continue with Google&lt;/button&gt;
+    &lt;/div&gt;
+    &lt;div class="lb-auth__divider"&gt;or&lt;/div&gt;
+    &lt;form class="lb-form lb-form--compact"&gt;
+      &lt;div class="lb-field"&gt;
+        &lt;label class="lb-label" for="email"&gt;Email&lt;/label&gt;
+        &lt;div class="lb-input-wrap"&gt;&lt;input class="lb-input lb-input--medium" id="email" type="email" autocomplete="username webauthn"&gt;&lt;/div&gt;
+      &lt;/div&gt;
+      &lt;div class="lb-field" data-lb-password&gt;
+        &lt;label class="lb-label" for="pw"&gt;Password&lt;/label&gt;
+        &lt;div class="lb-input-wrap"&gt;&lt;input class="lb-input lb-input--medium" id="pw" type="password" autocomplete="current-password"&gt;&lt;/div&gt;
+      &lt;/div&gt;
+      &lt;button class="lb-btn lb-btn--primary lb-btn--medium" type="submit"&gt;Log in&lt;/button&gt;
+    &lt;/form&gt;
+    &lt;p class="lb-auth__meta"&gt;No account? &lt;a class="lb-link" href="/signup"&gt;Sign up&lt;/a&gt;&lt;/p&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+
+  </section>
+</main>
+
+<script src="../js/lb.js"></script>
+<script src="../js/slot-engine.js"></script>
+<script src="../js/theme-editor.js"></script>
+<script src="../js/token-exporter.js"></script>
+<script src="../js/gallery-layout.js"></script>
+</body>
+</html>

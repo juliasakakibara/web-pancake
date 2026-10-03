@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <!-- theme-preamble:v1 -->
+  <script>(function(){try{var t=localStorage.getItem('letbe-ds-dark-mode');if(t==='1')document.documentElement.setAttribute('data-theme','dark');else if(t==='0')document.documentElement.setAttribute('data-theme','light');}catch(e){}})();</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta data-lb-page="data-table">
+  <title>Data Table — letbe-ds</title>
+  <link rel="stylesheet" href="../tokens/theme.css">
+  <link rel="stylesheet" href="../tokens/fonts.css">
+  <link rel="stylesheet" href="../components/components.css">
+  <link rel="stylesheet" href="../components/theme-editor.css">
+  <link rel="stylesheet" href="../components/gallery.css">
+</head>
+<body data-lb-base="..">
+
+<main class="gallery-main">
+  <section class="gallery-section" id="data-table">
+    <h1 class="gallery-section__title" style="font-size: var(--lb-t-heading-l-font-size); line-height: var(--lb-t-heading-l-line-height);">Data Table</h1>
+    <p class="gallery-section__desc">The composed <strong>data-table view</strong> — an admin screen, not a component: App Shell frame, toolbar (search · filters · columns · density · pagination) with the bulk flip, applied-filter chips, a sticky split table with resizable columns and selection, and the App Shell's in-flow right rail (<code class="lb-code">.lb-shell__panel</code>) as the row's <em>side peek</em> — the table stays interactive while the record opens. Client-side here; swap the filter/slice step for a server query and the chrome stays identical. Windowed virtualization for 100k-row sets is deliberately <strong>not bundled</strong> — bring TanStack Virtual or Clusterize per the pluggable-engines rule, same as the media player's engine note.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>a11y (built in):</strong> the result counter is a polite live region (<code class="lb-code">aria-live="polite"</code>), so search, filter and page changes are announced, and the table reports the whole filtered set through <code class="lb-code">aria-rowcount</code> plus per-row <code class="lb-code">aria-rowindex</code> even though only one page is in the DOM. Column resize handles are focusable <code class="lb-code">role="separator"</code> widgets &mdash; <kbd>&larr;</kbd>/<kbd>&rarr;</kbd> step the width, <code class="lb-code">aria-valuenow</code> updates as they move, and double-click resets to auto width as the single-pointer alternative. Every region is a named landmark (<code class="lb-code">nav aria-label</code> on sidebar, breadcrumb and pagination; <code class="lb-code">aside aria-label</code> on the side peek), the shell's <code class="lb-code">&lt;main&gt;</code> carries <code class="lb-code">tabindex="-1"</code> so it can take focus programmatically, the density switch is a roving-tabindex <code class="lb-code">role="radiogroup"</code>, and select-all goes <code class="lb-code">indeterminate</code> on a partial selection.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>Usage:</strong> Two scripts: <code class="lb-code">js/lb.js</code> (Table, Pagination, Segmented and Popover are core) plus <code class="lb-code">js/components/lb-shell.js</code> for the frame — the table auto-inits from <code class="lb-code">data-lb-table</code>, column resize from <code class="lb-code">data-lb-table-resize</code> on the sticky wrap, the pager from <code class="lb-code">data-lb-pagination</code>. The render loop is yours: filter/slice your data, write rows into the <code class="lb-code">&lt;tbody&gt;</code>, then call <code class="lb-code">LB.initIcons(tbody)</code> and <code class="lb-code">table._lbTable.refresh()</code> — refresh is the documented post-swap hook that re-runs the icon/checkbox passes, selection classes and select-all state. Wire <code class="lb-code">lb-table-select</code> (<code class="lb-code">{selectedCount}</code>) to the toolbar's bulk flip, <code class="lb-code">lb-page-change</code> (<code class="lb-code">{page}</code>) back into the loop, and push totals to <code class="lb-code">nav._lbPagination</code> (<code class="lb-code">totalPages</code> / <code class="lb-code">currentPage</code> + <code class="lb-code">render()</code>). One split-table gotcha: the select-all checkbox lives in the header table, outside the <code class="lb-code">&lt;tbody&gt;</code> the Table instance scans, so relay <code class="lb-code">change</code> events both ways — this page's source carries the canonical ~15-line bridge.</p>
+    <p class="gallery-section__desc"><strong>Consumed here:</strong> <a class="lb-link" href="../app-shell/">App Shell</a> (frame + right rail) · <a class="lb-link" href="../table/">Table</a> (sticky split, resize, selection) · <a class="lb-link" href="../input/">Input</a> (toolbar search) · <a class="lb-link" href="../popover/">Popover</a> (filters/columns) · <a class="lb-link" href="../segmented/">Segmented</a> (density) · <a class="lb-link" href="../pagination/">Pagination</a> · <a class="lb-link" href="../chip/">Chip</a> (filter pills) · <a class="lb-link" href="../badge/">Badge</a> · <a class="lb-link" href="../avatar/">Avatar</a> · <a class="lb-link" href="../empty-state/">Empty State</a>.</p>
+
+    <hr class="gallery-desc-divider">
+
+    <div style="border: var(--lb-border-width-thin) solid var(--lb-border-muted); border-radius: var(--lb-radius-overlay); overflow: hidden; position: relative;">
+      <div class="lb-shell" data-lb-shell data-lb-shell-collapse="icon" data-lb-shell-key="lb-shell-data-table" style="height: 640px;">
+        <div class="lb-shell__sidebar">
+          <div class="lb-shell__sidebar-head"><a class="lb-shell__brand" href="#"><span class="lb-shell__logo" data-lb-icon="letbe"></span><span class="lb-shell__brand-name">letbe</span></a></div>
+          <nav class="lb-shell__nav" aria-label="Main">
+            <div class="lb-shell__group">
+              <a class="lb-shell__item" href="#"><span class="lb-shell__item-icon" data-lb-icon="layout-dashboard"></span><span class="lb-shell__item-label">Dashboard</span></a>
+              <a class="lb-shell__item lb-shell__item--active" href="#" aria-current="page"><span class="lb-shell__item-icon" data-lb-icon="users"></span><span class="lb-shell__item-label">Members</span></a>
+              <a class="lb-shell__item" href="#"><span class="lb-shell__item-icon" data-lb-icon="folder"></span><span class="lb-shell__item-label">Projects</span></a>
+              <a class="lb-shell__item" href="#"><span class="lb-shell__item-icon" data-lb-icon="settings"></span><span class="lb-shell__item-label">Settings</span></a>
+            </div>
+          </nav>
+        </div>
+        <div class="lb-shell__main">
+          <div class="lb-shell__topbar">
+            <button class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--medium" data-lb-shell-toggle aria-label="Toggle sidebar"><span data-lb-icon="panel-left"></span></button>
+            <nav class="lb-breadcrumb" aria-label="Breadcrumb"><ol class="lb-breadcrumb__list"><li class="lb-breadcrumb__item"><a class="lb-breadcrumb__link" href="#">Workspace</a></li><li class="lb-breadcrumb__item" aria-current="page">Members</li></ol></nav>
+          </div>
+          <div class="lb-shell__content" tabindex="-1">
+            <div style="display: flex; align-items: center; gap: var(--lb-size-3x); margin-bottom: var(--lb-size-4x);">
+              <h2 style="font-size: var(--lb-t-heading-m-font-size); line-height: var(--lb-t-heading-m-line-height); margin: 0;">Members</h2>
+              <div style="flex: 1;"></div>
+              <button class="lb-btn lb-btn--primary lb-btn--small" type="button"><span class="lb-btn__icon" aria-hidden="true" data-lb-icon="plus"></span> Add member</button>
+            </div>
+
+            <div class="lb-toolbar" id="dt-toolbar" style="margin-bottom: var(--lb-size-3x);">
+              <div class="lb-toolbar__default">
+                <div class="lb-input-wrap lb-toolbar__search">
+                  <span class="lb-input-wrap__icon lb-input-wrap__icon--start" data-lb-icon="search"></span>
+                  <input class="lb-input lb-input--medium lb-input--has-start" type="search" placeholder="Search members…" aria-label="Search members" id="dt-search">
+                </div>
+                <div class="lb-popover-host" data-lb-popover>
+                  <button class="lb-popover-trigger lb-btn lb-btn--secondary lb-btn--small" type="button"><span class="lb-btn__icon" aria-hidden="true" data-lb-icon="filter"></span> Filters <span class="lb-badge lb-badge--default lb-badge--small" id="dt-filter-count" hidden>0</span></button>
+                  <div class="lb-popover lb-popover--bottom" style="display:none; min-width: 13rem; padding: var(--lb-size-3x);">
+                    <div class="lb-label" style="margin-bottom: var(--lb-size-1x);">Role</div>
+                    <div id="dt-filter-roles" style="display: grid; gap: var(--lb-size-1x); margin-bottom: var(--lb-size-3x);"></div>
+                    <div class="lb-label" style="margin-bottom: var(--lb-size-1x);">Status</div>
+                    <div id="dt-filter-statuses" style="display: grid; gap: var(--lb-size-1x);"></div>
+                  </div>
+                </div>
+                <div class="lb-popover-host" data-lb-popover>
+                  <button class="lb-popover-trigger lb-btn lb-btn--secondary lb-btn--small" type="button"><span class="lb-btn__icon" aria-hidden="true" data-lb-icon="sliders-horizontal"></span> Columns</button>
+                  <div class="lb-popover lb-popover--bottom" style="display:none; min-width: 11rem; padding: var(--lb-size-3x);">
+                    <div id="dt-columns" style="display: grid; gap: var(--lb-size-1x);"></div>
+                  </div>
+                </div>
+                <div class="lb-segmented" data-lb-segmented aria-label="Row density" id="dt-density">
+                  <button type="button" class="lb-segmented__item" data-lb-value="sm">Compact</button>
+                  <button type="button" class="lb-segmented__item" data-lb-value="md" aria-checked="true">Default</button>
+                </div>
+                <div class="lb-toolbar__spacer"></div>
+                <span id="dt-info" aria-live="polite" style="font-size: var(--lb-t-body-s-font-size); color: var(--lb-fg-muted); white-space: nowrap;"></span>
+                <nav class="lb-pagination" data-lb-pagination data-lb-total-pages="1" data-lb-current-page="1" aria-label="Pagination" id="dt-nav"></nav>
+              </div>
+              <div class="lb-toolbar__bulk">
+                <span class="lb-toolbar__count"><span id="dt-count">0</span> selected</span>
+                <div class="lb-toolbar__spacer"></div>
+                <button type="button" class="lb-btn lb-btn--secondary lb-btn--small"><span class="lb-btn__icon" aria-hidden="true" data-lb-icon="download"></span> Export</button>
+                <button type="button" class="lb-btn lb-btn--danger lb-btn--small"><span class="lb-btn__icon" aria-hidden="true" data-lb-icon="trash-2"></span> Remove</button>
+                <button type="button" class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--small" id="dt-clear" aria-label="Clear selection"><span data-lb-icon="x"></span></button>
+              </div>
+            </div>
+            <div class="lb-filter-bar" id="dt-filter-bar" hidden>
+              <span class="lb-filter-bar__label">Filters:</span>
+            </div>
+
+            <div class="lb-table-wrap lb-table-wrap--sticky" data-lb-table-resize>
+              <div class="lb-table-wrap__header">
+                <table class="lb-table lb-table--sticky">
+                  <thead>
+                    <tr>
+                      <th class="lb-table__cell lb-table__cell--select" scope="col"><label class="lb-checkbox-wrap"><input type="checkbox" class="lb-checkbox" id="dt-select-all" aria-label="Select"><span class="lb-visually-hidden">Select</span></label></th>
+                      <th class="lb-table__cell" scope="col" style="width: 34%;">Member</th>
+                      <th class="lb-table__cell" scope="col">Role</th>
+                      <th class="lb-table__cell" scope="col">Status</th>
+                      <th class="lb-table__cell lb-table__cell--end" scope="col" style="width: 6.5rem;">Amount</th>
+                    </tr>
+                  </thead>
+                </table>
+              </div>
+              <div class="lb-table-wrap__body">
+                <table class="lb-table lb-table--sticky lb-table--hoverable" data-lb-table id="dt-table">
+                  <tbody id="dt-body"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+        <aside class="lb-shell__panel" aria-label="Member details" id="dt-panel">
+          <div style="display: flex; flex-direction: column; gap: var(--lb-size-5x);">
+            <div style="display: flex; align-items: center; gap: var(--lb-size-2x);">
+              <span class="lb-avatar lb-avatar--medium" role="img" id="dt-panel-avatar" aria-label="Member" data-lb-initials="—"></span>
+              <div>
+                <strong id="dt-panel-name" style="display: block;">Select a row</strong>
+                <span id="dt-panel-role" style="font-size: var(--lb-t-body-s-font-size); color: var(--lb-fg-muted);">Click a member to peek</span>
+              </div>
+            </div>
+            <div class="lb-stat"><span class="lb-stat__label">Status</span><div class="lb-stat__sub" id="dt-panel-status">—</div></div>
+            <div class="lb-stat"><span class="lb-stat__label">Amount</span><div class="lb-stat__sub" id="dt-panel-amount">—</div></div>
+            <div class="lb-stat"><span class="lb-stat__label">Location</span><div class="lb-stat__sub" id="dt-panel-loc">—</div></div>
+          </div>
+        </aside>
+      </div>
+    </div>
+
+    <p class="gallery-section__desc" style="margin-top: var(--lb-size-6x); font-size: var(--lb-t-body-s-font-size);">Everything here is the canonical wiring documented on the component pages — the toolbar flip adapter, the filter/search/slice render loop with <code class="lb-code">refresh()</code>, split-sync column resize (<code class="lb-code">data-lb-table-resize</code> on the wrap), and the select-all bridge for the split header. View this page's source for the full composition.</p>
+  </section>
+</main>
+
+<script src="../js/lb.js"></script>
+<script src="../js/components/lb-shell.js"></script>
+<script src="../js/slot-engine.js"></script>
+<script src="../js/theme-editor.js"></script>
+<script src="../js/token-exporter.js"></script>
+<script src="../js/gallery-layout.js"></script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const table = document.getElementById('dt-table');
+    const tbody = document.getElementById('dt-body');
+    const search = document.getElementById('dt-search');
+    const info = document.getElementById('dt-info');
+    const nav = document.getElementById('dt-nav');
+    const toolbar = document.getElementById('dt-toolbar');
+    const selectAll = document.getElementById('dt-select-all');
+
+    const NAMES = ['Avery Green','Noor Ibrahim','Kai Tanaka','Luca Rossi','Priya Shah','Sam Lee','Mei Zhao','Omar Khan','Lin Chen','Yusuf Ali','Olivia Smith','Elena Petrov','Arjun Rao','Diego Morales','Hana Kim','Mateo Silva','Ada Obi','Jun Park','Zoe Martin','Rafi Nasser','Ines Duarte','Tom Novak','Sana Iqbal','Leo Brandt','Aya Sato','Nils Berg','Carmen Ruiz','Ivo Kral','Lea Fischer','Amir Said'];
+    const ROLES = ['Designer','Engineer','Product','QA','Operations','Marketing'];
+    const STATUSES = ['Active','Invited','Inactive'];
+    const LOCS = ['Rotterdam','Stockholm','Osaka','Lisbon','Nairobi','Toronto'];
+    const BADGES = {
+      Active: '<span class="lb-badge lb-badge--small lb-badge--success"><span class="lb-badge__dot"></span>Active</span>',
+      Invited: '<span class="lb-badge lb-badge--small lb-badge--warning"><span class="lb-badge__dot"></span>Invited</span>',
+      Inactive: '<span class="lb-badge lb-badge--small lb-badge--danger"><span class="lb-badge__dot"></span>Inactive</span>',
+    };
+    const data = NAMES.map((n, i) => ({
+      name: n, role: ROLES[i % ROLES.length], status: STATUSES[i % 3],
+      loc: LOCS[i % LOCS.length], amount: 240 + ((i * 173) % 2400),
+    }));
+    const PAGE_SIZE = 10;
+    let query = '', page = 1;
+    const roleFilter = new Set(), statusFilter = new Set();
+
+    const initials = (n) => n.split(' ').map((w) => w[0]).join('').slice(0, 2).toUpperCase();
+
+    const render = () => {
+      const q = query.trim().toLowerCase();
+      const filtered = data.filter((r) =>
+        (!q || (r.name + ' ' + r.role).toLowerCase().includes(q)) &&
+        (roleFilter.size === 0 || roleFilter.has(r.role)) &&
+        (statusFilter.size === 0 || statusFilter.has(r.status)));
+      const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+      if (page > totalPages) page = totalPages;
+      const start = (page - 1) * PAGE_SIZE;
+      const slice = filtered.slice(start, start + PAGE_SIZE);
+
+      table.setAttribute('aria-rowcount', filtered.length + 1);
+      if (slice.length === 0) {
+        tbody.innerHTML = '<tr class="lb-table__row--empty"><td class="lb-table__cell" colspan="5"><div class="lb-empty-state lb-empty-state--sm"><span class="lb-empty-state__icon" aria-hidden="true" data-lb-icon="search"></span><h3 class="lb-empty-state__title">No matches</h3><p class="lb-empty-state__description">Adjust the search or filters.</p></div></td></tr>';
+        info.textContent = '0 results';
+      } else {
+        tbody.innerHTML = slice.map((r, i) =>
+          '<tr aria-rowindex="' + (start + i + 2) + '" data-idx="' + data.indexOf(r) + '">' +
+          '<td class="lb-table__cell lb-table__cell--select"><label class="lb-checkbox-wrap"><input type="checkbox" class="lb-checkbox" data-lb-table-select><span class="lb-visually-hidden">Select row</span></label></td>' +
+          '<td class="lb-table__cell"><div class="lb-table__inline"><span class="lb-avatar lb-avatar--small" role="img" aria-label="' + r.name + '" data-lb-initials="' + initials(r.name) + '"></span>' + r.name + '</div></td>' +
+          '<td class="lb-table__cell">' + r.role + '</td>' +
+          '<td class="lb-table__cell">' + BADGES[r.status] + '</td>' +
+          '<td class="lb-table__cell lb-table__cell--end">$' + r.amount.toLocaleString('en-US') + '</td>' +
+          '</tr>').join('');
+        info.textContent = (start + 1) + '–' + (start + slice.length) + ' of ' + filtered.length;
+      }
+      if (window.LB && LB.initIcons) LB.initIcons(tbody);
+      if (table._lbTable) table._lbTable.refresh();
+      if (selectAll) { selectAll.checked = false; selectAll.indeterminate = false; }
+      const pager = nav._lbPagination;
+      if (pager) { pager.totalPages = totalPages; pager.currentPage = page; pager.render(); }
+      nav.style.visibility = totalPages > 1 ? '' : 'hidden';
+    };
+
+    // Select-all bridge for the split header (the select-all lives in the
+    // header table, outside the body table LB.Table instance scans).
+    if (selectAll) {
+      selectAll.addEventListener('change', () => {
+        tbody.querySelectorAll('[data-lb-table-select]').forEach((cb) => {
+          if (cb.checked !== selectAll.checked) { cb.checked = selectAll.checked; cb.dispatchEvent(new Event('change', { bubbles: true })); }
+        });
+      });
+      table.addEventListener('lb-table-select', (e) => {
+        const total = tbody.querySelectorAll('[data-lb-table-select]').length;
+        const count = e.detail.selectedCount;
+        selectAll.checked = count > 0 && count === total;
+        selectAll.indeterminate = count > 0 && count < total;
+        document.getElementById('dt-count').textContent = count;
+        toolbar.classList.toggle('lb-toolbar--selecting', count > 0);
+      });
+    }
+    document.getElementById('dt-clear').addEventListener('click', () => {
+      tbody.querySelectorAll('[data-lb-table-select]:checked').forEach((cb) => {
+        cb.checked = false; cb.dispatchEvent(new Event('change', { bubbles: true }));
+      });
+    });
+
+    // Density (two stops fit the toolbar; --lg omitted deliberately)
+    document.getElementById('dt-density').addEventListener('lb-segmented-change', (e) => {
+      document.querySelectorAll('#dt-table, .lb-table-wrap--sticky .lb-table').forEach((t) => t.classList.toggle('lb-table--sm', e.detail.value === 'sm'));
+    });
+
+    // Filters + columns (same wiring as the Table page demos)
+    const bar = document.getElementById('dt-filter-bar');
+    const countBadge = document.getElementById('dt-filter-count');
+    const groups = [
+      { host: document.getElementById('dt-filter-roles'), values: ROLES, set: roleFilter, label: 'Role' },
+      { host: document.getElementById('dt-filter-statuses'), values: STATUSES, set: statusFilter, label: 'Status' },
+    ];
+    const syncFilters = () => {
+      const total = roleFilter.size + statusFilter.size;
+      countBadge.hidden = total === 0;
+      countBadge.textContent = total;
+      bar.hidden = total === 0;
+      bar.querySelectorAll('.lb-chip').forEach((c) => c.remove());
+      groups.forEach((g) => {
+        g.set.forEach((v) => {
+          const chip = document.createElement('span');
+          chip.className = 'lb-chip lb-chip--selected';
+          chip.append(g.label + ': ' + v);
+          const rm = document.createElement('button');
+          rm.type = 'button'; rm.className = 'lb-chip__remove';
+          rm.setAttribute('aria-label', 'Remove filter ' + v);
+          rm.innerHTML = '<span data-lb-icon="x"></span>';
+          rm.addEventListener('click', () => {
+            g.set.delete(v);
+            const cb = g.host.querySelector('input[value="' + v + '"]');
+            if (cb) cb.checked = false;
+            page = 1; syncFilters(); render();
+          });
+          chip.appendChild(rm);
+          bar.appendChild(chip);
+        });
+      });
+      if (window.LB && LB.initIcons) LB.initIcons(bar);
+    };
+    groups.forEach((g) => {
+      g.values.forEach((v) => {
+        const label = document.createElement('label');
+        label.className = 'lb-checkbox-wrap';
+        label.innerHTML = '<input type="checkbox" class="lb-checkbox" value="' + v + '"><span class="lb-checkbox__label">' + v + '</span>';
+        label.querySelector('input').addEventListener('change', (e) => {
+          if (e.target.checked) g.set.add(v); else g.set.delete(v);
+          page = 1; syncFilters(); render();
+        });
+        g.host.appendChild(label);
+      });
+      if (window.LB && LB.initCheckboxGlyphs) { LB.initCheckboxGlyphs(g.host); LB.initIcons(g.host); }
+    });
+
+    const COLS = [{ index: 1, label: 'Member' }, { index: 2, label: 'Role' }, { index: 3, label: 'Status' }, { index: 4, label: 'Amount' }];
+    const hiddenCols = new Set();
+    const headRow = document.querySelector('.lb-table-wrap__header thead tr');
+    const applyCols = () => {
+      COLS.forEach((c) => { if (headRow.cells[c.index]) headRow.cells[c.index].hidden = hiddenCols.has(c.index); });
+      Array.from(tbody.rows).forEach((tr) => {
+        if (tr.classList.contains('lb-table__row--empty')) return;
+        COLS.forEach((c) => { if (tr.cells[c.index]) tr.cells[c.index].hidden = hiddenCols.has(c.index); });
+      });
+    };
+    const colsHost = document.getElementById('dt-columns');
+    COLS.forEach((c) => {
+      const label = document.createElement('label');
+      label.className = 'lb-checkbox-wrap';
+      label.innerHTML = '<input type="checkbox" class="lb-checkbox" checked><span class="lb-checkbox__label">' + c.label + '</span>';
+      label.querySelector('input').addEventListener('change', (e) => {
+        if (e.target.checked) hiddenCols.delete(c.index); else hiddenCols.add(c.index);
+        applyCols();
+      });
+      colsHost.appendChild(label);
+    });
+    if (window.LB && LB.initCheckboxGlyphs) { LB.initCheckboxGlyphs(colsHost); LB.initIcons(colsHost); }
+    const origRender = render;
+    const renderWithCols = () => { origRender(); applyCols(); };
+
+    // Side peek: row click (not checkbox) populates the inspector rail.
+    tbody.addEventListener('click', (e) => {
+      if (e.target.closest('.lb-checkbox-wrap')) return;
+      const tr = e.target.closest('tr[data-idx]');
+      if (!tr) return;
+      const r = data[Number(tr.dataset.idx)];
+      document.getElementById('dt-panel-name').textContent = r.name;
+      document.getElementById('dt-panel-role').textContent = r.role;
+      const av = document.getElementById('dt-panel-avatar');
+      av.setAttribute('data-lb-initials', initials(r.name));
+      av.setAttribute('aria-label', r.name);
+      document.getElementById('dt-panel-status').innerHTML = BADGES[r.status];
+      document.getElementById('dt-panel-amount').textContent = '$' + r.amount.toLocaleString('en-US');
+      document.getElementById('dt-panel-loc').textContent = r.loc;
+      if (window.LB && LB.initIcons) LB.initIcons(document.getElementById('dt-panel'));
+    });
+
+    let debounce;
+    search.addEventListener('input', () => {
+      clearTimeout(debounce);
+      debounce = setTimeout(() => { query = search.value; page = 1; renderWithCols(); }, 150);
+    });
+    nav.addEventListener('lb-page-change', (e) => { page = e.detail.page; renderWithCols(); });
+    renderWithCols();
+  });
+</script>
+</body>
+</html>

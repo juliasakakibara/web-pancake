@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <!-- theme-preamble:v1 -->
+  <script>(function(){try{var t=localStorage.getItem('letbe-ds-dark-mode');if(t==='1')document.documentElement.setAttribute('data-theme','dark');else if(t==='0')document.documentElement.setAttribute('data-theme','light');}catch(e){}})();</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta data-lb-page="playbar">
+  <title>Playbar — letbe-ds</title>
+  <link rel="stylesheet" href="../tokens/theme.css">
+  <link rel="stylesheet" href="../tokens/fonts.css">
+  <link rel="stylesheet" href="../components/components.css">
+  <link rel="stylesheet" href="../components/theme-editor.css">
+  <link rel="stylesheet" href="../components/gallery.css">
+</head>
+<body data-lb-base="..">
+
+<main class="gallery-main">
+  <section class="gallery-section" id="playbar">
+    <h1 class="gallery-section__title" style="font-size: var(--lb-t-heading-l-font-size); line-height: var(--lb-t-heading-l-line-height);">Playbar</h1>
+    <p class="gallery-section__desc">Persistent bottom now-playing dock (workspace-modules S5), mounted as the last child of an app frame (below the shell's <code class="lb-code">__main</code>). Three zones: <strong>now playing</strong> (thumb · title/artist) · <strong>transport</strong> (buttons + scrubber + timestamps) · <strong>utilities</strong> (hidden ≤768px). Per the pluggable-engines principle the bar itself is <strong>layout + skin only</strong> — the demo below wires a native <code class="lb-code">&lt;audio&gt;</code> engine in ~110 lines, exactly how a consumer wires theirs. Consumed here: <a class="lb-link" href="../button/">Icon Button</a> · <a class="lb-link" href="../slider/">Slider</a> · <a class="lb-link" href="../popover/">Popover</a> · <a class="lb-link" href="../media-player/">Media Player playlist pattern</a>. Mounts below the <a class="lb-link" href="../app-shell/">App Shell</a> main zone.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>a11y (built in):</strong> every control is a real <code class="lb-code">&lt;button type="button"&gt;</code> with an <code class="lb-code">aria-label</code>, and both the scrubber and the volume slider are native <code class="lb-code">&lt;input type="range"&gt;</code> (<code class="lb-code">.lb-slider</code>) — arrow-key seekable, with a <code class="lb-code">:focus-visible</code> ring on the thumb. Shuffle/repeat state lives on <code class="lb-code">aria-pressed</code>, which is also the selector the accent styling hangs off, so the attribute is the source of truth rather than a class; the artwork is a decorative <code class="lb-code">&lt;img alt=""&gt;</code>; below 768px <code class="lb-code">__utils</code> is <code class="lb-code">display: none</code>, so queue and volume need another home on mobile. Your engine owns the rest — the reference wiring flips the play button's <code class="lb-code">aria-label</code> between Play and Pause, keeps <code class="lb-code">aria-valuetext</code> on the scrubber (<code class="lb-code">1:12 of 3:32</code>), and marks the playing queue row <code class="lb-code">aria-current="true"</code>.</p>
+
+    <hr class="gallery-desc-divider">
+
+    <h2 class="gallery-section__title">The bar — fully wired</h2>
+    <p class="gallery-section__desc">Live with the full 18-track album: play/pause · prev/next · <strong>shuffle</strong> and <strong>repeat</strong> toggles (accent + tinted when on) · seek · <strong>queue</strong> popover reusing the media-player playlist pattern (scrolls past ~4 rows, active row marked) · <strong>volume</strong> popover with mute. Repeat wraps the queue; shuffle randomizes the next pick.</p>
+    <div style="border: var(--lb-border-width-thin) solid var(--lb-border-muted); border-radius: var(--lb-radius-overlay); overflow: visible;">
+      <div style="height: 260px; display: flex; flex-direction: column; background: var(--lb-bg-default);">
+        <div style="flex: 1; display: grid; place-items: center; color: var(--lb-fg-muted); font-size: var(--lb-t-body-s-font-size);">App content — the bar stays put.</div>
+        <div class="lb-playbar">
+          <div class="lb-playbar__now">
+            <div class="lb-playbar__thumb"><img src="../assets/media/letbe-profile-cover.jpg" alt=""></div>
+            <div class="lb-playbar__titles">
+              <p class="lb-playbar__title">Old School</p>
+              <p class="lb-playbar__artist">Letbe Design</p>
+            </div>
+          </div>
+          <div class="lb-playbar__transport">
+            <div class="lb-playbar__buttons">
+              <button class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--small" type="button" aria-label="Shuffle" aria-pressed="false"><span data-lb-icon="shuffle"></span></button>
+              <button class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--small" type="button" aria-label="Previous"><span data-lb-icon="skip-back"></span></button>
+              <button class="lb-icon-btn lb-icon-btn--primary lb-icon-btn--medium" type="button" aria-label="Play"><span data-lb-icon="play"></span></button>
+              <button class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--small" type="button" aria-label="Next"><span data-lb-icon="skip-forward"></span></button>
+              <button class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--small" type="button" aria-label="Repeat" aria-pressed="false"><span data-lb-icon="repeat"></span></button>
+            </div>
+            <div class="lb-playbar__scrub">
+              <span>0:00</span>
+              <div class="lb-slider-track-wrap lb-slider-track-wrap--medium">
+                <div class="lb-slider-track"><div class="lb-slider-track__fill" style="width: 0%"></div></div>
+                <input type="range" class="lb-slider" min="0" max="212" value="0" aria-label="Seek">
+              </div>
+              <span>3:32</span>
+            </div>
+          </div>
+          <div class="lb-playbar__utils">
+            <div class="lb-popover-host" data-lb-popover>
+              <button class="lb-popover-trigger lb-icon-btn lb-icon-btn--ghost lb-icon-btn--small" type="button" aria-label="Queue"><span data-lb-icon="list"></span></button>
+              <div class="lb-popover lb-popover--top" style="display:none; min-width: 17rem; padding: var(--lb-size-2x); left: auto; right: 0; transform: none;">
+                <ul class="lb-media__playlist lb-media__playlist--scroll" id="pb-queue" style="border-top: none; padding-top: 0;"></ul>
+              </div>
+            </div>
+            <div class="lb-popover-host" data-lb-popover>
+              <button class="lb-popover-trigger lb-icon-btn lb-icon-btn--ghost lb-icon-btn--small" type="button" aria-label="Volume" id="pb-vol-btn"><span data-lb-icon="volume-2"></span></button>
+              <div class="lb-popover lb-popover--top" style="display:none; min-width: 12rem; padding: var(--lb-size-3x); left: auto; right: 0; transform: none;">
+                <div style="display: flex; align-items: center; gap: var(--lb-size-2x);">
+                  <button class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--small" type="button" aria-label="Mute" id="pb-mute"><span data-lb-icon="volume-2"></span></button>
+                  <div class="lb-slider-track-wrap lb-slider-track-wrap--small" style="flex: 1;">
+                    <div class="lb-slider-track"><div class="lb-slider-track__fill" id="pb-vol-fill" style="width: 100%"></div></div>
+                    <input type="range" class="lb-slider" id="pb-vol" min="0" max="100" value="100" aria-label="Volume">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <button class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--small" type="button" aria-label="More"><span data-lb-icon="more-vertical"></span></button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Usage</h2>
+    <p class="gallery-section__desc">Pure CSS bar. <code class="lb-code">.lb-playbar</code> → <code class="lb-code">__now</code> (<code class="lb-code">__thumb</code> + <code class="lb-code">__titles</code>) · <code class="lb-code">__transport</code> (<code class="lb-code">__buttons</code> + <code class="lb-code">__scrub</code> with the canonical <code class="lb-code">.lb-slider-track-wrap</code> holding the real <code class="lb-code">.lb-slider</code> range — keyboard-seekable) · <code class="lb-code">__utils</code> (queue/volume as consumed Popovers). Toggle buttons carry <code class="lb-code">aria-pressed</code> — pressed renders accent. Wire your engine to the controls exactly as this page's demo script does; view source for the ~110-line reference wiring.</p>
+
+  </section>
+</main>
+
+<script src="../js/lb.js"></script>
+<script>
+  // Reference engine wiring — native <audio> queue driving the playbar.
+  document.addEventListener('DOMContentLoaded', () => {
+    const bar = document.querySelector('.lb-playbar');
+    if (!bar) return;
+    const QUEUE = [
+      { src: 'https://cdn.jsdelivr.net/gh/m1ha1l0/letbe-media@v1.0.1/tracks/Letbe-Design-01-Old-School.mp3', title: 'Old School', dur: '3:32' },
+      { src: 'https://cdn.jsdelivr.net/gh/m1ha1l0/letbe-media@v1.0.1/tracks/Letbe-Design-02-Hip-Hop.mp3', title: 'Hip Hop', dur: '2:09' },
+      { src: 'https://cdn.jsdelivr.net/gh/m1ha1l0/letbe-media@v1.0.1/tracks/Letbe-Design-03-Country.mp3', title: 'Country', dur: '3:04' },
+      { src: 'https://cdn.jsdelivr.net/gh/m1ha1l0/letbe-media@v1.0.1/tracks/Letbe-Design-04-Reggae.mp3', title: 'Reggae', dur: '3:57' },
+      { src: 'https://cdn.jsdelivr.net/gh/m1ha1l0/letbe-media@v1.0.1/tracks/Letbe-Design-05-Metal.mp3', title: 'Metal', dur: '3:32' },
+      { src: 'https://cdn.jsdelivr.net/gh/m1ha1l0/letbe-media@v1.0.1/tracks/Letbe-Design-06-Techno.mp3', title: 'Techno', dur: '4:00' },
+      { src: 'https://cdn.jsdelivr.net/gh/m1ha1l0/letbe-media@v1.0.1/tracks/Letbe-Design-07-Funk.mp3', title: 'Funk', dur: '3:46' },
+      { src: 'https://cdn.jsdelivr.net/gh/m1ha1l0/letbe-media@v1.0.1/tracks/Letbe-Design-08-Electronic.mp3', title: 'Electronic', dur: '4:19' },
+      { src: 'https://cdn.jsdelivr.net/gh/m1ha1l0/letbe-media@v1.0.1/tracks/Letbe-Design-09-Dubstep.mp3', title: 'Dubstep', dur: '4:06' },
+      { src: 'https://cdn.jsdelivr.net/gh/m1ha1l0/letbe-media@v1.0.1/tracks/Letbe-Design-10-Turbo-Folk.mp3', title: 'Turbo Folk', dur: '3:58' },
+      { src: 'https://cdn.jsdelivr.net/gh/m1ha1l0/letbe-media@v1.0.1/tracks/Letbe-Design-11-Epic.mp3', title: 'Epic', dur: '3:42' },
+      { src: 'https://cdn.jsdelivr.net/gh/m1ha1l0/letbe-media@v1.0.1/tracks/Letbe-Design-12-Grunge.mp3', title: 'Grunge', dur: '3:44' },
+      { src: 'https://cdn.jsdelivr.net/gh/m1ha1l0/letbe-media@v1.0.1/tracks/Letbe-Design-13-Latina.mp3', title: 'Latina', dur: '2:09' },
+      { src: 'https://cdn.jsdelivr.net/gh/m1ha1l0/letbe-media@v1.0.1/tracks/Letbe-Design-14-East.mp3', title: 'East', dur: '3:29' },
+      { src: 'https://cdn.jsdelivr.net/gh/m1ha1l0/letbe-media@v1.0.1/tracks/Letbe-Design-15-Hindu.mp3', title: 'Hindu', dur: '3:29' },
+      { src: 'https://cdn.jsdelivr.net/gh/m1ha1l0/letbe-media@v1.0.1/tracks/Letbe-Design-16-Ambient.mp3', title: 'Ambient', dur: '4:18' },
+      { src: 'https://cdn.jsdelivr.net/gh/m1ha1l0/letbe-media@v1.0.1/tracks/Letbe-Design-17-Asia.mp3', title: 'Asia', dur: '3:16' },
+      { src: 'https://cdn.jsdelivr.net/gh/m1ha1l0/letbe-media@v1.0.1/tracks/Letbe-Design-18-Pop.mp3', title: 'Pop', dur: '3:01' }
+    ];
+    const audio = new Audio();
+    let i = 0, shuffle = false, repeat = false;
+    const range = bar.querySelector('.lb-playbar__scrub .lb-slider');
+    const fill = bar.querySelector('.lb-playbar__scrub .lb-slider-track__fill');
+    const spans = bar.querySelectorAll('.lb-playbar__scrub > span');
+    const titleEl = bar.querySelector('.lb-playbar__title');
+    const playBtn = bar.querySelector('[aria-label="Play"]');
+    const playIcon = playBtn.querySelector('[data-lb-icon]');
+    const prevBtn = bar.querySelector('[aria-label="Previous"]');
+    const nextBtn = bar.querySelector('[aria-label="Next"]');
+    const shuffleBtn = bar.querySelector('[aria-label="Shuffle"]');
+    const repeatBtn = bar.querySelector('[aria-label="Repeat"]');
+    const queueEl = document.getElementById('pb-queue');
+    const volBtn = document.getElementById('pb-vol-btn');
+    const volRange = document.getElementById('pb-vol');
+    const volFill = document.getElementById('pb-vol-fill');
+    const muteBtn = document.getElementById('pb-mute');
+    const fmt = (s) => Math.floor(s / 60) + ':' + String(Math.floor(s % 60)).padStart(2, '0');
+    const setIcon = (host, name) => { host.setAttribute('data-lb-icon', name); host.innerHTML = ''; if (window.LB && LB.icon) LB.icon(name, host); };
+
+    function renderQueue() {
+      // Reuses the media-player playlist pattern (.lb-media__track rows)
+      // — same anatomy, active state and scroll cap as /media-player/.
+      queueEl.innerHTML = '';
+      QUEUE.forEach((t, k) => {
+        const li = document.createElement('li');
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'lb-media__track' + (k === i ? ' lb-media__track--active' : '');
+        if (k === i) b.setAttribute('aria-current', 'true');
+        b.innerHTML = '<span class="lb-media__track-index">' + (k + 1) + '</span>'
+          + '<span class="lb-media__track-title"></span>'
+          + '<span class="lb-media__track-dur">' + t.dur + '</span>';
+        b.querySelector('.lb-media__track-title').textContent = t.title;
+        b.addEventListener('click', () => load(k, true));
+        li.appendChild(b);
+        queueEl.appendChild(li);
+      });
+      const active = queueEl.querySelector('.lb-media__track--active');
+      if (active) active.scrollIntoView({ block: 'nearest' });
+    }
+    function nextIndex(dir) {
+      if (shuffle && QUEUE.length > 1) {
+        let n; do { n = Math.floor(Math.random() * QUEUE.length); } while (n === i);
+        return n;
+      }
+      return (i + dir + QUEUE.length) % QUEUE.length;
+    }
+    function load(n, autoplay) {
+      i = (n + QUEUE.length) % QUEUE.length;
+      audio.src = QUEUE[i].src;
+      titleEl.textContent = QUEUE[i].title;
+      renderQueue();
+      if (autoplay) audio.play();
+    }
+    function sync() {
+      const dur = audio.duration || 0, cur = audio.currentTime || 0;
+      if (dur) { range.max = Math.floor(dur); spans[1].textContent = fmt(dur); }
+      range.value = Math.floor(cur);
+      spans[0].textContent = fmt(cur);
+      fill.style.width = (dur ? (cur / dur) * 100 : 0) + '%';
+      range.setAttribute('aria-valuetext', fmt(cur) + ' of ' + fmt(dur));
+    }
+    function reflectVolume() {
+      const muted = audio.muted || audio.volume === 0;
+      setIcon(volBtn.querySelector('[data-lb-icon]'), muted ? 'volume-x' : 'volume-2');
+      setIcon(muteBtn.querySelector('[data-lb-icon]'), muted ? 'volume-x' : 'volume-2');
+      volFill.style.width = (audio.muted ? 0 : audio.volume * 100) + '%';
+    }
+    playBtn.addEventListener('click', () => { audio.paused ? audio.play() : audio.pause(); });
+    audio.addEventListener('play',  () => { setIcon(playIcon, 'pause'); playBtn.setAttribute('aria-label', 'Pause'); });
+    audio.addEventListener('pause', () => { setIcon(playIcon, 'play');  playBtn.setAttribute('aria-label', 'Play'); });
+    audio.addEventListener('timeupdate', sync);
+    audio.addEventListener('loadedmetadata', sync);
+    audio.addEventListener('ended', () => {
+      if (repeat || shuffle || i < QUEUE.length - 1) load(nextIndex(1), true);
+      else sync();
+    });
+    prevBtn.addEventListener('click', () => load(nextIndex(-1), !audio.paused));
+    nextBtn.addEventListener('click', () => load(nextIndex(1), !audio.paused));
+    shuffleBtn.addEventListener('click', () => { shuffle = !shuffle; shuffleBtn.setAttribute('aria-pressed', String(shuffle)); });
+    repeatBtn.addEventListener('click', () => { repeat = !repeat; repeatBtn.setAttribute('aria-pressed', String(repeat)); });
+    range.addEventListener('input', () => { audio.currentTime = Number(range.value); sync(); });
+    volRange.addEventListener('input', () => { audio.volume = volRange.value / 100; audio.muted = false; reflectVolume(); });
+    muteBtn.addEventListener('click', () => { audio.muted = !audio.muted; reflectVolume(); });
+    load(0, false);
+    sync();
+    reflectVolume();
+  });
+</script>
+<script src="../js/slot-engine.js"></script>
+<script src="../js/theme-editor.js"></script>
+<script src="../js/token-exporter.js"></script>
+<script src="../js/gallery-layout.js"></script>
+</body>
+</html>

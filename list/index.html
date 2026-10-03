@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <!-- theme-preamble:v1 -->
+  <script>(function(){try{var t=localStorage.getItem('letbe-ds-dark-mode');if(t==='1')document.documentElement.setAttribute('data-theme','dark');else if(t==='0')document.documentElement.setAttribute('data-theme','light');}catch(e){}})();</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta data-lb-page="list">
+  <title>List — letbe-ds</title>
+  <link rel="stylesheet" href="../tokens/theme.css">
+  <link rel="stylesheet" href="../tokens/fonts.css">
+  <link rel="stylesheet" href="../components/components.css">
+  <link rel="stylesheet" href="../components/theme-editor.css">
+  <link rel="stylesheet" href="../components/gallery.css">
+</head>
+<body data-lb-base="..">
+
+<main class="gallery-main">
+  <section class="gallery-section" id="list">
+    <h1 class="gallery-section__title" style="font-size: var(--lb-t-heading-l-font-size); line-height: var(--lb-t-heading-l-line-height);">List</h1>
+    <p class="gallery-section__desc">Shared primitive for option lists. Used internally by <strong>Select</strong>, <strong>Dropdown</strong> (combobox), <strong>MultiSelect</strong>, <strong>Menu</strong>, the Phone input's country picker, and Datepicker's month/year selects. The slots, modes, and keyboard behaviour documented below are what each of those consumers inherits.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>a11y (built in):</strong> <code class="lb-code">LB.List</code> applies the roles itself — <code class="lb-code">role="listbox"</code> (or <code class="lb-code">menu</code> under <code class="lb-code">data-lb-list-mode="menu"</code>) on the items container, <code class="lb-code">role="option"</code>/<code class="lb-code">menuitem</code> per item, <code class="lb-code">aria-multiselectable</code> in multi mode, <code class="lb-code">aria-disabled</code> mirrored from the item's disabled class at mount, and <code class="lb-code">aria-selected</code> kept in sync on every toggle; auto-inserted separators get <code class="lb-code">role="separator"</code> like the authored ones. Keyboard is <kbd>↑</kbd>/<kbd>↓</kbd> (wrapping), <kbd>Home</kbd>/<kbd>End</kbd> and <kbd>Enter</kbd>/<kbd>Space</kbd> to select, and it skips disabled and filtered-out items — on a filterable list the same keys are bound to the search field so you can type and arrow without re-tabbing. Items are given stable <code class="lb-code">id</code>s and each highlight move fires <code class="lb-code">lb-list-active-change</code>, so the owning combobox (Command Palette) points <code class="lb-code">aria-activedescendant</code> at the active option while focus stays in the input — the list never steals it.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>Usage:</strong> Root <code class="lb-code">.lb-list</code> on a <code class="lb-code">&lt;ul&gt;</code> (or <code class="lb-code">&lt;div&gt;</code>). Items are <code class="lb-code">.lb-list__item</code> — <code class="lb-code">&lt;li&gt;</code>, <code class="lb-code">&lt;button&gt;</code>, or <code class="lb-code">&lt;a&gt;</code>. Opt-in keyboard + selection behaviour with <code class="lb-code">data-lb-list</code>; set mode via <code class="lb-code">data-lb-list-mode="single|multi|menu"</code>. Filterable lists add <code class="lb-code">data-lb-list-filterable</code>. The container is not focusable on its own — put <code class="lb-code">tabindex="0"</code> and an <code class="lb-code">aria-label</code> on it when the list itself is the tab stop, as the demos below do.</p>
+
+    <hr class="gallery-desc-divider">
+
+    <!-- ────────────────── Simple ────────────────── -->
+    <h2 class="gallery-section__title">Simple</h2>
+    <p class="gallery-section__desc">Plain items. No interactions unless wired. Use when rendering read-only lists (recent activity, navigation options).</p>
+    <div style="max-width: 320px; background: var(--lb-surface-bg-overlay); border: var(--lb-border-width-thin) solid var(--lb-surface-border-overlay); border-radius: var(--lb-radius-overlay); box-shadow: var(--lb-shadow-dropdown); overflow: hidden;">
+      <ul class="lb-list">
+        <li class="lb-list__item"><span class="lb-list__label">Apple</span></li>
+        <li class="lb-list__item"><span class="lb-list__label">Banana</span></li>
+        <li class="lb-list__item"><span class="lb-list__label">Cherry</span></li>
+        <li class="lb-list__item lb-list__item--disabled"><span class="lb-list__label">Grape (sold out)</span></li>
+        <li class="lb-list__item"><span class="lb-list__label">Mango</span></li>
+      </ul>
+    </div>
+
+    <!-- ────────────────── With icons ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">With icons</h2>
+    <p class="gallery-section__desc">Leading icon slot (<code class="lb-code">.lb-list__icon</code>). Useful for category lists, country pickers, or menus with visual hints.</p>
+    <div style="max-width: 320px; background: var(--lb-surface-bg-overlay); border: var(--lb-border-width-thin) solid var(--lb-surface-border-overlay); border-radius: var(--lb-radius-overlay); box-shadow: var(--lb-shadow-dropdown); overflow: hidden;">
+      <ul class="lb-list lb-list--with-icons">
+        <li class="lb-list__item">
+          <span class="lb-list__icon" aria-hidden="true" data-lb-icon="user"></span>
+          <span class="lb-list__label">Account settings</span>
+        </li>
+        <li class="lb-list__item">
+          <span class="lb-list__icon" aria-hidden="true" data-lb-icon="settings"></span>
+          <span class="lb-list__label">Preferences</span>
+        </li>
+        <li class="lb-list__item">
+          <span class="lb-list__icon" aria-hidden="true" data-lb-icon="log-out"></span>
+          <span class="lb-list__label">Sign out</span>
+        </li>
+      </ul>
+    </div>
+
+    <!-- ────────────────── Single-select ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Single-select</h2>
+    <p class="gallery-section__desc">Arrow keys navigate, Enter/Space selects, Home/End jump. Dispatches <code class="lb-code">lb-list-select</code> with <code class="lb-code">{ value, item }</code>. Tab into the list to try it.</p>
+    <div style="max-width: 320px; background: var(--lb-surface-bg-overlay); border: var(--lb-border-width-thin) solid var(--lb-surface-border-overlay); border-radius: var(--lb-radius-overlay); box-shadow: var(--lb-shadow-dropdown); overflow: hidden;">
+      <ul class="lb-list" data-lb-list data-lb-list-mode="single" tabindex="0" aria-label="Select a fruit">
+        <li class="lb-list__item" data-lb-value="apple"><span class="lb-list__label">Apple</span><span class="lb-list__check" aria-hidden="true" data-lb-icon="check"></span></li>
+        <li class="lb-list__item lb-list__item--selected" data-lb-value="banana"><span class="lb-list__label">Banana</span><span class="lb-list__check" aria-hidden="true" data-lb-icon="check"></span></li>
+        <li class="lb-list__item" data-lb-value="cherry"><span class="lb-list__label">Cherry</span><span class="lb-list__check" aria-hidden="true" data-lb-icon="check"></span></li>
+        <li class="lb-list__item lb-list__item--disabled" data-lb-value="grape"><span class="lb-list__label">Grape (sold out)</span></li>
+        <li class="lb-list__item" data-lb-value="mango"><span class="lb-list__label">Mango</span><span class="lb-list__check" aria-hidden="true" data-lb-icon="check"></span></li>
+      </ul>
+    </div>
+    <p class="gallery-section__desc" style="margin-top: var(--lb-size-3x); font-size: var(--lb-t-body-s-font-size);">Last selected: <span id="single-select-feedback" style="font-family: var(--lb-font-family-3); color: var(--lb-fg-accent);">banana</span></p>
+
+    <!-- ────────────────── Multi-select ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Multi-select</h2>
+    <p class="gallery-section__desc">Checkbox on each item. Clicking toggles, keyboard Enter toggles. Dispatches <code class="lb-code">lb-list-select</code>; consumers call <code class="lb-code">list.getSelected()</code>. This demo also opts into <code class="lb-code">data-lb-list-sort-selected</code> — selected items float to the top with an auto-separator, alphabetical within each group; order stays stable while you toggle (re-sorts only on mount + <code class="lb-code">list.refresh()</code>).</p>
+    <div style="max-width: 320px; background: var(--lb-surface-bg-overlay); border: var(--lb-border-width-thin) solid var(--lb-surface-border-overlay); border-radius: var(--lb-radius-overlay); box-shadow: var(--lb-shadow-dropdown); overflow: hidden;">
+      <ul class="lb-list lb-list--multi-select" data-lb-list data-lb-list-mode="multi" data-lb-list-sort-selected tabindex="0" aria-label="Toppings">
+        <li class="lb-list__item lb-list__item--selected" data-lb-value="cheese">
+          <input type="checkbox" class="lb-checkbox" checked tabindex="-1">
+          <span class="lb-list__label">Cheese</span>
+        </li>
+        <li class="lb-list__item" data-lb-value="olives">
+          <input type="checkbox" class="lb-checkbox" tabindex="-1">
+          <span class="lb-list__label">Olives</span>
+        </li>
+        <li class="lb-list__item lb-list__item--selected" data-lb-value="basil">
+          <input type="checkbox" class="lb-checkbox" checked tabindex="-1">
+          <span class="lb-list__label">Basil</span>
+        </li>
+        <li class="lb-list__item" data-lb-value="pepperoni">
+          <input type="checkbox" class="lb-checkbox" tabindex="-1">
+          <span class="lb-list__label">Pepperoni</span>
+        </li>
+        <li class="lb-list__item lb-list__item--disabled" data-lb-value="truffle">
+          <input type="checkbox" class="lb-checkbox" disabled tabindex="-1">
+          <span class="lb-list__label">Truffle (unavailable)</span>
+        </li>
+      </ul>
+    </div>
+    <p class="gallery-section__desc" style="margin-top: var(--lb-size-3x); font-size: var(--lb-t-body-s-font-size);">Selected: <span id="multi-select-feedback" style="font-family: var(--lb-font-family-3); color: var(--lb-fg-accent);">basil, cheese</span></p>
+    <div style="margin-top: var(--lb-size-3x);">
+      <button type="button" class="lb-btn lb-btn--secondary lb-btn--small" id="multi-refresh-btn">Refresh sort (float selected to top)</button>
+    </div>
+
+    <!-- ────────────────── Filterable ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Filterable</h2>
+    <p class="gallery-section__desc">Pinned search input at top filters items by textContent substring. Keyboard nav stays on the search input so you can type + arrow-select without re-tabbing. Empty result renders <code class="lb-code">.lb-list__no-results</code>. Uses our regular <code class="lb-code">.lb-input</code> + <code class="lb-code">data-lb-clearable</code> so the X button is the same custom component used everywhere else in the DS.</p>
+    <div style="max-width: 320px; background: var(--lb-surface-bg-overlay); border: var(--lb-border-width-thin) solid var(--lb-surface-border-overlay); border-radius: var(--lb-radius-overlay); box-shadow: var(--lb-shadow-dropdown); max-height: 320px; overflow: hidden;">
+      <div class="lb-list lb-list--filterable" data-lb-list data-lb-list-mode="single" data-lb-list-filterable aria-label="Search countries" style="max-height: 320px;">
+        <div class="lb-list__search-wrap" data-lb-clearable>
+          <div class="lb-input-wrap">
+            <span class="lb-input-wrap__icon lb-input-wrap__icon--start" aria-hidden="true" data-lb-icon="search"></span>
+            <input class="lb-input lb-input--medium lb-input--has-start lb-list__search" type="search" placeholder="Search country…" autocomplete="off">
+          </div>
+        </div>
+        <ul class="lb-list__items">
+          <li class="lb-list__item" data-lb-value="de"><img class="lb-list__icon lb-list__icon--round" src="../assets/flags/de.svg" alt="" loading="lazy"><span class="lb-list__label">Germany</span><span class="lb-list__hint">+49</span></li>
+          <li class="lb-list__item" data-lb-value="fr"><img class="lb-list__icon lb-list__icon--round" src="../assets/flags/fr.svg" alt="" loading="lazy"><span class="lb-list__label">France</span><span class="lb-list__hint">+33</span></li>
+          <li class="lb-list__item" data-lb-value="it"><img class="lb-list__icon lb-list__icon--round" src="../assets/flags/it.svg" alt="" loading="lazy"><span class="lb-list__label">Italy</span><span class="lb-list__hint">+39</span></li>
+          <li class="lb-list__item" data-lb-value="jp"><img class="lb-list__icon lb-list__icon--round" src="../assets/flags/jp.svg" alt="" loading="lazy"><span class="lb-list__label">Japan</span><span class="lb-list__hint">+81</span></li>
+          <li class="lb-list__item" data-lb-value="kr"><img class="lb-list__icon lb-list__icon--round" src="../assets/flags/kr.svg" alt="" loading="lazy"><span class="lb-list__label">South Korea</span><span class="lb-list__hint">+82</span></li>
+          <li class="lb-list__item" data-lb-value="mx"><img class="lb-list__icon lb-list__icon--round" src="../assets/flags/mx.svg" alt="" loading="lazy"><span class="lb-list__label">Mexico</span><span class="lb-list__hint">+52</span></li>
+          <li class="lb-list__item" data-lb-value="nl"><img class="lb-list__icon lb-list__icon--round" src="../assets/flags/nl.svg" alt="" loading="lazy"><span class="lb-list__label">Netherlands</span><span class="lb-list__hint">+31</span></li>
+          <li class="lb-list__item" data-lb-value="no"><img class="lb-list__icon lb-list__icon--round" src="../assets/flags/no.svg" alt="" loading="lazy"><span class="lb-list__label">Norway</span><span class="lb-list__hint">+47</span></li>
+          <li class="lb-list__item" data-lb-value="pl"><img class="lb-list__icon lb-list__icon--round" src="../assets/flags/pl.svg" alt="" loading="lazy"><span class="lb-list__label">Poland</span><span class="lb-list__hint">+48</span></li>
+          <li class="lb-list__item" data-lb-value="se"><img class="lb-list__icon lb-list__icon--round" src="../assets/flags/se.svg" alt="" loading="lazy"><span class="lb-list__label">Sweden</span><span class="lb-list__hint">+46</span></li>
+          <li class="lb-list__item" data-lb-value="us"><img class="lb-list__icon lb-list__icon--round" src="../assets/flags/us.svg" alt="" loading="lazy"><span class="lb-list__label">United States</span><span class="lb-list__hint">+1</span></li>
+        </ul>
+        <div class="lb-list__no-results" hidden>No countries match</div>
+      </div>
+    </div>
+
+    <!-- ────────────────── Stacked items ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Stacked items (label + subtext)</h2>
+    <p class="gallery-section__desc">Use <code class="lb-code">.lb-list__stack</code> instead of <code class="lb-code">.lb-list__label</code> when you need a primary + secondary line (team members, contacts, search results).</p>
+    <div style="max-width: 360px; background: var(--lb-surface-bg-overlay); border: var(--lb-border-width-thin) solid var(--lb-surface-border-overlay); border-radius: var(--lb-radius-overlay); box-shadow: var(--lb-shadow-dropdown); overflow: hidden;">
+      <ul class="lb-list">
+        <li class="lb-list__item">
+          <span class="lb-list__icon lb-list__icon--round" style="background: var(--lb-bg-accent-muted); display: inline-flex; align-items: center; justify-content: center; font-size: var(--lb-t-body-xs-font-size); color: var(--lb-fg-accent); font-weight: var(--lb-font-weight-semibold);">AG</span>
+          <span class="lb-list__stack"><span>Avery Green</span><span class="lb-list__subtext">avery.green@letbe.design</span></span>
+        </li>
+        <li class="lb-list__item lb-list__item--selected">
+          <span class="lb-list__icon lb-list__icon--round" style="background: var(--lb-bg-accent-muted); display: inline-flex; align-items: center; justify-content: center; font-size: var(--lb-t-body-xs-font-size); color: var(--lb-fg-accent); font-weight: var(--lb-font-weight-semibold);">NI</span>
+          <span class="lb-list__stack"><span>Noor Ibrahim</span><span class="lb-list__subtext">noor.i@letbe.design</span></span>
+          <span class="lb-list__check" aria-hidden="true" data-lb-icon="check"></span>
+        </li>
+        <li class="lb-list__item">
+          <span class="lb-list__icon lb-list__icon--round" style="background: var(--lb-bg-accent-muted); display: inline-flex; align-items: center; justify-content: center; font-size: var(--lb-t-body-xs-font-size); color: var(--lb-fg-accent); font-weight: var(--lb-font-weight-semibold);">KT</span>
+          <span class="lb-list__stack"><span>Kai Tanaka</span><span class="lb-list__subtext">kai.t@letbe.design</span></span>
+        </li>
+      </ul>
+    </div>
+
+    <!-- ────────────────── Menu-style with separator ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Menu-style (separator + danger + hint)</h2>
+    <p class="gallery-section__desc">For action-menu styling. <code class="lb-code">data-lb-list-mode="menu"</code> swaps the roles to <code class="lb-code">menu</code>/<code class="lb-code">menuitem</code> and moves a highlight class — it never moves focus and does not handle <kbd>Esc</kbd>; use <a class="lb-link" href="../menu/">Menu</a> for a popup menu with focus management. Add <code class="lb-code">.lb-list__separator</code> between groups, <code class="lb-code">--danger</code> for destructive, <code class="lb-code">.lb-list__hint</code> for keyboard shortcuts.</p>
+    <div style="max-width: 280px; background: var(--lb-surface-bg-overlay); border: var(--lb-border-width-thin) solid var(--lb-surface-border-overlay); border-radius: var(--lb-radius-overlay); box-shadow: var(--lb-shadow-dropdown); overflow: hidden;">
+      <ul class="lb-list" data-lb-list data-lb-list-mode="menu" tabindex="0" aria-label="File menu">
+        <li class="lb-list__item" data-lb-value="new"><span class="lb-list__label">New file</span><span class="lb-list__hint">⌘ N</span></li>
+        <li class="lb-list__item" data-lb-value="open"><span class="lb-list__label">Open…</span><span class="lb-list__hint">⌘ O</span></li>
+        <li class="lb-list__item" data-lb-value="save"><span class="lb-list__label">Save</span><span class="lb-list__hint">⌘ S</span></li>
+        <li class="lb-list__separator" role="separator"></li>
+        <li class="lb-list__item" data-lb-value="export"><span class="lb-list__label">Export…</span></li>
+        <li class="lb-list__separator" role="separator"></li>
+        <li class="lb-list__item lb-list__item--danger" data-lb-value="delete"><span class="lb-list__label">Delete</span><span class="lb-list__hint">⌫</span></li>
+      </ul>
+    </div>
+
+  </section>
+</main>
+
+<script src="../js/lb.js"></script>
+<script src="../js/slot-engine.js"></script>
+<script src="../js/theme-editor.js"></script>
+<script src="../js/token-exporter.js"></script>
+<script src="../js/gallery-layout.js"></script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Feedback wiring — prove the events fire
+    const singleList = document.querySelector('[aria-label="Select a fruit"]');
+    const singleFb = document.getElementById('single-select-feedback');
+    if (singleList && singleFb) {
+      singleList.addEventListener('lb-list-select', (e) => {
+        singleFb.textContent = e.detail.value;
+      });
+    }
+
+    const multiList = document.querySelector('[aria-label="Toppings"]');
+    const multiFb = document.getElementById('multi-select-feedback');
+    if (multiList && multiFb) {
+      const update = () => {
+        const selected = multiList._lbList.getSelected().map((s) => s.value).sort();
+        multiFb.textContent = selected.length ? selected.join(', ') : '(none)';
+      };
+      multiList.addEventListener('lb-list-select', update);
+      update();
+
+      // Wire the refresh button to re-apply the selected-first sort
+      const refreshBtn = document.getElementById('multi-refresh-btn');
+      if (refreshBtn) {
+        refreshBtn.addEventListener('click', () => multiList._lbList.refresh());
+      }
+    }
+  });
+</script>
+</body>
+</html>

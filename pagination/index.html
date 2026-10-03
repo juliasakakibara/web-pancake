@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <!-- theme-preamble:v1 -->
+  <script>(function(){try{var t=localStorage.getItem('letbe-ds-dark-mode');if(t==='1')document.documentElement.setAttribute('data-theme','dark');else if(t==='0')document.documentElement.setAttribute('data-theme','light');}catch(e){}})();</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta data-lb-page="pagination">
+  <title>Pagination — letbe-ds</title>
+  <link rel="stylesheet" href="../tokens/theme.css">
+  <link rel="stylesheet" href="../tokens/fonts.css">
+  <link rel="stylesheet" href="../components/components.css">
+  <link rel="stylesheet" href="../components/theme-editor.css">
+  <link rel="stylesheet" href="../components/gallery.css">
+</head>
+<body data-lb-base="..">
+
+<main class="gallery-main">
+  <section class="gallery-section" id="pagination">
+    <h1 class="gallery-section__title" style="font-size: var(--lb-t-heading-l-font-size); line-height: var(--lb-t-heading-l-line-height);">Pagination</h1>
+    <p class="gallery-section__desc">Page-range selector for long lists. Use when you have more than 10–12 items that users need to browse rather than search. For open-ended feeds (social, news), prefer infinite scroll instead. Active page uses primary action styling.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>a11y (built in):</strong> the host is a <code class="lb-code">&lt;nav aria-label="Pagination"&gt;</code> landmark and every control is a real <code class="lb-code">&lt;button&gt;</code> with an explicit <code class="lb-code">aria-label</code> — <code class="lb-code">Previous page</code>, <code class="lb-code">Page 4</code>, <code class="lb-code">Next page</code> — while the current page also carries <code class="lb-code">aria-current="page"</code> and the <code class="lb-code">…</code> gap is a <code class="lb-code">&lt;span aria-hidden="true"&gt;</code>, so it is neither focusable nor announced. Prev/next take the native <code class="lb-code">disabled</code> attribute at the first and last page, and every button shows a <code class="lb-code">:focus-visible</code> outline.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>Usage:</strong> Ship the <code class="lb-code">&lt;nav class="lb-pagination" data-lb-pagination&gt;</code> empty — the controller owns its contents and renders every button from <code class="lb-code">data-lb-total-pages</code> + <code class="lb-code">data-lb-current-page</code> (or <code class="lb-code">totalPages</code> / <code class="lb-code">currentPage</code> / <code class="lb-code">siblingCount</code> / <code class="lb-code">onChange</code> passed to <code class="lb-code">new LB.Pagination(el, options)</code>). Every accepted change re-renders and dispatches <code class="lb-code">lb-page-change</code> with <code class="lb-code">detail.page</code>; out-of-range and same-page requests are silently ignored. The component only tracks the page number — fetching and redrawing the actual list is the consumer's job, driven by that event or <code class="lb-code">onChange(page)</code>; jump programmatically with <code class="lb-code">el._lbPagination.goTo(page)</code>.</p>
+
+<hr class="gallery-desc-divider">
+
+
+<h2 class="gallery-section__title">Pagination Demo</h2>
+    <nav class="lb-pagination" data-lb-pagination data-lb-total-pages="12" data-lb-current-page="3" aria-label="Pagination"></nav>
+  </section>
+</main>
+
+<script src="../js/lb.js"></script>
+<script src="../js/slot-engine.js"></script>
+<script src="../js/theme-editor.js"></script>
+<script src="../js/token-exporter.js"></script>
+<script src="../js/gallery-layout.js"></script>
+</body>
+</html>

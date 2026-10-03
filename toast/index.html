@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <!-- theme-preamble:v1 -->
+  <script>(function(){try{var t=localStorage.getItem('letbe-ds-dark-mode');if(t==='1')document.documentElement.setAttribute('data-theme','dark');else if(t==='0')document.documentElement.setAttribute('data-theme','light');}catch(e){}})();</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta data-lb-page="toast">
+  <title>Toast — letbe-ds</title>
+  <link rel="stylesheet" href="../tokens/theme.css">
+  <link rel="stylesheet" href="../tokens/fonts.css">
+  <link rel="stylesheet" href="../components/components.css">
+  <link rel="stylesheet" href="../components/theme-editor.css">
+  <link rel="stylesheet" href="../components/gallery.css">
+</head>
+<body data-lb-base="..">
+
+<main class="gallery-main">
+  <section class="gallery-section" id="toast">
+    <h1 class="gallery-section__title" style="font-size: var(--lb-t-heading-l-font-size); line-height: var(--lb-t-heading-l-line-height);">Toast</h1>
+    <p class="gallery-section__desc">Brief non-blocking notification appearing bottom-right. Four status variants (info, success, warning, danger) plus <strong>neutral</strong> — the actionable flavor: a floating elevated-surface pill for events that carry an <strong>Undo</strong> rather than a status. Auto-dismiss after 5 seconds by default. Use for transient confirmations (saved, copied) or non-blocking errors — the warning and danger variants still announce assertively. For critical errors use Banner or Modal.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>a11y (built in):</strong> each toast carries its own live semantics — info and success render as <code class="lb-code">role="status"</code> + <code class="lb-code">aria-live="polite"</code>, warning and danger as <code class="lb-code">role="alert"</code> + <code class="lb-code">aria-live="assertive"</code>. The status glyph is <code class="lb-code">aria-hidden</code> decoration and the dismiss control is a real <code class="lb-code">button</code> with <code class="lb-code">aria-label="Dismiss"</code> and its own <code class="lb-code">:focus-visible</code> ring. Auto-dismiss is opt-out for anyone who needs more time: pass <code class="lb-code">duration: 0</code> to <code class="lb-code">show()</code> for one toast, or <code class="lb-code">new LB.ToastManager({ autoDismiss: 0 })</code> for all of them, and the toast stays until it is dismissed. Timers also pause while the pointer is over a toast or focus is inside it. <strong>A toast carrying an action gets double the reading time</strong> — 10s instead of 5s — because the reader has to take in the message and decide about the action; its timer pauses the moment the pointer or focus arrives. A timed action is still a time limit on functionality under WCAG 2.2.1 (Level A), so the strictest reading is one call away: <code class="lb-code">duration: 0</code> for a single toast, or <code class="lb-code">new LB.ToastManager({ autoDismissWithAction: 0 })</code> to make every actionable toast persist. An actionable toast is also always <code class="lb-code">role="status"</code>, never <code class="lb-code">alert</code>, since assertive announcements race the button. <kbd>Esc</kbd> dismisses a toast while focus is inside it. One caveat the pattern cannot solve: a control inside a live region is not reliably reachable for assistive tech, so the action must be <strong>safe to ignore</strong> — always leave a durable path to the same operation (a Trash view, a history panel).</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>Usage:</strong> Instantiate once: <code class="lb-code">const mgr = new LB.ToastManager(); mgr.show({ variant, title, message })</code> — the region is created on first use and <code class="lb-code">show()</code> returns an id for <code class="lb-code">mgr.dismiss(id)</code>. Add <code class="lb-code">action: { label, onClick }</code> for the undo flavor (pair it with <code class="lb-code">variant: 'neutral'</code>); exactly one action is supported by design — two or more choices belong in a Modal. The action closes the toast after firing unless you pass <code class="lb-code">dismissOnAction: false</code>. Options: <code class="lb-code">duration</code> (ms, <code class="lb-code">0</code> = persist), <code class="lb-code">icon</code> (neutral takes none by default), and <code class="lb-code">new LB.ToastManager({ autoDismiss })</code> for the global default.</p>
+<hr class="gallery-desc-divider">
+
+<h2 class="gallery-section__title">Toast Demo</h2>
+    <div class="gallery-row">
+      <button class="lb-btn lb-btn--secondary lb-btn--medium" id="toast-info">Info Toast</button>
+      <button class="lb-btn lb-btn--primary lb-btn--medium" id="toast-success">Success Toast</button>
+      <button class="lb-btn lb-btn--subtle lb-btn--medium" id="toast-warning">Warning Toast</button>
+      <button class="lb-btn lb-btn--primary lb-btn--medium" id="toast-danger">Danger Toast</button>
+    </div>
+
+    <h2 class="gallery-section__title">Neutral — the actionable / undo flavor</h2>
+    <p class="gallery-section__desc">A moved file, an archived thread, a deleted row: these are neutral events, not statuses, so this variant drops status colour and lifts off the page on the plain elevated surface, following the theme exactly like its status siblings — the two share one region and are often on screen together. It carries exactly one action and stays twice as long as a status toast (10s, pausing on hover or focus). Prefer this over a confirmation dialog for reversible actions: undo lets the work happen immediately and still satisfies WCAG 3.3.4's reversible branch, while confirmation dialogs train people to click through them.</p>
+    <div class="gallery-row">
+      <button class="lb-btn lb-btn--secondary lb-btn--medium" id="toast-undo">Archive item</button>
+      <button class="lb-btn lb-btn--secondary lb-btn--medium" id="toast-undo-title">Delete 3 rows</button>
+      <button class="lb-btn lb-btn--secondary lb-btn--medium" id="toast-action-status">Status toast + action</button>
+    </div>
+
+  </section>
+</main>
+
+<script src="../js/lb.js"></script>
+<script src="../js/slot-engine.js"></script>
+<script src="../js/theme-editor.js"></script>
+<script src="../js/token-exporter.js"></script>
+<script src="../js/gallery-layout.js"></script>
+
+<script>
+  // Toast demos
+  document.addEventListener('DOMContentLoaded', () => {
+    const toastMgr = new LB.ToastManager();
+    const bind = (id, args) => {
+      const btn = document.getElementById(id);
+      if (btn) btn.addEventListener('click', () => toastMgr.show(args));
+    };
+    bind('toast-info',    { variant: 'info',    title: 'Information', message: 'This is an informational toast notification.' });
+    bind('toast-success', { variant: 'success', title: 'Success',     message: 'Operation completed successfully!' });
+    bind('toast-warning', { variant: 'warning', title: 'Warning',     message: 'Please check your input before proceeding.' });
+    bind('toast-danger',  { variant: 'danger',  title: 'Error',       message: 'Something went wrong. Please try again.' });
+    // Actionable toasts: neutral flavor, one action, no auto-dismiss.
+    bind('toast-undo', { variant: 'neutral', message: 'Moved \u201cQ3 roadmap\u201d to Archive',
+      action: { label: 'Undo', onClick: () => toastMgr.show({ variant: 'neutral', message: 'Restored to Projects', duration: 3000 }) } });
+    bind('toast-undo-title', { variant: 'neutral', title: '3 rows deleted', message: 'They stay recoverable in Trash for 30 days.',
+      action: { label: 'Undo', onClick: () => toastMgr.show({ variant: 'neutral', message: 'Rows restored', duration: 3000 }) } });
+    bind('toast-action-status', { variant: 'success', title: 'Changes published', message: 'Live for everyone on the workspace.',
+      action: { label: 'View', onClick: () => {} } });
+  });
+</script>
+</body>
+</html>

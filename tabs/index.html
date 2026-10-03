@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <!-- theme-preamble:v1 -->
+  <script>(function(){try{var t=localStorage.getItem('letbe-ds-dark-mode');if(t==='1')document.documentElement.setAttribute('data-theme','dark');else if(t==='0')document.documentElement.setAttribute('data-theme','light');}catch(e){}})();</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta data-lb-page="tabs">
+  <title>Tabs — letbe-ds</title>
+  <link rel="stylesheet" href="../tokens/theme.css">
+  <link rel="stylesheet" href="../tokens/fonts.css">
+  <link rel="stylesheet" href="../components/components.css">
+  <link rel="stylesheet" href="../components/theme-editor.css">
+  <link rel="stylesheet" href="../components/gallery.css">
+</head>
+<body data-lb-base="..">
+
+<main class="gallery-main">
+  <section class="gallery-section" id="tabs">
+    <h1 class="gallery-section__title" style="font-size: var(--lb-t-heading-l-font-size); line-height: var(--lb-t-heading-l-line-height);">Tabs</h1>
+    <p class="gallery-section__desc">Switch between related views of the same data in a shared context. Supports label-only, label + count badge (for filters), label + notification dot, icon + label, icon-only, and icon + label + badge. Use for view filters, settings groups, or tabbed content blocks.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>a11y (built in):</strong> the full APG tabs pattern is stamped by the controller — <code class="lb-code">LB.Tabs</code> applies <code class="lb-code">role=tablist</code>/<code class="lb-code">tab</code>/<code class="lb-code">tabpanel</code> and wires <code class="lb-code">aria-controls</code> + <code class="lb-code">aria-labelledby</code> from generated ids, so authors only mark the active tab with <code class="lb-code">aria-selected="true"</code>. A roving <code class="lb-code">tabindex</code> keeps exactly one tab in the page tab order; <kbd>←</kbd>/<kbd>→</kbd> wrap around the set, <kbd>Home</kbd>/<kbd>End</kbd> jump to the ends, <code class="lb-code">disabled</code> tabs are skipped, and selection follows focus while inactive panels are toggled with the <code class="lb-code">hidden</code> attribute. Tabs are real <code class="lb-code">button</code>s, the selected one gains an underline as well as a color change, and icon-only tabs carry <code class="lb-code">aria-label</code> with the glyph <code class="lb-code">aria-hidden</code>.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>Usage:</strong> Root gets <code class="lb-code">data-lb-tabs</code>. Each tab uses <code class="lb-code">aria-selected="true"</code> on the active button; <code class="lb-code">LB.Tabs</code> supplies the rest — <code class="lb-code">role</code>, <code class="lb-code">aria-controls</code>, <code class="lb-code">aria-labelledby</code> and the roving <code class="lb-code">tabindex</code>. Icon-only tabs need <code class="lb-code">aria-label</code> on the button.</p>
+<hr class="gallery-desc-divider">
+
+<h2 class="gallery-section__title">Tabs Demo</h2>
+
+    <div class="gallery-label">Default (label only)</div>
+    <div class="lb-tabs" data-lb-tabs>
+      <div class="lb-tab-list" role="tablist">
+        <button class="lb-tab" aria-selected="true">Overview</button>
+        <button class="lb-tab">Features</button>
+        <button class="lb-tab">Pricing</button>
+        <button class="lb-tab" disabled>Disabled</button>
+      </div>
+      <div class="lb-tab-panel">Overview content. This is the first tab panel with general information about the product.</div>
+      <div class="lb-tab-panel" hidden>Features content. Here are the key features: responsive, accessible, themeable, and zero-dependency.</div>
+      <div class="lb-tab-panel" hidden>Pricing content. letbe-ds is free and open source under the MIT license.</div>
+      <div class="lb-tab-panel" hidden>Disabled content.</div>
+    </div>
+
+    <div class="gallery-label">Label + count badge</div>
+    <div class="lb-tabs" data-lb-tabs>
+      <div class="lb-tab-list" role="tablist">
+        <button class="lb-tab" aria-selected="true">Type <span class="lb-counter">3</span></button>
+        <button class="lb-tab">Art <span class="lb-counter">12</span></button>
+        <button class="lb-tab">Country <span class="lb-counter">99+</span></button>
+        <button class="lb-tab">Empty <span class="lb-counter"></span></button>
+      </div>
+      <div class="lb-tab-panel">3 types selected.</div>
+      <div class="lb-tab-panel" hidden>12 art categories selected.</div>
+      <div class="lb-tab-panel" hidden>99+ countries selected.</div>
+      <div class="lb-tab-panel" hidden>Badge is empty so it auto-hides.</div>
+    </div>
+
+    <div class="gallery-label">Label + notification dot</div>
+    <div class="lb-tabs" data-lb-tabs>
+      <div class="lb-tab-list" role="tablist">
+        <button class="lb-tab" aria-selected="true">Inbox <span class="lb-tab__dot" aria-label="Has new items"></span></button>
+        <button class="lb-tab">Sent</button>
+        <button class="lb-tab">Drafts <span class="lb-tab__dot" aria-label="Has new items"></span></button>
+      </div>
+      <div class="lb-tab-panel">Inbox — new items arrived.</div>
+      <div class="lb-tab-panel" hidden>Sent — all clear.</div>
+      <div class="lb-tab-panel" hidden>Drafts — work in progress.</div>
+    </div>
+
+    <div class="gallery-label">Icon + label</div>
+    <div class="lb-tabs" data-lb-tabs>
+      <div class="lb-tab-list" role="tablist">
+        <button class="lb-tab" aria-selected="true">
+          <span class="lb-tab__icon" aria-hidden="true"><span data-lb-icon="home" style="width: 1.5rem; height: 1.5rem;"></span></span>
+          Home
+        </button>
+        <button class="lb-tab">
+          <span class="lb-tab__icon" aria-hidden="true"><span data-lb-icon="settings" style="width: 1.5rem; height: 1.5rem;"></span></span>
+          Settings
+        </button>
+        <button class="lb-tab">
+          <span class="lb-tab__icon" aria-hidden="true"><span data-lb-icon="user" style="width: 1.5rem; height: 1.5rem;"></span></span>
+          Profile
+        </button>
+      </div>
+      <div class="lb-tab-panel">Home content.</div>
+      <div class="lb-tab-panel" hidden>Settings content.</div>
+      <div class="lb-tab-panel" hidden>Profile content.</div>
+    </div>
+
+    <div class="gallery-label">Icon only</div>
+    <div class="lb-tabs" data-lb-tabs>
+      <div class="lb-tab-list" role="tablist">
+        <button class="lb-tab" aria-selected="true" aria-label="Grid view">
+          <span class="lb-tab__icon" aria-hidden="true"><span data-lb-icon="layout-grid" style="width: 1.5rem; height: 1.5rem;"></span></span>
+        </button>
+        <button class="lb-tab" aria-label="List view">
+          <span class="lb-tab__icon" aria-hidden="true"><span data-lb-icon="list" style="width: 1.5rem; height: 1.5rem;"></span></span>
+        </button>
+        <button class="lb-tab" aria-label="Map view">
+          <span class="lb-tab__icon" aria-hidden="true"><span data-lb-icon="package" style="width: 1.5rem; height: 1.5rem;"></span></span>
+        </button>
+      </div>
+      <div class="lb-tab-panel">Grid view content.</div>
+      <div class="lb-tab-panel" hidden>List view content.</div>
+      <div class="lb-tab-panel" hidden>Map view content.</div>
+    </div>
+
+    <div class="gallery-label">Icon + label + badge</div>
+    <div class="lb-tabs" data-lb-tabs>
+      <div class="lb-tab-list" role="tablist">
+        <button class="lb-tab" aria-selected="true">
+          <span class="lb-tab__icon" aria-hidden="true"><span data-lb-icon="mail" style="width: 1.5rem; height: 1.5rem;"></span></span>
+          Inbox
+          <span class="lb-counter">12</span>
+        </button>
+        <button class="lb-tab">
+          <span class="lb-tab__icon" aria-hidden="true"><span data-lb-icon="bell" style="width: 1.5rem; height: 1.5rem;"></span></span>
+          Alerts
+          <span class="lb-counter">3</span>
+        </button>
+        <button class="lb-tab">
+          <span class="lb-tab__icon" aria-hidden="true"><span data-lb-icon="message-square" style="width: 1.5rem; height: 1.5rem;"></span></span>
+          Messages
+          <span class="lb-counter">99+</span>
+        </button>
+      </div>
+      <div class="lb-tab-panel">Inbox (12 new).</div>
+      <div class="lb-tab-panel" hidden>Alerts (3 unread).</div>
+      <div class="lb-tab-panel" hidden>Messages (99+).</div>
+    </div>
+  </section>
+</main>
+
+<script src="../js/lb.js"></script>
+<script src="../js/slot-engine.js"></script>
+<script src="../js/theme-editor.js"></script>
+<script src="../js/token-exporter.js"></script>
+<script src="../js/gallery-layout.js"></script>
+</body>
+</html>

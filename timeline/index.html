@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <!-- theme-preamble:v1 -->
+  <script>(function(){try{var t=localStorage.getItem('letbe-ds-dark-mode');if(t==='1')document.documentElement.setAttribute('data-theme','dark');else if(t==='0')document.documentElement.setAttribute('data-theme','light');}catch(e){}})();</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta data-lb-page="timeline">
+  <title>Timeline — letbe-ds</title>
+  <link rel="stylesheet" href="../tokens/theme.css">
+  <link rel="stylesheet" href="../tokens/fonts.css">
+  <link rel="stylesheet" href="../components/components.css">
+  <link rel="stylesheet" href="../components/theme-editor.css">
+  <link rel="stylesheet" href="../components/gallery.css">
+</head>
+<body data-lb-base="..">
+
+<main class="gallery-main">
+  <section class="gallery-section" id="timeline">
+    <h1 class="gallery-section__title" style="font-size: var(--lb-t-heading-l-font-size); line-height: var(--lb-t-heading-l-line-height);">Timeline</h1>
+    <p class="gallery-section__desc">A standalone trim / playhead / ruler primitive. Composes with <a class="lb-link" href="../media-player/index.html">Media Player</a> but doesn&rsquo;t require one &mdash; useful for any &ldquo;set in/out over a duration&rdquo; UI (audio editor, video trimmer, range slice picker, transcript scrubber). Per the letbe-ds <strong>pluggable engines</strong> rule, we ship the chrome and state machine; bring your own waveform renderer (<code class="lb-code">WaveSurfer.js</code>, <code class="lb-code">Peaks.js</code>) or frame-accurate scrub engine (<code class="lb-code">requestVideoFrameCallback</code>) and attach.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>a11y (built in):</strong> the two trim handles and the playhead are each <code class="lb-code">role="slider"</code> with <code class="lb-code">tabindex="0"</code>, <code class="lb-code">aria-orientation="horizontal"</code>, an <code class="lb-code">aria-label</code> (Trim start / Trim end / Playhead) and live <code class="lb-code">aria-valuemin</code>/<code class="lb-code">max</code>/<code class="lb-code">now</code> — plus <code class="lb-code">aria-valuetext</code> written as the same formatted clock string the readout shows, so screen readers announce a time rather than a raw seconds count. Keyboard mirrors the drag: <kbd>←</kbd>/<kbd>→</kbd> nudge one second, <kbd>Shift</kbd> makes it ten, <kbd>Home</kbd>/<kbd>End</kbd> jump to the bounds, all clamped by the same per-handle rules as pointer drag (in ≤ out ≤ duration). Zoom is a native <code class="lb-code">input[type=range]</code> with its own <code class="lb-code">aria-label</code>, and its multiplier readout is an <code class="lb-code">aria-live="polite"</code> region.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>Usage:</strong> Load <code class="lb-code">js/lb.js</code> first, then <code class="lb-code">js/components/lb-timeline.js</code> — the module self-registers via <code class="lb-code">LB.register</code> and every <code class="lb-code">&lt;div data-lb-timeline&gt;</code> auto-inits, rendering its own readout, ruler, lane and zoom control (instance at <code class="lb-code">el._lbTimeline</code>, class at <code class="lb-code">LB.Timeline</code>; lb.js console-warns if it finds the attribute without the module). Seed state declaratively, all in seconds — <code class="lb-code">data-lb-duration</code>, <code class="lb-code">data-lb-in</code>, <code class="lb-code">data-lb-out</code>, <code class="lb-code">data-lb-playhead</code> — plus opt-in <code class="lb-code">data-lb-timeline-wheel-zoom</code> for <kbd>Ctrl</kbd>+scroll zoom. Three bubbling events: <code class="lb-code">lb-timeline-change</code> (<code class="lb-code">detail.inSec</code> / <code class="lb-code">outSec</code> / <code class="lb-code">playheadSec</code> / <code class="lb-code">duration</code>) on every edit, <code class="lb-code">lb-timeline-selection</code> (adds <code class="lb-code">detail.rect</code> — the on-screen rect of the in–out span, for anchoring a popover composer), and <code class="lb-code">lb-timeline-zoom</code> (<code class="lb-code">detail.zoom</code>). The getter/setter surface (<code class="lb-code">getRange</code> / <code class="lb-code">setRange</code>, <code class="lb-code">setPlayhead</code>, <code class="lb-code">setDuration</code>) is spelled out under Public API below, and <code class="lb-code">setZoom(z)</code> rounds out the instance; binding to a media clock stays consumer code — see the composition demo.</p>
+    <p class="gallery-section__desc">Opt in with <code class="lb-code">data-lb-timeline</code> on a wrapper. The controller renders a readout row (in / out / duration), a time-axis ruler with auto-scaled ticks, and a lane with trim handles + a playhead marker. Time format auto-scales by total duration: <strong>M:SS.mmm</strong> below a minute, <strong>MM:SS</strong> below an hour, <strong>HH:MM:SS</strong> beyond.</p>
+    <p class="gallery-section__desc">Pointer drag + keyboard nudge on all three sliders, click-on-lane scrubbing, <code class="lb-code">role="slider"</code> ARIA throughout, 1&times;&ndash;10&times; horizontal zoom with adaptive ruler tick density, and an end-to-end Media Player composition example at the bottom showing the audio &lt;-&gt; timeline binding pattern (rAF-driven playhead, trim-region loop, no feedback loops between the two clocks).</p>
+
+    <hr class="gallery-desc-divider">
+
+    <h2 class="gallery-section__title">Default</h2>
+    <p class="gallery-section__desc">A 2-minute clip with an in/out window selected and the playhead parked partway through. The auto-scale picks <strong>MM:SS</strong> since the total duration sits between a minute and an hour.</p>
+
+    <div style="max-width: 640px;">
+      <div data-lb-timeline data-lb-duration="124.5" data-lb-in="12" data-lb-out="98" data-lb-playhead="42"></div>
+    </div>
+
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Short clip &mdash; sub-second precision</h2>
+    <p class="gallery-section__desc">When the total duration is under a minute, the readout switches to <strong>M:SS.mmm</strong> for sub-second precision &mdash; the right format for clipping voice notes, drum loops, or animation frames. The ruler densifies its ticks the same way.</p>
+
+    <div style="max-width: 640px;">
+      <div data-lb-timeline data-lb-duration="12" data-lb-in="2.5" data-lb-out="9.25" data-lb-playhead="6.1"></div>
+    </div>
+
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Long form &mdash; podcast or interview</h2>
+    <p class="gallery-section__desc">Above an hour, the readout uses <strong>HH:MM:SS</strong> and the ruler caps major-tick density at ~6&ndash;10 across the visible width so the labels stay legible.</p>
+
+    <div style="max-width: 640px;">
+      <div data-lb-timeline data-lb-duration="5400" data-lb-in="600" data-lb-out="4800" data-lb-playhead="2700"></div>
+    </div>
+
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Empty &mdash; no media attached</h2>
+    <p class="gallery-section__desc">Without a duration, the lane reads as a dashed placeholder &mdash; a ready-to-receive state rather than a broken one. Call <code class="lb-code">el._lbTimeline.setDuration(seconds)</code> to populate it from a consumer hook (the media&rsquo;s <code class="lb-code">loadedmetadata</code> event, for instance).</p>
+
+    <div style="max-width: 640px;">
+      <div data-lb-timeline></div>
+    </div>
+
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Composing with Media Player</h2>
+    <p class="gallery-section__desc">Timeline doesn&rsquo;t depend on Media Player &mdash; but composing the two is the most common use case. The pattern: subscribe Timeline&rsquo;s playhead to the media&rsquo;s clock (via <code class="lb-code">requestAnimationFrame</code> for a smooth playhead, not just the <code class="lb-code">timeupdate</code> event which ticks ~4&times;/sec), push <code class="lb-code">currentTime</code> back when the user drags, and loop between the trim handles when playback reaches the out point.</p>
+    <p class="gallery-section__desc"><strong>Try it:</strong> press <strong>Play</strong>, then drag the trim handles to clip the loop region. Drag the playhead to scrub; click the lane to jump.</p>
+
+    <div style="max-width: 640px; display: flex; flex-direction: column; gap: var(--lb-size-3x);">
+      <div class="lb-media" data-lb-media id="tl-compose-media">
+        <audio src="https://cdn.jsdelivr.net/gh/m1ha1l0/letbe-media@v1.0.1/tracks/Letbe-Design-01-Old-School.mp3" preload="metadata"></audio>
+        <div class="lb-media__controls">
+          <button type="button" class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--medium" data-lb-media-playpause data-lb-icon="play" aria-label="Play"></button>
+          <span class="lb-media__time" data-lb-media-current>0:00</span>
+          <div class="lb-media__scrubber" data-lb-media-seek>
+            <div class="lb-media__rail">
+              <div class="lb-media__buffered" data-lb-media-buffered></div>
+              <div class="lb-media__fill" data-lb-media-played></div>
+            </div>
+            <input type="range" class="lb-media__range" min="0" max="100" step="0.1" value="0" aria-label="Seek">
+          </div>
+          <span class="lb-media__time" data-lb-media-duration>0:00</span>
+          <button type="button" class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--medium" data-lb-media-mute data-lb-icon="volume-2" aria-label="Mute"></button>
+        </div>
+      </div>
+      <div data-lb-timeline data-lb-timeline-wheel-zoom id="tl-compose-tl"></div>
+    </div>
+
+    <pre data-lb-code-block data-lb-lang="js"><code>// Sketch of the wiring used in this demo. Substitute your own
+// element ids and tune the loop / scrubbing rules to taste.
+(function () {
+  var media = document.getElementById('tl-compose-media');
+  var tl    = document.getElementById('tl-compose-tl');
+  var audio = media.querySelector('audio');
+  var ph    = tl.querySelector('[data-lb-timeline-playhead]');
+
+  function init() {
+    // 1. Once metadata loads, populate Timeline duration + open the
+    //    trim window across the full clip.
+    var apply = function () {
+      if (!isFinite(audio.duration)) return;
+      tl._lbTimeline.setDuration(audio.duration);
+      tl._lbTimeline.setRange({ inSec: 0, outSec: audio.duration });
+    };
+    if (audio.readyState &gt;= 1) apply();
+    else audio.addEventListener('loadedmetadata', apply);
+
+    // 2. While playing, drive the playhead via rAF so it tracks
+    //    smoothly (timeupdate is ~4×/sec, choppy for editing).
+    //    Suspend loop bounds while the user is adjusting in/out so
+    //    OUT &lt; currentTime doesn't yank audio back every frame mid-drag.
+    var fromAudio = false;
+    var rafId = null;
+    var lastPushedSec = null;
+    var inH  = tl.querySelector('[data-lb-timeline-handle="in"]');
+    var outH = tl.querySelector('[data-lb-timeline-handle="out"]');
+    function userAdjustingTrim() {
+      return (inH  &amp;&amp; inH.classList.contains('lb-timeline__handle--dragging'))
+          || (outH &amp;&amp; outH.classList.contains('lb-timeline__handle--dragging'));
+    }
+    function tick() {
+      if (audio.paused) { rafId = null; return; }
+      if (!userAdjustingTrim()) {
+        var r = tl._lbTimeline.getRange();
+        if (audio.currentTime &gt;= r.outSec - 0.02) audio.currentTime = r.inSec;
+        if (audio.currentTime &lt; r.inSec)          audio.currentTime = r.inSec;
+      }
+      // Don't fight the user if they're dragging the playhead.
+      if (!ph.classList.contains('lb-timeline__playhead--dragging')) {
+        fromAudio = true;
+        tl._lbTimeline.setPlayhead(audio.currentTime);
+        fromAudio = false;
+      }
+      rafId = requestAnimationFrame(tick);
+    }
+    audio.addEventListener('play',  function () { if (!rafId) rafId = requestAnimationFrame(tick); });
+    audio.addEventListener('pause', function () { if (rafId) cancelAnimationFrame(rafId); rafId = null; });
+
+    // 3. Timeline → audio. Skip our own audio→playhead push (fromAudio
+    //    guard) AND trim-handle events that keep playheadSec unchanged
+    //    (dedup) — both would otherwise glitch audio.currentTime during
+    //    in/out adjustment.
+    tl.addEventListener('lb-timeline-change', function (e) {
+      if (fromAudio) return;
+      if (!isFinite(e.detail.playheadSec)) return;
+      if (lastPushedSec === e.detail.playheadSec) return;
+      lastPushedSec = e.detail.playheadSec;
+      audio.currentTime = e.detail.playheadSec;
+    });
+  }
+
+  if (media._lbMedia &amp;&amp; tl._lbTimeline) init();
+  else document.addEventListener('DOMContentLoaded', init);
+})();</code></pre>
+
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Public API</h2>
+    <p class="gallery-section__desc">Read and write Timeline state from consumer code; writes repaint the lane and emit <code class="lb-code">lb-timeline-change</code>.</p>
+
+    <pre data-lb-code-block data-lb-lang="js"><code>// Read
+el._lbTimeline.getRange();        // { inSec, outSec }
+el._lbTimeline.getPlayhead();     // number (seconds)
+el._lbTimeline.getDuration();     // number (seconds)
+
+// Write — paints + emits lb-timeline-change
+el._lbTimeline.setRange({ inSec: 5, outSec: 30 });
+el._lbTimeline.setPlayhead(12.5);
+el._lbTimeline.setDuration(180);  // call after loadedmetadata
+
+// Subscribe
+el.addEventListener('lb-timeline-change', (e) =&gt; {
+  const { inSec, outSec, playheadSec, duration } = e.detail;
+});</code></pre>
+
+  </section>
+</main>
+
+<script src="../js/lb.js"></script>
+<script src="../js/components/lb-media.js"></script>
+<script src="../js/components/lb-timeline.js"></script>
+<script src="../js/slot-engine.js"></script>
+<script src="../js/theme-editor.js"></script>
+<script src="../js/token-exporter.js"></script>
+<script src="../js/gallery-layout.js"></script>
+
+<script>
+  // Live wiring for the "Composing with Media Player" section. Same
+  // code as the code-block above but actually running on the page.
+  (function () {
+    var media = document.getElementById('tl-compose-media');
+    var tl    = document.getElementById('tl-compose-tl');
+    if (!media || !tl) return;
+    var audio = media.querySelector('audio');
+
+    function init() {
+      // Re-query the playhead each retry: Timeline._render only
+      // populates the timeline's innerHTML once new Timeline(el) has
+      // run, which happens during LB.init() — possibly AFTER this
+      // IIFE has executed.
+      var ph = tl.querySelector('[data-lb-timeline-playhead]');
+      if (!media._lbMedia || !tl._lbTimeline || !ph) {
+        return setTimeout(init, 50);
+      }
+      var apply = function () {
+        if (!isFinite(audio.duration)) return;
+        tl._lbTimeline.setDuration(audio.duration);
+        tl._lbTimeline.setRange({ inSec: 0, outSec: audio.duration });
+      };
+      if (audio.readyState >= 1) apply();
+      else audio.addEventListener('loadedmetadata', apply);
+
+      var fromAudio = false;
+      var rafId = null;
+      var lastPushedSec = null;
+      // Cache handle refs once — they're created on Timeline init and
+      // never recreated. Used to detect "user is adjusting in/out"
+      // state so the loop check doesn't fire mid-drag and yank the
+      // audio back to inSec while the user is still positioning the
+      // OUT handle before the current play position.
+      var inH  = tl.querySelector('[data-lb-timeline-handle="in"]');
+      var outH = tl.querySelector('[data-lb-timeline-handle="out"]');
+      function userAdjustingTrim() {
+        return (inH  && inH.classList.contains('lb-timeline__handle--dragging'))
+            || (outH && outH.classList.contains('lb-timeline__handle--dragging'));
+      }
+      function tick() {
+        if (audio.paused) { rafId = null; return; }
+        // Suspend loop bounds while the user is still adjusting trim;
+        // commit the new bounds on release. Otherwise dragging OUT
+        // to before currentTime causes the audio to ping back to
+        // inSec on every frame.
+        if (!userAdjustingTrim()) {
+          var r = tl._lbTimeline.getRange();
+          if (audio.currentTime >= r.outSec - 0.02) audio.currentTime = r.inSec;
+          if (audio.currentTime <  r.inSec)         audio.currentTime = r.inSec;
+        }
+        if (!ph.classList.contains('lb-timeline__playhead--dragging')) {
+          fromAudio = true;
+          tl._lbTimeline.setPlayhead(audio.currentTime);
+          fromAudio = false;
+        }
+        rafId = requestAnimationFrame(tick);
+      }
+      audio.addEventListener('play',  function () { if (!rafId) rafId = requestAnimationFrame(tick); });
+      audio.addEventListener('pause', function () { if (rafId) cancelAnimationFrame(rafId); rafId = null; });
+
+      // Push playhead changes to audio only when the playhead VALUE
+      // actually changed — trim-handle drags fire lb-timeline-change
+      // every move with the SAME playheadSec, and without this dedup
+      // each one would call audio.currentTime = playheadSec, glitching
+      // playback while the user is just adjusting in/out.
+      tl.addEventListener('lb-timeline-change', function (e) {
+        if (fromAudio) return;
+        if (!isFinite(e.detail.playheadSec)) return;
+        if (lastPushedSec === e.detail.playheadSec) return;
+        lastPushedSec = e.detail.playheadSec;
+        audio.currentTime = e.detail.playheadSec;
+      });
+    }
+    init();
+  })();
+</script>
+</body>
+</html>

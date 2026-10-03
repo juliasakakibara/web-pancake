@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <!-- theme-preamble:v1 -->
+  <script>(function(){try{var t=localStorage.getItem('letbe-ds-dark-mode');if(t==='1')document.documentElement.setAttribute('data-theme','dark');else if(t==='0')document.documentElement.setAttribute('data-theme','light');}catch(e){}})();</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta data-lb-page="animation">
+  <title>Animation — letbe-ds</title>
+  <link rel="stylesheet" href="../tokens/theme.css">
+  <link rel="stylesheet" href="../tokens/fonts.css">
+  <link rel="stylesheet" href="../components/components.css">
+  <link rel="stylesheet" href="../components/theme-editor.css">
+  <link rel="stylesheet" href="../components/gallery.css">
+  <style>
+    /* ── Row layout for each animation token ── */
+    .anim-table { display: flex; flex-direction: column; gap: var(--lb-size-3x); }
+    .anim-row {
+      display: grid;
+      grid-template-columns: 180px 1fr 60px;
+      gap: var(--lb-size-4x);
+      align-items: center;
+      padding: var(--lb-size-3x);
+      border: var(--lb-border-width-thin) solid var(--lb-border-muted);
+      border-radius: var(--lb-radius-surface);
+      background: var(--lb-surface-bg-default);
+      cursor: default;
+    }
+    .anim-row__info {
+      display: flex;
+      flex-direction: column;
+      gap: var(--lb-size-0-5x);
+    }
+    .anim-row__token {
+      font-family: 'Roboto Mono', monospace;
+      font-size: var(--lb-font-size-xs);
+      color: var(--lb-fg-default);
+      word-break: break-all;
+    }
+    .anim-row__value {
+      font-family: 'Roboto Mono', monospace;
+      font-size: var(--lb-font-size-2xs);
+      color: var(--lb-fg-muted);
+    }
+    .anim-row__value-pair {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+    }
+
+    /* ── The runway + animated rectangle ──
+       The box is sized 32px and positioned with `left: 0`. Animating
+       it to `left: 100%` would push it past the runway (anchored by
+       its top-left corner). Using `right: 0` as the end position
+       means "right edge flush to runway right edge" — that's what we
+       want. We animate `left` from 0 → calc(100% - <box size>), which
+       places the box's right edge at the runway's right edge. */
+    .anim-runway {
+      position: relative;
+      width: 100%;
+      height: 32px;
+      background: var(--lb-bg-strong);
+      border-radius: var(--lb-radius-full);
+      overflow: hidden;
+    }
+    .anim-box {
+      --_box-size: 32px;
+      position: absolute;
+      top: 50%;
+      left: 0;
+      transform: translateY(-50%);
+      width: var(--_box-size);
+      height: var(--_box-size);
+      background: var(--lb-fg-accent);
+      border-radius: var(--lb-radius-full);
+      transition: left var(--_dur, 200ms) var(--_ease, cubic-bezier(0.2, 0, 0, 1));
+    }
+    .anim-row--active .anim-box {
+      left: calc(100% - var(--_box-size));
+    }
+
+    /* ── Play button ── */
+    .anim-row__play {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      padding: 0;
+      border: var(--lb-border-width-thin) solid var(--lb-border-default);
+      background: var(--lb-bg-default);
+      color: var(--lb-fg-default);
+      border-radius: var(--lb-radius-full);
+      cursor: pointer;
+      transition: background-color 120ms ease, border-color 120ms ease;
+    }
+    .anim-row__play:hover { background: var(--lb-action-bg-ghost-hover); }
+    .anim-row__play:focus-visible { outline: var(--lb-border-width-medium) solid var(--lb-border-focus); outline-offset: var(--lb-size-0-5x); }
+    .anim-row__play svg { width: 14px; height: 14px; }
+
+    /* ── Top controls ── */
+    .anim-controls {
+      display: flex;
+      align-items: center;
+      gap: var(--lb-size-3x);
+      margin-bottom: var(--lb-size-6x);
+      padding: var(--lb-size-3x) var(--lb-size-4x);
+      border: var(--lb-border-width-thin) solid var(--lb-border-muted);
+      border-radius: var(--lb-radius-surface);
+      background: var(--lb-surface-bg-elevated);
+    }
+
+    /* ── Reduced-motion fallback ── */
+    @media (prefers-reduced-motion: reduce) {
+      .anim-box { transition: none !important; }
+      .anim-row--active .anim-box { left: 0; }
+      .anim-motion-note { display: block !important; }
+    }
+    .anim-motion-note {
+      display: none;
+      padding: var(--lb-size-2x) var(--lb-size-3x);
+      background: var(--lb-bg-warning);
+      color: var(--lb-fg-warning);
+      border-radius: var(--lb-radius-interactive);
+      font-size: var(--lb-t-body-s-font-size);
+      margin-bottom: var(--lb-size-4x);
+    }
+
+    @media (max-width: 600px) {
+      .anim-row { grid-template-columns: 1fr; gap: var(--lb-size-2x); }
+      .anim-row__play { justify-self: end; }
+    }
+  </style>
+</head>
+<body data-lb-base="..">
+
+<main class="gallery-main">
+  <section class="gallery-section" id="animation">
+    <h1 class="gallery-section__title" style="font-size: var(--lb-t-heading-l-font-size); line-height: var(--lb-t-heading-l-line-height);">Animation</h1>
+    <p class="gallery-section__desc">Motion tokens — durations (0–500ms) and easing curves. L2 aliases give semantic names like <code class="lb-code">dur-fast</code> (100ms, state changes), <code class="lb-code">dur-normal</code> (150ms, menus/tooltips), <code class="lb-code">dur-gentle</code> (200ms, transitions), <code class="lb-code">ease-ui</code> (standard UI), and <code class="lb-code">ease-bounce</code> (playful spring). Components that animate drop their motion individually under <code class="lb-code">prefers-reduced-motion: reduce</code> — there is no global reset.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>a11y (built in):</strong> under <code class="lb-code">prefers-reduced-motion: reduce</code> the previews below freeze and a visible notice appears above them — the token values still resolve, only the motion stops. Each row carries a real <code class="lb-code">&lt;button aria-label="Play preview"&gt;</code>, so a preview is keyboard-triggerable rather than hover-only, and continuous looping is opt-in behind a <code class="lb-code">role=switch</code> toggle that starts off. Components with ambient or transform motion drop it under the same query — the badge pulse and the interactive-card lift, among others.</p>
+    <hr class="gallery-desc-divider">
+
+    <h2 class="gallery-section__title">Animation Demo</h2>
+
+    <div class="anim-motion-note">
+      <strong>Reduced-motion enabled</strong> — previews below are static. Token values still apply when motion is re-enabled in your OS settings.
+    </div>
+
+    <div class="anim-controls">
+      <label class="lb-switch-wrap">
+        <input type="checkbox" class="lb-switch" role="switch" id="anim-loop-toggle">
+        <span class="lb-switch__label">Play all continuously</span>
+      </label>
+      <span style="font-size: var(--lb-t-body-s-font-size); color: var(--lb-fg-muted);">Hover a row or press Play to preview. Box travels the same distance each time, so differences in duration or easing are directly visible.</span>
+    </div>
+
+    <div class="gallery-label">L1 Duration primitives</div>
+    <div class="anim-table" data-anim-group="durations">
+      <div class="anim-row" data-anim style="--_dur: 0ms;">
+        <div class="anim-row__info"><div class="anim-row__token">--lb-duration-0</div><div class="anim-row__value">0ms (instant)</div></div>
+        <div class="anim-runway"><div class="anim-box"></div></div>
+        <button class="anim-row__play" type="button" aria-label="Play preview"><span data-lb-icon="play"></span></button>
+      </div>
+      <div class="anim-row" data-anim style="--_dur: 50ms;">
+        <div class="anim-row__info"><div class="anim-row__token">--lb-duration-50</div><div class="anim-row__value">50ms</div></div>
+        <div class="anim-runway"><div class="anim-box"></div></div>
+        <button class="anim-row__play" type="button" aria-label="Play preview"><span data-lb-icon="play"></span></button>
+      </div>
+      <div class="anim-row" data-anim style="--_dur: 100ms;">
+        <div class="anim-row__info"><div class="anim-row__token">--lb-duration-100</div><div class="anim-row__value">100ms</div></div>
+        <div class="anim-runway"><div class="anim-box"></div></div>
+        <button class="anim-row__play" type="button" aria-label="Play preview"><span data-lb-icon="play"></span></button>
+      </div>
+      <div class="anim-row" data-anim style="--_dur: 150ms;">
+        <div class="anim-row__info"><div class="anim-row__token">--lb-duration-150</div><div class="anim-row__value">150ms</div></div>
+        <div class="anim-runway"><div class="anim-box"></div></div>
+        <button class="anim-row__play" type="button" aria-label="Play preview"><span data-lb-icon="play"></span></button>
+      </div>
+      <div class="anim-row" data-anim style="--_dur: 200ms;">
+        <div class="anim-row__info"><div class="anim-row__token">--lb-duration-200</div><div class="anim-row__value">200ms</div></div>
+        <div class="anim-runway"><div class="anim-box"></div></div>
+        <button class="anim-row__play" type="button" aria-label="Play preview"><span data-lb-icon="play"></span></button>
+      </div>
+      <div class="anim-row" data-anim style="--_dur: 300ms;">
+        <div class="anim-row__info"><div class="anim-row__token">--lb-duration-300</div><div class="anim-row__value">300ms</div></div>
+        <div class="anim-runway"><div class="anim-box"></div></div>
+        <button class="anim-row__play" type="button" aria-label="Play preview"><span data-lb-icon="play"></span></button>
+      </div>
+      <div class="anim-row" data-anim style="--_dur: 500ms;">
+        <div class="anim-row__info"><div class="anim-row__token">--lb-duration-500</div><div class="anim-row__value">500ms</div></div>
+        <div class="anim-runway"><div class="anim-box"></div></div>
+        <button class="anim-row__play" type="button" aria-label="Play preview"><span data-lb-icon="play"></span></button>
+      </div>
+    </div>
+
+    <div class="gallery-label">L1 Easing primitives</div>
+    <div class="anim-table" data-anim-group="easings">
+      <div class="anim-row" data-anim style="--_dur: 600ms; --_ease: cubic-bezier(0, 0, 1, 1);">
+        <div class="anim-row__info"><div class="anim-row__token">--lb-ease-linear</div><div class="anim-row__value">cubic-bezier(0, 0, 1, 1)</div></div>
+        <div class="anim-runway"><div class="anim-box"></div></div>
+        <button class="anim-row__play" type="button" aria-label="Play preview"><span data-lb-icon="play"></span></button>
+      </div>
+      <div class="anim-row" data-anim style="--_dur: 600ms; --_ease: cubic-bezier(0.2, 0, 0, 1);">
+        <div class="anim-row__info"><div class="anim-row__token">--lb-ease-standard</div><div class="anim-row__value">cubic-bezier(0.2, 0, 0, 1) — UI default</div></div>
+        <div class="anim-runway"><div class="anim-box"></div></div>
+        <button class="anim-row__play" type="button" aria-label="Play preview"><span data-lb-icon="play"></span></button>
+      </div>
+      <div class="anim-row" data-anim style="--_dur: 600ms; --_ease: cubic-bezier(0, 0, 0, 1);">
+        <div class="anim-row__info"><div class="anim-row__token">--lb-ease-decelerate</div><div class="anim-row__value">cubic-bezier(0, 0, 0, 1) — ease-in</div></div>
+        <div class="anim-runway"><div class="anim-box"></div></div>
+        <button class="anim-row__play" type="button" aria-label="Play preview"><span data-lb-icon="play"></span></button>
+      </div>
+      <div class="anim-row" data-anim style="--_dur: 600ms; --_ease: cubic-bezier(0.3, 0, 1, 1);">
+        <div class="anim-row__info"><div class="anim-row__token">--lb-ease-accelerate</div><div class="anim-row__value">cubic-bezier(0.3, 0, 1, 1) — ease-out</div></div>
+        <div class="anim-runway"><div class="anim-box"></div></div>
+        <button class="anim-row__play" type="button" aria-label="Play preview"><span data-lb-icon="play"></span></button>
+      </div>
+      <div class="anim-row" data-anim style="--_dur: 800ms; --_ease: cubic-bezier(0.2, 1.4, 0.4, 1);">
+        <div class="anim-row__info"><div class="anim-row__token">--lb-ease-spring</div><div class="anim-row__value">cubic-bezier(0.2, 1.4, 0.4, 1) — bounce</div></div>
+        <div class="anim-runway"><div class="anim-box"></div></div>
+        <button class="anim-row__play" type="button" aria-label="Play preview"><span data-lb-icon="play"></span></button>
+      </div>
+    </div>
+
+    <div class="gallery-label">L2 Semantic aliases</div>
+    <div class="anim-table" data-anim-group="semantic">
+      <!-- Durations with recommended usage -->
+      <div class="anim-row" data-anim style="--_dur: var(--lb-animation-dur-instant); --_ease: var(--lb-animation-ease-ui);">
+        <div class="anim-row__info"><div class="anim-row__token">--lb-animation-dur-instant</div><div class="anim-row__value">→ duration-0 · Instant state</div></div>
+        <div class="anim-runway"><div class="anim-box"></div></div>
+        <button class="anim-row__play" type="button" aria-label="Play preview"><span data-lb-icon="play"></span></button>
+      </div>
+      <div class="anim-row" data-anim style="--_dur: var(--lb-animation-dur-micro); --_ease: var(--lb-animation-ease-ui);">
+        <div class="anim-row__info"><div class="anim-row__token">--lb-animation-dur-micro</div><div class="anim-row__value">→ duration-50 · Button press feedback</div></div>
+        <div class="anim-runway"><div class="anim-box"></div></div>
+        <button class="anim-row__play" type="button" aria-label="Play preview"><span data-lb-icon="play"></span></button>
+      </div>
+      <div class="anim-row" data-anim style="--_dur: var(--lb-animation-dur-fast); --_ease: var(--lb-animation-ease-ui);">
+        <div class="anim-row__info"><div class="anim-row__token">--lb-animation-dur-fast</div><div class="anim-row__value">→ duration-100 · Hover, focus</div></div>
+        <div class="anim-runway"><div class="anim-box"></div></div>
+        <button class="anim-row__play" type="button" aria-label="Play preview"><span data-lb-icon="play"></span></button>
+      </div>
+      <div class="anim-row" data-anim style="--_dur: var(--lb-animation-dur-normal); --_ease: var(--lb-animation-ease-ui);">
+        <div class="anim-row__info"><div class="anim-row__token">--lb-animation-dur-normal</div><div class="anim-row__value">→ duration-150 · Menus, tooltips</div></div>
+        <div class="anim-runway"><div class="anim-box"></div></div>
+        <button class="anim-row__play" type="button" aria-label="Play preview"><span data-lb-icon="play"></span></button>
+      </div>
+      <div class="anim-row" data-anim style="--_dur: var(--lb-animation-dur-gentle); --_ease: var(--lb-animation-ease-ui);">
+        <div class="anim-row__info"><div class="anim-row__token">--lb-animation-dur-gentle</div><div class="anim-row__value">→ duration-200 · Modals, popovers</div></div>
+        <div class="anim-runway"><div class="anim-box"></div></div>
+        <button class="anim-row__play" type="button" aria-label="Play preview"><span data-lb-icon="play"></span></button>
+      </div>
+      <div class="anim-row" data-anim style="--_dur: var(--lb-animation-dur-slow); --_ease: var(--lb-animation-ease-ui);">
+        <div class="anim-row__info"><div class="anim-row__token">--lb-animation-dur-slow</div><div class="anim-row__value">→ duration-300 · Drawers, page transitions</div></div>
+        <div class="anim-runway"><div class="anim-box"></div></div>
+        <button class="anim-row__play" type="button" aria-label="Play preview"><span data-lb-icon="play"></span></button>
+      </div>
+      <div class="anim-row" data-anim style="--_dur: var(--lb-animation-dur-collapse); --_ease: var(--lb-animation-ease-ui);">
+        <div class="anim-row__info"><div class="anim-row__token">--lb-animation-dur-collapse</div><div class="anim-row__value">→ duration-500 · Large collapse/expand motion (no shipped component uses it yet)</div></div>
+        <div class="anim-runway"><div class="anim-box"></div></div>
+        <button class="anim-row__play" type="button" aria-label="Play preview"><span data-lb-icon="play"></span></button>
+      </div>
+
+      <!-- Easings shown at a common 600ms so the curve is readable -->
+      <div class="anim-row" data-anim style="--_dur: 600ms; --_ease: var(--lb-animation-ease-ui);">
+        <div class="anim-row__info"><div class="anim-row__token">--lb-animation-ease-ui</div><div class="anim-row__value">→ ease-standard · Default for all UI motion</div></div>
+        <div class="anim-runway"><div class="anim-box"></div></div>
+        <button class="anim-row__play" type="button" aria-label="Play preview"><span data-lb-icon="play"></span></button>
+      </div>
+      <div class="anim-row" data-anim style="--_dur: 600ms; --_ease: var(--lb-animation-ease-in);">
+        <div class="anim-row__info"><div class="anim-row__token">--lb-animation-ease-in</div><div class="anim-row__value">→ ease-decelerate · Enter animations (element arriving)</div></div>
+        <div class="anim-runway"><div class="anim-box"></div></div>
+        <button class="anim-row__play" type="button" aria-label="Play preview"><span data-lb-icon="play"></span></button>
+      </div>
+      <div class="anim-row" data-anim style="--_dur: 600ms; --_ease: var(--lb-animation-ease-out);">
+        <div class="anim-row__info"><div class="anim-row__token">--lb-animation-ease-out</div><div class="anim-row__value">→ ease-accelerate · Exit animations (element leaving)</div></div>
+        <div class="anim-runway"><div class="anim-box"></div></div>
+        <button class="anim-row__play" type="button" aria-label="Play preview"><span data-lb-icon="play"></span></button>
+      </div>
+      <div class="anim-row" data-anim style="--_dur: 800ms; --_ease: var(--lb-animation-ease-bounce);">
+        <div class="anim-row__info"><div class="anim-row__token">--lb-animation-ease-bounce</div><div class="anim-row__value">→ ease-spring · Playful, notification-style motion</div></div>
+        <div class="anim-runway"><div class="anim-box"></div></div>
+        <button class="anim-row__play" type="button" aria-label="Play preview"><span data-lb-icon="play"></span></button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script src="../js/lb.js"></script>
+<script src="../js/slot-engine.js"></script>
+<script src="../js/theme-editor.js"></script>
+<script src="../js/token-exporter.js"></script>
+<script src="../js/gallery-layout.js"></script>
+
+<script>
+  // Interactive preview — hover a row to trigger once, Play button to trigger once,
+  // or toggle "Play all continuously" at the top.
+  (function () {
+    const rows = Array.from(document.querySelectorAll('[data-anim]'));
+    const loopToggle = document.getElementById('anim-loop-toggle');
+    let loopInterval = null;
+    let loopState = false;
+
+    function pulse(row) {
+      // Remove + re-add to re-trigger the transition
+      row.classList.remove('anim-row--active');
+      void row.offsetWidth;  // force reflow
+      row.classList.add('anim-row--active');
+      // Max possible duration is our slowest + some buffer (ease-spring 800ms)
+      clearTimeout(row._pulseTimer);
+      row._pulseTimer = setTimeout(() => row.classList.remove('anim-row--active'), 900);
+    }
+
+    rows.forEach(row => {
+      // Hover plays once
+      row.addEventListener('mouseenter', () => {
+        if (!loopState) pulse(row);
+      });
+      // Play button plays once
+      const btn = row.querySelector('.anim-row__play');
+      if (btn) btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        pulse(row);
+      });
+    });
+
+    function startLoop() {
+      loopState = true;
+      const run = () => rows.forEach((r, i) => setTimeout(() => pulse(r), i * 120));
+      run();
+      loopInterval = setInterval(run, 1400);
+    }
+    function stopLoop() {
+      loopState = false;
+      clearInterval(loopInterval);
+      loopInterval = null;
+      rows.forEach(r => r.classList.remove('anim-row--active'));
+    }
+
+    if (loopToggle) {
+      loopToggle.addEventListener('change', () => {
+        loopToggle.checked ? startLoop() : stopLoop();
+      });
+    }
+  })();
+</script>
+</body>
+</html>

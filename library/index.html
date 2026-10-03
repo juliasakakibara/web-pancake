@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <!-- theme-preamble:v1 -->
+  <script>(function(){try{var t=localStorage.getItem('letbe-ds-dark-mode');if(t==='1')document.documentElement.setAttribute('data-theme','dark');else if(t==='0')document.documentElement.setAttribute('data-theme','light');}catch(e){}})();</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta data-lb-page="library">
+  <title>Library view — letbe-ds</title>
+  <link rel="stylesheet" href="../tokens/theme.css">
+  <link rel="stylesheet" href="../tokens/fonts.css">
+  <link rel="stylesheet" href="../components/components.css">
+  <link rel="stylesheet" href="../components/theme-editor.css">
+  <link rel="stylesheet" href="../components/gallery.css">
+</head>
+<body data-lb-base="..">
+
+<main class="gallery-main">
+  <section class="gallery-section" id="library">
+    <h1 class="gallery-section__title" style="font-size: var(--lb-t-heading-l-font-size); line-height: var(--lb-t-heading-l-line-height);">Library view</h1>
+    <p class="gallery-section__desc">The media-library template — three modules on one canvas: the <strong>Toolbar Row</strong> (search · filter with count · sort · view switcher · pagination — all existing atoms), the <strong>Media Card</strong> (grid + <code class="lb-code">--row</code> variants, hover action cluster, duration overlay, caption + kebab), and the <strong>Selection system</strong> (<code class="lb-code">LB.Selection</code>) wiring them together: the toolbar flips to its bulk bar while anything is selected. Consumed here: <a class="lb-link" href="../input/">Input</a> · <a class="lb-link" href="../button/">Button</a> · <a class="lb-link" href="../badge/">Badge</a> · <a class="lb-link" href="../segmented/">Segmented</a> · <a class="lb-link" href="../pagination/">Pagination</a> · <a class="lb-link" href="../checkbox/">Checkbox</a> · <a class="lb-link" href="../card/">Card media presets</a> · <a class="lb-link" href="../popover/">Popover</a>. Detail pairs with the <a class="lb-link" href="../inspector/">Inspector Panel</a>.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>a11y (built in):</strong> selection rides native controls — each card's check is a real <code class="lb-code">&lt;input type="checkbox"&gt;</code> inside a <code class="lb-code">&lt;label&gt;</code> with its own <code class="lb-code">aria-label</code> ("Select <em>title</em>"), a 24px control in a 32px padded hit area (the WCAG 2.5.8 floor) held clear of the top-right action cluster, and select-all sets native <code class="lb-code">indeterminate</code> for partial sets rather than a custom mixed state. Checks reveal on <code class="lb-code">:focus-within</code> as well as hover — so they are reachable without a pointer — and the <code class="lb-code">--row</code> variant keeps them permanently visible; <kbd>Esc</kbd> clears the whole selection. One <code class="lb-code">_sync()</code> pass re-checks every box, rewrites the "N selected" count and fires <code class="lb-code">lb-selection-change</code>, and <code class="lb-code">prefers-reduced-motion</code> drops the reveal transition.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>Selection spec:</strong> checks are 24px controls in 32px hit areas (WCAG 2.5.8 AA floor), kept clear of the action cluster so the spacing rule holds; they reveal on hover/focus and the <em>first</em> selection escalates checks onto every card; <strong>long-press</strong> (a 500 ms hold with any pointer — touch or mouse) enters selection; select-all shows the minus (indeterminate) for partial sets; selection <em>persists after bulk actions</em> until deliberately cleared (<kbd>Esc</kbd>, deselect-all, or the ✕).</p>
+
+    <hr class="gallery-desc-divider">
+
+    <!-- ────────────────── The library ────────────────── -->
+    <h2 class="gallery-section__title">Grid + toolbar + selection</h2>
+    <p class="gallery-section__desc">Hover a card — check appears top-left, actions top-right. Select one — every card grows a check and the toolbar becomes the bulk bar. <kbd>Esc</kbd> clears.</p>
+    <div style="border: var(--lb-border-width-thin) solid var(--lb-border-muted); border-radius: var(--lb-radius-overlay); padding: var(--lb-size-4x);">
+      <div class="lb-toolbar" id="lib-toolbar">
+        <div class="lb-toolbar__default">
+          <div class="lb-input-wrap lb-toolbar__search">
+            <span class="lb-input-wrap__icon lb-input-wrap__icon--start" aria-hidden="true" data-lb-icon="search"></span>
+            <input class="lb-input lb-input--medium lb-input--has-start" type="search" placeholder="Search library…" aria-label="Search library">
+          </div>
+          <button class="lb-btn lb-btn--secondary lb-btn--small" type="button"><span class="lb-btn__icon" aria-hidden="true" data-lb-icon="filter"></span> Filters <span class="lb-badge lb-badge--default lb-badge--small">3</span></button>
+          <div class="lb-popover-host" data-lb-popover>
+            <button class="lb-popover-trigger lb-btn lb-btn--secondary lb-btn--small" type="button">Newest <span class="lb-btn__icon" aria-hidden="true" data-lb-icon="chevron-down"></span></button>
+            <div class="lb-popover lb-popover--bottom" style="display:none; min-width: 10rem; padding: var(--lb-size-1x);">
+              <button class="lb-btn lb-btn--ghost lb-btn--small" type="button" style="width: 100%; justify-content: flex-start;">Newest</button>
+              <button class="lb-btn lb-btn--ghost lb-btn--small" type="button" style="width: 100%; justify-content: flex-start;">Oldest</button>
+              <button class="lb-btn lb-btn--ghost lb-btn--small" type="button" style="width: 100%; justify-content: flex-start;">A–Z</button>
+            </div>
+          </div>
+          <div class="lb-toolbar__spacer"></div>
+          <div class="lb-segmented" data-lb-segmented aria-label="View">
+            <button type="button" class="lb-segmented__item" aria-checked="true" data-lb-value="grid" aria-label="Grid view"><span class="lb-segmented__icon" aria-hidden="true" data-lb-icon="layout-grid"></span></button>
+            <button type="button" class="lb-segmented__item" data-lb-value="list" aria-label="List view"><span class="lb-segmented__icon" aria-hidden="true" data-lb-icon="list"></span></button>
+          </div>
+          <nav class="lb-pagination" data-lb-pagination data-lb-total-pages="4" data-lb-current-page="1" aria-label="Pagination"></nav>
+        </div>
+        <div class="lb-toolbar__bulk">
+          <label class="lb-checkbox-wrap"><input type="checkbox" class="lb-checkbox" data-lb-selection-all aria-label="Select all"><span class="lb-checkbox__label lb-toolbar__count" data-lb-selection-count>0 selected</span></label>
+          <div class="lb-toolbar__spacer"></div>
+          <button class="lb-btn lb-btn--secondary lb-btn--small" type="button"><span class="lb-btn__icon" aria-hidden="true" data-lb-icon="download"></span> Download</button>
+          <button class="lb-btn lb-btn--danger lb-btn--small" type="button"><span class="lb-btn__icon" aria-hidden="true" data-lb-icon="trash-2"></span> Delete</button>
+          <button class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--small" type="button" data-lb-selection-clear aria-label="Clear selection"><span aria-hidden="true" data-lb-icon="x"></span></button>
+        </div>
+      </div>
+
+      <div data-lb-selection data-lb-selection-toolbar="#lib-toolbar" style="margin-top: var(--lb-size-4x); display: grid; grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr)); gap: var(--lb-size-4x);">
+        <div class="lb-media-card" data-lb-selectable data-lb-id="m1">
+          <div class="lb-media-card__media lb-card__media--16x9">
+            <img src="../assets/media/letbe-profile-cover.jpg" alt="">
+            <label class="lb-media-card__check"><input type="checkbox" class="lb-checkbox" aria-label="Select Sunset session"></label>
+            <div class="lb-media-card__actions">
+              <button class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--small" type="button" aria-label="Favorite"><span aria-hidden="true" data-lb-icon="heart"></span></button>
+              <button class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--small" type="button" aria-label="More actions"><span aria-hidden="true" data-lb-icon="more-vertical"></span></button>
+            </div>
+            <span class="lb-media-card__duration">0:49</span>
+          </div>
+          <div class="lb-media-card__caption">
+            <div class="lb-media-card__text">
+              <p class="lb-media-card__title">Sunset session</p>
+              <p class="lb-media-card__meta">v5.5 · funk meets glitch, 118 BPM</p>
+            </div>
+          </div>
+        </div>
+        <div class="lb-media-card" data-lb-selectable data-lb-id="m2">
+          <div class="lb-media-card__media lb-card__media--16x9">
+            <img src="../assets/media/letbe-profile-cover.jpg" alt="" style="filter: hue-rotate(90deg);">
+            <label class="lb-media-card__check"><input type="checkbox" class="lb-checkbox" aria-label="Select Old School"></label>
+            <div class="lb-media-card__actions">
+              <button class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--small" type="button" aria-label="Favorite"><span aria-hidden="true" data-lb-icon="heart"></span></button>
+              <button class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--small" type="button" aria-label="More actions"><span aria-hidden="true" data-lb-icon="more-vertical"></span></button>
+            </div>
+            <span class="lb-media-card__duration">1:04</span>
+          </div>
+          <div class="lb-media-card__caption">
+            <div class="lb-media-card__text">
+              <p class="lb-media-card__title">Old School</p>
+              <p class="lb-media-card__meta">v5.5 · dubstep meets glitch, 118 BPM</p>
+            </div>
+          </div>
+        </div>
+        <div class="lb-media-card" data-lb-selectable data-lb-id="m3">
+          <div class="lb-media-card__media lb-card__media--16x9">
+            <img src="../assets/media/letbe-profile-cover.jpg" alt="" style="filter: hue-rotate(200deg);">
+            <label class="lb-media-card__check"><input type="checkbox" class="lb-checkbox" aria-label="Select Tape warmth"></label>
+            <div class="lb-media-card__actions">
+              <button class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--small" type="button" aria-label="Favorite"><span aria-hidden="true" data-lb-icon="heart"></span></button>
+              <button class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--small" type="button" aria-label="More actions"><span aria-hidden="true" data-lb-icon="more-vertical"></span></button>
+            </div>
+            <span class="lb-media-card__duration">1:00</span>
+          </div>
+          <div class="lb-media-card__caption">
+            <div class="lb-media-card__text">
+              <p class="lb-media-card__title">Tape warmth</p>
+              <p class="lb-media-card__meta">v5.5 · lo-fi, 72 BPM</p>
+            </div>
+          </div>
+        </div>
+        <div class="lb-media-card" data-lb-selectable data-lb-id="m4">
+          <div class="lb-media-card__media lb-card__media--16x9">
+            <img src="../assets/media/letbe-profile-cover.jpg" alt="" style="filter: hue-rotate(300deg);">
+            <label class="lb-media-card__check"><input type="checkbox" class="lb-checkbox" aria-label="Select Ambient noise"></label>
+            <div class="lb-media-card__actions">
+              <button class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--small" type="button" aria-label="Favorite"><span aria-hidden="true" data-lb-icon="heart"></span></button>
+              <button class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--small" type="button" aria-label="More actions"><span aria-hidden="true" data-lb-icon="more-vertical"></span></button>
+            </div>
+            <span class="lb-media-card__duration">0:53</span>
+          </div>
+          <div class="lb-media-card__caption">
+            <div class="lb-media-card__text">
+              <p class="lb-media-card__title">Ambient noise</p>
+              <p class="lb-media-card__meta">v5.5 · atmospheric, industrial</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ────────────────── List variant ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">List variant — <code class="lb-code">--row</code></h2>
+    <p class="gallery-section__desc">Same card, horizontal — the check sits inline at the row start and the whole row carries the selected state. Same <code class="lb-code">LB.Selection</code> layer: select one and checks appear on every row; <kbd>Esc</kbd> clears.</p>
+    <div style="border: var(--lb-border-width-thin) solid var(--lb-border-muted); border-radius: var(--lb-radius-overlay); padding: var(--lb-size-4x);">
+      <div data-lb-selection style="display: flex; flex-direction: column; gap: var(--lb-size-1x);">
+      <div class="lb-media-card lb-media-card--row" data-lb-selectable data-lb-id="r1">
+        <label class="lb-media-card__check"><input type="checkbox" class="lb-checkbox" aria-label="Select Sunset session"></label>
+        <div class="lb-media-card__media lb-card__media--16x9">
+          <img src="../assets/media/letbe-profile-cover.jpg" alt="">
+          <span class="lb-media-card__duration">0:49</span>
+        </div>
+        <div class="lb-media-card__caption">
+          <div class="lb-media-card__text">
+            <p class="lb-media-card__title">Sunset session</p>
+            <p class="lb-media-card__meta">v5.5 · funk meets glitch hop rage, 118 BPM, driving slap bassline</p>
+          </div>
+          <button class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--small" type="button" aria-label="More actions"><span aria-hidden="true" data-lb-icon="more-vertical"></span></button>
+        </div>
+      </div>
+      <div class="lb-media-card lb-media-card--row" data-lb-selectable data-lb-id="r2">
+        <label class="lb-media-card__check"><input type="checkbox" class="lb-checkbox" aria-label="Select Old School"></label>
+        <div class="lb-media-card__media lb-card__media--16x9">
+          <img src="../assets/media/letbe-profile-cover.jpg" alt="" style="filter: hue-rotate(90deg);">
+          <span class="lb-media-card__duration">1:04</span>
+        </div>
+        <div class="lb-media-card__caption">
+          <div class="lb-media-card__text">
+            <p class="lb-media-card__title">Old School</p>
+            <p class="lb-media-card__meta">v5.5 · dubstep meets glitch hop, 118 BPM, chopped and stuttered</p>
+          </div>
+          <button class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--small" type="button" aria-label="More actions"><span aria-hidden="true" data-lb-icon="more-vertical"></span></button>
+        </div>
+      </div>
+      </div>
+    </div>
+
+    <!-- ────────────────── Usage ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Usage</h2>
+    <p class="gallery-section__desc">Load <code class="lb-code">js/components/lb-selection.js</code>. Container: <code class="lb-code">data-lb-selection</code> (+ <code class="lb-code">data-lb-selection-toolbar="#id"</code>); items: <code class="lb-code">data-lb-selectable data-lb-id="…"</code> each holding a <code class="lb-code">.lb-media-card__check</code> checkbox. Toolbar hooks: <code class="lb-code">data-lb-selection-all / -count / -clear</code>. API at <code class="lb-code">el._lbSelection</code>: <code class="lb-code">getSelected() · selectAll() · clear() · toggle(id)</code>. Event: <code class="lb-code">lb-selection-change {ids, count, total}</code> — wire your bulk actions to it; selection persists after actions until you call <code class="lb-code">clear()</code>.</p>
+
+  </section>
+</main>
+
+<script src="../js/lb.js"></script>
+<script src="../js/components/lb-selection.js"></script>
+<script src="../js/slot-engine.js"></script>
+<script src="../js/theme-editor.js"></script>
+<script src="../js/token-exporter.js"></script>
+<script src="../js/gallery-layout.js"></script>
+</body>
+</html>

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <!-- theme-preamble:v1 -->
+  <script>(function(){try{var t=localStorage.getItem('letbe-ds-dark-mode');if(t==='1')document.documentElement.setAttribute('data-theme','dark');else if(t==='0')document.documentElement.setAttribute('data-theme','light');}catch(e){}})();</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta data-lb-page="banner">
+  <title>Banner — letbe-ds</title>
+  <link rel="stylesheet" href="../tokens/theme.css">
+  <link rel="stylesheet" href="../tokens/fonts.css">
+  <link rel="stylesheet" href="../components/components.css">
+  <link rel="stylesheet" href="../components/theme-editor.css">
+  <link rel="stylesheet" href="../components/gallery.css">
+</head>
+<body data-lb-base="..">
+
+<main class="gallery-main">
+  <section class="gallery-section" id="banner">
+    <h1 class="gallery-section__title" style="font-size: var(--lb-t-heading-l-font-size); line-height: var(--lb-t-heading-l-line-height);">Banner</h1>
+    <p class="gallery-section__desc">Contextual message spanning the top of a section or page. Four status variants (info, success, warning, danger), three sizes (small, medium, large). CTA actions and the dismiss button are both optional. Use for page-level announcements, system status, or contextual help.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>a11y (built in):</strong> the announcement role is part of the markup contract — <code class="lb-code">role="status"</code> for info/success, <code class="lb-code">role="alert"</code> for warning/danger — and the controller never sets it for you, so a banner injected into a live page announces itself only if you wrote the role. Dismiss is a real <code class="lb-code">&lt;button&gt;</code> with an <code class="lb-code">aria-label</code> and a <code class="lb-code">:focus-visible</code> outline; it hides the banner and fires <code class="lb-code">lb-banner-dismiss</code> so you can persist the choice. CTAs are ordinary buttons sitting after the message in DOM order.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>Usage:</strong> Mark with <code class="lb-code">role="status"</code> for info/success, <code class="lb-code">role="alert"</code> for warning/danger. Actions go in <code class="lb-code">.lb-banner__actions</code>; the close button is optional.</p>
+<hr class="gallery-desc-divider">
+
+<h2 class="gallery-section__title">Banner Demo</h2>
+    <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+
+      <div class="gallery-label">Default — close only</div>
+      <div class="lb-banner lb-banner--info lb-banner--m" role="status">
+        <span class="lb-banner__icon" data-lb-icon="info-filled" aria-hidden="true" style="width: 1.5rem; height: 1.5rem;"></span>
+        <div class="lb-banner__body"><span class="lb-banner__title">Information</span> This is an informational banner.</div>
+        <button class="lb-banner__close" aria-label="Dismiss"><span data-lb-icon="x" style="width: 1.5rem; height: 1.5rem;"></span></button>
+      </div>
+
+      <div class="gallery-label">With single CTA (no close)</div>
+      <div class="lb-banner lb-banner--success lb-banner--m" role="status">
+        <span class="lb-banner__icon" data-lb-icon="circle-check-filled" aria-hidden="true" style="width: 1.5rem; height: 1.5rem;"></span>
+        <div class="lb-banner__body"><span class="lb-banner__title">Saved</span> Your changes are published.</div>
+        <div class="lb-banner__actions">
+          <button class="lb-btn lb-btn--secondary lb-btn--small">View</button>
+        </div>
+      </div>
+
+      <div class="gallery-label">With CTA + close</div>
+      <div class="lb-banner lb-banner--warning lb-banner--m" role="alert">
+        <span class="lb-banner__icon" data-lb-icon="alert-triangle-filled" aria-hidden="true" style="width: 1.5rem; height: 1.5rem;"></span>
+        <div class="lb-banner__body"><span class="lb-banner__title">New version available</span> Some features may be outdated.</div>
+        <div class="lb-banner__actions">
+          <button class="lb-btn lb-btn--secondary lb-btn--small">Update now</button>
+        </div>
+        <button class="lb-banner__close" aria-label="Dismiss"><span data-lb-icon="x" style="width: 1.5rem; height: 1.5rem;"></span></button>
+      </div>
+
+      <div class="gallery-label">With two CTAs</div>
+      <div class="lb-banner lb-banner--info lb-banner--m" role="status">
+        <span class="lb-banner__icon" data-lb-icon="info-filled" aria-hidden="true" style="width: 1.5rem; height: 1.5rem;"></span>
+        <div class="lb-banner__body"><span class="lb-banner__title">Cookies</span> We use cookies to improve your experience.</div>
+        <div class="lb-banner__actions">
+          <button class="lb-btn lb-btn--secondary lb-btn--small">Settings</button>
+          <button class="lb-btn lb-btn--primary lb-btn--small">Accept</button>
+        </div>
+      </div>
+
+      <div class="gallery-label">Large — actions stack under body</div>
+      <div class="lb-banner lb-banner--danger lb-banner--l" role="alert">
+        <span class="lb-banner__icon" data-lb-icon="x-circle-filled" aria-hidden="true" style="width: 1.5rem; height: 1.5rem;"></span>
+        <div class="lb-banner__body">
+          <span class="lb-banner__title">Unable to save changes</span>
+          Check your connection and try again. If the problem persists, contact support.
+          <div class="lb-banner__actions">
+            <button class="lb-btn lb-btn--secondary lb-btn--small">Retry</button>
+            <button class="lb-btn lb-btn--secondary lb-btn--small">Contact support</button>
+          </div>
+        </div>
+        <button class="lb-banner__close" aria-label="Dismiss"><span data-lb-icon="x" style="width: 1.5rem; height: 1.5rem;"></span></button>
+      </div>
+
+      <div class="gallery-label">Small — close only</div>
+      <div class="lb-banner lb-banner--warning lb-banner--s" role="alert">
+        <span class="lb-banner__icon" data-lb-icon="alert-triangle-filled" aria-hidden="true" style="width: 1.5rem; height: 1.5rem;"></span>
+        <div class="lb-banner__body"><span class="lb-banner__title">Inline warning</span></div>
+      </div>
+
+    </div>
+  </section>
+</main>
+
+<script src="../js/lb.js"></script>
+<script src="../js/slot-engine.js"></script>
+<script src="../js/theme-editor.js"></script>
+<script src="../js/token-exporter.js"></script>
+<script src="../js/gallery-layout.js"></script>
+</body>
+</html>

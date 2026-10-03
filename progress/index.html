@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <!-- theme-preamble:v1 -->
+  <script>(function(){try{var t=localStorage.getItem('letbe-ds-dark-mode');if(t==='1')document.documentElement.setAttribute('data-theme','dark');else if(t==='0')document.documentElement.setAttribute('data-theme','light');}catch(e){}})();</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta data-lb-page="progress">
+  <title>Progress — letbe-ds</title>
+  <link rel="stylesheet" href="../tokens/theme.css">
+  <link rel="stylesheet" href="../tokens/fonts.css">
+  <link rel="stylesheet" href="../components/components.css">
+  <link rel="stylesheet" href="../components/theme-editor.css">
+  <link rel="stylesheet" href="../components/gallery.css">
+</head>
+<body data-lb-base="..">
+
+<main class="gallery-main">
+  <section class="gallery-section" id="progress">
+    <h1 class="gallery-section__title" style="font-size: var(--lb-t-heading-l-font-size); line-height: var(--lb-t-heading-l-line-height);">Progress</h1>
+    <p class="gallery-section__desc">Linear progress indicator. Sizes: small, medium, large. Variants for success/warning/danger. Use for determinate progress (uploads, multi-step form progress). For indeterminate waits use Spinner.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>a11y (built in):</strong> the track is the native <code class="lb-code">&lt;progress&gt;</code> element — implicit <code class="lb-code">role=progressbar</code> carrying <code class="lb-code">value</code>/<code class="lb-code">max</code>, with no ARIA and no JS controller behind it. Status variants only repaint the fill, so the state has to be readable from the adjacent label or value text, never from colour alone. A <code class="lb-code">&lt;progress&gt;</code> takes no name from a neighbouring <code class="lb-code">&lt;span&gt;</code>: give it an <code class="lb-code">aria-label</code>, or point <code class="lb-code">aria-labelledby</code> at the label row.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>Usage:</strong> Drive it yourself — set the element's <code class="lb-code">value</code> (against <code class="lb-code">max</code>) from your upload or step logic and the CSS transition animates the fill; no events fire, and the <code class="lb-code">.lb-progress-value</code> readout is plain text you update in the same step. The labelled form composes <code class="lb-code">.lb-progress-wrap</code> &rarr; <code class="lb-code">.lb-progress-label-row</code> (<code class="lb-code">.lb-progress-label</code> + <code class="lb-code">.lb-progress-value</code>) above the <code class="lb-code">&lt;progress&gt;</code>, which takes one size modifier for track height plus an optional status modifier stacked on it. Inside <code class="lb-code">.lb-progress-inline</code>, leave the size modifier off — the wrapper sizes the mini track itself.</p>
+
+<hr class="gallery-desc-divider">
+
+
+<h2 class="gallery-section__title">Progress Demo</h2>
+    <div style="max-width: 400px;">
+      <div class="lb-progress-wrap" style="margin-bottom: 1rem;">
+        <div class="lb-progress-label-row"><span class="lb-progress-label">Uploading...</span><span class="lb-progress-value">65%</span></div>
+        <progress class="lb-progress lb-progress--medium" value="65" max="100"></progress>
+      </div>
+      <div class="lb-progress-wrap" style="margin-bottom: 1rem;">
+        <progress class="lb-progress lb-progress--small lb-progress--success" value="100" max="100"></progress>
+      </div>
+      <div class="lb-progress-wrap">
+        <progress class="lb-progress lb-progress--large lb-progress--danger" value="30" max="100"></progress>
+      </div>
+    </div>
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Inline — mini track for table cells</h2>
+    <p class="gallery-section__desc"><code class="lb-code">.lb-progress-inline</code>: value label + a short thick track (1.8rem × 8px). The progress-in-cell pattern — quotas, completion, capacity inside rows, toolbars, composer footers. Status variants apply as usual.</p>
+    <table class="lb-table" style="max-width: 28rem;">
+      <thead><tr><th class="lb-table__cell" scope="col">Project</th><th class="lb-table__cell" scope="col">Storage</th></tr></thead>
+      <tbody>
+        <tr><td class="lb-table__cell">Website</td><td class="lb-table__cell"><span class="lb-progress-inline"><span class="lb-progress-value">3.1 / 10 GB</span><progress class="lb-progress" value="31" max="100"></progress></span></td></tr>
+        <tr><td class="lb-table__cell">Design system</td><td class="lb-table__cell"><span class="lb-progress-inline"><span class="lb-progress-value">6.8 / 10 GB</span><progress class="lb-progress" value="68" max="100"></progress></span></td></tr>
+        <tr><td class="lb-table__cell">Archive</td><td class="lb-table__cell"><span class="lb-progress-inline"><span class="lb-progress-value">9.4 / 10 GB</span><progress class="lb-progress lb-progress--danger" value="94" max="100"></progress></span></td></tr>
+      </tbody>
+    </table>
+
+  </section>
+</main>
+
+<script src="../js/lb.js"></script>
+<script src="../js/slot-engine.js"></script>
+<script src="../js/theme-editor.js"></script>
+<script src="../js/token-exporter.js"></script>
+<script src="../js/gallery-layout.js"></script>
+</body>
+</html>

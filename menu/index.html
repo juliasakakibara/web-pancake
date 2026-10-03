@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <!-- theme-preamble:v1 -->
+  <script>(function(){try{var t=localStorage.getItem('letbe-ds-dark-mode');if(t==='1')document.documentElement.setAttribute('data-theme','dark');else if(t==='0')document.documentElement.setAttribute('data-theme','light');}catch(e){}})();</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta data-lb-page="menu">
+  <title>Menu — letbe-ds</title>
+  <link rel="stylesheet" href="../tokens/theme.css">
+  <link rel="stylesheet" href="../tokens/fonts.css">
+  <link rel="stylesheet" href="../components/components.css">
+  <link rel="stylesheet" href="../components/theme-editor.css">
+  <link rel="stylesheet" href="../components/gallery.css">
+</head>
+<body data-lb-base="..">
+
+<main class="gallery-main">
+  <section class="gallery-section" id="menu">
+    <h1 class="gallery-section__title" style="font-size: var(--lb-t-heading-l-font-size); line-height: var(--lb-t-heading-l-line-height);">Menu</h1>
+    <p class="gallery-section__desc">Contextual popup list attached to a trigger button. Use for overflow actions (three-dots menu), user account menus, or dense action lists. For in-form selection use Select or Dropdown; for navigation use Nav.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>a11y (built in):</strong> <code class="lb-code">LB.Menu</code> wires the pair on init — the trigger gets <code class="lb-code">aria-haspopup="menu"</code> + <code class="lb-code">aria-expanded</code> + <code class="lb-code">aria-controls</code>, the panel gets <code class="lb-code">role="menu"</code> + <code class="lb-code">aria-labelledby</code>, and every row becomes a <code class="lb-code">role="menuitem"</code> with roving <code class="lb-code">tabindex="-1"</code>. Opening moves focus to the first enabled item; <kbd>↑</kbd> <kbd>↓</kbd> wrap through the enabled items, <kbd>Home</kbd> / <kbd>End</kbd> jump to the ends, and <kbd>Esc</kbd>, <kbd>Tab</kbd> or an outside click closes and returns focus to the trigger. Disabled rows carry <code class="lb-code">aria-disabled="true"</code> and are skipped by the arrow keys; separators are <code class="lb-code">role="separator"</code>, glyphs are <code class="lb-code">aria-hidden</code>, and an icon-only (kebab) trigger needs its own <code class="lb-code">aria-label</code>.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>Usage:</strong> Wrap with <code class="lb-code">data-lb-menu</code>. The panel is <code class="lb-code">&lt;ul class="lb-menu lb-list"&gt;</code> — outer class provides the popup surface, inner class provides item layout. Items use the shared List primitive classes (<code class="lb-code">.lb-list__item</code>, <code class="lb-code">.lb-list__item--danger</code>, <code class="lb-code">.lb-list__item--disabled</code>, <code class="lb-code">.lb-list__separator</code>, <code class="lb-code">.lb-list__icon</code>, <code class="lb-code">.lb-list__hint</code>).</p>
+
+<hr class="gallery-desc-divider">
+
+<h2 class="gallery-section__title">Default — text trigger</h2>
+    <p class="gallery-section__desc">Standard pattern for a row of overflow actions. Trigger is a button with text + chevron, panel attaches below. Items carry leading icons and trailing keyboard shortcuts.</p>
+    <div class="lb-menu-wrapper" data-lb-menu>
+      <button class="lb-menu__trigger lb-btn lb-btn--secondary lb-btn--medium">
+        Actions
+        <span class="lb-btn__icon" aria-hidden="true" data-lb-icon="chevron-down"></span>
+      </button>
+      <ul class="lb-menu lb-list">
+        <li><button class="lb-list__item" data-lb-id="edit">
+          <span class="lb-list__icon" aria-hidden="true" data-lb-icon="pencil"></span>
+          <span class="lb-list__label">Edit</span>
+          <span class="lb-list__hint">⌘ E</span>
+        </button></li>
+        <li><button class="lb-list__item" data-lb-id="duplicate">
+          <span class="lb-list__icon" aria-hidden="true" data-lb-icon="copy"></span>
+          <span class="lb-list__label">Duplicate</span>
+          <span class="lb-list__hint">⌘ D</span>
+        </button></li>
+        <li class="lb-list__separator" role="separator"></li>
+        <li><button class="lb-list__item lb-list__item--disabled" aria-disabled="true">
+          <span class="lb-list__icon" aria-hidden="true" data-lb-icon="folder"></span>
+          <span class="lb-list__label">Archive</span>
+        </button></li>
+        <li><button class="lb-list__item lb-list__item--danger" data-lb-id="delete">
+          <span class="lb-list__icon" aria-hidden="true" data-lb-icon="trash-2"></span>
+          <span class="lb-list__label">Delete</span>
+          <span class="lb-list__hint">⌫</span>
+        </button></li>
+      </ul>
+    </div>
+
+    <!-- ────────────────── Kebab / overflow ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Kebab — icon-only trigger</h2>
+    <p class="gallery-section__desc">Compact three-dots affordance for table rows, list items, card actions. Use <code class="lb-code">.lb-icon-btn</code> as the trigger and remember an <code class="lb-code">aria-label</code> describing what it controls.</p>
+    <div class="lb-menu-wrapper" data-lb-menu>
+      <button class="lb-menu__trigger lb-icon-btn lb-icon-btn--ghost lb-icon-btn--medium" aria-label="Row actions">
+        <span class="lb-icon-btn__icon" data-lb-icon="more-vertical"></span>
+      </button>
+      <ul class="lb-menu lb-list">
+        <li><button class="lb-list__item" data-lb-id="open">
+          <span class="lb-list__icon" aria-hidden="true" data-lb-icon="external-link"></span>
+          <span class="lb-list__label">Open</span>
+        </button></li>
+        <li><button class="lb-list__item" data-lb-id="rename">
+          <span class="lb-list__icon" aria-hidden="true" data-lb-icon="pencil"></span>
+          <span class="lb-list__label">Rename</span>
+        </button></li>
+        <li><button class="lb-list__item" data-lb-id="share">
+          <span class="lb-list__icon" aria-hidden="true" data-lb-icon="share-2"></span>
+          <span class="lb-list__label">Share</span>
+        </button></li>
+        <li class="lb-list__separator" role="separator"></li>
+        <li><button class="lb-list__item lb-list__item--danger" data-lb-id="kebab-delete">
+          <span class="lb-list__icon" aria-hidden="true" data-lb-icon="trash-2"></span>
+          <span class="lb-list__label">Delete</span>
+        </button></li>
+      </ul>
+    </div>
+
+    <!-- ────────────────── User account ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">User account menu</h2>
+    <p class="gallery-section__desc">Header carries identity (avatar + name + email), separator below, then app-level destinations and a danger-tinted Sign out at the bottom. Common pattern for the top-right of an app shell.</p>
+    <div class="lb-menu-wrapper" data-lb-menu>
+      <button class="lb-menu__trigger lb-btn lb-btn--ghost lb-btn--medium" aria-label="Account menu">
+        <span class="lb-avatar lb-avatar--small" role="img" aria-label="Jane Doe" data-lb-initials="JD" style="margin-right: var(--lb-size-2x);"><img class="lb-avatar__img" src="../assets/avatars/avatar-01.jpg" alt=""></span>
+        Jane
+        <span class="lb-btn__icon" aria-hidden="true" data-lb-icon="chevron-down"></span>
+      </button>
+      <ul class="lb-menu lb-list" style="min-width: 16rem;">
+        <li class="lb-menu__header">
+          <span class="lb-avatar lb-avatar--medium" role="img" aria-label="Jane Doe" data-lb-initials="JD"><img class="lb-avatar__img" src="../assets/avatars/avatar-01.jpg" alt=""></span>
+          <span class="lb-menu__header-text">
+            <span class="lb-menu__header-name">Jane Doe</span>
+            <span class="lb-menu__header-meta">jane@letbe.design</span>
+          </span>
+        </li>
+        <li><button class="lb-list__item" data-lb-id="profile">
+          <span class="lb-list__icon" aria-hidden="true" data-lb-icon="user"></span>
+          <span class="lb-list__label">Profile</span>
+        </button></li>
+        <li><button class="lb-list__item" data-lb-id="settings">
+          <span class="lb-list__icon" aria-hidden="true" data-lb-icon="settings"></span>
+          <span class="lb-list__label">Settings</span>
+          <span class="lb-list__hint">⌘ ,</span>
+        </button></li>
+        <li><button class="lb-list__item" data-lb-id="billing">
+          <span class="lb-list__icon" aria-hidden="true" data-lb-icon="credit-card"></span>
+          <span class="lb-list__label">Billing</span>
+        </button></li>
+        <li class="lb-list__separator" role="separator"></li>
+        <li><button class="lb-list__item lb-list__item--danger" data-lb-id="signout">
+          <span class="lb-list__icon" aria-hidden="true" data-lb-icon="log-out"></span>
+          <span class="lb-list__label">Sign out</span>
+        </button></li>
+      </ul>
+    </div>
+
+    <!-- ────────────────── Sectioned with group labels ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Sectioned with group labels</h2>
+    <p class="gallery-section__desc">Use <code class="lb-code">.lb-list__group-label</code> to label a cluster of related items. Keeps long menus scannable; pair each section with a separator below it.</p>
+    <div class="lb-menu-wrapper" data-lb-menu>
+      <button class="lb-menu__trigger lb-btn lb-btn--secondary lb-btn--medium">
+        Workspace
+        <span class="lb-btn__icon" aria-hidden="true" data-lb-icon="chevron-down"></span>
+      </button>
+      <ul class="lb-menu lb-list" style="min-width: 14rem;">
+        <li class="lb-list__group-label">Workspace</li>
+        <li><button class="lb-list__item" data-lb-id="invite">
+          <span class="lb-list__icon" aria-hidden="true" data-lb-icon="user-plus"></span>
+          <span class="lb-list__label">Invite members</span>
+        </button></li>
+        <li><button class="lb-list__item" data-lb-id="team">
+          <span class="lb-list__icon" aria-hidden="true" data-lb-icon="users"></span>
+          <span class="lb-list__label">Team</span>
+        </button></li>
+        <li class="lb-list__separator" role="separator"></li>
+        <li class="lb-list__group-label">Account</li>
+        <li><button class="lb-list__item" data-lb-id="profile-2">
+          <span class="lb-list__icon" aria-hidden="true" data-lb-icon="user"></span>
+          <span class="lb-list__label">Profile</span>
+        </button></li>
+        <li><button class="lb-list__item" data-lb-id="prefs">
+          <span class="lb-list__icon" aria-hidden="true" data-lb-icon="settings"></span>
+          <span class="lb-list__label">Preferences</span>
+        </button></li>
+      </ul>
+    </div>
+
+    <!-- ────────────────── Checkable toggles ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Checkable items</h2>
+    <p class="gallery-section__desc">Multi-toggle pattern — each item is independently on/off. Use a leading <code class="lb-code">.lb-list__check</code> slot; toggle <code class="lb-code">.lb-list__item--checked</code> on the item to flip the visible check. With <code class="lb-code">data-lb-menu-mode="checkable"</code> on the wrapper, <code class="lb-code">LB.Menu</code> tags rows <code class="lb-code">role="menuitemcheckbox"</code> and keeps <code class="lb-code">aria-checked</code> mirrored to that class.</p>
+    <div class="lb-menu-wrapper" data-lb-menu data-lb-menu-mode="checkable">
+      <button class="lb-menu__trigger lb-btn lb-btn--secondary lb-btn--medium">
+        View
+        <span class="lb-btn__icon" aria-hidden="true" data-lb-icon="chevron-down"></span>
+      </button>
+      <ul class="lb-menu lb-list" style="min-width: 14rem;">
+        <li><button class="lb-list__item lb-list__item--checked" data-lb-id="grid">
+          <span class="lb-list__check" aria-hidden="true" data-lb-icon="check"></span>
+          <span class="lb-list__label">Show grid</span>
+        </button></li>
+        <li><button class="lb-list__item lb-list__item--checked" data-lb-id="ruler">
+          <span class="lb-list__check" aria-hidden="true" data-lb-icon="check"></span>
+          <span class="lb-list__label">Show rulers</span>
+        </button></li>
+        <li><button class="lb-list__item" data-lb-id="layout">
+          <span class="lb-list__check" aria-hidden="true" data-lb-icon="check"></span>
+          <span class="lb-list__label">Show layout</span>
+        </button></li>
+      </ul>
+    </div>
+
+    <!-- ────────────────── Radio: single-pick ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Radio items — single pick</h2>
+    <p class="gallery-section__desc">Sort-by / view-as pattern. Only one item carries <code class="lb-code">.lb-list__item--checked</code> at a time; clicking another moves the check. <code class="lb-code">data-lb-menu-mode="radio"</code> tags rows <code class="lb-code">role="menuitemradio"</code> with <code class="lb-code">aria-checked</code> tracking the pick.</p>
+    <div class="lb-menu-wrapper" data-lb-menu data-lb-menu-mode="radio">
+      <button class="lb-menu__trigger lb-btn lb-btn--secondary lb-btn--medium">
+        Sort by
+        <span class="lb-btn__icon" aria-hidden="true" data-lb-icon="chevron-down"></span>
+      </button>
+      <ul class="lb-menu lb-list" style="min-width: 14rem;">
+        <li><button class="lb-list__item lb-list__item--checked" data-lb-id="sort-az">
+          <span class="lb-list__check" aria-hidden="true" data-lb-icon="check"></span>
+          <span class="lb-list__label">Name — A to Z</span>
+        </button></li>
+        <li><button class="lb-list__item" data-lb-id="sort-za">
+          <span class="lb-list__check" aria-hidden="true" data-lb-icon="check"></span>
+          <span class="lb-list__label">Name — Z to A</span>
+        </button></li>
+        <li><button class="lb-list__item" data-lb-id="sort-date">
+          <span class="lb-list__check" aria-hidden="true" data-lb-icon="check"></span>
+          <span class="lb-list__label">Most recent</span>
+        </button></li>
+      </ul>
+    </div>
+  </section>
+</main>
+
+<script src="../js/lb.js"></script>
+<script src="../js/slot-engine.js"></script>
+<script src="../js/theme-editor.js"></script>
+<script src="../js/token-exporter.js"></script>
+<script src="../js/gallery-layout.js"></script>
+
+<script>
+  // Demo wiring — make the checkable + radio menus respond to clicks so
+  // people can see the state actually flip. Production consumers would
+  // own this via their own state; this is just gallery polish.
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('[data-lb-menu-mode="checkable"] .lb-list__item').forEach((item) => {
+      item.addEventListener('click', (e) => {
+        e.preventDefault();
+        item.classList.toggle('lb-list__item--checked');
+      });
+    });
+    document.querySelectorAll('[data-lb-menu-mode="radio"]').forEach((menu) => {
+      const items = menu.querySelectorAll('.lb-list__item');
+      items.forEach((item) => {
+        item.addEventListener('click', (e) => {
+          e.preventDefault();
+          items.forEach((i) => i.classList.remove('lb-list__item--checked'));
+          item.classList.add('lb-list__item--checked');
+        });
+      });
+    });
+  });
+</script>
+</body>
+</html>

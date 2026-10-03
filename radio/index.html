@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <!-- theme-preamble:v1 -->
+  <script>(function(){try{var t=localStorage.getItem('letbe-ds-dark-mode');if(t==='1')document.documentElement.setAttribute('data-theme','dark');else if(t==='0')document.documentElement.setAttribute('data-theme','light');}catch(e){}})();</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta data-lb-page="radio">
+  <title>Radio — letbe-ds</title>
+  <link rel="stylesheet" href="../tokens/theme.css">
+  <link rel="stylesheet" href="../tokens/fonts.css">
+  <link rel="stylesheet" href="../components/components.css">
+  <link rel="stylesheet" href="../components/theme-editor.css">
+  <link rel="stylesheet" href="../components/gallery.css">
+</head>
+<body data-lb-base="..">
+
+<main class="gallery-main">
+  <section class="gallery-section" id="radio">
+    <h1 class="gallery-section__title" style="font-size: var(--lb-t-heading-l-font-size); line-height: var(--lb-t-heading-l-line-height);">Radio</h1>
+    <p class="gallery-section__desc">Single-choice selection from a group. Vertical by default; add <code class="lb-code">.lb-radio-group--horizontal</code> for a wrapping row. Use when the user must pick exactly one option and you want all options visible at once (≤5–7). For larger sets prefer Select or Dropdown. Disable a row with <code class="lb-code">disabled</code> on the input plus <code class="lb-code">.lb-radio-wrap--disabled</code> on its wrapping label.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>a11y (built in):</strong> plain native <code class="lb-code">&lt;input type="radio"&gt;</code> sharing one <code class="lb-code">name</code> — there is no JS controller, so arrow-key roving, the single tab stop per group and form submission are the browser's own. Each input sits inside its <code class="lb-code">&lt;label class="lb-radio-wrap"&gt;</code>, which makes the visible text the accessible name and the whole row a hit target, and the wrapper carries <code class="lb-code">role="radiogroup"</code> + <code class="lb-code">aria-label</code>. Checked state is drawn as a thicker ring (<code class="lb-code">border-width</code>), not colour alone, and focus uses the standard <code class="lb-code">:focus-visible</code> outline.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>Usage:</strong> Pure CSS — nothing to init and no <code class="lb-code">js/lb.js</code> dependency; the styling rides entirely on <code class="lb-code">.lb-radio</code>, so the stylesheets alone are enough. Wire it like any native form control: <code class="lb-code">change</code> bubbles from the inputs, so one listener on the <code class="lb-code">.lb-radio-group</code> wrapper hears every selection change, and the current value reads as <code class="lb-code">document.querySelector('input[name="…"]:checked').value</code> or via <code class="lb-code">FormData</code>. No custom events, no JS handle — and rows added after load need no re-sweep, because there is nothing to hydrate.</p>
+
+<hr class="gallery-desc-divider">
+
+
+<h2 class="gallery-section__title">Radio Demo</h2>
+    <div class="lb-radio-group" role="radiogroup" aria-label="Example">
+      <label class="lb-radio-wrap"><input type="radio" name="demo-radio" class="lb-radio" value="a" checked><span class="lb-radio__label">Option A</span></label>
+      <label class="lb-radio-wrap"><input type="radio" name="demo-radio" class="lb-radio" value="b"><span class="lb-radio__label">Option B</span></label>
+      <label class="lb-radio-wrap"><input type="radio" name="demo-radio" class="lb-radio" value="c"><span class="lb-radio__label">Option C</span></label>
+    </div>
+  </section>
+</main>
+
+<script src="../js/lb.js"></script>
+<script src="../js/slot-engine.js"></script>
+<script src="../js/theme-editor.js"></script>
+<script src="../js/token-exporter.js"></script>
+<script src="../js/gallery-layout.js"></script>
+</body>
+</html>

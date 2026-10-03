@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <!-- theme-preamble:v1 -->
+  <script>(function(){try{var t=localStorage.getItem('letbe-ds-dark-mode');if(t==='1')document.documentElement.setAttribute('data-theme','dark');else if(t==='0')document.documentElement.setAttribute('data-theme','light');}catch(e){}})();</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta data-lb-page="counter">
+  <title>Counter — letbe-ds</title>
+  <link rel="stylesheet" href="../tokens/theme.css">
+  <link rel="stylesheet" href="../tokens/fonts.css">
+  <link rel="stylesheet" href="../components/components.css">
+  <link rel="stylesheet" href="../components/theme-editor.css">
+  <link rel="stylesheet" href="../components/gallery.css">
+</head>
+<body data-lb-base="..">
+
+<main class="gallery-main">
+  <section class="gallery-section" id="counter">
+    <h1 class="gallery-section__title" style="font-size: var(--lb-t-heading-l-font-size); line-height: var(--lb-t-heading-l-line-height);">Counter</h1>
+    <p class="gallery-section__desc">Numeric notification pill, hosted by tabs, accordions, calendar cells, and buttons. Single component (<code class="lb-code">.lb-counter</code>) reused across all four hosts so the shape, sizing, and contrast guarantees stay consistent. Auto-hides when empty, so consumers can blank <code class="lb-code">textContent</code> to remove the pill without rebuilding the DOM. For a labelled status pill (success / warning / danger with text), use <a class="lb-link" href="../badge/">Badge</a> instead.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>a11y (built in):</strong> the pill is plain text in a <code class="lb-code">&lt;span&gt;</code> and is deliberately not <code class="lb-code">aria-hidden</code>, so its digits join the host's accessible name — the button below reads as &ldquo;Inbox 8&rdquo; — and <code class="lb-code">.lb-counter:empty { display: none }</code> means blanking <code class="lb-code">textContent</code> leaves that name clean rather than trailing an empty node. Where a bare number would be ambiguous the host passes a spelled-out name instead: Calendar renders its count pill with <code class="lb-code">aria-label="3 slots available"</code>. Colour is always a bg/fg token pair, never a background alone — <code class="lb-code">--on-btn</code> inherits the host button variant's pair, and the theme editor re-picks <code class="lb-code">action.fg-primary-*</code> against a 4.5:1 threshold whenever the user changes brand colour.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>Usage:</strong> <code class="lb-code">&lt;span class="lb-counter"&gt;5&lt;/span&gt;</code> — default is brand-themed and contrast-safe in both light and dark themes (bg routes through <code class="lb-code">action.bg-primary-default</code>, digit through <code class="lb-code">action.fg-primary-default</code>, which the theme editor re-points to whichever of <code class="lb-code">fg.inverse</code> / <code class="lb-code">fg.default</code> reads better on the chosen brand). Add <code class="lb-code">--small</code> for a 16px pill, <code class="lb-code">--subtle</code> for a quiet/dimmed variant, or <code class="lb-code">--on-btn</code> when nesting inside a button so the pill inherits the button variant's colour pair.</p>
+
+    <hr class="gallery-desc-divider">
+
+    <!-- ────────────────── Default ────────────────── -->
+    <h2 class="gallery-section__title">Default — brand-themed</h2>
+    <p class="gallery-section__desc">Standalone pill that sits anywhere on the page. Used by Tabs, Accordion, and Calendar for "N items / events / open" affordances. Brand bg with its paired digit colour — white in the shipped themes, re-picked against the brand colour when the user overrides it in the theme editor — so the pair keeps its contrast in light and dark.</p>
+    <div class="gallery-row">
+      <span class="lb-counter">3</span>
+      <span class="lb-counter">12</span>
+      <span class="lb-counter">99+</span>
+    </div>
+
+    <!-- ────────────────── Small ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Small</h2>
+    <p class="gallery-section__desc">Compact 16px pill for dense rows — calendar month cells, small buttons, tight tab strips. Same colour treatment as the default; only the box shrinks and the type drops to <code class="lb-code">caption-s</code>.</p>
+    <div class="gallery-row">
+      <span class="lb-counter lb-counter--small">3</span>
+      <span class="lb-counter lb-counter--small">12</span>
+      <span class="lb-counter lb-counter--small">99+</span>
+    </div>
+
+    <!-- ────────────────── Subtle ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Subtle — dimmed</h2>
+    <p class="gallery-section__desc">Quiet variant for low-priority counters: items in past calendar days, archived rows, "+N more" chips, stale notifications. Bg routes through <code class="lb-code">bg.disabled</code>, digit through <code class="lb-code">fg.disabled</code> — reads as "activity gone" rather than "current attention". Available at both sizes.</p>
+    <div class="gallery-row">
+      <span class="lb-counter lb-counter--subtle">5</span>
+      <span class="lb-counter lb-counter--subtle">23</span>
+      <span class="lb-counter lb-counter--subtle lb-counter--small">5</span>
+      <span class="lb-counter lb-counter--subtle lb-counter--small">23</span>
+    </div>
+
+    <!-- ────────────────── On-button ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">On a button</h2>
+    <p class="gallery-section__desc">Nest <code class="lb-code">.lb-counter--on-btn</code> inside a button to flip the colour treatment: bg becomes the button's text colour, digit becomes the button's bg colour. Each button variant scopes its own colour pair, so the counter inverts correctly on primary, secondary, danger, and ghost buttons. Auto-downsizes when the host button is <code class="lb-code">--small</code>.</p>
+    <div class="gallery-label">Medium</div>
+    <div class="gallery-row">
+      <button class="lb-btn lb-btn--primary lb-btn--medium">Inbox <span class="lb-counter lb-counter--on-btn">8</span></button>
+      <button class="lb-btn lb-btn--secondary lb-btn--medium">Filters <span class="lb-counter lb-counter--on-btn">3</span></button>
+      <button class="lb-btn lb-btn--ghost lb-btn--medium">Drafts <span class="lb-counter lb-counter--on-btn">12</span></button>
+      <button class="lb-btn lb-btn--danger lb-btn--medium">Errors <span class="lb-counter lb-counter--on-btn">2</span></button>
+    </div>
+    <div class="gallery-label" style="margin-top: var(--lb-size-3x);">Small</div>
+    <div class="gallery-row">
+      <button class="lb-btn lb-btn--primary lb-btn--small">Inbox <span class="lb-counter lb-counter--on-btn">8</span></button>
+      <button class="lb-btn lb-btn--secondary lb-btn--small">Filters <span class="lb-counter lb-counter--on-btn">3</span></button>
+      <button class="lb-btn lb-btn--ghost lb-btn--small">Drafts <span class="lb-counter lb-counter--on-btn">12</span></button>
+      <button class="lb-btn lb-btn--danger lb-btn--small">Errors <span class="lb-counter lb-counter--on-btn">2</span></button>
+    </div>
+
+    <!-- ────────────────── Empty auto-hide ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Auto-hide when empty</h2>
+    <p class="gallery-section__desc">A counter with no text content collapses to <code class="lb-code">display: none</code>. Useful for live updates — set <code class="lb-code">textContent = ''</code> to remove the pill without touching the surrounding markup.</p>
+    <div class="gallery-row">
+      <span>With value:</span>
+      <span class="lb-counter">7</span>
+      <span style="margin-left: var(--lb-size-4x);">Empty (hidden):</span>
+      <span class="lb-counter"></span>
+      <span>← nothing renders</span>
+    </div>
+  </section>
+</main>
+
+<script src="../js/lb.js"></script>
+<script src="../js/slot-engine.js"></script>
+<script src="../js/theme-editor.js"></script>
+<script src="../js/token-exporter.js"></script>
+<script src="../js/gallery-layout.js"></script>
+</body>
+</html>

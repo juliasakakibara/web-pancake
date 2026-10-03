@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <!-- theme-preamble:v1 -->
+  <script>(function(){try{var t=localStorage.getItem('letbe-ds-dark-mode');if(t==='1')document.documentElement.setAttribute('data-theme','dark');else if(t==='0')document.documentElement.setAttribute('data-theme','light');}catch(e){}})();</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta data-lb-page="bar-list">
+  <title>Bar List — letbe-ds</title>
+  <link rel="stylesheet" href="../tokens/theme.css">
+  <link rel="stylesheet" href="../tokens/fonts.css">
+  <link rel="stylesheet" href="../components/components.css">
+  <link rel="stylesheet" href="../components/theme-editor.css">
+  <link rel="stylesheet" href="../components/gallery.css">
+</head>
+<body data-lb-base="..">
+
+<main class="gallery-main">
+  <section class="gallery-section" id="bar-list">
+    <h1 class="gallery-section__title" style="font-size: var(--lb-t-heading-l-font-size); line-height: var(--lb-t-heading-l-line-height);">Bar List</h1>
+    <p class="gallery-section__desc">Ranked horizontal bar list — top countries, top pages, top referrers. Each row shows a label with a proportional bar layer behind it and a value flush right — the bar fills the label column only, so it never sits under the number. Pure HTML/CSS; the only JS is a tiny init pass that computes each row's width as a percentage of the list's max value. Drop inside <a class="lb-link" href="../card/">Card</a> for a stand-alone widget, or pair with charts for richer breakdowns.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>a11y (built in):</strong> the list stays a real <code class="lb-code">ul</code>/<code class="lb-code">li</code> — the initialiser only adds classes and a <code class="lb-code">--bar-width</code> custom property, injects no roles or ARIA, and every value is literal text, so a screen reader reads label and number without help. The bar is a <code class="lb-code">::before</code> layer with <code class="lb-code">pointer-events: none</code> — decoration, never content. Flag labels pair an <code class="lb-code">alt=""</code> image with a visible code or name, and <code class="lb-code">--interactive</code> is hover styling only: put a real <code class="lb-code">&lt;a&gt;</code> or <code class="lb-code">&lt;button&gt;</code> in the label to make a row keyboard-reachable.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>Usage:</strong> Add <code class="lb-code">data-lb-bar-list</code> to a <code class="lb-code">&lt;ul&gt;</code>. Each <code class="lb-code">&lt;li data-lb-bar-list-row data-lb-value="N"&gt;</code> gets a <code class="lb-code">.lb-bar-list__label</code> and <code class="lb-code">.lb-bar-list__value</code>. Add <code class="lb-code">lb-bar-list--interactive</code> for hover state. Color via <code class="lb-code">style="--color: var(--lb-data-N)"</code>.</p>
+
+    <hr class="gallery-desc-divider">
+
+    <!-- ────────────────── Default ────────────────── -->
+    <h2 class="gallery-section__title">Default — top countries</h2>
+    <p class="gallery-section__desc">Plain ranked bars, no surface around them. Largest value fills its row; everything else is proportional. Country labels use the <code class="lb-code">.lb-flag</code> component for compact representation — flag image plus 2-letter ISO code, same flag set the Phone input uses.</p>
+    <div style="max-width: 24rem;">
+      <ul data-lb-bar-list>
+        <li data-lb-bar-list-row data-lb-value="384"><span class="lb-bar-list__label"><span class="lb-flag"><img class="lb-flag__img" src="../assets/flags/us.svg" alt=""><span class="lb-flag__code">US</span></span></span><span class="lb-bar-list__value">384</span></li>
+        <li data-lb-bar-list-row data-lb-value="218"><span class="lb-bar-list__label"><span class="lb-flag"><img class="lb-flag__img" src="../assets/flags/de.svg" alt=""><span class="lb-flag__code">DE</span></span></span><span class="lb-bar-list__value">218</span></li>
+        <li data-lb-bar-list-row data-lb-value="171"><span class="lb-bar-list__label"><span class="lb-flag"><img class="lb-flag__img" src="../assets/flags/gb.svg" alt=""><span class="lb-flag__code">GB</span></span></span><span class="lb-bar-list__value">171</span></li>
+        <li data-lb-bar-list-row data-lb-value="108"><span class="lb-bar-list__label"><span class="lb-flag"><img class="lb-flag__img" src="../assets/flags/fr.svg" alt=""><span class="lb-flag__code">FR</span></span></span><span class="lb-bar-list__value">108</span></li>
+        <li data-lb-bar-list-row data-lb-value="92"><span class="lb-bar-list__label"><span class="lb-flag"><img class="lb-flag__img" src="../assets/flags/br.svg" alt=""><span class="lb-flag__code">BR</span></span></span><span class="lb-bar-list__value">92</span></li>
+        <li data-lb-bar-list-row data-lb-value="61"><span class="lb-bar-list__label"><span class="lb-flag"><img class="lb-flag__img" src="../assets/flags/jp.svg" alt=""><span class="lb-flag__code">JP</span></span></span><span class="lb-bar-list__value">61</span></li>
+      </ul>
+    </div>
+
+    <!-- ────────────────── Flag with full name ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Flag + full name</h2>
+    <p class="gallery-section__desc">Pair the flag with the country name when there's room. The <code class="lb-code">.lb-flag__label</code> span carries the name; both align baseline-flush with the flag.</p>
+    <div style="max-width: 28rem;">
+      <ul data-lb-bar-list style="--color: var(--lb-data-3);">
+        <li data-lb-bar-list-row data-lb-value="384"><span class="lb-bar-list__label"><span class="lb-flag"><img class="lb-flag__img" src="../assets/flags/us.svg" alt=""><span class="lb-flag__label">United States</span></span></span><span class="lb-bar-list__value">384</span></li>
+        <li data-lb-bar-list-row data-lb-value="218"><span class="lb-bar-list__label"><span class="lb-flag"><img class="lb-flag__img" src="../assets/flags/de.svg" alt=""><span class="lb-flag__label">Germany</span></span></span><span class="lb-bar-list__value">218</span></li>
+        <li data-lb-bar-list-row data-lb-value="171"><span class="lb-bar-list__label"><span class="lb-flag"><img class="lb-flag__img" src="../assets/flags/gb.svg" alt=""><span class="lb-flag__label">United Kingdom</span></span></span><span class="lb-bar-list__value">171</span></li>
+        <li data-lb-bar-list-row data-lb-value="108"><span class="lb-bar-list__label"><span class="lb-flag"><img class="lb-flag__img" src="../assets/flags/fr.svg" alt=""><span class="lb-flag__label">France</span></span></span><span class="lb-bar-list__value">108</span></li>
+      </ul>
+    </div>
+
+    <!-- ────────────────── In a Card ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">In a Card — labelled widget</h2>
+    <p class="gallery-section__desc">Wrap in a Card with a heading and caption for a stand-alone dashboard widget.</p>
+    <div class="lb-card lb-card--padded" style="max-width: 26rem;">
+      <div class="lb-card__heading">
+        <div class="lb-card__title">Top referrers</div>
+        <div class="lb-card__subtitle">Last 7 days · ranked by sessions</div>
+      </div>
+      <ul data-lb-bar-list style="margin-top: var(--lb-size-4x); --color: var(--lb-data-2);">
+        <li data-lb-bar-list-row data-lb-value="2486"><span class="lb-bar-list__label">google.com</span><span class="lb-bar-list__value">2,486</span></li>
+        <li data-lb-bar-list-row data-lb-value="1190"><span class="lb-bar-list__label">github.com</span><span class="lb-bar-list__value">1,190</span></li>
+        <li data-lb-bar-list-row data-lb-value="864"><span class="lb-bar-list__label">x.com</span><span class="lb-bar-list__value">864</span></li>
+        <li data-lb-bar-list-row data-lb-value="412"><span class="lb-bar-list__label">linkedin.com</span><span class="lb-bar-list__value">412</span></li>
+        <li data-lb-bar-list-row data-lb-value="208"><span class="lb-bar-list__label">news.ycombinator.com</span><span class="lb-bar-list__value">208</span></li>
+      </ul>
+    </div>
+
+    <!-- ────────────────── Custom color ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Color variants</h2>
+    <p class="gallery-section__desc">Color the bars per list via the <code class="lb-code">--color</code> custom property — useful when you have multiple Bar Lists side by side and want each to read distinctly.</p>
+    <div class="lb-grid" style="--min: 14rem;">
+      <ul data-lb-bar-list style="--color: var(--lb-data-1);">
+        <li data-lb-bar-list-row data-lb-value="60"><span class="lb-bar-list__label">Mobile</span><span class="lb-bar-list__value">60%</span></li>
+        <li data-lb-bar-list-row data-lb-value="32"><span class="lb-bar-list__label">Desktop</span><span class="lb-bar-list__value">32%</span></li>
+        <li data-lb-bar-list-row data-lb-value="8"><span class="lb-bar-list__label">Tablet</span><span class="lb-bar-list__value">8%</span></li>
+      </ul>
+      <ul data-lb-bar-list style="--color: var(--lb-data-3);">
+        <li data-lb-bar-list-row data-lb-value="412"><span class="lb-bar-list__label">Free</span><span class="lb-bar-list__value">412</span></li>
+        <li data-lb-bar-list-row data-lb-value="218"><span class="lb-bar-list__label">Pro</span><span class="lb-bar-list__value">218</span></li>
+        <li data-lb-bar-list-row data-lb-value="84"><span class="lb-bar-list__label">Enterprise</span><span class="lb-bar-list__value">84</span></li>
+      </ul>
+      <ul data-lb-bar-list style="--color: var(--lb-data-5);">
+        <li data-lb-bar-list-row data-lb-value="48"><span class="lb-bar-list__label">404 errors</span><span class="lb-bar-list__value">48</span></li>
+        <li data-lb-bar-list-row data-lb-value="14"><span class="lb-bar-list__label">500 errors</span><span class="lb-bar-list__value">14</span></li>
+        <li data-lb-bar-list-row data-lb-value="6"><span class="lb-bar-list__label">Timeouts</span><span class="lb-bar-list__value">6</span></li>
+      </ul>
+    </div>
+
+    <!-- ────────────────── Interactive (clickable rows) ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Interactive — clickable rows</h2>
+    <p class="gallery-section__desc">Add <code class="lb-code">lb-bar-list--interactive</code> for hover state + pointer cursor. Wrap labels in <code class="lb-code">&lt;a&gt;</code> tags for navigation, or attach a click listener to each row.</p>
+    <div style="max-width: 24rem;">
+      <ul data-lb-bar-list class="lb-bar-list--interactive">
+        <li data-lb-bar-list-row data-lb-value="2486"><span class="lb-bar-list__label"><a href="#">/dashboard</a></span><span class="lb-bar-list__value">2,486</span></li>
+        <li data-lb-bar-list-row data-lb-value="1190"><span class="lb-bar-list__label"><a href="#">/projects</a></span><span class="lb-bar-list__value">1,190</span></li>
+        <li data-lb-bar-list-row data-lb-value="864"><span class="lb-bar-list__label"><a href="#">/settings</a></span><span class="lb-bar-list__value">864</span></li>
+        <li data-lb-bar-list-row data-lb-value="412"><span class="lb-bar-list__label"><a href="#">/billing</a></span><span class="lb-bar-list__value">412</span></li>
+      </ul>
+    </div>
+  </section>
+</main>
+
+<script src="../js/lb.js"></script>
+<script src="../js/slot-engine.js"></script>
+<script src="../js/theme-editor.js"></script>
+<script src="../js/token-exporter.js"></script>
+<script src="../js/gallery-layout.js"></script>
+</body>
+</html>

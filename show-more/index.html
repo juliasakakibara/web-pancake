@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <!-- theme-preamble:v1 -->
+  <script>(function(){try{var t=localStorage.getItem('letbe-ds-dark-mode');if(t==='1')document.documentElement.setAttribute('data-theme','dark');else if(t==='0')document.documentElement.setAttribute('data-theme','light');}catch(e){}})();</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta data-lb-page="show-more">
+  <title>Show More — letbe-ds</title>
+  <link rel="stylesheet" href="../tokens/theme.css">
+  <link rel="stylesheet" href="../tokens/fonts.css">
+  <link rel="stylesheet" href="../components/components.css">
+  <link rel="stylesheet" href="../components/theme-editor.css">
+  <link rel="stylesheet" href="../components/gallery.css">
+  <style>
+    /* demo-local: a consumer-style grid whose tiles are NOT lb-* classed
+       — exercising the [data-lb-show-more] > [hidden] rule */
+    .sm-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(10rem, 100%), 1fr)); gap: var(--lb-size-4x); margin-bottom: var(--lb-size-4x); }
+    .sm-tile { display: flex; align-items: center; justify-content: center; aspect-ratio: 4 / 3; background: var(--lb-bg-strong); border-radius: var(--lb-radius-surface); font-family: var(--lb-t-label-m-font-family); font-size: var(--lb-t-label-m-font-size); color: var(--lb-fg-muted); }
+  </style>
+</head>
+<body data-lb-base="..">
+
+<main class="gallery-main">
+  <section class="gallery-section" id="show-more">
+    <h1 class="gallery-section__title" style="font-size: var(--lb-t-heading-l-font-size); line-height: var(--lb-t-heading-l-line-height);">Show More</h1>
+    <p class="gallery-section__desc">Collapse a grid to N rows and reveal the rest on demand — <code class="lb-code">LB.ShowMore</code>. The limit is rows × the grid's <em>rendered</em> column count, so it follows the responsive template as the viewport changes; <code class="lb-code">data-lb-show-more-sm</code> overrides the row count on phones (≤640px). Collapsing scrolls back to where the reader expanded, so the button lands exactly where it was before the page grew.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>a11y (built in):</strong> the trigger is a consumer-authored real <code class="lb-code">button</code> the DS wires with <code class="lb-code">aria-controls</code> + <code class="lb-code">aria-expanded</code> and a swapped label (<code class="lb-code">data-lb-label-more</code> / <code class="lb-code">data-lb-label-less</code>); it hides itself when nothing is hidden. Tiles collapse via the native <code class="lb-code">hidden</code> attribute — gone for every reader, not just visually.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>Usage:</strong> <code class="lb-code">data-lb-show-more="3"</code> on a grid with an <code class="lb-code">id</code>, plus your own button carrying <code class="lb-code">data-lb-show-more-for="&lt;that id&gt;"</code>. Auto-inits (instance at <code class="lb-code">el._lbShowMore</code>) with <code class="lb-code">expand()</code> / <code class="lb-code">collapse()</code> / <code class="lb-code">toggle()</code> / <code class="lb-code">refresh()</code>, and emits a bubbling <code class="lb-code">lb-show-more-toggle</code> with <code class="lb-code">detail.expanded</code>. A ResizeObserver recomputes on resize and when the grid becomes visible (inside a tab panel, an accordion…). Tiles are your elements of any class — the DS ships a <code class="lb-code">[data-lb-show-more] &gt; [hidden]</code> rule so a tile's own <code class="lb-code">display</code> never beats the collapse. Reveal motion is deliberately not bundled; add your own entrance animation if the page wants one.</p>
+
+    <hr class="gallery-desc-divider">
+
+    <h2 class="gallery-section__title">Grid collapsed to 2 rows — phone override 3</h2>
+    <p class="gallery-section__desc">Resize the window: the visible count follows the column count. On phones the <code class="lb-code">data-lb-show-more-sm="3"</code> override applies.</p>
+    <div class="sm-grid" id="sm-demo" data-lb-show-more="2" data-lb-show-more-sm="3">
+      <div class="sm-tile">01</div><div class="sm-tile">02</div><div class="sm-tile">03</div>
+      <div class="sm-tile">04</div><div class="sm-tile">05</div><div class="sm-tile">06</div>
+      <div class="sm-tile">07</div><div class="sm-tile">08</div><div class="sm-tile">09</div>
+      <div class="sm-tile">10</div><div class="sm-tile">11</div><div class="sm-tile">12</div>
+      <div class="sm-tile">13</div><div class="sm-tile">14</div><div class="sm-tile">15</div>
+      <div class="sm-tile">16</div><div class="sm-tile">17</div><div class="sm-tile">18</div>
+    </div>
+    <button type="button" class="lb-btn lb-btn--secondary lb-btn--medium" data-lb-show-more-for="sm-demo" data-lb-label-more="Show all 18" data-lb-label-less="Show fewer"><span class="lb-btn__label">Show all 18</span></button>
+
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Nothing hidden — the button hides itself</h2>
+    <p class="gallery-section__desc">Four tiles in a 2-row collapse: at most widths nothing overflows the limit, so the trigger stays hidden until the grid actually collapses something.</p>
+    <div class="sm-grid" id="sm-few" data-lb-show-more="2" style="max-width: 36rem;">
+      <div class="sm-tile">A</div><div class="sm-tile">B</div><div class="sm-tile">C</div><div class="sm-tile">D</div>
+    </div>
+    <button type="button" class="lb-btn lb-btn--ghost lb-btn--medium" data-lb-show-more-for="sm-few"><span class="lb-btn__label">Show more</span></button>
+  </section>
+</main>
+
+<script src="../js/lb.js"></script>
+<script src="../js/slot-engine.js"></script>
+<script src="../js/theme-editor.js"></script>
+<script src="../js/token-exporter.js"></script>
+<script src="../js/gallery-layout.js"></script>
+</body>
+</html>

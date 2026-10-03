@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <!-- theme-preamble:v1 -->
+  <script>(function(){try{var t=localStorage.getItem('letbe-ds-dark-mode');if(t==='1')document.documentElement.setAttribute('data-theme','dark');else if(t==='0')document.documentElement.setAttribute('data-theme','light');}catch(e){}})();</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta data-lb-page="app-shell">
+  <title>App Shell — letbe-ds</title>
+  <link rel="stylesheet" href="../tokens/theme.css">
+  <link rel="stylesheet" href="../tokens/fonts.css">
+  <link rel="stylesheet" href="../components/components.css">
+  <link rel="stylesheet" href="../components/theme-editor.css">
+  <link rel="stylesheet" href="../components/gallery.css">
+</head>
+<body data-lb-base="..">
+
+<main class="gallery-main">
+  <section class="gallery-section" id="shell">
+    <h1 class="gallery-section__title" style="font-size: var(--lb-t-heading-l-font-size); line-height: var(--lb-t-heading-l-line-height);">App Shell</h1>
+    <p class="gallery-section__desc">The dashboard skeleton — <code class="lb-code">LB.Shell</code>. The 2026 "inverted L": full-height sidebar + content column whose header lives <em>inside</em> the column. Variant axes: <strong>collapse</strong> (<code class="lb-code">data-lb-shell-collapse="icon | offcanvas | none"</code>) × <strong>side</strong> (<code class="lb-code">--right</code>) × <strong>style</strong> (standard · <code class="lb-code">--floating</code> · <code class="lb-code">--inset</code>) × <strong>right rail</strong> (slot). Opt-in <strong>drag-resize</strong> (<code class="lb-code">data-lb-shell-resizable</code>) — drag the sidebar edge, arrow keys when focused, drag-to-edge collapses. State persists in <code class="lb-code">localStorage</code>. Toggle: button or <kbd>Ctrl/Cmd+B</kbd>. Consumed here: <a class="lb-link" href="../button/">Icon Button</a> · <a class="lb-link" href="../breadcrumb/">Breadcrumb</a> · <a class="lb-link" href="../avatar/">Avatar</a> · <a class="lb-link" href="../badge/">Badge</a> · <a class="lb-link" href="../card/">Card</a> · <a class="lb-link" href="../stat/">Stat</a> · <a class="lb-link" href="../resizable/">Resizable</a>. Composed in the <a class="lb-link" href="../ai-chat/">AI Chat template</a>.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>a11y (built in, verified):</strong> sidebar nav is a <code class="lb-code">&lt;nav aria-label&gt;</code> landmark (never <code class="lb-code">aside</code>); the content column is <code class="lb-code">&lt;main tabindex="-1"&gt;</code> so the skip link can move real focus; the topbar is <em>not</em> a banner landmark (nested headers lose the role by spec — intentional); toggle is a <code class="lb-code">button[aria-expanded][aria-controls]</code>; rail mode keeps labels in the DOM (clip-hidden) so accessible names survive; frame is <code class="lb-code">100dvh</code>; reduced-motion disables the collapse animation. Mobile ≤768px: sidebar becomes a modal drawer (focus trap + scroll-lock + Esc), or opt into the bottom-bar pattern with <code class="lb-code">--mobile-bar</code>.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>Usage:</strong> Load <code class="lb-code">js/lb.js</code> first, then <code class="lb-code">js/components/lb-shell.js</code>; every <code class="lb-code">data-lb-shell</code> element auto-inits, and lb.js console-warns if the markup is present without the module. Structure contract: <code class="lb-code">.lb-shell__sidebar</code> (head · <code class="lb-code">&lt;nav&gt;</code> · foot) + <code class="lb-code">.lb-shell__main</code> (topbar · <code class="lb-code">.lb-shell__content</code>), optional <code class="lb-code">&lt;aside class="lb-shell__panel"&gt;</code>; any button inside carrying <code class="lb-code">data-lb-shell-toggle</code> becomes a collapse control with <code class="lb-code">aria-expanded</code>/<code class="lb-code">aria-controls</code> wired for free. React to <code class="lb-code">lb-shell-collapse</code> (<code class="lb-code">{collapsed}</code>) and <code class="lb-code">lb-shell-drawer-open</code> / <code class="lb-code">lb-shell-drawer-close</code>, or drive it from <code class="lb-code">el._lbShell</code>. Routing stays yours — items are plain links, you set <code class="lb-code">lb-shell__item--active</code> + <code class="lb-code">aria-current</code> per route, and each distinct shell needs its own <code class="lb-code">data-lb-shell-key</code> so persisted widths don't collide (the default key is shared).</p>
+
+    <hr class="gallery-desc-divider">
+
+    <!-- ────────────────── A. Default: icon-rail + drag-resize ────────────────── -->
+    <h2 class="gallery-section__title">A · Default — icon-rail collapse + drag-resize</h2>
+    <p class="gallery-section__desc">Click the <code class="lb-code">panel-left</code> toggle (or <kbd>Ctrl/Cmd+B</kbd>) to collapse to the 3rem rail — labels clip-hide, icons keep their accessible names. Drag the sidebar's right edge to resize (14–22rem); drag it near the edge to collapse. Three sidebar zones: brand · nav groups (one nested level) · user foot.</p>
+    <div style="border: var(--lb-border-width-thin) solid var(--lb-border-muted); border-radius: var(--lb-radius-overlay); overflow: hidden; position: relative;">
+      <div class="lb-shell" data-lb-shell data-lb-shell-collapse="icon" data-lb-shell-resizable data-lb-shell-key="lb-shell-demo-a" style="height: 480px;">
+        <a class="lb-shell__skip" href="#shellA-main">Skip to content</a>
+        <div class="lb-shell__sidebar">
+          <div class="lb-shell__sidebar-head">
+            <a class="lb-shell__brand" href="#"><span class="lb-shell__logo" data-lb-icon="letbe"></span><span class="lb-shell__brand-name">letbe</span></a>
+          </div>
+          <nav class="lb-shell__nav" aria-label="Main (shell A)">
+            <div class="lb-shell__group">
+              <div class="lb-shell__group-label">Platform</div>
+              <a class="lb-shell__item lb-shell__item--active" href="#" aria-current="page"><span class="lb-shell__item-icon" data-lb-icon="home"></span><span class="lb-shell__item-label">Dashboard</span></a>
+              <a class="lb-shell__item" href="#"><span class="lb-shell__item-icon" data-lb-icon="inbox"></span><span class="lb-shell__item-label">Inbox</span></a>
+              <div>
+                <button class="lb-shell__item" data-lb-shell-sub aria-expanded="true"><span class="lb-shell__item-icon" data-lb-icon="folder"></span><span class="lb-shell__item-label">Projects</span><span class="lb-shell__item-chevron" data-lb-icon="chevron-right"></span></button>
+                <div class="lb-shell__sub">
+                  <a class="lb-shell__item" href="#"><span class="lb-shell__item-label">Website</span></a>
+                  <a class="lb-shell__item" href="#"><span class="lb-shell__item-label">Mobile app</span></a>
+                  <a class="lb-shell__item" href="#"><span class="lb-shell__item-label">Design system</span></a>
+                </div>
+              </div>
+            </div>
+            <div class="lb-shell__group">
+              <div class="lb-shell__group-label">Workspace</div>
+              <a class="lb-shell__item" href="#"><span class="lb-shell__item-icon" data-lb-icon="users"></span><span class="lb-shell__item-label">Members</span></a>
+              <a class="lb-shell__item" href="#"><span class="lb-shell__item-icon" data-lb-icon="settings"></span><span class="lb-shell__item-label">Settings</span></a>
+            </div>
+          </nav>
+          <div class="lb-shell__sidebar-foot">
+            <button class="lb-shell__item lb-shell__item--user" type="button"><span class="lb-avatar lb-avatar--small" role="img" aria-label="Vatroslav K" data-lb-initials="VK"></span><span class="lb-shell__item-label">v.kova@letbe.art</span></button>
+          </div>
+        </div>
+        <div class="lb-shell__main">
+          <div class="lb-shell__topbar">
+            <button class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--medium" data-lb-shell-toggle aria-label="Toggle sidebar"><span data-lb-icon="panel-left"></span></button>
+            <nav class="lb-breadcrumb" aria-label="Breadcrumb">
+              <ol class="lb-breadcrumb__list">
+                <li class="lb-breadcrumb__item"><a class="lb-breadcrumb__link" href="#">Workspace</a><span class="lb-breadcrumb__separator" aria-hidden="true">/</span></li>
+                <li class="lb-breadcrumb__item"><span class="lb-breadcrumb__current" aria-current="page">Dashboard</span></li>
+              </ol>
+            </nav>
+            <div class="lb-shell__topbar-actions">
+              <button class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--medium" aria-label="Search"><span data-lb-icon="search"></span></button>
+              <button class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--medium" aria-label="Notifications"><span data-lb-icon="bell"></span></button>
+            </div>
+          </div>
+          <div class="lb-shell__content" id="shellA-main" tabindex="-1">
+            <div class="lb-shell__page-head">
+              <h3 class="lb-shell__page-title">Dashboard</h3>
+              <div class="lb-shell__page-actions">
+                <button class="lb-btn lb-btn--primary lb-btn--small"><span class="lb-btn__icon" aria-hidden="true" data-lb-icon="plus"></span> New project</button>
+              </div>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr)); gap: var(--lb-size-4x);">
+              <div class="lb-card lb-card--padded"><div class="lb-stat"><span class="lb-stat__label">Active projects</span><span class="lb-stat__value">128</span></div></div>
+              <div class="lb-card lb-card--padded"><div class="lb-stat"><span class="lb-stat__label">Components</span><span class="lb-stat__value">2,410</span></div></div>
+              <div class="lb-card lb-card--padded"><div class="lb-stat"><span class="lb-stat__label">Token coverage</span><span class="lb-stat__value">97%</span></div></div>
+            </div>
+            <div style="height: 400px;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ────────────────── B. Offcanvas ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">B · Offcanvas collapse</h2>
+    <p class="gallery-section__desc"><code class="lb-code">data-lb-shell-collapse="offcanvas"</code> — the sidebar hides entirely — no icon rail remains. Toggle brings it back.</p>
+    <div style="border: var(--lb-border-width-thin) solid var(--lb-border-muted); border-radius: var(--lb-radius-overlay); overflow: hidden; position: relative;">
+      <div class="lb-shell" data-lb-shell data-lb-shell-collapse="offcanvas" data-lb-shell-key="lb-shell-demo-b" style="height: 360px;">
+        <div class="lb-shell__sidebar">
+          <div class="lb-shell__sidebar-head">
+            <a class="lb-shell__brand" href="#"><span class="lb-shell__logo" data-lb-icon="letbe"></span><span class="lb-shell__brand-name">letbe</span></a>
+          </div>
+          <nav class="lb-shell__nav" aria-label="Main (shell B)">
+            <div class="lb-shell__group">
+              <a class="lb-shell__item lb-shell__item--active" href="#" aria-current="page"><span class="lb-shell__item-icon" data-lb-icon="home"></span><span class="lb-shell__item-label">Overview</span></a>
+              <a class="lb-shell__item" href="#"><span class="lb-shell__item-icon" data-lb-icon="file"></span><span class="lb-shell__item-label">Documents</span></a>
+              <a class="lb-shell__item" href="#"><span class="lb-shell__item-icon" data-lb-icon="settings"></span><span class="lb-shell__item-label">Settings</span></a>
+            </div>
+          </nav>
+        </div>
+        <div class="lb-shell__main">
+          <div class="lb-shell__topbar">
+            <button class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--medium" data-lb-shell-toggle aria-label="Toggle sidebar"><span data-lb-icon="panel-left"></span></button>
+            <strong style="font-size: var(--lb-t-body-s-font-size);">Overview</strong>
+          </div>
+          <div class="lb-shell__content" tabindex="-1">
+            <p class="gallery-section__desc">Collapse fully hides the sidebar — every tab gets the full width.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ────────────────── C. Floating + Inset ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">C · Styles — <code class="lb-code">--floating</code> · <code class="lb-code">--inset</code></h2>
+    <p class="gallery-section__desc">Floating detaches the sidebar as a card; inset makes the <em>content column</em> the card instead. Both collapse like the default.</p>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(22rem, 100%), 1fr)); gap: var(--lb-size-4x);">
+      <div style="border: var(--lb-border-width-thin) solid var(--lb-border-muted); border-radius: var(--lb-radius-overlay); overflow: hidden; position: relative;">
+        <div class="lb-shell lb-shell--floating" data-lb-shell data-lb-shell-collapse="icon" data-lb-shell-key="lb-shell-demo-c1" style="height: 340px;">
+          <div class="lb-shell__sidebar">
+            <div class="lb-shell__sidebar-head"><a class="lb-shell__brand" href="#"><span class="lb-shell__logo" data-lb-icon="letbe"></span><span class="lb-shell__brand-name">letbe</span></a></div>
+            <nav class="lb-shell__nav" aria-label="Main (shell C)">
+              <div class="lb-shell__group">
+                <a class="lb-shell__item lb-shell__item--active" href="#" aria-current="page"><span class="lb-shell__item-icon" data-lb-icon="home"></span><span class="lb-shell__item-label">Home</span></a>
+                <a class="lb-shell__item" href="#"><span class="lb-shell__item-icon" data-lb-icon="inbox"></span><span class="lb-shell__item-label">Inbox</span></a>
+              </div>
+            </nav>
+          </div>
+          <div class="lb-shell__main">
+            <div class="lb-shell__topbar">
+              <button class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--medium" data-lb-shell-toggle aria-label="Toggle sidebar"><span data-lb-icon="panel-left"></span></button>
+              <strong style="font-size: var(--lb-t-body-s-font-size);">Floating</strong>
+            </div>
+            <div class="lb-shell__content" tabindex="-1"><p class="gallery-section__desc">Sidebar floats as a detached card.</p></div>
+          </div>
+        </div>
+      </div>
+      <div style="border: var(--lb-border-width-thin) solid var(--lb-border-muted); border-radius: var(--lb-radius-overlay); overflow: hidden; position: relative;">
+        <div class="lb-shell lb-shell--inset" data-lb-shell data-lb-shell-collapse="icon" data-lb-shell-key="lb-shell-demo-c2" style="height: 340px;">
+          <div class="lb-shell__sidebar">
+            <div class="lb-shell__sidebar-head"><a class="lb-shell__brand" href="#"><span class="lb-shell__logo" data-lb-icon="letbe"></span><span class="lb-shell__brand-name">letbe</span></a></div>
+            <nav class="lb-shell__nav" aria-label="Main (shell D)">
+              <div class="lb-shell__group">
+                <a class="lb-shell__item lb-shell__item--active" href="#" aria-current="page"><span class="lb-shell__item-icon" data-lb-icon="home"></span><span class="lb-shell__item-label">Home</span></a>
+                <a class="lb-shell__item" href="#"><span class="lb-shell__item-icon" data-lb-icon="users"></span><span class="lb-shell__item-label">Team</span></a>
+              </div>
+            </nav>
+          </div>
+          <div class="lb-shell__main">
+            <div class="lb-shell__topbar">
+              <button class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--medium" data-lb-shell-toggle aria-label="Toggle sidebar"><span data-lb-icon="panel-left"></span></button>
+              <strong style="font-size: var(--lb-t-body-s-font-size);">Inset</strong>
+            </div>
+            <div class="lb-shell__content" tabindex="-1"><p class="gallery-section__desc">Content column is the elevated card.</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ────────────────── D. Right rail ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">D · Inspector rail</h2>
+    <p class="gallery-section__desc">The optional right rail (<code class="lb-code">.lb-shell__panel</code>) — an inspector for the selected item. It's an <code class="lb-code">&lt;aside&gt;</code> (complementary is correct here: supporting detail, not navigation).</p>
+    <div style="border: var(--lb-border-width-thin) solid var(--lb-border-muted); border-radius: var(--lb-radius-overlay); overflow: hidden; position: relative;">
+      <div class="lb-shell" data-lb-shell data-lb-shell-collapse="icon" data-lb-shell-key="lb-shell-demo-d" style="height: 360px;">
+        <div class="lb-shell__sidebar">
+          <div class="lb-shell__sidebar-head"><a class="lb-shell__brand" href="#"><span class="lb-shell__logo" data-lb-icon="letbe"></span><span class="lb-shell__brand-name">letbe</span></a></div>
+          <nav class="lb-shell__nav" aria-label="Main (shell E)">
+            <div class="lb-shell__group">
+              <a class="lb-shell__item lb-shell__item--active" href="#" aria-current="page"><span class="lb-shell__item-icon" data-lb-icon="inbox"></span><span class="lb-shell__item-label">Issues</span></a>
+              <a class="lb-shell__item" href="#"><span class="lb-shell__item-icon" data-lb-icon="folder"></span><span class="lb-shell__item-label">Projects</span></a>
+            </div>
+          </nav>
+        </div>
+        <div class="lb-shell__main">
+          <div class="lb-shell__topbar">
+            <button class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--medium" data-lb-shell-toggle aria-label="Toggle sidebar"><span data-lb-icon="panel-left"></span></button>
+            <strong style="font-size: var(--lb-t-body-s-font-size);">LB-204 · Fix focus ring on rail items</strong>
+          </div>
+          <div class="lb-shell__content" tabindex="0" tabindex="0" tabindex="-1">
+            <p class="gallery-section__desc">Issue body. The rail on the right holds metadata.</p>
+          </div>
+        </div>
+        <aside class="lb-shell__panel" aria-label="Issue details">
+          <div style="display: flex; flex-direction: column; gap: var(--lb-size-5x);">
+            <div class="lb-stat">
+              <span class="lb-stat__label">Status</span>
+              <div class="lb-stat__sub"><span class="lb-badge lb-badge--default lb-badge--small"><span class="lb-badge__dot"></span> In progress</span></div>
+            </div>
+            <div class="lb-stat">
+              <span class="lb-stat__label">Assignee</span>
+              <div class="lb-stat__sub"><span class="lb-avatar lb-avatar--small" role="img" aria-label="Vatroslav K" data-lb-initials="VK"></span><span style="font-size: var(--lb-t-body-s-font-size);">Vatroslav K</span></div>
+            </div>
+            <div class="lb-stat">
+              <span class="lb-stat__label">Priority</span>
+              <div class="lb-stat__sub"><span style="font-size: var(--lb-t-body-s-font-size);">High</span></div>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </div>
+
+    <!-- ────────────────── E. Mobile bottom bar ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">E · Mobile — bottom bar variant</h2>
+    <p class="gallery-section__desc"><code class="lb-code">--mobile-bar</code> + a <code class="lb-code">.lb-shell__bottombar</code> nav: below 768px the sidebar disappears and this bar takes over, keeping the primary destinations in thumb reach. Without the modifier the sidebar becomes a modal drawer instead — <strong>shrink the window below 768px</strong> to compare (demo A = drawer, this one = bar).</p>
+    <div style="border: var(--lb-border-width-thin) solid var(--lb-border-muted); border-radius: var(--lb-radius-overlay); overflow: hidden; position: relative;">
+      <div class="lb-shell lb-shell--mobile-bar" data-lb-shell data-lb-shell-collapse="icon" data-lb-shell-key="lb-shell-demo-e" style="height: 360px;">
+        <div class="lb-shell__sidebar">
+          <div class="lb-shell__sidebar-head"><a class="lb-shell__brand" href="#"><span class="lb-shell__logo" data-lb-icon="letbe"></span><span class="lb-shell__brand-name">letbe</span></a></div>
+          <nav class="lb-shell__nav" aria-label="Main (shell F)">
+            <div class="lb-shell__group">
+              <a class="lb-shell__item lb-shell__item--active" href="#" aria-current="page"><span class="lb-shell__item-icon" data-lb-icon="home"></span><span class="lb-shell__item-label">Home</span></a>
+              <a class="lb-shell__item" href="#"><span class="lb-shell__item-icon" data-lb-icon="search"></span><span class="lb-shell__item-label">Search</span></a>
+              <a class="lb-shell__item" href="#"><span class="lb-shell__item-icon" data-lb-icon="bell"></span><span class="lb-shell__item-label">Activity</span></a>
+              <a class="lb-shell__item" href="#"><span class="lb-shell__item-icon" data-lb-icon="settings"></span><span class="lb-shell__item-label">Settings</span></a>
+            </div>
+          </nav>
+        </div>
+        <div class="lb-shell__main">
+          <div class="lb-shell__topbar">
+            <button class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--medium" data-lb-shell-toggle aria-label="Toggle sidebar"><span data-lb-icon="panel-left"></span></button>
+            <strong style="font-size: var(--lb-t-body-s-font-size);">Home</strong>
+          </div>
+          <div class="lb-shell__content" tabindex="-1"><p class="gallery-section__desc">Below 768px the bottom bar replaces the sidebar.</p></div>
+        </div>
+        <nav class="lb-shell__bottombar" aria-label="Main">
+          <a class="lb-shell__bottombar-item lb-shell__bottombar-item--active" href="#" aria-current="page"><span data-lb-icon="home"></span>Home</a>
+          <a class="lb-shell__bottombar-item" href="#"><span data-lb-icon="search"></span>Search</a>
+          <a class="lb-shell__bottombar-item" href="#"><span data-lb-icon="bell"></span>Activity</a>
+          <a class="lb-shell__bottombar-item" href="#"><span data-lb-icon="settings"></span>Settings</a>
+        </nav>
+      </div>
+    </div>
+
+    <!-- ────────────────── F. Hover-peek rail ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">F · Hover-peek rail — <code class="lb-code">--peek</code></h2>
+    <p class="gallery-section__desc">This shell starts on the icon rail — <strong>hover the rail</strong> (or <kbd>Tab</kbd> into it) and it expands as a temporary overlay; the content never shifts. Leave and it snaps back. Pure CSS (<code class="lb-code">:hover</code> / <code class="lb-code">:focus-within</code>), so keyboard users get the same peek. Toggle still pins it open permanently.</p>
+    <div style="border: var(--lb-border-width-thin) solid var(--lb-border-muted); border-radius: var(--lb-radius-overlay); overflow: hidden; position: relative;">
+      <div class="lb-shell lb-shell--peek lb-shell--collapsed" data-lb-shell data-lb-shell-collapse="icon" data-lb-shell-key="lb-shell-demo-f" style="height: 380px;">
+        <div class="lb-shell__sidebar">
+          <div class="lb-shell__sidebar-head"><a class="lb-shell__brand" href="#"><span class="lb-shell__logo" data-lb-icon="letbe"></span><span class="lb-shell__brand-name">letbe</span></a></div>
+          <nav class="lb-shell__nav" aria-label="Main (shell G)">
+            <div class="lb-shell__group">
+              <div class="lb-shell__group-label">Studio</div>
+              <a class="lb-shell__item lb-shell__item--active" href="#" aria-current="page"><span class="lb-shell__item-icon" data-lb-icon="home"></span><span class="lb-shell__item-label">Home</span></a>
+              <a class="lb-shell__item" href="#"><span class="lb-shell__item-icon" data-lb-icon="folder"></span><span class="lb-shell__item-label">Projects</span></a>
+              <a class="lb-shell__item" href="#"><span class="lb-shell__item-icon" data-lb-icon="inbox"></span><span class="lb-shell__item-label">Inbox</span></a>
+              <a class="lb-shell__item" href="#"><span class="lb-shell__item-icon" data-lb-icon="users"></span><span class="lb-shell__item-label">Members</span></a>
+              <a class="lb-shell__item" href="#"><span class="lb-shell__item-icon" data-lb-icon="settings"></span><span class="lb-shell__item-label">Settings</span></a>
+            </div>
+          </nav>
+          <div class="lb-shell__sidebar-foot">
+            <button class="lb-shell__item lb-shell__item--user" type="button"><span class="lb-avatar lb-avatar--small" role="img" aria-label="Vatroslav K" data-lb-initials="VK"></span><span class="lb-shell__item-label">v.kova@letbe.art</span></button>
+          </div>
+        </div>
+        <div class="lb-shell__main">
+          <div class="lb-shell__topbar">
+            <button class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--medium" data-lb-shell-toggle aria-label="Toggle sidebar"><span data-lb-icon="panel-left"></span></button>
+            <strong style="font-size: var(--lb-t-body-s-font-size);">Hover-peek</strong>
+          </div>
+          <div class="lb-shell__content" tabindex="-1">
+            <p class="gallery-section__desc">Hover the rail on the left — it peeks open over this text without pushing it. This paragraph stays exactly where it is.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ────────────────── API ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">API</h2>
+    <p class="gallery-section__desc">Add <code class="lb-code">data-lb-shell</code>. Auto-inits. Options: <code class="lb-code">data-lb-shell-collapse="icon|offcanvas|none"</code>, <code class="lb-code">data-lb-shell-resizable</code>, <code class="lb-code">data-lb-shell-key</code> (persistence key); class modifiers <code class="lb-code">--right</code> / <code class="lb-code">--floating</code> / <code class="lb-code">--inset</code> / <code class="lb-code">--peek</code> (hover/focus overlay expand of the icon rail, standard style only) / <code class="lb-code">--mobile-bar</code>; add <code class="lb-code">--collapsed</code> in markup to start on the rail. Instance at <code class="lb-code">el._lbShell</code>: <code class="lb-code">toggle()</code> / <code class="lb-code">setCollapsed(bool)</code> / <code class="lb-code">isCollapsed()</code>, <code class="lb-code">openDrawer()</code> / <code class="lb-code">closeDrawer()</code>. Events: <code class="lb-code">lb-shell-collapse</code> <code class="lb-code">{collapsed}</code>, <code class="lb-code">lb-shell-drawer-open/-close</code>. On a real page the shell is the body's only child at <code class="lb-code">100dvh</code>; demos override height inline.</p>
+
+  </section>
+</main>
+
+<script src="../js/lb.js"></script>
+<script src="../js/components/lb-shell.js"></script>
+<script src="../js/slot-engine.js"></script>
+<script src="../js/theme-editor.js"></script>
+<script src="../js/token-exporter.js"></script>
+<script src="../js/gallery-layout.js"></script>
+</body>
+</html>

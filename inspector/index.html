@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <!-- theme-preamble:v1 -->
+  <script>(function(){try{var t=localStorage.getItem('letbe-ds-dark-mode');if(t==='1')document.documentElement.setAttribute('data-theme','dark');else if(t==='0')document.documentElement.setAttribute('data-theme','light');}catch(e){}})();</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta data-lb-page="inspector">
+  <title>Inspector Panel — letbe-ds</title>
+  <link rel="stylesheet" href="../tokens/theme.css">
+  <link rel="stylesheet" href="../tokens/fonts.css">
+  <link rel="stylesheet" href="../components/components.css">
+  <link rel="stylesheet" href="../components/theme-editor.css">
+  <link rel="stylesheet" href="../components/gallery.css">
+</head>
+<body data-lb-base="..">
+
+<main class="gallery-main">
+  <section class="gallery-section" id="inspector">
+    <h1 class="gallery-section__title" style="font-size: var(--lb-t-heading-l-font-size); line-height: var(--lb-t-heading-l-line-height);">Inspector Panel</h1>
+    <p class="gallery-section__desc">The right-rail detail/settings <strong>content pattern</strong> (workspace-modules S4) — a panel that describes or edits whatever the main view has selected. Two mounts: <strong>in-flow</strong> inside the shell's <code class="lb-code">aside.lb-shell__panel</code> (nonmodal complementary landmark — the default, because it keeps the canvas usable for reference and copy-paste) or <strong>overlay</strong> inside <code class="lb-code">.lb-sheet--right</code> for transient tasks. Consumed here: <a class="lb-link" href="../button/">Button and Icon Button</a> · <a class="lb-link" href="../badge/">Badge</a> · <a class="lb-link" href="../radio/">Radio</a> · <a class="lb-link" href="../segmented/">Segmented</a> · <a class="lb-link" href="../sheet/">Sheet</a>. Mounts in the <a class="lb-link" href="../app-shell/">App Shell</a> aside or over the <a class="lb-link" href="../library/">Library view</a>.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>a11y (built in):</strong> the panel is heading-structured (<code class="lb-code">__title</code> is an <code class="lb-code">&lt;h3&gt;</code>, each <code class="lb-code">__section-title</code> an <code class="lb-code">&lt;h4&gt;</code>) and every icon-only control — back, close, per-row copy — carries an <code class="lb-code">aria-label</code>; <code class="lb-code">.lb-choice</code> is a <code class="lb-code">&lt;label&gt;</code> wrapped round a native radio, so its title <em>and</em> description both land in the accessible name. Segmented rows come from <code class="lb-code">LB.Segmented</code>: <code class="lb-code">role=radiogroup</code>/<code class="lb-code">role=radio</code>, roving <code class="lb-code">tabindex</code>, <kbd>←</kbd>/<kbd>→</kbd> to move and <kbd>Home</kbd>/<kbd>End</kbd> to jump. In-flow it mounts in <code class="lb-code">aside.lb-shell__panel[aria-label]</code> — a nonmodal <code class="lb-code">complementary</code> landmark; the panel ships no JS of its own, so moving focus in on open and back to the launcher on close stays the consumer's job.</p>
+
+    <hr class="gallery-desc-divider">
+
+    <!-- ────────────────── A. Detail flavor ────────────────── -->
+    <h2 class="gallery-section__title">A · Detail — media inspector</h2>
+    <p class="gallery-section__desc">The media-detail flavor: hero, engagement stats, primary CTA, copy-able metadata sections.</p>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(20rem, 100%), 1fr)); gap: var(--lb-size-4x);">
+      <div style="border: var(--lb-border-width-thin) solid var(--lb-border-muted); border-radius: var(--lb-radius-overlay); padding: var(--lb-size-4x); height: 560px;">
+        <div class="lb-inspector">
+          <div class="lb-inspector__head">
+            <div class="lb-inspector__titles">
+              <p class="lb-inspector__label">Track</p>
+              <h3 class="lb-inspector__title">Old School</h3>
+            </div>
+            <button class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--small" type="button" aria-label="Close panel"><span data-lb-icon="x"></span></button>
+          </div>
+          <div class="lb-inspector__body">
+            <div class="lb-inspector__hero"><img src="../assets/media/letbe-profile-cover.jpg" alt="Old School cover art"></div>
+            <div style="display: flex; gap: var(--lb-size-2x);">
+              <span class="lb-badge lb-badge--default"><span class="lb-badge__icon" data-lb-icon="play"></span> 2</span>
+              <span class="lb-badge lb-badge--default"><span class="lb-badge__icon" data-lb-icon="thumbs-up"></span> 1</span>
+              <span class="lb-badge lb-badge--default"><span class="lb-badge__icon" data-lb-icon="message-square"></span> 0</span>
+            </div>
+            <button class="lb-btn lb-btn--primary lb-btn--medium" type="button"><span class="lb-btn__icon" aria-hidden="true" data-lb-icon="music"></span> Remix / Edit</button>
+            <div class="lb-inspector__section">
+              <h4 class="lb-inspector__section-title">Styles</h4>
+              <div class="lb-inspector__row">
+                <span class="lb-inspector__row-value" style="text-align: left; white-space: normal;">1950s jazz ballad, dreamy female vocals, sparse piano, brushed drums, lo-fi tape warmth, 72 BPM</span>
+                <button class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--small" type="button" aria-label="Copy styles"><span data-lb-icon="copy"></span></button>
+              </div>
+              <div class="lb-inspector__row"><span class="lb-inspector__row-label">Weirdness</span><span class="lb-inspector__row-value">58%</span></div>
+              <div class="lb-inspector__row"><span class="lb-inspector__row-label">Style influence</span><span class="lb-inspector__row-value">100%</span></div>
+            </div>
+            <div class="lb-inspector__section">
+              <h4 class="lb-inspector__section-title">Lyrics</h4>
+              <div class="lb-inspector__row">
+                <span class="lb-inspector__row-value" style="text-align: left; white-space: normal;">Instrumental — no lyrics. Old-school boom-bap over warm analog keys…</span>
+                <button class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--small" type="button" aria-label="Copy lyrics"><span data-lb-icon="copy"></span></button>
+              </div>
+            </div>
+          </div>
+          <div class="lb-inspector__foot">
+            <button class="lb-btn lb-btn--secondary lb-btn--small" type="button"><span class="lb-btn__icon" aria-hidden="true" data-lb-icon="download"></span> Download</button>
+            <button class="lb-btn lb-btn--secondary lb-btn--small" type="button"><span class="lb-btn__icon" aria-hidden="true" data-lb-icon="share-2"></span> Share</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ────────────────── B. Settings flavor ────────────────── -->
+      <div style="border: var(--lb-border-width-thin) solid var(--lb-border-muted); border-radius: var(--lb-radius-overlay); padding: var(--lb-size-4x); height: 560px;">
+        <div class="lb-inspector">
+          <div class="lb-inspector__head">
+            <button class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--small" type="button" aria-label="Back"><span data-lb-icon="arrow-left"></span></button>
+            <div class="lb-inspector__titles">
+              <p class="lb-inspector__label">Workspace</p>
+              <h3 class="lb-inspector__title">Agent settings</h3>
+            </div>
+          </div>
+          <div class="lb-inspector__body">
+            <div class="lb-inspector__section">
+              <h4 class="lb-inspector__section-title">Confirm before generating</h4>
+              <label class="lb-choice"><input type="radio" name="insp-confirm" class="lb-radio" checked><span class="lb-choice__text"><span class="lb-choice__title">Always</span><span class="lb-choice__desc">Agent will ask for confirmation before generating media.</span></span></label>
+              <label class="lb-choice"><input type="radio" name="insp-confirm" class="lb-radio"><span class="lb-choice__text"><span class="lb-choice__title">Never</span><span class="lb-choice__desc">Agent will generate media and spend credits automatically.</span></span></label>
+            </div>
+            <div class="lb-inspector__section">
+              <h4 class="lb-inspector__section-title">Image defaults</h4>
+              <div class="lb-dock__tray-row">
+                <span class="lb-dock__tray-label">Aspect ratio</span>
+                <div class="lb-segmented lb-segmented--full-width" data-lb-segmented aria-label="Aspect ratio">
+                  <button type="button" class="lb-segmented__item" aria-checked="true" data-lb-value="16:9">16:9</button>
+                  <button type="button" class="lb-segmented__item" data-lb-value="4:3">4:3</button>
+                  <button type="button" class="lb-segmented__item" data-lb-value="1:1">1:1</button>
+                </div>
+              </div>
+              <div class="lb-dock__tray-row">
+                <span class="lb-dock__tray-label">Count</span>
+                <div class="lb-segmented lb-segmented--full-width" data-lb-segmented aria-label="Count">
+                  <button type="button" class="lb-segmented__item" data-lb-value="1">×1</button>
+                  <button type="button" class="lb-segmented__item" aria-checked="true" data-lb-value="2">×2</button>
+                  <button type="button" class="lb-segmented__item" data-lb-value="4">×4</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="lb-inspector__foot">
+            <button class="lb-btn lb-btn--primary lb-btn--medium" type="button">Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ────────────────── Usage ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Usage</h2>
+    <p class="gallery-section__desc">Pure CSS — mount <code class="lb-code">.lb-inspector</code> inside <code class="lb-code">aside.lb-shell__panel[aria-label]</code> (in-flow, nonmodal — the default) or inside <code class="lb-code">.lb-sheet--right</code> (transient overlay). Anatomy: <code class="lb-code">__head</code> (optional back icon-btn · <code class="lb-code">__titles</code> with <code class="lb-code">__label</code>+<code class="lb-code">__title</code> · close icon-btn) → <code class="lb-code">__body</code> (scrolls: <code class="lb-code">__hero</code>, badges/stats, CTA, <code class="lb-code">__section</code>s of <code class="lb-code">__row</code>s with copy icon-btns) → <code class="lb-code">__foot</code> (pinned actions). The <code class="lb-code">.lb-choice</code> row (radio + title + description) is the settings-form pattern — pair with segmented defaults and a Save foot for settings panels.</p>
+
+  </section>
+</main>
+
+<script src="../js/lb.js"></script>
+<script src="../js/slot-engine.js"></script>
+<script src="../js/theme-editor.js"></script>
+<script src="../js/token-exporter.js"></script>
+<script src="../js/gallery-layout.js"></script>
+</body>
+</html>

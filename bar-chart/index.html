@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <!-- theme-preamble:v1 -->
+  <script>(function(){try{var t=localStorage.getItem('letbe-ds-dark-mode');if(t==='1')document.documentElement.setAttribute('data-theme','dark');else if(t==='0')document.documentElement.setAttribute('data-theme','light');}catch(e){}})();</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta data-lb-page="bar-chart">
+  <title>Bar Chart — letbe-ds</title>
+  <link rel="stylesheet" href="../tokens/theme.css">
+  <link rel="stylesheet" href="../tokens/fonts.css">
+  <link rel="stylesheet" href="../components/components.css">
+  <link rel="stylesheet" href="../components/theme-editor.css">
+  <link rel="stylesheet" href="../components/gallery.css">
+</head>
+<body data-lb-base="..">
+
+<main class="gallery-main">
+  <section class="gallery-section" id="bar-chart">
+    <h1 class="gallery-section__title" style="font-size: var(--lb-t-heading-l-font-size); line-height: var(--lb-t-heading-l-line-height);">Bar Chart</h1>
+    <p class="gallery-section__desc">Categorical bar chart — vertical (default) or horizontal, single or multi-series, grouped or stacked. Hand-rolled SVG, no dependencies. Round-number axis ticks computed from data extent; hover tooltip on each bar. Auto-renders a legend for multi-series.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>a11y (built in):</strong> the chart's <code class="lb-code">&lt;svg&gt;</code> is <code class="lb-code">role="img"</code> and gets an <code class="lb-code">aria-label</code> rebuilt on every render — category count plus each series name and its full list of values — so assistive tech reads the data instead of a stack of unlabelled <code class="lb-code">&lt;rect&gt;</code>s. The auto-rendered legend pairs each swatch with its series name as real text. Hover tooltips are pointer-only (<code class="lb-code">mouseenter</code>/<code class="lb-code">mousemove</code>/<code class="lb-code">mouseleave</code>); the <code class="lb-code">aria-label</code> summary is the non-pointer route to the same numbers.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>Usage:</strong> <code class="lb-code">&lt;div data-lb-bar-chart&gt;</code> with a JSON config in <code class="lb-code">&lt;script type="application/json"&gt;</code>. Keys: <code class="lb-code">x</code>, <code class="lb-code">series</code>, <code class="lb-code">orientation</code>, <code class="lb-code">stacked</code>, <code class="lb-code">colors</code>, <code class="lb-code">legend</code>.</p>
+
+    <hr class="gallery-desc-divider">
+
+    <!-- ────────────────── Single series vertical ────────────────── -->
+    <h2 class="gallery-section__title">Single series — vertical</h2>
+    <p class="gallery-section__desc">The simplest case. One series, vertical bars, automatic y-axis ticks.</p>
+    <div data-lb-bar-chart>
+      <script type="application/json">
+        {"x":["Mon","Tue","Wed","Thu","Fri","Sat","Sun"],"series":[{"name":"Sessions","data":[1240,1580,1320,1890,2100,1450,980]}]}
+      </script>
+    </div>
+
+    <!-- ────────────────── Multi-series grouped ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Multi-series — grouped</h2>
+    <p class="gallery-section__desc">Side-by-side bars per category. Legend auto-renders.</p>
+    <div data-lb-bar-chart>
+      <script type="application/json">
+        {"x":["Q1","Q2","Q3","Q4"],"series":[
+          {"name":"Revenue","data":[120,140,135,180]},
+          {"name":"Cost","data":[80,95,100,110]},
+          {"name":"Profit","data":[40,45,35,70]}
+        ]}
+      </script>
+    </div>
+
+    <!-- ────────────────── Stacked ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Stacked</h2>
+    <p class="gallery-section__desc">Same data with <code class="lb-code">"stacked": true</code> — series accumulate per category.</p>
+    <div data-lb-bar-chart>
+      <script type="application/json">
+        {"x":["Jan","Feb","Mar","Apr","May","Jun"],"stacked":true,"series":[
+          {"name":"Web","data":[42,51,38,67,72,84]},
+          {"name":"Mobile","data":[28,32,35,40,52,61]},
+          {"name":"API","data":[12,15,11,18,22,17]}
+        ]}
+      </script>
+    </div>
+
+    <!-- ────────────────── Horizontal ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Horizontal</h2>
+    <p class="gallery-section__desc">Long category labels read better horizontally. For country axes, prefer 2-letter ISO codes — they sit cleanly in the SVG label slot and pair naturally with a Flag column elsewhere on the page (a Bar List or Table) when the user needs richer context.</p>
+    <div data-lb-bar-chart style="--bar-chart-height: 22rem;">
+      <script type="application/json">
+        {"orientation":"horizontal","x":["US","DE","GB","FR","BR","JP","CA"],"series":[{"name":"Visitors","data":[2486,1190,864,612,540,412,318]}]}
+      </script>
+    </div>
+
+    <!-- ────────────────── In a Card ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">In a Card — dashboard widget</h2>
+    <p class="gallery-section__desc">Wrap in a Card with a heading + caption for a stand-alone widget.</p>
+    <div class="lb-card lb-card--padded">
+      <div class="lb-card__heading">
+        <div class="lb-card__title">Weekly active users</div>
+        <div class="lb-card__subtitle">Trailing 4 weeks · plan breakdown</div>
+      </div>
+      <div data-lb-bar-chart style="margin-top: var(--lb-size-4x);">
+        <script type="application/json">
+          {"stacked":true,"x":["Wk -3","Wk -2","Wk -1","This wk"],"series":[
+            {"name":"Free","data":[3200,3450,3680,3920]},
+            {"name":"Pro","data":[1840,1920,2080,2240]},
+            {"name":"Enterprise","data":[420,470,510,540]}
+          ]}
+        </script>
+      </div>
+    </div>
+
+    <!-- ────────────────── Custom colors ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Custom colors</h2>
+    <p class="gallery-section__desc">Pass a <code class="lb-code">colors</code> array to override the default palette per chart.</p>
+    <div data-lb-bar-chart>
+      <script type="application/json">
+        {"x":["A","B","C","D","E"],"series":[
+          {"name":"Success","data":[40,55,38,67,72]},
+          {"name":"Errors","data":[5,12,8,15,9]}
+        ],"colors":["var(--lb-data-3)","var(--lb-data-5)"]}
+      </script>
+    </div>
+  </section>
+</main>
+
+<script src="../js/lb.js"></script>
+<script src="../js/slot-engine.js"></script>
+<script src="../js/theme-editor.js"></script>
+<script src="../js/token-exporter.js"></script>
+<script src="../js/gallery-layout.js"></script>
+</body>
+</html>

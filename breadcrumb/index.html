@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <!-- theme-preamble:v1 -->
+  <script>(function(){try{var t=localStorage.getItem('letbe-ds-dark-mode');if(t==='1')document.documentElement.setAttribute('data-theme','dark');else if(t==='0')document.documentElement.setAttribute('data-theme','light');}catch(e){}})();</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta data-lb-page="breadcrumb">
+  <title>Breadcrumb — letbe-ds</title>
+  <link rel="stylesheet" href="../tokens/theme.css">
+  <link rel="stylesheet" href="../tokens/fonts.css">
+  <link rel="stylesheet" href="../components/components.css">
+  <link rel="stylesheet" href="../components/theme-editor.css">
+  <link rel="stylesheet" href="../components/gallery.css">
+</head>
+<body data-lb-base="..">
+
+<main class="gallery-main">
+  <section class="gallery-section" id="breadcrumb">
+    <h1 class="gallery-section__title" style="font-size: var(--lb-t-heading-l-font-size); line-height: var(--lb-t-heading-l-line-height);">Breadcrumb</h1>
+    <p class="gallery-section__desc">Hierarchical navigation showing the user's location in the app. Use when pages are nested three or more levels deep. The current page gets <code class="lb-code">aria-current="page"</code> and is not a link. Works at any depth — add as many list items as your IA needs. A crumb that runs an action instead of navigating can be a <code class="lb-code">&lt;button class="lb-breadcrumb__link lb-breadcrumb__link--button"&gt;</code> — the modifier strips the native button chrome so it matches the links either side.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>a11y (built in):</strong> the trail is a <code class="lb-code">&lt;nav aria-label="Breadcrumb"&gt;</code> wrapping an <code class="lb-code">&lt;ol&gt;</code>, so both the landmark and the ordering carry the hierarchy. The current page is a <code class="lb-code">&lt;span aria-current="page"&gt;</code>, not a link — nothing to tab to that goes nowhere. Separators are <code class="lb-code">aria-hidden="true"</code> so the slash is never announced, links take a <code class="lb-code">:focus-visible</code> ring from <code class="lb-code">--lb-border-focus</code>, and there is no JS at all — the component is markup plus CSS.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>Usage:</strong> <code class="lb-code">&lt;nav class="lb-breadcrumb" aria-label="Breadcrumb"&gt;</code> around an <code class="lb-code">&lt;ol class="lb-breadcrumb__list"&gt;</code>. Each <code class="lb-code">&lt;li class="lb-breadcrumb__item"&gt;</code> holds an <code class="lb-code">.lb-breadcrumb__link</code> plus an <code class="lb-code">aria-hidden</code> <code class="lb-code">.lb-breadcrumb__separator</code>; the last item is a <code class="lb-code">.lb-breadcrumb__current</code> span carrying <code class="lb-code">aria-current="page"</code>. Nothing to initialise — there is no controller.</p>
+
+<hr class="gallery-desc-divider">
+
+<h2 class="gallery-section__title">3 levels</h2>
+    <nav class="lb-breadcrumb" aria-label="Breadcrumb">
+      <ol class="lb-breadcrumb__list">
+        <li class="lb-breadcrumb__item"><a class="lb-breadcrumb__link" href="#">Home</a><span class="lb-breadcrumb__separator" aria-hidden="true">/</span></li>
+        <li class="lb-breadcrumb__item"><a class="lb-breadcrumb__link" href="#">Products</a><span class="lb-breadcrumb__separator" aria-hidden="true">/</span></li>
+        <li class="lb-breadcrumb__item"><span class="lb-breadcrumb__current" aria-current="page">Widget Pro</span></li>
+      </ol>
+    </nav>
+
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-8x);">5 levels</h2>
+    <nav class="lb-breadcrumb" aria-label="Breadcrumb (compact)">
+      <ol class="lb-breadcrumb__list">
+        <li class="lb-breadcrumb__item"><a class="lb-breadcrumb__link" href="#">Home</a><span class="lb-breadcrumb__separator" aria-hidden="true">/</span></li>
+        <li class="lb-breadcrumb__item"><a class="lb-breadcrumb__link" href="#">Workspace</a><span class="lb-breadcrumb__separator" aria-hidden="true">/</span></li>
+        <li class="lb-breadcrumb__item"><a class="lb-breadcrumb__link" href="#">Design system</a><span class="lb-breadcrumb__separator" aria-hidden="true">/</span></li>
+        <li class="lb-breadcrumb__item"><a class="lb-breadcrumb__link" href="#">Components</a><span class="lb-breadcrumb__separator" aria-hidden="true">/</span></li>
+        <li class="lb-breadcrumb__item"><span class="lb-breadcrumb__current" aria-current="page">Breadcrumb</span></li>
+      </ol>
+    </nav>
+  </section>
+</main>
+
+<script src="../js/lb.js"></script>
+<script src="../js/slot-engine.js"></script>
+<script src="../js/theme-editor.js"></script>
+<script src="../js/token-exporter.js"></script>
+<script src="../js/gallery-layout.js"></script>
+</body>
+</html>

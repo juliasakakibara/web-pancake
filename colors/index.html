@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <!-- theme-preamble:v1 -->
+  <script>(function(){try{var t=localStorage.getItem('letbe-ds-dark-mode');if(t==='1')document.documentElement.setAttribute('data-theme','dark');else if(t==='0')document.documentElement.setAttribute('data-theme','light');}catch(e){}})();</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta data-lb-page="colors">
+  <title>Colors — letbe-ds</title>
+  <link rel="stylesheet" href="../tokens/theme.css">
+  <link rel="stylesheet" href="../tokens/fonts.css">
+  <link rel="stylesheet" href="../components/components.css">
+  <link rel="stylesheet" href="../components/theme-editor.css">
+  <link rel="stylesheet" href="../components/gallery.css">
+</head>
+<body data-lb-base="..">
+
+<main class="gallery-main">
+  <section class="gallery-section" id="colors">
+    <h1 class="gallery-section__title" style="font-size: var(--lb-t-heading-l-font-size); line-height: var(--lb-t-heading-l-line-height);">Colors</h1>
+    <p class="gallery-section__desc">Eight L1 color palettes — neutral, violet (brand), blue (info), green (success), yellow (warning), red (danger), orange, cyan — each with 11 steps from 50 (lightest) to 950 (darkest). Primitives are immutable; theming happens by remapping L2 semantic tokens to different L1 palettes. Picking a brand color in the theme editor generates a new <code class="lb-code">brand.*</code> palette. Orange and cyan extend the palette into a full 8-hue rotation for the L2 categorical groups (data, code) used by charts and code blocks.</p>
+
+<hr class="gallery-desc-divider">
+
+
+<h2 class="gallery-section__title">Colors Demo</h2>
+    <p class="gallery-section__desc">All color primitives (L1). Semantic colors (L2) and component colors (L3) reference these.</p>
+    <div class="color-palette">
+      <div class="color-palette__header">
+        <h3 class="color-palette__name">Neutral</h3>
+        <p class="color-palette__desc">Warm grayscale. Base for backgrounds, text, borders.</p>
+      </div>
+      <div class="color-palette__grid">
+        <div class="color-swatch">
+          <div class="color-swatch__chip" style="background: var(--lb-neutral-50);"></div>
+          <div class="color-swatch__info">
+            <div class="color-swatch__step">50</div>
+            <div class="color-swatch__token">--lb-neutral-50</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-swatch__chip" style="background: var(--lb-neutral-100);"></div>
+          <div class="color-swatch__info">
+            <div class="color-swatch__step">100</div>
+            <div class="color-swatch__token">--lb-neutral-100</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-swatch__chip" style="background: var(--lb-neutral-200);"></div>
+          <div class="color-swatch__info">
+            <div class="color-swatch__step">200</div>
+            <div class="color-swatch__token">--lb-neutral-200</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-swatch__chip" style="background: var(--lb-neutral-300);"></div>
+          <div class="color-swatch__info">
+            <div class="color-swatch__step">300</div>
+            <div class="color-swatch__token">--lb-neutral-300</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-swatch__chip" style="background: var(--lb-neutral-400);"></div>
+          <div class="color-swatch__info">
+            <div class="color-swatch__step">400</div>
+            <div class="color-swatch__token">--lb-neutral-400</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-swatch__chip" style="background: var(--lb-neutral-500);"></div>
+          <div class="color-swatch__info">
+            <div class="color-swatch__step">500</div>
+            <div class="color-swatch__token">--lb-neutral-500</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-swatch__chip" style="background: var(--lb-neutral-600);"></div>
+          <div class="color-swatch__info">
+            <div class="color-swatch__step">600</div>
+            <div class="color-swatch__token">--lb-neutral-600</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-swatch__chip" style="background: var(--lb-neutral-700);"></div>
+          <div class="color-swatch__info">
+            <div class="color-swatch__step">700</div>
+            <div class="color-swatch__token">--lb-neutral-700</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-swatch__chip" style="background: var(--lb-neutral-800);"></div>
+          <div class="color-swatch__info">
+            <div class="color-swatch__step">800</div>
+            <div class="color-swatch__token">--lb-neutral-800</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-swatch__chip" style="background: var(--lb-neutral-900);"></div>
+          <div class="color-swatch__info">
+            <div class="color-swatch__step">900</div>
+            <div class="color-swatch__token">--lb-neutral-900</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-swatch__chip" style="background: var(--lb-neutral-950);"></div>
+          <div class="color-swatch__info">
+            <div class="color-swatch__step">950</div>
+            <div class="color-swatch__token">--lb-neutral-950</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="color-palette">
+      <div class="color-palette__header">
+        <h3 class="color-palette__name">Violet</h3>
+        <p class="color-palette__desc">Brand accent. Used for action/primary and focus indicators.</p>
+      </div>
+      <div class="color-palette__grid">
+        <div class="color-swatch">
+          <div class="color-swatch__chip" style="background: var(--lb-violet-50);"></div>
+          <div class="color-swatch__info">
+            <div class="color-swatch__step">50</div>
+            <div class="color-swatch__token">--lb-violet-50</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-swatch__chip" style="background: var(--lb-violet-100);"></div>
+          <div class="color-swatch__info">
+            <div class="color-swatch__step">100</div>
+            <div class="color-swatch__token">--lb-violet-100</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-swatch__chip" style="background: var(--lb-violet-200);"></div>
+          <div class="color-swatch__info">
+            <div class="color-swatch__step">200</div>
+            <div class="color-swatch__token">--lb-violet-200</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-swatch__chip" style="background: var(--lb-violet-300);"></div>
+          <div class="color-swatch__info">
+            <div class="color-swatch__step">300</div>
+            <div class="color-swatch__token">--lb-violet-300</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-swatch__chip" style="background: var(--lb-violet-400);"></div>
+          <div class="color-swatch__info">
+            <div class="color-swatch__step">400</div>
+            <div class="color-swatch__token">--lb-violet-400</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-swatch__chip" style="background: var(--lb-violet-500);"></div>
+          <div class="color-swatch__info">
+            <div class="color-swatch__step">500</div>
+            <div class="color-swatch__token">--lb-violet-500</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-swatch__chip" style="background: var(--lb-violet-600);"></div>
+          <div class="color-swatch__info">
+            <div class="color-swatch__step">600</div>
+            <div class="color-swatch__token">--lb-violet-600</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-swatch__chip" style="background: var(--lb-violet-700);"></div>
+          <div class="color-swatch__info">
+            <div class="color-swatch__step">700</div>
+            <div class="color-swatch__token">--lb-violet-700</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-swatch__chip" style="background: var(--lb-violet-800);"></div>
+          <div class="color-swatch__info">
+            <div class="color-swatch__step">800</div>
+            <div class="color-swatch__token">--lb-violet-800</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-swatch__chip" style="background: var(--lb-violet-900);"></div>
+          <div class="color-swatch__info">
+            <div class="color-swatch__step">900</div>
+            <div class="color-swatch__token">--lb-violet-900</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-swatch__chip" style="background: var(--lb-violet-950);"></div>
+          <div class="color-swatch__info">
+            <div class="color-swatch__step">950</div>
+            <div class="color-swatch__token">--lb-violet-950</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="color-palette">
+      <div class="color-palette__header">
+        <h3 class="color-palette__name">Blue</h3>
+        <p class="color-palette__desc">Info status. Banners, toasts, informational messaging.</p>
+      </div>
+      <div class="color-palette__grid">
+        <div class="color-swatch">
+          <div class="color-swatch__chip" style="background: var(--lb-blue-50);"></div>
+          <div class="color-swatch__info">
+            <div class="color-swatch__step">50</div>
+            <div class="color-swatch__token">--lb-blue-50</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-swatch__chip" style="background: var(--lb-blue-100);"></div>
+          <div class="color-swatch__info">
+            <div class="color-swatch__step">100</div>
+            <div class="color-swatch__token">--lb-blue-100</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-swatch__chip" style="background: var(--lb-blue-200);"></div>
+          <div class="color-swatch__info">
+            <div class="color-swatch__step">200</div>
+            <div class="color-swatch__token">--lb-blue-200</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-swatch__chip" style="background: var(--lb-blue-300);"></div>
+          <div class="color-swatch__info">
+            <div class="color-swatch__step">300</div>
+            <div class="color-swatch__token">--lb-blue-300</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-swatch__chip" style="background: var(--lb-blue-400);"></div>
+          <div class="color-swatch__info">
+            <div class="color-swatch__step">400</div>
+            <div class="color-swatch__token">--lb-blue-400</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-swatch__chip" style="background: var(--lb-blue-500);"></div>
+          <div class="color-swatch__info">
+            <div class="color-swatch__step">500</div>
+            <div class="color-swatch__token">--lb-blue-500</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-swatch__chip" style="background: var(--lb-blue-600);"></div>
+          <div class="color-swatch__info">
+            <div class="color-swatch__step">600</div>
+            <div class="color-swatch__token">--lb-blue-600</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-swatch__chip" style="background: var(--lb-blue-700);"></div>
+          <div class="color-swatch__info">
+            <div class="color-swatch__step">700</div>
+            <div class="color-swatch__token">--lb-blue-700</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-swatch__chip" style="background: var(--lb-blue-800);"></div>
+          <div class="color-swatch__info">
+            <div class="color-swatch__step">800</div>
+            <div class="color-swatch__token">--lb-blue-800</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-swatch__chip" style="background: var(--lb-blue-900);"></div>
+          <div class="color-swatch__info">
+            <div class="color-swatch__step">900</div>
+            <div class="color-swatch__token">--lb-blue-900</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-swatch__chip" style="background: var(--lb-blue-950);"></div>
+          <div class="color-swatch__info">
+            <div class="color-swatch__step">950</div>
+            <div class="color-swatch__token">--lb-blue-950</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="color-palette">
+      <div class="color-palette__header">
+        <h3 class="color-palette__name">Green</h3>
+        <p class="color-palette__desc">Success status. Positive confirmations.</p>
+      </div>
+      <div class="color-palette__grid">
+        <div class="color-swatch">
+          <div class="color-swatch__chip" style="background: var(--lb-green-50);"></div>
+          <div class="color-swatch__info">
+            <div class="color-swatch__step">50</div>
+            <div class="color-swatch__token">--lb-green-50</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-swatch__chip" style="background: var(--lb-green-100);"></div>
+          <div class="color-swatch__info">
+            <div class="color-swatch__step">100</div>
+            <div class="color-swatch__token">--lb-green-100</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-swatch__chip" style="background: var(--lb-green-200);"></div>
+          <div class="color-swatch__info">
+            <div class="color-swatch__step">200</div>
+            <div class="color-swatch__token">--lb-green-200</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-swatch__chip" style="background: var(--lb-green-300);"></div>
+          <div class="color-swatch__info">
+            <div class="color-swatch__step">300</div>
+            <div class="color-swatch__token">--lb-green-300</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-swatch__chip" style="background: var(--lb-green-400);"></div>
+          <div class="color-swatch__info">
+            <div class="color-swatch__step">400</div>
+            <div class="color-swatch__token">--lb-green-400</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-swatch__chip" style="background: var(--lb-green-500);"></div>
+          <div class="color-swatch__info">
+            <div class="color-swatch__step">500</div>
+            <div class="color-swatch__token">--lb-green-500</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-swatch__chip" style="background: var(--lb-green-600);"></div>
+          <div class="color-swatch__info">
+            <div class="color-swatch__step">600</div>
+            <div class="color-swatch__token">--lb-green-600</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-swatch__chip" style="background: var(--lb-green-700);"></div>
+          <div class="color-swatch__info">
+            <div class="color-swatch__step">700</div>
+            <div class="color-swatch__token">--lb-green-700</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-swatch__chip" style="background: var(--lb-green-800);"></div>
+          <div class="color-swatch__info">
+            <div class="color-swatch__step">800</div>
+            <div class="color-swatch__token">--lb-green-800</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-swatch__chip" style="background: var(--lb-green-900);"></div>
+          <div class="color-swatch__info">
+            <div class="color-swatch__step">900</div>
+            <div class="color-swatch__token">--lb-green-900</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-swatch__chip" style="background: var(--lb-green-950);"></div>
+          <div class="color-swatch__info">
+            <div class="color-swatch__step">950</div>
+            <div class="color-swatch__token">--lb-green-950</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="color-palette">
+      <div class="color-palette__header">
+        <h3 class="color-palette__name">Yellow</h3>
+        <p class="color-palette__desc">Warning status. Cautionary messaging.</p>
+      </div>
+      <div class="color-palette__grid">
+        <div class="color-swatch">
+          <div class="color-swatch__chip" style="background: var(--lb-yellow-50);"></div>
+          <div class="color-swatch__info">
+            <div class="color-swatch__step">50</div>
+            <div class="color-swatch__token">--lb-yellow-50</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-swatch__chip" style="background: var(--lb-yellow-100);"></div>
+          <div class="color-swatch__info">
+            <div class="color-swatch__step">100</div>
+            <div class="color-swatch__token">--lb-yellow-100</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-swatch__chip" style="background: var(--lb-yellow-200);"></div>
+          <div class="color-swatch__info">
+            <div class="color-swatch__step">200</div>
+            <div class="color-swatch__token">--lb-yellow-200</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-swatch__chip" style="background: var(--lb-yellow-300);"></div>
+          <div class="color-swatch__info">
+            <div class="color-swatch__step">300</div>
+            <div class="color-swatch__token">--lb-yellow-300</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-swatch__chip" style="background: var(--lb-yellow-400);"></div>
+          <div class="color-swatch__info">
+            <div class="color-swatch__step">400</div>
+            <div class="color-swatch__token">--lb-yellow-400</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-swatch__chip" style="background: var(--lb-yellow-500);"></div>
+          <div class="color-swatch__info">
+            <div class="color-swatch__step">500</div>
+            <div class="color-swatch__token">--lb-yellow-500</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-swatch__chip" style="background: var(--lb-yellow-600);"></div>
+          <div class="color-swatch__info">
+            <div class="color-swatch__step">600</div>
+            <div class="color-swatch__token">--lb-yellow-600</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-swatch__chip" style="background: var(--lb-yellow-700);"></div>
+          <div class="color-swatch__info">
+            <div class="color-swatch__step">700</div>
+            <div class="color-swatch__token">--lb-yellow-700</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-swatch__chip" style="background: var(--lb-yellow-800);"></div>
+          <div class="color-swatch__info">
+            <div class="color-swatch__step">800</div>
+            <div class="color-swatch__token">--lb-yellow-800</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-swatch__chip" style="background: var(--lb-yellow-900);"></div>
+          <div class="color-swatch__info">
+            <div class="color-swatch__step">900</div>
+            <div class="color-swatch__token">--lb-yellow-900</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-swatch__chip" style="background: var(--lb-yellow-950);"></div>
+          <div class="color-swatch__info">
+            <div class="color-swatch__step">950</div>
+            <div class="color-swatch__token">--lb-yellow-950</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="color-palette">
+      <div class="color-palette__header">
+        <h3 class="color-palette__name">Red</h3>
+        <p class="color-palette__desc">Danger status. Errors and destructive actions.</p>
+      </div>
+      <div class="color-palette__grid">
+        <div class="color-swatch">
+          <div class="color-swatch__chip" style="background: var(--lb-red-50);"></div>
+          <div class="color-swatch__info">
+            <div class="color-swatch__step">50</div>
+            <div class="color-swatch__token">--lb-red-50</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-swatch__chip" style="background: var(--lb-red-100);"></div>
+          <div class="color-swatch__info">
+            <div class="color-swatch__step">100</div>
+            <div class="color-swatch__token">--lb-red-100</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-swatch__chip" style="background: var(--lb-red-200);"></div>
+          <div class="color-swatch__info">
+            <div class="color-swatch__step">200</div>
+            <div class="color-swatch__token">--lb-red-200</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-swatch__chip" style="background: var(--lb-red-300);"></div>
+          <div class="color-swatch__info">
+            <div class="color-swatch__step">300</div>
+            <div class="color-swatch__token">--lb-red-300</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-swatch__chip" style="background: var(--lb-red-400);"></div>
+          <div class="color-swatch__info">
+            <div class="color-swatch__step">400</div>
+            <div class="color-swatch__token">--lb-red-400</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-swatch__chip" style="background: var(--lb-red-500);"></div>
+          <div class="color-swatch__info">
+            <div class="color-swatch__step">500</div>
+            <div class="color-swatch__token">--lb-red-500</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-swatch__chip" style="background: var(--lb-red-600);"></div>
+          <div class="color-swatch__info">
+            <div class="color-swatch__step">600</div>
+            <div class="color-swatch__token">--lb-red-600</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-swatch__chip" style="background: var(--lb-red-700);"></div>
+          <div class="color-swatch__info">
+            <div class="color-swatch__step">700</div>
+            <div class="color-swatch__token">--lb-red-700</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-swatch__chip" style="background: var(--lb-red-800);"></div>
+          <div class="color-swatch__info">
+            <div class="color-swatch__step">800</div>
+            <div class="color-swatch__token">--lb-red-800</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-swatch__chip" style="background: var(--lb-red-900);"></div>
+          <div class="color-swatch__info">
+            <div class="color-swatch__step">900</div>
+            <div class="color-swatch__token">--lb-red-900</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-swatch__chip" style="background: var(--lb-red-950);"></div>
+          <div class="color-swatch__info">
+            <div class="color-swatch__step">950</div>
+            <div class="color-swatch__token">--lb-red-950</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="color-palette">
+      <div class="color-palette__header">
+        <h3 class="color-palette__name">Orange</h3>
+        <p class="color-palette__desc">Categorical hue (45° on the colour wheel). Used by the L2 data palette as data.7 and by the code palette as code.7. Sits between red and yellow on the chart series rotation.</p>
+      </div>
+      <div class="color-palette__grid">
+        <div class="color-swatch">
+          <div class="color-swatch__chip" style="background: var(--lb-orange-50);"></div>
+          <div class="color-swatch__info">
+            <div class="color-swatch__step">50</div>
+            <div class="color-swatch__token">--lb-orange-50</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-swatch__chip" style="background: var(--lb-orange-100);"></div>
+          <div class="color-swatch__info">
+            <div class="color-swatch__step">100</div>
+            <div class="color-swatch__token">--lb-orange-100</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-swatch__chip" style="background: var(--lb-orange-200);"></div>
+          <div class="color-swatch__info">
+            <div class="color-swatch__step">200</div>
+            <div class="color-swatch__token">--lb-orange-200</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-swatch__chip" style="background: var(--lb-orange-300);"></div>
+          <div class="color-swatch__info">
+            <div class="color-swatch__step">300</div>
+            <div class="color-swatch__token">--lb-orange-300</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-swatch__chip" style="background: var(--lb-orange-400);"></div>
+          <div class="color-swatch__info">
+            <div class="color-swatch__step">400</div>
+            <div class="color-swatch__token">--lb-orange-400</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-swatch__chip" style="background: var(--lb-orange-500);"></div>
+          <div class="color-swatch__info">
+            <div class="color-swatch__step">500</div>
+            <div class="color-swatch__token">--lb-orange-500</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-swatch__chip" style="background: var(--lb-orange-600);"></div>
+          <div class="color-swatch__info">
+            <div class="color-swatch__step">600</div>
+            <div class="color-swatch__token">--lb-orange-600</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-swatch__chip" style="background: var(--lb-orange-700);"></div>
+          <div class="color-swatch__info">
+            <div class="color-swatch__step">700</div>
+            <div class="color-swatch__token">--lb-orange-700</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-swatch__chip" style="background: var(--lb-orange-800);"></div>
+          <div class="color-swatch__info">
+            <div class="color-swatch__step">800</div>
+            <div class="color-swatch__token">--lb-orange-800</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-swatch__chip" style="background: var(--lb-orange-900);"></div>
+          <div class="color-swatch__info">
+            <div class="color-swatch__step">900</div>
+            <div class="color-swatch__token">--lb-orange-900</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-swatch__chip" style="background: var(--lb-orange-950);"></div>
+          <div class="color-swatch__info">
+            <div class="color-swatch__step">950</div>
+            <div class="color-swatch__token">--lb-orange-950</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="color-palette">
+      <div class="color-palette__header">
+        <h3 class="color-palette__name">Cyan</h3>
+        <p class="color-palette__desc">Categorical hue (205°). Used by the L2 data palette as data.8 and by the code palette as code.8. Sits between green and blue on the chart series rotation.</p>
+      </div>
+      <div class="color-palette__grid">
+        <div class="color-swatch">
+          <div class="color-swatch__chip" style="background: var(--lb-cyan-50);"></div>
+          <div class="color-swatch__info">
+            <div class="color-swatch__step">50</div>
+            <div class="color-swatch__token">--lb-cyan-50</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-swatch__chip" style="background: var(--lb-cyan-100);"></div>
+          <div class="color-swatch__info">
+            <div class="color-swatch__step">100</div>
+            <div class="color-swatch__token">--lb-cyan-100</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-swatch__chip" style="background: var(--lb-cyan-200);"></div>
+          <div class="color-swatch__info">
+            <div class="color-swatch__step">200</div>
+            <div class="color-swatch__token">--lb-cyan-200</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-swatch__chip" style="background: var(--lb-cyan-300);"></div>
+          <div class="color-swatch__info">
+            <div class="color-swatch__step">300</div>
+            <div class="color-swatch__token">--lb-cyan-300</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-swatch__chip" style="background: var(--lb-cyan-400);"></div>
+          <div class="color-swatch__info">
+            <div class="color-swatch__step">400</div>
+            <div class="color-swatch__token">--lb-cyan-400</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-swatch__chip" style="background: var(--lb-cyan-500);"></div>
+          <div class="color-swatch__info">
+            <div class="color-swatch__step">500</div>
+            <div class="color-swatch__token">--lb-cyan-500</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-swatch__chip" style="background: var(--lb-cyan-600);"></div>
+          <div class="color-swatch__info">
+            <div class="color-swatch__step">600</div>
+            <div class="color-swatch__token">--lb-cyan-600</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-swatch__chip" style="background: var(--lb-cyan-700);"></div>
+          <div class="color-swatch__info">
+            <div class="color-swatch__step">700</div>
+            <div class="color-swatch__token">--lb-cyan-700</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-swatch__chip" style="background: var(--lb-cyan-800);"></div>
+          <div class="color-swatch__info">
+            <div class="color-swatch__step">800</div>
+            <div class="color-swatch__token">--lb-cyan-800</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-swatch__chip" style="background: var(--lb-cyan-900);"></div>
+          <div class="color-swatch__info">
+            <div class="color-swatch__step">900</div>
+            <div class="color-swatch__token">--lb-cyan-900</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-swatch__chip" style="background: var(--lb-cyan-950);"></div>
+          <div class="color-swatch__info">
+            <div class="color-swatch__step">950</div>
+            <div class="color-swatch__token">--lb-cyan-950</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script src="../js/lb.js"></script>
+<script src="../js/slot-engine.js"></script>
+<script src="../js/theme-editor.js"></script>
+<script src="../js/token-exporter.js"></script>
+<script src="../js/gallery-layout.js"></script>
+</body>
+</html>

@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <!-- theme-preamble:v1 -->
+  <script>(function(){try{var t=localStorage.getItem('letbe-ds-dark-mode');if(t==='1')document.documentElement.setAttribute('data-theme','dark');else if(t==='0')document.documentElement.setAttribute('data-theme','light');}catch(e){}})();</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta data-lb-page="tree">
+  <title>Tree — letbe-ds</title>
+  <link rel="stylesheet" href="../tokens/theme.css">
+  <link rel="stylesheet" href="../tokens/fonts.css">
+  <link rel="stylesheet" href="../components/components.css">
+  <link rel="stylesheet" href="../components/theme-editor.css">
+  <link rel="stylesheet" href="../components/gallery.css">
+  <style>
+    /* The Tree ships without its own surface so it composes into any
+       container — these demos just cap the width so very long names
+       don't stretch across the page. Drop into a Card, a Sheet, a
+       sidebar — wherever fits. */
+    .demo-tree-host { max-width: 24rem; }
+  </style>
+</head>
+<body data-lb-base="..">
+
+<main class="gallery-main">
+  <section class="gallery-section" id="tree">
+    <h1 class="gallery-section__title" style="font-size: var(--lb-t-heading-l-font-size); line-height: var(--lb-t-heading-l-line-height);">Tree</h1>
+    <p class="gallery-section__desc">Hierarchical list with expand / collapse and single-select. Markup is a plain nested <code class="lb-code">&lt;ul&gt;</code> of <code class="lb-code">&lt;li data-lb-node&gt;</code> elements; the component wraps each node in a focusable row with a chevron, an optional icon, and the label. Annotated in place: <code class="lb-code">role="tree"</code> / <code class="lb-code">role="treeitem"</code> with <code class="lb-code">aria-expanded</code> and <code class="lb-code">aria-level</code>; selection is class-only (<code class="lb-code">.lb-tree__row--selected</code>). The tab stop and focus live on the <code class="lb-code">.lb-tree__row</code> inside each <code class="lb-code">&lt;li&gt;</code>, so the focused element itself carries none of that state.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>a11y (built in):</strong> the nested <code class="lb-code">&lt;ul&gt;</code> is annotated in place — <code class="lb-code">role="tree"</code> on the root, <code class="lb-code">role="treeitem"</code> on every node, <code class="lb-code">role="group"</code> on each child list, an <code class="lb-code">aria-level</code> per depth, and <code class="lb-code">aria-expanded</code> on every parent, kept in sync by clicks, keys and <code class="lb-code">expandAll()</code> / <code class="lb-code">collapseAll()</code>. A roving tab stop means one <kbd>Tab</kbd> enters the tree and one leaves it: <kbd>↑</kbd><kbd>↓</kbd> walk the visible rows only, <kbd>→</kbd> expands or steps to the first child, <kbd>←</kbd> collapses or steps to the parent, <kbd>Home</kbd>/<kbd>End</kbd> jump to first/last visible, <kbd>Enter</kbd> selects, <kbd>Space</kbd> toggles. Chevron and node icon are <code class="lb-code">aria-hidden</code> decoration, and the focused row takes the system focus ring through <code class="lb-code">:focus-visible</code>.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>Usage:</strong> <code class="lb-code">data-lb-tree</code> auto-inits on DOMContentLoaded and rebuilds the rows in place — you author only the nested <code class="lb-code">&lt;ul&gt;</code> / <code class="lb-code">&lt;li data-lb-node&gt;</code> skeleton, with <code class="lb-code">data-lb-expanded</code> for initially-open parents and <code class="lb-code">data-lb-value</code> when the selection key should outlive a label rename (label text is the default). Both events bubble from the root: <code class="lb-code">lb-tree-select</code> with <code class="lb-code">detail.value</code> / <code class="lb-code">detail.label</code> on commit, and <code class="lb-code">lb-tree-expand</code> with <code class="lb-code">detail.value</code> / <code class="lb-code">detail.expanded</code> on every toggle, including those triggered by the API. That API hangs off <code class="lb-code">el._lbTree</code> — <code class="lb-code">expandAll()</code>, <code class="lb-code">collapseAll()</code>, <code class="lb-code">getSelected()</code>, <code class="lb-code">setSelected(value)</code>; Tree is not exported on the <code class="lb-code">LB</code> namespace, so the data attribute is the only init path — call <code class="lb-code">LB.init()</code> after injecting a tree at runtime.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>Keyboard:</strong> Tab focuses the tree, then ↑/↓ to move, ← to collapse or jump to parent, → to expand or jump to first child, Enter to select, Space to toggle expand, Home/End for first/last visible.</p>
+
+    <hr class="gallery-desc-divider">
+
+    <!-- ────────────────── Default file tree ────────────────── -->
+    <h2 class="gallery-section__title">Default — file explorer</h2>
+    <p class="gallery-section__desc">Per-node <code class="lb-code">data-lb-icon</code> renders a glyph next to the label. <code class="lb-code">data-lb-expanded</code> opens a node initially. The Tree handles arbitrary nesting depth — this demo goes six levels deep so you can see the indentation scales without breaking.</p>
+    <div class="demo-tree-host">
+      <ul data-lb-tree id="files-tree">
+        <li data-lb-node data-lb-icon="folder" data-lb-expanded>Documents
+          <ul>
+            <li data-lb-node data-lb-icon="file-text">Resume.pdf</li>
+            <li data-lb-node data-lb-icon="folder">Photos
+              <ul>
+                <li data-lb-node data-lb-icon="file">vacation.jpg</li>
+                <li data-lb-node data-lb-icon="file">family.jpg</li>
+                <li data-lb-node data-lb-icon="file">portrait.png</li>
+              </ul>
+            </li>
+            <li data-lb-node data-lb-icon="file-text">Notes.md</li>
+          </ul>
+        </li>
+        <li data-lb-node data-lb-icon="folder" data-lb-expanded>Projects
+          <ul>
+            <li data-lb-node data-lb-icon="folder" data-lb-expanded>letbe-ds
+              <ul>
+                <li data-lb-node data-lb-icon="folder" data-lb-expanded>src
+                  <ul>
+                    <li data-lb-node data-lb-icon="folder" data-lb-expanded>components
+                      <ul>
+                        <li data-lb-node data-lb-icon="folder">Button
+                          <ul>
+                            <li data-lb-node data-lb-icon="file-text">Button.tsx</li>
+                            <li data-lb-node data-lb-icon="file-text">Button.test.tsx</li>
+                            <li data-lb-node data-lb-icon="file-text">index.ts</li>
+                          </ul>
+                        </li>
+                        <li data-lb-node data-lb-icon="folder">Card
+                          <ul>
+                            <li data-lb-node data-lb-icon="file-text">Card.tsx</li>
+                            <li data-lb-node data-lb-icon="file-text">index.ts</li>
+                          </ul>
+                        </li>
+                      </ul>
+                    </li>
+                    <li data-lb-node data-lb-icon="folder">hooks
+                      <ul>
+                        <li data-lb-node data-lb-icon="file-text">useTheme.ts</li>
+                        <li data-lb-node data-lb-icon="file-text">useMedia.ts</li>
+                      </ul>
+                    </li>
+                  </ul>
+                </li>
+                <li data-lb-node data-lb-icon="file-text">README.md</li>
+                <li data-lb-node data-lb-icon="file-text">package.json</li>
+              </ul>
+            </li>
+            <li data-lb-node data-lb-icon="folder">website
+              <ul>
+                <li data-lb-node data-lb-icon="file">index.html</li>
+                <li data-lb-node data-lb-icon="file">styles.css</li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+        <li data-lb-node data-lb-icon="folder">Music
+          <ul>
+            <li data-lb-node data-lb-icon="file">favourites.mp3</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+
+    <!-- ────────────────── No icons ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Plain text — no icons</h2>
+    <p class="gallery-section__desc">Skip <code class="lb-code">data-lb-icon</code> for a minimal tree of category names. The chevron alone carries the parent affordance.</p>
+    <div class="demo-tree-host">
+      <ul data-lb-tree>
+        <li data-lb-node data-lb-expanded>Engineering
+          <ul>
+            <li data-lb-node>Frontend
+              <ul>
+                <li data-lb-node>Web</li>
+                <li data-lb-node>Mobile</li>
+              </ul>
+            </li>
+            <li data-lb-node>Backend</li>
+            <li data-lb-node>Platform</li>
+          </ul>
+        </li>
+        <li data-lb-node>Design
+          <ul>
+            <li data-lb-node>Brand</li>
+            <li data-lb-node>Product</li>
+          </ul>
+        </li>
+        <li data-lb-node>Operations</li>
+      </ul>
+    </div>
+
+    <!-- ────────────────── data-lb-value + selection event ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Custom values — <code class="lb-code">data-lb-value</code></h2>
+    <p class="gallery-section__desc">Each row's selection identity defaults to its label text. Set <code class="lb-code">data-lb-value</code> for a stable key (e.g. an id or path) that won't change if the label is renamed.</p>
+    <div class="lb-stack" style="max-width: 32rem;">
+      <div class="lb-cluster">
+        <span class="lb-rating__value-text">Selected:</span>
+        <span class="lb-rating__value-text" id="cat-out" style="color: var(--lb-fg-default); font-weight: var(--lb-font-weight-semibold);">—</span>
+      </div>
+      <div class="demo-tree-host">
+        <ul data-lb-tree id="categories-tree">
+          <li data-lb-node data-lb-value="cat:books" data-lb-icon="folder" data-lb-expanded>Books
+            <ul>
+              <li data-lb-node data-lb-value="cat:books.fiction" data-lb-icon="file-text">Fiction</li>
+              <li data-lb-node data-lb-value="cat:books.nonfiction" data-lb-icon="file-text">Non-fiction</li>
+            </ul>
+          </li>
+          <li data-lb-node data-lb-value="cat:music" data-lb-icon="folder">Music
+            <ul>
+              <li data-lb-node data-lb-value="cat:music.classical" data-lb-icon="file">Classical</li>
+              <li data-lb-node data-lb-value="cat:music.jazz" data-lb-icon="file">Jazz</li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <script>
+      (function(){
+        const t = document.getElementById('categories-tree');
+        const out = document.getElementById('cat-out');
+        if (!t || !out) return;
+        t.addEventListener('lb-tree-select', (e) => {
+          out.textContent = `${e.detail.label}  ·  ${e.detail.value}`;
+        });
+      })();
+    </script>
+
+    <!-- ────────────────── Programmatic API ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Expand / collapse all + selection API</h2>
+    <p class="gallery-section__desc">Three methods on <code class="lb-code">el._lbTree</code>: <code class="lb-code">expandAll()</code>, <code class="lb-code">collapseAll()</code>, and <code class="lb-code">setSelected(value)</code> for restoring saved state.</p>
+    <div class="lb-stack" style="max-width: 32rem;">
+      <div class="lb-cluster">
+        <button class="lb-btn lb-btn--secondary lb-btn--small" id="api-expand">Expand all</button>
+        <button class="lb-btn lb-btn--secondary lb-btn--small" id="api-collapse">Collapse all</button>
+        <button class="lb-btn lb-btn--secondary lb-btn--small" id="api-select">Select Photos</button>
+      </div>
+      <div class="demo-tree-host">
+        <ul data-lb-tree id="api-tree">
+          <li data-lb-node data-lb-icon="folder">Documents
+            <ul>
+              <li data-lb-node data-lb-icon="file-text">Resume.pdf</li>
+              <li data-lb-node data-lb-icon="folder" data-lb-value="folder:photos">Photos
+                <ul>
+                  <li data-lb-node data-lb-icon="file">vacation.jpg</li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+          <li data-lb-node data-lb-icon="folder">Music
+            <ul>
+              <li data-lb-node data-lb-icon="file">song.mp3</li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <script>
+      (function(){
+        const t = document.getElementById('api-tree');
+        if (!t) return;
+        document.getElementById('api-expand').addEventListener('click', () => t._lbTree.expandAll());
+        document.getElementById('api-collapse').addEventListener('click', () => t._lbTree.collapseAll());
+        document.getElementById('api-select').addEventListener('click', () => {
+          t._lbTree.expandAll();
+          t._lbTree.setSelected('folder:photos');
+        });
+      })();
+    </script>
+  </section>
+</main>
+
+<script src="../js/lb.js"></script>
+<script src="../js/slot-engine.js"></script>
+<script src="../js/theme-editor.js"></script>
+<script src="../js/token-exporter.js"></script>
+<script src="../js/gallery-layout.js"></script>
+</body>
+</html>

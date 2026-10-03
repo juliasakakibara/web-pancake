@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <!-- theme-preamble:v1 -->
+  <script>(function(){try{var t=localStorage.getItem('letbe-ds-dark-mode');if(t==='1')document.documentElement.setAttribute('data-theme','dark');else if(t==='0')document.documentElement.setAttribute('data-theme','light');}catch(e){}})();</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta data-lb-page="spinner">
+  <title>Spinner — letbe-ds</title>
+  <link rel="stylesheet" href="../tokens/theme.css">
+  <link rel="stylesheet" href="../tokens/fonts.css">
+  <link rel="stylesheet" href="../components/components.css">
+  <link rel="stylesheet" href="../components/theme-editor.css">
+  <link rel="stylesheet" href="../components/gallery.css">
+</head>
+<body data-lb-base="..">
+
+<main class="gallery-main">
+  <section class="gallery-section" id="spinner">
+    <h1 class="gallery-section__title" style="font-size: var(--lb-t-heading-l-font-size); line-height: var(--lb-t-heading-l-line-height);">Spinner</h1>
+    <p class="gallery-section__desc">Indeterminate loading indicator. Three sizes: small, medium, large. Use for waits of unknown duration under ~5 seconds. For longer waits, pair with a message or use Progress if determinate. Don't stack multiple spinners.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>a11y (built in):</strong> every spinner is a named live region — <code class="lb-code">role="status"</code> plus <code class="lb-code">aria-label</code> — so the wait carries an accessible name instead of reading as an empty box; the ring itself is a pure CSS <code class="lb-code">@keyframes</code> rotation and holds no text of its own.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>Usage:</strong> An empty <code class="lb-code">&lt;span&gt;</code> with the full combo — base plus size, e.g. <code class="lb-code">lb-spinner lb-spinner--medium</code>: all width, height, and ring thickness live on the size modifier, so the bare base renders collapsed. It spins from the moment it is in the DOM — there is no start/stop API, no init, and no events: mount it when the wait begins, remove it (or swap in the loaded content) when the wait ends. <code class="lb-code">flex-shrink: 0</code> is built in, so it can sit in a flex row next to a message without being squeezed.</p>
+
+<hr class="gallery-desc-divider">
+
+
+<h2 class="gallery-section__title">Spinner Demo</h2>
+    <div class="gallery-row">
+      <span class="lb-spinner lb-spinner--small" role="status" aria-label="Loading"></span>
+      <span class="lb-spinner lb-spinner--medium" role="status" aria-label="Loading"></span>
+      <span class="lb-spinner lb-spinner--large" role="status" aria-label="Loading"></span>
+    </div>
+  </section>
+</main>
+
+<script src="../js/lb.js"></script>
+<script src="../js/slot-engine.js"></script>
+<script src="../js/theme-editor.js"></script>
+<script src="../js/token-exporter.js"></script>
+<script src="../js/gallery-layout.js"></script>
+</body>
+</html>

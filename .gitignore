@@ -1,0 +1,20 @@
+# Original (pre-web) media masters kept locally, not committed — GitHub
+# rejects >100MB files. Web-ready versions ARE committed
+# (Letbe-Design-*.mp3, letbe-video-web.mp4, letbe-profile-cover.jpg).
+assets/media/letbe-video.mp4
+
+# Demo media lives in the letbe-media repo and is served from its CDN
+# (cdn.jsdelivr.net/gh/m1ha1l0/letbe-media@v1.0.1) — the gallery references it
+# there, so the public tree stays slim. Files may remain on a contributor's
+# disk; they are simply not part of this repo.
+assets/media/Letbe-Design-*.mp3
+assets/media/letbe-video-web.mp4
+assets/media/letbe-video-web-480.mp4
+assets/media/letbe-video.en.vtt
+assets/media/letbe-video.es.vtt
+assets/media/letbe-video-FIN-logo-compressed.mp4
+scripts/dev/
+
+# Private: real-brand test material and themes (never public)
+resources/
+*.local

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <!-- theme-preamble:v1 -->
+  <script>(function(){try{var t=localStorage.getItem('letbe-ds-dark-mode');if(t==='1')document.documentElement.setAttribute('data-theme','dark');else if(t==='0')document.documentElement.setAttribute('data-theme','light');}catch(e){}})();</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta data-lb-page="tooltip">
+  <title>Tooltip — letbe-ds</title>
+  <link rel="stylesheet" href="../tokens/theme.css">
+  <link rel="stylesheet" href="../tokens/fonts.css">
+  <link rel="stylesheet" href="../components/components.css">
+  <link rel="stylesheet" href="../components/theme-editor.css">
+  <link rel="stylesheet" href="../components/gallery.css">
+</head>
+<body data-lb-base="..">
+
+<main class="gallery-main">
+  <section class="gallery-section" id="tooltip">
+    <h1 class="gallery-section__title" style="font-size: var(--lb-t-heading-l-font-size); line-height: var(--lb-t-heading-l-line-height);">Tooltip</h1>
+    <p class="gallery-section__desc">Short hint that appears on hover or focus. Four positions (top, bottom, left, right) with a directional arrow caret. Default 300ms delay on mouse hover so accidental hovers don't trigger; keyboard focus shows instantly. Opens with a fade and slide.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>a11y (built in):</strong> the bubble gets a generated <code class="lb-code">id</code> plus <code class="lb-code">role="tooltip"</code>, and the wrapper's first child — the trigger — gets <code class="lb-code">aria-describedby</code> pointing at it, so the hint is a <em>description</em> and never the accessible name; icon-only triggers still need their own <code class="lb-code">aria-label</code> (every demo below carries one). Keyboard <code class="lb-code">focus</code> shows the tooltip immediately while hover waits <code class="lb-code">300ms</code> (<code class="lb-code">data-lb-tooltip-delay</code> overrides per instance, <code class="lb-code">0</code> for instant), and the surface is <code class="lb-code">pointer-events: none</code> so it never intercepts a click meant for the trigger underneath.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>When NOT to use:</strong> tooltips are hidden from touch users (no hover events) and from screen readers that don't follow <code class="lb-code">aria-describedby</code>. Don't put essential information here. Use for icon-only buttons, kbd shortcuts, optional context. <strong>Usage:</strong> Wrap a trigger + <code class="lb-code">.lb-tooltip</code> in <code class="lb-code">&lt;span class="lb-tooltip-wrap" data-lb-tooltip&gt;</code>. Override delay with <code class="lb-code">data-lb-tooltip-delay="600"</code>.</p>
+
+    <hr class="gallery-desc-divider">
+
+    <!-- ────────────────── Positions ────────────────── -->
+    <h2 class="gallery-section__title">Positions</h2>
+    <p class="gallery-section__desc">Four directional placements with arrow carets pointing back at the trigger.</p>
+    <div class="gallery-row" style="gap: var(--lb-size-8x); padding: var(--lb-size-6x);">
+      <span class="lb-tooltip-wrap" data-lb-tooltip>
+        <button class="lb-btn lb-btn--secondary lb-btn--medium">Top</button>
+        <span class="lb-tooltip lb-tooltip--top">Tooltip on top</span>
+      </span>
+      <span class="lb-tooltip-wrap" data-lb-tooltip>
+        <button class="lb-btn lb-btn--secondary lb-btn--medium">Bottom</button>
+        <span class="lb-tooltip lb-tooltip--bottom">Tooltip on bottom</span>
+      </span>
+      <span class="lb-tooltip-wrap" data-lb-tooltip>
+        <button class="lb-btn lb-btn--secondary lb-btn--medium">Left</button>
+        <span class="lb-tooltip lb-tooltip--left">Tooltip on left</span>
+      </span>
+      <span class="lb-tooltip-wrap" data-lb-tooltip>
+        <button class="lb-btn lb-btn--secondary lb-btn--medium">Right</button>
+        <span class="lb-tooltip lb-tooltip--right">Tooltip on right</span>
+      </span>
+    </div>
+
+    <!-- ────────────────── Icon button — most common use case ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Icon-only buttons</h2>
+    <p class="gallery-section__desc">The most common tooltip use case — give an icon-only control a discoverable name. The <code class="lb-code">aria-label</code> on the button is what assistive tech reads; the tooltip is the visual reinforcement for sighted users.</p>
+    <div class="gallery-row">
+      <span class="lb-tooltip-wrap" data-lb-tooltip>
+        <button class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--medium" aria-label="Edit">
+          <span class="lb-icon-btn__icon" data-lb-icon="pencil"></span>
+        </button>
+        <span class="lb-tooltip lb-tooltip--bottom">Edit</span>
+      </span>
+      <span class="lb-tooltip-wrap" data-lb-tooltip>
+        <button class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--medium" aria-label="Duplicate">
+          <span class="lb-icon-btn__icon" data-lb-icon="copy"></span>
+        </button>
+        <span class="lb-tooltip lb-tooltip--bottom">Duplicate</span>
+      </span>
+      <span class="lb-tooltip-wrap" data-lb-tooltip>
+        <button class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--medium" aria-label="Share">
+          <span class="lb-icon-btn__icon" data-lb-icon="share-2"></span>
+        </button>
+        <span class="lb-tooltip lb-tooltip--bottom">Share</span>
+      </span>
+      <span class="lb-tooltip-wrap" data-lb-tooltip>
+        <button class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--medium" aria-label="Delete">
+          <span class="lb-icon-btn__icon" data-lb-icon="trash-2"></span>
+        </button>
+        <span class="lb-tooltip lb-tooltip--bottom">Delete</span>
+      </span>
+    </div>
+
+    <!-- ────────────────── With keyboard shortcut ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">With keyboard shortcut</h2>
+    <p class="gallery-section__desc">Add a <code class="lb-code">.lb-tooltip__kbd</code> after the label to surface the shortcut for power users.</p>
+    <div class="gallery-row">
+      <span class="lb-tooltip-wrap" data-lb-tooltip>
+        <button class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--medium" aria-label="Save">
+          <span class="lb-icon-btn__icon" data-lb-icon="save"></span>
+        </button>
+        <span class="lb-tooltip lb-tooltip--bottom">Save<span class="lb-tooltip__kbd">⌘ S</span></span>
+      </span>
+      <span class="lb-tooltip-wrap" data-lb-tooltip>
+        <button class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--medium" aria-label="Search">
+          <span class="lb-icon-btn__icon" data-lb-icon="search"></span>
+        </button>
+        <span class="lb-tooltip lb-tooltip--bottom">Search<span class="lb-tooltip__kbd">⌘ K</span></span>
+      </span>
+      <span class="lb-tooltip-wrap" data-lb-tooltip>
+        <button class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--medium" aria-label="Settings">
+          <span class="lb-icon-btn__icon" data-lb-icon="settings"></span>
+        </button>
+        <span class="lb-tooltip lb-tooltip--bottom">Preferences<span class="lb-tooltip__kbd">⌘ ,</span></span>
+      </span>
+    </div>
+
+    <!-- ────────────────── Sizes + multi-line ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Small variant + multi-line</h2>
+    <p class="gallery-section__desc">Add <code class="lb-code">--small</code> for tighter padding (compact toolbars). Tooltips wrap automatically when content exceeds 15rem; default text-align is centered for that case.</p>
+    <div class="gallery-row" style="gap: var(--lb-size-8x);">
+      <span class="lb-tooltip-wrap" data-lb-tooltip>
+        <button class="lb-btn lb-btn--ghost lb-btn--small">Small</button>
+        <span class="lb-tooltip lb-tooltip--small lb-tooltip--top">Compact</span>
+      </span>
+      <span class="lb-tooltip-wrap" data-lb-tooltip>
+        <button class="lb-btn lb-btn--secondary lb-btn--medium">Multi-line</button>
+        <span class="lb-tooltip lb-tooltip--top">Tooltips wrap their content automatically when it exceeds 15rem in width.</span>
+      </span>
+      <span class="lb-tooltip-wrap" data-lb-tooltip data-lb-tooltip-delay="0">
+        <button class="lb-btn lb-btn--secondary lb-btn--medium">Instant (no delay)</button>
+        <span class="lb-tooltip lb-tooltip--top">Override <code>data-lb-tooltip-delay="0"</code> for instant hover feedback.</span>
+      </span>
+    </div>
+  </section>
+</main>
+
+<script src="../js/lb.js"></script>
+<script src="../js/slot-engine.js"></script>
+<script src="../js/theme-editor.js"></script>
+<script src="../js/token-exporter.js"></script>
+<script src="../js/gallery-layout.js"></script>
+</body>
+</html>

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <!-- theme-preamble:v1 -->
+  <script>(function(){try{var t=localStorage.getItem('letbe-ds-dark-mode');if(t==='1')document.documentElement.setAttribute('data-theme','dark');else if(t==='0')document.documentElement.setAttribute('data-theme','light');}catch(e){}})();</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta data-lb-page="icons">
+  <title>Icons — letbe-ds</title>
+  <link rel="stylesheet" href="../tokens/theme.css">
+  <link rel="stylesheet" href="../tokens/fonts.css">
+  <link rel="stylesheet" href="../components/components.css">
+  <link rel="stylesheet" href="../components/theme-editor.css">
+  <link rel="stylesheet" href="../components/gallery.css">
+</head>
+<body data-lb-base="..">
+
+<main class="gallery-main">
+  <section class="gallery-section" id="icons">
+    <h1 class="gallery-section__title" style="font-size: var(--lb-t-heading-l-font-size); line-height: var(--lb-t-heading-l-line-height);">Icons</h1>
+    <p class="gallery-section__desc">254 icons bundled as standalone SVGs. The circle family ships in mixed historical orderings (<code class="lb-code">circle-check</code> but <code class="lb-code">help-circle</code>) — the loader accepts both orders for every circle icon, so either guess resolves. Use <code class="lb-code">LB.icon('name', element)</code> to inject by name. Stroke width follows <code class="lb-code">--lb-stroke-icon</code>. Requires serving over http (not <code class="lb-code">file://</code>) — icons are fetched at runtime.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>a11y (built in):</strong> <code class="lb-code">LB.icon()</code> injects the raw SVG and nothing else — no <code class="lb-code">role</code>, no name, and the shipped files carry no <code class="lb-code">aria-hidden</code> of their own — so an icon is only ever decoration or a glyph inside something already named: components set <code class="lb-code">aria-hidden=true</code> on their own icon slots, and icon-only controls carry an <code class="lb-code">aria-label</code>.</p>
+
+<hr class="gallery-desc-divider">
+
+
+<h2 class="gallery-section__title">Icons Demo</h2>
+    <p class="gallery-section__desc">Files live in <code class="lb-code">assets/icons/</code>. Three categories: <em>outlined</em> (Lucide, stroke-based), <em>filled</em> (solid status/rating glyphs), and <em>brand</em> (Simple Icons / Bootstrap Icons — filled single-path logos, colored via <code class="lb-code">fill: currentColor</code>; trademark usage subject to each brand's guidelines).</p>
+
+    <div class="gallery-label">Outlined (stroke-based, default)</div>
+    <div class="gallery-icon-grid" id="icon-grid-outlined"></div>
+
+    <div class="gallery-label">Filled</div>
+    <div class="gallery-icon-grid" id="icon-grid-filled"></div>
+
+    <div class="gallery-label">Brand</div>
+    <div class="gallery-icon-grid" id="icon-grid-brand"></div>
+  </section>
+</main>
+
+<script src="../js/lb.js"></script>
+<script src="../js/slot-engine.js"></script>
+<script src="../js/theme-editor.js"></script>
+<script src="../js/token-exporter.js"></script>
+<script src="../js/gallery-layout.js"></script>
+
+<script>
+  // Icon grid — full letbe-ds icon set rendered via LB.icon().
+  // Separated into outlined and filled groups; filled end with "-filled".
+  document.addEventListener('DOMContentLoaded', () => {
+    const iconNames = [
+      // Navigation
+      'arrow-left','arrow-right','arrow-up','arrow-down','arrow-up-right','arrow-down-left','navigation',
+      'chevron-down','chevron-up','chevron-left','chevron-right','chevrons-left','chevrons-right','chevrons-up-down',
+      'menu','x','more-horizontal','more-vertical','external-link','compass','map',
+      // Actions / Edit
+      'plus','plus-circle','minus','minus-circle','pencil','trash-2','copy','download','upload',
+      'search','filter','sliders-horizontal','refresh-cw','save','tag','send','pin','pin-off',
+      'undo-2','redo-2','archive','flag','pipette','grip-vertical',
+      // Status / Info
+      'check','check-check','check-square','circle-check','alert-triangle','x-circle','info','help-circle',
+      'bell','circle-dot','circle-alert','loader-circle','history','timer',
+      // People / Accounts
+      'user','users','user-plus','user-check','user-x','user-circle','log-in','log-out','lock','unlock',
+      'key','key-round','fingerprint','shield-check',
+      // Communication / Docs
+      'mail','message-square','phone','file','file-text','folder','clipboard','printer',
+      'calendar','calendar-days','clock','paperclip','at-sign','hash','inbox','megaphone','ticket',
+      // AI
+      'sparkles','sparkle','bot','brain','brain-circuit','wand-sparkles','audio-lines','audio-waveform',
+      'mic','mic-off','circle-stop','scan-face','languages','workflow',
+      // Dev / Data
+      'code','terminal','square-terminal','braces','command','keyboard','git-branch',
+      'database','server','cloud','cpu','qr-code','rss','calculator',
+      // View / Display
+      'eye','eye-off','grid-3x3','list','list-plus','list-minus','list-start','maximize','minimize',
+      'layout-dashboard','layout-grid','panel-left','monitor','smartphone','captions','picture-in-picture-2',
+      // Delight / Rating
+      'star','star-half','heart','thumbs-up','thumbs-down','laugh','smile','meh','frown','angry','zap',
+      // Finance / Commerce
+      'shopping-cart','package','credit-card','dollar-sign','briefcase',
+      // Analytics
+      'trending-up','trending-down','bar-chart','pie-chart','target',
+      // Media / Music
+      'play','play-circle','pause','pause-circle','skip-back','skip-forward','rewind','fast-forward',
+      'shuffle','repeat','repeat-1','music','music-2','headphones','speaker','disc-3','radio','podcast',
+      'mic-vocal','guitar','piano','video','film','clapperboard','volume-2','volume-x','square-rounded',
+      // Text formatting
+      'bold','italic','underline','strikethrough','type','align-left','align-center','align-right','align-justify',
+      // Theme / UI
+      'moon','sun','home','link','bookmark','image','camera',
+      'wifi','battery','share-2','settings','map-pin','globe','palette',
+    ];
+
+    const filledNames = [
+      'info-filled','circle-check-filled','alert-triangle-filled','x-circle-filled',
+      'star-filled','heart-filled','thumbs-up-filled','thumbs-down-filled',
+      'laugh-filled','smile-filled','meh-filled','frown-filled','angry-filled',
+    ];
+
+    // Brand logos — filled single-path glyphs (Simple Icons / Bootstrap
+    // Icons style), NOT stroke-based. Keep them in their own visual
+    // category; color via fill: currentColor.
+    const brandNames = [
+      // House
+      'letbe',
+      // Social
+      'instagram','facebook','x-logo','twitter','linkedin','tiktok','snapchat','pinterest',
+      'reddit','threads','bluesky','mastodon','whatsapp','telegram','discord','twitch','youtube',
+      // Music / Creator
+      'spotify','apple-music','soundcloud','bandcamp','deezer','tidal','youtube-music','patreon','substack','medium',
+      // Dev / Design / Work
+      'github','gitlab','figma','dribbble','behance','slack','google','apple',
+    ];
+
+    function render(targetId, names) {
+      const grid = document.getElementById(targetId);
+      if (!grid) return;
+      names.forEach(name => {
+        const cell = document.createElement('div');
+        cell.className = 'gallery-icon-cell';
+        const iconSlot = document.createElement('div');
+        const label = document.createElement('span');
+        label.textContent = name;
+        cell.append(iconSlot, label);
+        grid.appendChild(cell);
+        LB.icon(name, iconSlot);
+      });
+    }
+    render('icon-grid-outlined', iconNames);
+    render('icon-grid-filled', filledNames);
+    render('icon-grid-brand', brandNames);
+  });
+</script>
+</body>
+</html>

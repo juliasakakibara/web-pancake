@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <!-- theme-preamble:v1 -->
+  <script>(function(){try{var t=localStorage.getItem('letbe-ds-dark-mode');if(t==='1')document.documentElement.setAttribute('data-theme','dark');else if(t==='0')document.documentElement.setAttribute('data-theme','light');}catch(e){}})();</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta data-lb-page="scroll-area">
+  <title>Scroll Area — letbe-ds</title>
+  <link rel="stylesheet" href="../tokens/theme.css">
+  <link rel="stylesheet" href="../tokens/fonts.css">
+  <link rel="stylesheet" href="../components/components.css">
+  <link rel="stylesheet" href="../components/theme-editor.css">
+  <link rel="stylesheet" href="../components/gallery.css">
+</head>
+<body data-lb-base="..">
+
+<main class="gallery-main">
+  <section class="gallery-section" id="scroll-area">
+    <h1 class="gallery-section__title" style="font-size: var(--lb-t-heading-l-font-size); line-height: var(--lb-t-heading-l-line-height);">Scroll Area</h1>
+    <p class="gallery-section__desc">Documented primitive for "scrollable content block" — constrains height (or width with the <code class="lb-code">--horizontal</code> variant) and lets our global thin-scrollbar styles take over. Use for arbitrary scrollable consumer-app content like long descriptions, sidebar widgets, log views, code previews. Component-specific scroll regions (Modal body, Sheet body, Dropdown lists) keep their own implementations — they have context-specific padding.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>a11y (built in):</strong> this is CSS only — the scroll area adds no role, no <code class="lb-code">tabindex</code> and no JS, so when a block has to be reachable and announced as a region, give the instance <code class="lb-code">tabindex="0"</code> plus <code class="lb-code">role="region"</code> and a name yourself. The <code class="lb-code">--fade</code> edges are background layers, not elements, so they add nothing to the accessibility tree, and the global scrollbar (<code class="lb-code">scrollbar-width: thin</code> with a <code class="lb-code">border-strong</code> thumb on a transparent track, <code class="lb-code">::-webkit-scrollbar</code> kept for older Blink/WebKit) stays visible whenever content overflows.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>Usage:</strong> <code class="lb-code">&lt;div class="lb-scroll-area"&gt;…&lt;/div&gt;</code>. Override max-height per instance: <code class="lb-code">style="--max-height: 24rem"</code>. Add <code class="lb-code">--fade</code> for scroll-shadow indicators at the edges (pure CSS, no JS — shadows appear only when more content exists in that direction). Add <code class="lb-code">--horizontal</code> for horizontal scroll instead of vertical (use <code class="lb-code">--max-width</code> to constrain).</p>
+
+    <hr class="gallery-desc-divider">
+
+    <!-- ────────────────── Default ────────────────── -->
+    <h2 class="gallery-section__title">Default — vertical scroll</h2>
+    <p class="gallery-section__desc">Default <code class="lb-code">--max-height: 16rem</code>. Content overflowing the height becomes scrollable; the global thin-scrollbar styles render the visible thumb.</p>
+
+    <div tabindex="0" role="region" aria-label="Scroll demo 1" class="lb-scroll-area" style="max-width: 32rem; border: var(--lb-border-width-thin) solid var(--lb-border-default); border-radius: var(--lb-radius-surface); padding: var(--lb-size-4x);">
+      <div class="lb-stack">
+        <p style="margin: 0;">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+        <p style="margin: 0;">Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+        <p style="margin: 0;">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+        <p style="margin: 0;">Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+        <p style="margin: 0;">Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.</p>
+        <p style="margin: 0;">Eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
+        <p style="margin: 0;">Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni.</p>
+        <p style="margin: 0;">Ultima frase — confirms you've reached the end.</p>
+      </div>
+    </div>
+
+    <!-- ────────────────── With fade indicators ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">With fade indicators — <code class="lb-code">--fade</code></h2>
+    <p class="gallery-section__desc">Subtle gradient shadows at the top and bottom signal there's more content to scroll. Top shadow appears only when scrolled down (the cover gradient masks it at the start position); bottom shadow appears only when more content exists below. Pure CSS via stacked background layers with mixed <code class="lb-code">background-attachment: local</code> and <code class="lb-code">scroll</code> — no JS needed.</p>
+
+    <div tabindex="0" role="region" aria-label="Scroll demo 2" class="lb-scroll-area lb-scroll-area--fade" style="max-width: 32rem; --max-height: 12rem; border: var(--lb-border-width-thin) solid var(--lb-border-default); border-radius: var(--lb-radius-surface); padding: var(--lb-size-4x);">
+      <div class="lb-stack">
+        <p style="margin: 0;"><strong>Scroll down</strong> — notice the top fade only appears once you've scrolled away from the top edge.</p>
+        <p style="margin: 0;">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+        <p style="margin: 0;">Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+        <p style="margin: 0;">Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.</p>
+        <p style="margin: 0;">Nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor.</p>
+        <p style="margin: 0;">In reprehenderit in voluptate velit esse cillum dolore eu fugiat.</p>
+        <p style="margin: 0;">Nulla pariatur. Excepteur sint occaecat cupidatat non proident.</p>
+        <p style="margin: 0;">Sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+        <p style="margin: 0;"><strong>End of content</strong> — bottom fade disappears here.</p>
+      </div>
+    </div>
+
+    <!-- ────────────────── Horizontal ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Horizontal — <code class="lb-code">--horizontal</code></h2>
+    <p class="gallery-section__desc">Flips the scroll axis to horizontal. Useful for chip rows, tag clouds, sticky-row table-like data. <code class="lb-code">white-space: nowrap</code> on the wrap keeps content on one line so it actually scrolls instead of wrapping. Pair with <code class="lb-code">--fade</code> for left/right gradient indicators.</p>
+
+    <div class="gallery-label">Plain horizontal scroll</div>
+    <div tabindex="0" role="region" aria-label="Scroll demo 3" class="lb-scroll-area lb-scroll-area--horizontal" style="border: var(--lb-border-width-thin) solid var(--lb-border-default); border-radius: var(--lb-radius-surface); padding: var(--lb-size-3x);">
+      <div class="lb-cluster" style="flex-wrap: nowrap;">
+        <span class="lb-chip">Design</span>
+        <span class="lb-chip">Engineering</span>
+        <span class="lb-chip">Product</span>
+        <span class="lb-chip">Marketing</span>
+        <span class="lb-chip">Sales</span>
+        <span class="lb-chip">Operations</span>
+        <span class="lb-chip">Legal</span>
+        <span class="lb-chip">Finance</span>
+        <span class="lb-chip">Human Resources</span>
+        <span class="lb-chip">Customer Success</span>
+        <span class="lb-chip">Research</span>
+        <span class="lb-chip">Quality Assurance</span>
+      </div>
+    </div>
+
+    <div class="gallery-label" style="margin-top: var(--lb-size-6x);">With fade — <code class="lb-code">--horizontal --fade</code></div>
+    <div tabindex="0" role="region" aria-label="Scroll demo 4" class="lb-scroll-area lb-scroll-area--horizontal lb-scroll-area--fade" style="border: var(--lb-border-width-thin) solid var(--lb-border-default); border-radius: var(--lb-radius-surface); padding: var(--lb-size-3x);">
+      <div class="lb-cluster" style="flex-wrap: nowrap;">
+        <span class="lb-chip">Design</span>
+        <span class="lb-chip">Engineering</span>
+        <span class="lb-chip">Product</span>
+        <span class="lb-chip">Marketing</span>
+        <span class="lb-chip">Sales</span>
+        <span class="lb-chip">Operations</span>
+        <span class="lb-chip">Legal</span>
+        <span class="lb-chip">Finance</span>
+        <span class="lb-chip">Human Resources</span>
+        <span class="lb-chip">Customer Success</span>
+        <span class="lb-chip">Research</span>
+        <span class="lb-chip">Quality Assurance</span>
+      </div>
+    </div>
+
+    <!-- ────────────────── Composing with Card ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Inside a Card — log viewer pattern</h2>
+    <p class="gallery-section__desc">Drop a <code class="lb-code">.lb-scroll-area</code> inside a card body for log viewers, change-history panels, or any "long content fits in a fixed slot" use case. Reuses the existing Card component — the scroll area only handles its own scrolling.</p>
+
+    <div class="lb-card" style="max-width: 32rem;">
+      <div class="lb-card__header">
+        <div class="lb-card__header-title">
+          <h3 class="lb-card__title">Activity log</h3>
+          <p class="lb-card__description">Last 24 hours</p>
+        </div>
+      </div>
+      <div class="lb-card__body" style="padding: 0;">
+        <div tabindex="0" role="region" aria-label="Scroll demo 5" class="lb-scroll-area lb-scroll-area--fade" style="--max-height: 14rem; padding: var(--lb-size-4x);">
+          <div class="lb-stack" style="--gap: var(--lb-size-2x);">
+            <p style="margin: 0; font-size: var(--lb-t-body-s-font-size);"><strong>10:42</strong> — Jane invited Mark to the workspace</p>
+            <p style="margin: 0; font-size: var(--lb-t-body-s-font-size);"><strong>10:38</strong> — Project "Q2 launch" archived</p>
+            <p style="margin: 0; font-size: var(--lb-t-body-s-font-size);"><strong>09:15</strong> — Settings updated by Alex</p>
+            <p style="margin: 0; font-size: var(--lb-t-body-s-font-size);"><strong>08:22</strong> — Three new comments on "Dashboard redesign"</p>
+            <p style="margin: 0; font-size: var(--lb-t-body-s-font-size);"><strong>Yesterday 18:04</strong> — Deploy to production succeeded</p>
+            <p style="margin: 0; font-size: var(--lb-t-body-s-font-size);"><strong>Yesterday 17:50</strong> — PR #842 merged by Priya</p>
+            <p style="margin: 0; font-size: var(--lb-t-body-s-font-size);"><strong>Yesterday 16:31</strong> — Database migration complete</p>
+            <p style="margin: 0; font-size: var(--lb-t-body-s-font-size);"><strong>Yesterday 15:12</strong> — Two team members joined</p>
+            <p style="margin: 0; font-size: var(--lb-t-body-s-font-size);"><strong>Yesterday 14:00</strong> — Sprint retrospective notes added</p>
+            <p style="margin: 0; font-size: var(--lb-t-body-s-font-size);"><strong>Yesterday 11:45</strong> — Backup created</p>
+            <p style="margin: 0; font-size: var(--lb-t-body-s-font-size);"><strong>Yesterday 09:00</strong> — Monthly invoice generated</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script src="../js/lb.js"></script>
+<script src="../js/slot-engine.js"></script>
+<script src="../js/theme-editor.js"></script>
+<script src="../js/token-exporter.js"></script>
+<script src="../js/gallery-layout.js"></script>
+</body>
+</html>

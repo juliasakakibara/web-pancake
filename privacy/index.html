@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <!-- theme-preamble:v1 -->
+  <script>(function(){try{var t=localStorage.getItem('letbe-ds-dark-mode');if(t==='1')document.documentElement.setAttribute('data-theme','dark');else if(t==='0')document.documentElement.setAttribute('data-theme','light');}catch(e){}})();</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta data-lb-page="privacy">
+  <title>Privacy — letbe-ds</title>
+  <link rel="stylesheet" href="../tokens/theme.css">
+  <link rel="stylesheet" href="../tokens/fonts.css">
+  <link rel="stylesheet" href="../components/components.css">
+  <link rel="stylesheet" href="../components/theme-editor.css">
+  <link rel="stylesheet" href="../components/gallery.css">
+</head>
+<body data-lb-base="..">
+
+<main class="gallery-main">
+  <section class="gallery-section" id="privacy">
+
+    <h1 class="gallery-section__title">Privacy</h1>
+    <p class="gallery-section__desc">This site is a static component gallery. It has no accounts, no advertising, no cookies and no tracking across sites; the only measurement is a cookieless, EU-hosted page counter described below. Everything on this page is checkable in the source, which is public — the same rule this system applies to every other claim it makes.</p>
+
+    <hr class="gallery-desc-divider">
+
+    <h2 class="gallery-section__title">What stays on your device</h2>
+    <p class="gallery-section__desc">Three preferences are kept in your browser's <code class="lb-code">localStorage</code>, on your device only, and never sent anywhere: your light/dark choice (<code class="lb-code">letbe-ds-dark-mode</code>), the theme editor's state — knobs, presets, an imported baseline — (<code class="lb-code">letbe-ds-theme-editor-v2</code>), and the collapse/width of app-shell demos (<code class="lb-code">lb-shell-*</code>). These are not cookies, they carry no identifier, and clearing site data removes them.</p>
+
+    <h2 class="gallery-section__title">What leaves your device</h2>
+    <p class="gallery-section__desc">Loading a page requests files. Fonts, styles, scripts and the images on the About page are served from this site's own origin. Demo audio tracks and the brand film in the media demos are served from a public CDN (<code class="lb-code">cdn.jsdelivr.net</code>) that mirrors the companion <a class="lb-link" href="https://github.com/m1ha1l0/letbe-media">letbe-media</a> repository; requesting a file from any host means that host sees your IP address for the duration of the request, as with any download. Nothing about you is attached to those requests by this site.</p>
+    <p class="gallery-section__desc">One request happens only when you ask for it: the theme editor's font picker fetches a family from Google Fonts (<code class="lb-code">fonts.googleapis.com</code>) at the moment you choose one. Pages themselves make no request to Google — the shipped typefaces are self-hosted.</p>
+    <p class="gallery-section__desc"><strong>Analytics.</strong> Each page view sends one request to <a class="lb-link" href="https://plausible.io/data-policy">Plausible Analytics</a> (<code class="lb-code">plausible.io</code>), a cookieless service that processes and stores its data in the EU. It records the page path, referrer, browser, operating system, device type and country/region — no cookies, no <code class="lb-code">localStorage</code>, no persistent identifier. Unique visitors are counted through a salted hash that is discarded daily; raw IP addresses are never stored. The script is loaded by <code class="lb-code">js/gallery-layout.js</code> only when the page is served from <code class="lb-code">letbe.design</code> — local copies, previews and forks of the repository send nothing.</p>
+
+    <h2 class="gallery-section__title">Forms and inputs</h2>
+    <p class="gallery-section__desc">Every form on this site is a demonstration of a component. None has a destination: nothing typed into the auth flows, the newsletter box or any input is submitted, stored or transmitted. The theme editor's Import, Paste and <code class="lb-code">#theme=</code> links process a token file entirely in your browser.</p>
+
+    <h2 class="gallery-section__title">Hosting</h2>
+    <p class="gallery-section__desc">The site is served as static files by a hosting provider, which — like every web host — keeps standard access logs (IP address, requested path, user agent, timestamp) for operating and securing the service. This site adds nothing to those logs and does not read them for anything beyond keeping the site up.</p>
+
+    <h2 class="gallery-section__title">Contact</h2>
+    <p class="gallery-section__desc">Questions about any of this: open an issue on the <a class="lb-link" href="https://github.com/m1ha1l0/letbe-ds">letbe-ds repository</a>. If this page and the source ever disagree, the source is right and this page is a bug — report it.</p>
+
+  </section>
+</main>
+
+<script src="../js/lb.js"></script>
+<script src="../js/slot-engine.js"></script>
+<script src="../js/theme-editor.js"></script>
+<script src="../js/token-exporter.js"></script>
+<script src="../js/gallery-layout.js"></script>
+</body>
+</html>

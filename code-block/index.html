@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <!-- theme-preamble:v1 -->
+  <script>(function(){try{var t=localStorage.getItem('letbe-ds-dark-mode');if(t==='1')document.documentElement.setAttribute('data-theme','dark');else if(t==='0')document.documentElement.setAttribute('data-theme','light');}catch(e){}})();</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta data-lb-page="code-block">
+  <title>Code Block — letbe-ds</title>
+  <link rel="stylesheet" href="../tokens/theme.css">
+  <link rel="stylesheet" href="../tokens/fonts.css">
+  <link rel="stylesheet" href="../components/components.css">
+  <link rel="stylesheet" href="../components/theme-editor.css">
+  <link rel="stylesheet" href="../components/gallery.css">
+</head>
+<body data-lb-base="..">
+
+<main class="gallery-main">
+  <section class="gallery-section" id="code-block">
+    <h1 class="gallery-section__title" style="font-size: var(--lb-t-heading-l-font-size); line-height: var(--lb-t-heading-l-line-height);">Code Block</h1>
+    <p class="gallery-section__desc">Styled code surface for snippets, configs, theme exports. Optional header strip with language label and filename, optional line numbers, opt-in regex highlighter for <code class="lb-code">js</code>, <code class="lb-code">ts</code>, <code class="lb-code">json</code>, <code class="lb-code">css</code>, <code class="lb-code">html</code>, <code class="lb-code">bash</code>. Lightweight — no highlighting library, just spans driven by per-language regex. Inline counterpart <code class="lb-code">.lb-code</code> for prose-level snippets.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>a11y (built in):</strong> Copy / Save / Open / Apply are real <code class="lb-code">&lt;button type="button"&gt;</code>s, each with an <code class="lb-code">aria-label</code> and the system <code class="lb-code">:focus-visible</code> outline, and they are always visible rather than hover-revealed, so keyboard and touch users reach the same affordances as a mouse. Copy confirms in place — the button swaps its own icon and label to <code class="lb-code">Copied</code> for 1.5s, no toast to chase — and the line-number gutter is CSS <code class="lb-code">counter()</code> content marked <code class="lb-code">user-select: none</code>, so numbers never enter the selection or the clipboard (Copy writes the raw source as plain text).</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>Usage:</strong> <code class="lb-code">&lt;pre data-lb-code-block&gt;&lt;code&gt;…&lt;/code&gt;&lt;/pre&gt;</code>. Add <code class="lb-code">data-lb-lang</code>, <code class="lb-code">data-lb-title</code>, <code class="lb-code">data-lb-numbers</code>, <code class="lb-code">data-lb-no-copy</code> as needed.</p>
+
+    <hr class="gallery-desc-divider">
+
+    <!-- ────────────────── Plain ────────────────── -->
+    <h2 class="gallery-section__title">Plain — no header, no highlighting</h2>
+    <p class="gallery-section__desc">Just a styled surface and an always-visible copy button anchored top-right. Use for one-line install commands and short config snippets.</p>
+    <pre data-lb-code-block><code>npm install letbe-ds</code></pre>
+
+    <!-- ────────────────── With language + filename ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">With filename + language label</h2>
+    <p class="gallery-section__desc">Header strip carries a filename on the left, the language label on the right, and the copy button. Highlighter runs when <code class="lb-code">data-lb-lang</code> is set.</p>
+    <pre data-lb-code-block data-lb-lang="ts" data-lb-title="src/auth.ts"><code>import { signIn } from './session';
+
+interface AuthOptions {
+  redirect?: string;
+  remember?: boolean;
+}
+
+export async function authenticate(opts: AuthOptions = {}) {
+  // attempt the sign-in flow
+  const session = await signIn(opts);
+  return session.token;
+}</code></pre>
+
+    <!-- ────────────────── JSON with line numbers ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">JSON with line numbers</h2>
+    <p class="gallery-section__desc">Add <code class="lb-code">data-lb-numbers</code> for a numbered gutter — useful when you reference specific lines in surrounding prose.</p>
+    <pre data-lb-code-block data-lb-lang="json" data-lb-title="package.json" data-lb-numbers><code>{
+  "name": "letbe-ds",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "python3 -m http.server 8080",
+    "lint": "node --check js/lb.js"
+  }
+}</code></pre>
+
+    <!-- ────────────────── HTML ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">HTML</h2>
+    <p class="gallery-section__desc">Tags and attributes use distinct token colors. Note the &lt; / &gt; need escaping in the HTML source — same as anywhere code is embedded inside HTML.</p>
+    <pre data-lb-code-block data-lb-lang="html" data-lb-title="card.html"><code>&lt;div class="lb-card lb-card--padded"&gt;
+  &lt;div class="lb-card__heading"&gt;
+    &lt;div class="lb-card__title"&gt;Active users&lt;/div&gt;
+    &lt;div class="lb-card__subtitle"&gt;Last 7 days&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class="lb-stat"&gt;
+    &lt;div class="lb-stat__value"&gt;12,486&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+
+    <!-- ────────────────── CSS ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">CSS</h2>
+    <p class="gallery-section__desc">Custom properties (<code class="lb-code">--var-name</code>) are picked out as attribute tokens; at-rules and selectors are highlighted distinctly.</p>
+    <pre data-lb-code-block data-lb-lang="css"><code>:root {
+  --lb-radius-field: 6px;
+  --lb-radius-overlay: 12px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --lb-bg-default: #0a0a0a;
+  }
+}
+
+.lb-button {
+  padding: 8px 16px;
+  background: var(--lb-action-bg-primary);
+  border-radius: var(--lb-radius-field);
+}</code></pre>
+
+    <!-- ────────────────── Bash ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Bash</h2>
+    <p class="gallery-section__desc">Common shell commands, control flow, and quoted strings.</p>
+    <pre data-lb-code-block data-lb-lang="bash" data-lb-title="setup.sh"><code># Install dependencies and start the dev server
+npm install
+git checkout -b feat/charts
+
+if [ -d "dist" ]; then
+  echo "Cleaning previous build…"
+  rm -rf dist
+fi
+
+npm run build &amp;&amp; npm run dev</code></pre>
+
+    <!-- ────────────────── Inline code ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Inline code — <code class="lb-code">.lb-code</code></h2>
+    <p class="gallery-section__desc">For prose-level snippets — the name of a file, a flag, a command name. Sits inline with body text without breaking line height. Add <code class="lb-code">.lb-code</code> to a <code class="lb-code">&lt;code&gt;</code> tag.</p>
+    <p class="gallery-section__desc">
+      Run <code class="lb-code">npm install letbe-ds</code> to add the system to your project, then import the CSS via
+      <code class="lb-code">@import "letbe-ds/components.css"</code> in your stylesheet. The kebab-case attribute
+      <code class="lb-code">data-lb-component</code> drives auto-init.
+    </p>
+
+    <!-- ────────────────── No copy ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">No copy button — <code class="lb-code">data-lb-no-copy</code></h2>
+    <p class="gallery-section__desc">Hide the copy button when the snippet is illustrative rather than something to grab.</p>
+    <pre data-lb-code-block data-lb-lang="js" data-lb-no-copy><code>// pseudocode — illustrates the pattern, not runnable
+function pipeline(input) {
+  return transform(filter(parse(input)));
+}</code></pre>
+
+    <!-- ────────────────── New actions ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Action row &mdash; Save / Open / Apply</h2>
+    <p class="gallery-section__desc">The Copy button is joined by additional actions, all always-visible (per forum feedback that hover-only chrome hides discoverable affordances):</p>
+    <ul class="gallery-section__desc">
+      <li><strong>Copy</strong> &mdash; smart dual-format. Writes both <code class="lb-code">text/plain</code> AND <code class="lb-code">text/html</code> (with syntax-highlight preservation) to the clipboard, so pasting into a rich-text editor gets formatted code while terminal pastes get clean plain text. Opt out with <code class="lb-code">data-lb-no-copy</code>.</li>
+      <li><strong>Save</strong> &mdash; downloads the source as a file. Filename uses <code class="lb-code">data-lb-title</code> if it already has an extension, otherwise builds <code class="lb-code">{title-or-snippet}.{ext}</code> from the language. Opt out with <code class="lb-code">data-lb-no-save</code>.</li>
+      <li><strong>Open</strong> &mdash; opt-in via <code class="lb-code">data-lb-open</code>. Emits <code class="lb-code">lb-code-open</code> with <code class="lb-code">{source, lang, title}</code> &mdash; consumer routes to their editor of choice (in-page panel, VS Code deep link, etc.).</li>
+      <li><strong>Apply</strong> &mdash; opt-in via <code class="lb-code">data-lb-apply</code>. Primary-styled. Emits <code class="lb-code">lb-code-apply</code> for dev-surface consumers building &ldquo;apply this change to file X&rdquo; flows.</li>
+    </ul>
+    <p class="gallery-section__desc">All four also available programmatically: <code class="lb-code">el._lbCodeBlock.copy() / save() / openInEditor() / apply()</code>.</p>
+
+    <pre data-lb-code-block data-lb-lang="ts" data-lb-title="src/api.ts" data-lb-open data-lb-apply><code>// Try Copy → paste into a rich-text editor to see syntax highlighting preserved.
+// Try Save → download as src/api.ts. Open and Apply emit events.
+export async function fetchUser(id: string) {
+  const response = await fetch(`/api/users/${id}`);
+  if (!response.ok) throw new Error('Failed to fetch user');
+  return response.json();
+}</code></pre>
+
+    <p class="gallery-section__desc">Without a header, the actions float top-right with a card background so they stay legible over highlighted code:</p>
+
+    <pre data-lb-code-block data-lb-lang="bash" data-lb-open><code>rm -rf node_modules
+npm install
+npm run dev</code></pre>
+
+    <!-- ────────────────── Live API ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Programmatic update — <code class="lb-code">setSource()</code></h2>
+    <p class="gallery-section__desc">Swap the rendered code at runtime — useful for theme exports, query inspectors, or any block whose source comes from app state.</p>
+    <div class="lb-stack" style="max-width: 32rem;">
+      <div class="lb-cluster">
+        <button class="lb-btn lb-btn--secondary lb-btn--small" id="cb-js">JavaScript example</button>
+        <button class="lb-btn lb-btn--secondary lb-btn--small" id="cb-css">CSS example</button>
+        <button class="lb-btn lb-btn--secondary lb-btn--small" id="cb-json">JSON export</button>
+      </div>
+      <pre data-lb-code-block data-lb-lang="js" id="cb-live"><code>// Click a button to swap the source live
+const value = 42;</code></pre>
+    </div>
+    <script>
+      (function() {
+        const cb = document.getElementById('cb-live');
+        if (!cb) return;
+        document.getElementById('cb-js').addEventListener('click', () =>
+          cb._lbCodeBlock.setSource('const colors = ["red", "green", "blue"];\nconsole.log(colors.length);', 'js'));
+        document.getElementById('cb-css').addEventListener('click', () =>
+          cb._lbCodeBlock.setSource('.button {\n  color: var(--lb-fg-default);\n  padding: 0 12px;\n}', 'css'));
+        document.getElementById('cb-json').addEventListener('click', () =>
+          cb._lbCodeBlock.setSource('{\n  "theme": "dark",\n  "brand": "#7c3aed"\n}', 'json'));
+      })();
+    </script>
+  </section>
+</main>
+
+<script src="../js/lb.js"></script>
+<script src="../js/slot-engine.js"></script>
+<script src="../js/theme-editor.js"></script>
+<script src="../js/token-exporter.js"></script>
+<script src="../js/gallery-layout.js"></script>
+</body>
+</html>

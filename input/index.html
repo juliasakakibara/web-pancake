@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <!-- theme-preamble:v1 -->
+  <script>(function(){try{var t=localStorage.getItem('letbe-ds-dark-mode');if(t==='1')document.documentElement.setAttribute('data-theme','dark');else if(t==='0')document.documentElement.setAttribute('data-theme','light');}catch(e){}})();</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta data-lb-page="input">
+  <title>Input — letbe-ds</title>
+  <link rel="stylesheet" href="../tokens/theme.css">
+  <link rel="stylesheet" href="../tokens/fonts.css">
+  <link rel="stylesheet" href="../components/components.css">
+  <link rel="stylesheet" href="../components/theme-editor.css">
+  <link rel="stylesheet" href="../components/gallery.css">
+</head>
+<body data-lb-base="..">
+
+<main class="gallery-main">
+  <section class="gallery-section" id="input">
+    <h1 class="gallery-section__title" style="font-size: var(--lb-t-heading-l-font-size); line-height: var(--lb-t-heading-l-line-height);">Input</h1>
+    <p class="gallery-section__desc">Single-line and multi-line text entry. States: default, focus, hover, disabled, error, success. Variants: password (with eye toggle), clearable (with X), search (with search icon), phone number (with country selector), and multiline (free-form <code class="lb-code">&lt;textarea&gt;</code>). The numeric field with stepper buttons is documented in the Number Input section below. Always pair with a <code class="lb-code">.lb-label</code>; add <code class="lb-code">.lb-field__hint</code> for helper text, or a <code class="lb-code">.lb-field__error</code> carrying an <code class="lb-code">id</code> that the field references with <code class="lb-code">aria-describedby</code>.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>a11y (built in):</strong> every field is a native control bound to its <code class="lb-code">&lt;label for&gt;</code> — multiline is a real <code class="lb-code">&lt;textarea&gt;</code>, Number a real <code class="lb-code">&lt;input type="number"&gt;</code> — and an invalid field carries <code class="lb-code">aria-invalid</code> + <code class="lb-code">aria-describedby</code> pointing at its <code class="lb-code">.lb-field__error</code>. The generated clear (X) and password-eye buttons get <code class="lb-code">aria-label</code>s that track state (<em>Show password</em> ⇄ <em>Hide password</em>) and stay out of the tab order (<code class="lb-code">tabindex=-1</code>), so the field itself remains the single tab stop; the number steppers are real buttons (<code class="lb-code">aria-label</code> Decrease/Increase) that go <code class="lb-code">disabled</code> at min/max. Phone's country picker is a combobox (<code class="lb-code">role=combobox</code> + <code class="lb-code">aria-haspopup=listbox</code> + <code class="lb-code">aria-expanded</code>, with an <code class="lb-code">aria-label</code> naming the current country) over a <code class="lb-code">role=listbox</code>: <kbd>↑</kbd>/<kbd>↓</kbd>/<kbd>Home</kbd>/<kbd>End</kbd> move, <kbd>Enter</kbd> picks, <kbd>Esc</kbd> closes and returns focus to the trigger.</p>
+
+<hr class="gallery-desc-divider">
+
+
+    <!-- ────────────────── Default ────────────────── -->
+    <h2 class="gallery-section__title">Default</h2>
+    <p class="gallery-section__desc">Standard text input with label and hint. The minimum useful pattern: <code class="lb-code">.lb-field</code> wraps a <code class="lb-code">.lb-label</code> + <code class="lb-code">.lb-input-wrap</code> + <code class="lb-code">.lb-field__hint</code>.</p>
+    <div class="gallery-row" style="max-width: 360px;">
+      <div class="lb-field" style="width: 100%;">
+        <label class="lb-label" for="input-default">Label</label>
+        <div class="lb-input-wrap">
+          <input class="lb-input lb-input--medium" id="input-default" type="text" placeholder="Placeholder text">
+        </div>
+        <span class="lb-field__hint">Helpful hint text</span>
+      </div>
+    </div>
+
+    <!-- ────────────────── Sizes ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Sizes</h2>
+    <p class="gallery-section__desc">Two sizes: medium (default, 36px) and small (28px). Add <code class="lb-code">.lb-input--small</code> for compact toolbars or filter rows.</p>
+    <div class="gallery-row" style="max-width: 360px; flex-direction: column; align-items: stretch;">
+      <div class="lb-field">
+        <label class="lb-label" for="input-medium">Medium (default)</label>
+        <div class="lb-input-wrap"><input class="lb-input lb-input--medium" id="input-medium" type="text" placeholder="Medium"></div>
+      </div>
+      <div class="lb-field">
+        <label class="lb-label" for="input-small">Small</label>
+        <div class="lb-input-wrap"><input class="lb-input lb-input--small" id="input-small" type="text" placeholder="Small"></div>
+      </div>
+    </div>
+
+    <!-- ────────────────── States ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">States</h2>
+    <p class="gallery-section__desc">Validation states: <code class="lb-code">.lb-input--error</code> and <code class="lb-code">.lb-input--success</code> swap the border color and pair with <code class="lb-code">.lb-field__error</code> / <code class="lb-code">.lb-field__success</code>. The native <code class="lb-code">disabled</code> attribute handles the disabled state.</p>
+    <div class="gallery-row" style="max-width: 360px; flex-direction: column; align-items: stretch;">
+      <div class="lb-field">
+        <label class="lb-label lb-label--required" for="input-error">Required field</label>
+        <div class="lb-input-wrap">
+          <input class="lb-input lb-input--medium lb-input--error" id="input-error" type="text" value="Invalid value" aria-invalid="true" aria-describedby="input-error-msg" aria-required="true">
+        </div>
+        <span class="lb-field__error" id="input-error-msg">This field is required</span>
+      </div>
+      <div class="lb-field">
+        <label class="lb-label" for="input-success">Success</label>
+        <div class="lb-input-wrap">
+          <input class="lb-input lb-input--medium lb-input--success" id="input-success" type="text" value="Valid value">
+        </div>
+        <span class="lb-field__success">Looks good!</span>
+      </div>
+      <div class="lb-field">
+        <label class="lb-label" for="input-disabled">Disabled</label>
+        <div class="lb-input-wrap"><input class="lb-input lb-input--medium" id="input-disabled" type="text" value="Cannot edit" disabled></div>
+      </div>
+    </div>
+
+    <!-- ────────────────── Clearable ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Clearable</h2>
+    <p class="gallery-section__desc">Add <code class="lb-code">data-lb-clearable</code> to the field; an X button appears once the user types and wipes the value on click. Useful for filter inputs and search.</p>
+    <div class="gallery-row" style="max-width: 360px;">
+      <div class="lb-field" data-lb-clearable style="width: 100%;">
+        <label class="lb-label" for="input-clearable">Clearable input</label>
+        <div class="lb-input-wrap">
+          <input class="lb-input lb-input--medium" id="input-clearable" type="text" placeholder="Type to see clear button...">
+        </div>
+        <span class="lb-field__hint">Type something — an X button appears to clear</span>
+      </div>
+    </div>
+
+    <!-- ────────────────── With leading icon ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">With leading icon</h2>
+    <p class="gallery-section__desc">An icon slot inside the wrap; pair with <code class="lb-code">.lb-input--has-start</code> on the input to reserve padding. Combine with <code class="lb-code">data-lb-clearable</code> for the typical search field.</p>
+    <div class="gallery-row" style="max-width: 360px;">
+      <div class="lb-field" data-lb-clearable style="width: 100%;">
+        <label class="lb-label" for="input-search">Search with icon</label>
+        <div class="lb-input-wrap">
+          <span class="lb-input-wrap__icon lb-input-wrap__icon--start" aria-hidden="true" data-lb-icon="search"></span>
+          <input class="lb-input lb-input--medium lb-input--has-start" id="input-search" type="search" placeholder="Search...">
+        </div>
+      </div>
+    </div>
+
+    <!-- ────────────────── Password ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Password</h2>
+    <p class="gallery-section__desc">Add <code class="lb-code">data-lb-password</code> and use <code class="lb-code">type="password"</code>; an eye-toggle appends automatically and switches between password / text. Works at both sizes.</p>
+    <div class="gallery-row" style="max-width: 360px; flex-direction: column; align-items: stretch;">
+      <div class="lb-field" data-lb-password>
+        <label class="lb-label" for="input-password">Password (medium)</label>
+        <div class="lb-input-wrap">
+          <input class="lb-input lb-input--medium" id="input-password" type="password" placeholder="Enter password">
+        </div>
+        <span class="lb-field__hint">Click the eye icon to toggle visibility</span>
+      </div>
+      <div class="lb-field" data-lb-password>
+        <label class="lb-label" for="input-password-small">Password (small)</label>
+        <div class="lb-input-wrap">
+          <input class="lb-input lb-input--small" id="input-password-small" type="password" placeholder="Small password">
+        </div>
+      </div>
+    </div>
+
+    <!-- ────────────────── Phone number ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);" id="phone">Phone number</h2>
+    <p class="gallery-section__desc">Compound field: country-code dropdown + tel input. Use <code class="lb-code">.lb-phone</code> with <code class="lb-code">data-lb-phone</code>; states (<code class="lb-code">--error</code>, <code class="lb-code">--disabled</code>) live on the wrap, not the input.</p>
+    <div class="gallery-row" style="max-width: 360px; flex-direction: column; align-items: stretch;">
+      <div class="lb-field">
+        <label class="lb-label" for="phone-default">Phone</label>
+        <div class="lb-phone" data-lb-phone>
+          <input class="lb-phone__input" id="phone-default" type="tel" placeholder="Phone number">
+        </div>
+        <span class="lb-field__hint">Select your country and enter your number</span>
+      </div>
+      <div class="lb-field">
+        <label class="lb-label lb-label--required" for="phone-error">Phone (error)</label>
+        <div class="lb-phone lb-phone--error" data-lb-phone>
+          <input class="lb-phone__input" id="phone-error" type="tel" placeholder="Phone number" value="12345" aria-invalid="true" aria-describedby="phone-error-msg">
+        </div>
+        <span class="lb-field__error" id="phone-error-msg">Please enter a valid phone number</span>
+      </div>
+      <div class="lb-field">
+        <label class="lb-label" for="phone-disabled">Phone (disabled)</label>
+        <div class="lb-phone lb-phone--disabled" data-lb-phone>
+          <input class="lb-phone__input" id="phone-disabled" type="tel" placeholder="Phone number" disabled>
+        </div>
+      </div>
+    </div>
+
+    <!-- ────────────────── Multiline (textarea) ────────────────── -->
+    <h2 id="multiline" class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Multiline (textarea)</h2>
+    <p class="gallery-section__desc">Free-form multi-line entry — descriptions, comments, messages. Use a native <code class="lb-code">&lt;textarea&gt;</code> with the same <code class="lb-code">.lb-input</code> class plus <code class="lb-code">--multiline</code>. Inherits every Input state and token (focus, error, success, disabled). The <code class="lb-code">--multiline</code> modifier defeats the fixed height set by <code class="lb-code">--small</code> / <code class="lb-code">--medium</code>, restores block-level padding, pins resize to vertical only, and applies sensible width constraints (min ~18rem, max ~45rem — comfortable line length for prose, collapses on narrow parents). Override with inline <code class="lb-code">style="max-width: …"</code> or <code class="lb-code">rows="…"</code> as needed.</p>
+    <div class="gallery-row" style="flex-direction: column; align-items: stretch; gap: var(--lb-size-4x);">
+      <div class="lb-field">
+        <label class="lb-label" for="textarea-default">Message</label>
+        <textarea class="lb-input lb-input--multiline" id="textarea-default" placeholder="Type your message…"></textarea>
+        <span class="lb-field__hint">Max 500 characters</span>
+      </div>
+      <div class="lb-field">
+        <label class="lb-label" for="textarea-small">Small (compact font-size)</label>
+        <textarea class="lb-input lb-input--small lb-input--multiline" id="textarea-small" placeholder="Compact body-s font-size" rows="3"></textarea>
+      </div>
+      <div class="lb-field">
+        <label class="lb-label lb-label--required" for="textarea-error">Required field (error)</label>
+        <textarea class="lb-input lb-input--multiline lb-input--error" id="textarea-error" aria-invalid="true" aria-describedby="textarea-error-msg" aria-required="true">Too short</textarea>
+        <span class="lb-field__error" id="textarea-error-msg">Please write at least 20 characters</span>
+      </div>
+      <div class="lb-field">
+        <label class="lb-label" for="textarea-success">Valid field (success)</label>
+        <textarea class="lb-input lb-input--multiline lb-input--success" id="textarea-success" aria-describedby="textarea-success-msg">Looks good — long enough and within the character limit.</textarea>
+        <span class="lb-field__success" id="textarea-success-msg">Looks good</span>
+      </div>
+      <div class="lb-field">
+        <label class="lb-label" for="textarea-disabled">Disabled</label>
+        <textarea class="lb-input lb-input--multiline" id="textarea-disabled" disabled placeholder="You can't edit this">Read-only content shown in a disabled textarea.</textarea>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════════════════
+       NUMBER INPUT — numeric variant with stepper buttons and min/max
+       ══════════════════════════════════════════════════════════════════════ -->
+  <section class="gallery-section" id="number-input" style="margin-top: var(--lb-size-16x);">
+    <h2 class="gallery-section__title">Number Input</h2>
+    <p class="gallery-section__desc">Numeric field with stepper buttons, min/max clamping, decimal step support, optional unit prefix/suffix. Native browser spinner hidden; our stepper buttons are the single source of truth. Buttons auto-disable when the value hits the boundary.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>Usage:</strong> <code class="lb-code">&lt;div class="lb-number-wrap lb-number-wrap--medium" data-lb-number data-lb-min="0" data-lb-max="10" data-lb-step="1"&gt;</code> with <code class="lb-code">&lt;button class="lb-number__step lb-number__step--dec"&gt;</code>, <code class="lb-code">&lt;input type="number" class="lb-number"&gt;</code>, <code class="lb-code">&lt;button class="lb-number__step lb-number__step--inc"&gt;</code> inside. Dispatches <code class="lb-code">lb-number-change</code> with <code class="lb-code">{ value }</code>. Read/write via <code class="lb-code">wrap._lbNumber.getValue()</code> / <code class="lb-code">.setValue(v)</code>.</p>
+
+    <hr class="gallery-desc-divider">
+
+    <!-- ────────────────── Default ────────────────── -->
+    <h2 class="gallery-section__title">Default</h2>
+    <p class="gallery-section__desc">Medium size, no constraints. Type directly, or use the ± buttons, or press ↑/↓ on your keyboard.</p>
+    <div style="max-width: 240px; display: flex; flex-direction: column; gap: var(--lb-size-4x);">
+      <div class="lb-number-field">
+        <label class="lb-label" for="num-default">Quantity</label>
+        <div class="lb-number-wrap lb-number-wrap--medium" data-lb-number id="num-default-wrap">
+          <button type="button" class="lb-number__step lb-number__step--dec" aria-label="Decrease">
+            <span data-lb-icon="minus"></span>
+          </button>
+          <input type="number" class="lb-number" id="num-default" value="1" step="1">
+          <button type="button" class="lb-number__step lb-number__step--inc" aria-label="Increase">
+            <span data-lb-icon="plus"></span>
+          </button>
+        </div>
+        <span class="lb-field__hint">Last change: <span id="num-default-feedback" style="font-family: var(--lb-font-family-3); color: var(--lb-fg-accent);">1</span></span>
+      </div>
+    </div>
+
+    <!-- ────────────────── Sizes ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Sizes</h2>
+    <div style="max-width: 240px; display: flex; flex-direction: column; gap: var(--lb-size-4x);">
+      <div class="gallery-label">Small — <code class="lb-code">--sm</code></div>
+      <div class="lb-number-wrap lb-number-wrap--sm" data-lb-number>
+        <button type="button" class="lb-number__step lb-number__step--dec" aria-label="Decrease"><span data-lb-icon="minus"></span></button>
+        <input type="number" class="lb-number" value="5" aria-label="Quantity">
+        <button type="button" class="lb-number__step lb-number__step--inc" aria-label="Increase"><span data-lb-icon="plus"></span></button>
+      </div>
+      <div class="gallery-label" style="margin-top: var(--lb-size-3x);">Medium (default)</div>
+      <div class="lb-number-wrap lb-number-wrap--medium" data-lb-number>
+        <button type="button" class="lb-number__step lb-number__step--dec" aria-label="Decrease"><span data-lb-icon="minus"></span></button>
+        <input type="number" class="lb-number" value="5" aria-label="Quantity">
+        <button type="button" class="lb-number__step lb-number__step--inc" aria-label="Increase"><span data-lb-icon="plus"></span></button>
+      </div>
+    </div>
+
+    <!-- ────────────────── Min/max ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Min / max with auto-disable</h2>
+    <p class="gallery-section__desc">Range 0–10. Buttons grey out at the boundary. Typing outside the range clamps on blur.</p>
+    <div style="max-width: 240px;">
+      <div class="lb-number-field">
+        <label class="lb-label" for="num-bounded">Seats (0–10)</label>
+        <div class="lb-number-wrap lb-number-wrap--medium" data-lb-number data-lb-min="0" data-lb-max="10">
+          <button type="button" class="lb-number__step lb-number__step--dec" aria-label="Decrease"><span data-lb-icon="minus"></span></button>
+          <input type="number" class="lb-number" id="num-bounded" value="0" min="0" max="10">
+          <button type="button" class="lb-number__step lb-number__step--inc" aria-label="Increase"><span data-lb-icon="plus"></span></button>
+        </div>
+        <span class="lb-field__hint">Try clicking − now (already at min) — button is disabled.</span>
+      </div>
+    </div>
+
+    <!-- ────────────────── Decimal step ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Decimal step</h2>
+    <p class="gallery-section__desc">Step 0.1 — for ratings, tolerances, fine-grained sliders. Rounding handled internally so you never see <code class="lb-code">0.30000004</code>.</p>
+    <div style="max-width: 240px;">
+      <div class="lb-number-field">
+        <label class="lb-label" for="num-decimal">Rating (0–5, step 0.1)</label>
+        <div class="lb-number-wrap lb-number-wrap--medium" data-lb-number data-lb-min="0" data-lb-max="5" data-lb-step="0.1">
+          <button type="button" class="lb-number__step lb-number__step--dec" aria-label="Decrease"><span data-lb-icon="minus"></span></button>
+          <input type="number" class="lb-number" id="num-decimal" value="3.5" min="0" max="5" step="0.1">
+          <button type="button" class="lb-number__step lb-number__step--inc" aria-label="Increase"><span data-lb-icon="plus"></span></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ────────────────── Prefix — currency ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Prefix — currency</h2>
+    <p class="gallery-section__desc">Unit prefix (<code class="lb-code">$</code>, <code class="lb-code">€</code>, etc.) sits inside the wrap. Text left-aligns because prefix anchors the start.</p>
+    <div style="max-width: 240px; display: flex; flex-direction: column; gap: var(--lb-size-4x);">
+      <div class="lb-number-field">
+        <label class="lb-label" for="num-currency">Price</label>
+        <div class="lb-number-wrap lb-number-wrap--medium" data-lb-number data-lb-min="0" data-lb-step="0.01">
+          <span class="lb-number__prefix" aria-hidden="true">$</span>
+          <input type="number" class="lb-number" id="num-currency" value="49.99" min="0" step="0.01">
+        </div>
+      </div>
+    </div>
+
+    <!-- ────────────────── Suffix — percentage ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Suffix — percentage</h2>
+    <div style="max-width: 240px;">
+      <div class="lb-number-field">
+        <label class="lb-label" for="num-percent">Discount</label>
+        <div class="lb-number-wrap lb-number-wrap--medium" data-lb-number data-lb-min="0" data-lb-max="100">
+          <input type="number" class="lb-number" id="num-percent" value="25" min="0" max="100">
+          <span class="lb-number__suffix" aria-hidden="true">%</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ────────────────── Full featured — prefix + suffix + steppers ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Prefix + suffix + steppers</h2>
+    <p class="gallery-section__desc">All four slots together. Useful for amounts with unit codes (e.g. <code class="lb-code">$ 1,000 USD</code>).</p>
+    <div style="max-width: 320px;">
+      <div class="lb-number-field">
+        <label class="lb-label" for="num-full">Amount</label>
+        <div class="lb-number-wrap lb-number-wrap--medium" data-lb-number data-lb-min="0" data-lb-step="10">
+          <button type="button" class="lb-number__step lb-number__step--dec" aria-label="Decrease"><span data-lb-icon="minus"></span></button>
+          <span class="lb-number__prefix" aria-hidden="true">$</span>
+          <input type="number" class="lb-number" id="num-full" value="250" min="0" step="10">
+          <span class="lb-number__suffix" aria-hidden="true">USD</span>
+          <button type="button" class="lb-number__step lb-number__step--inc" aria-label="Increase"><span data-lb-icon="plus"></span></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ────────────────── States ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">States</h2>
+    <div style="max-width: 240px; display: flex; flex-direction: column; gap: var(--lb-size-4x);">
+      <div class="lb-number-field">
+        <label class="lb-label" for="num-err">Error</label>
+        <div class="lb-number-wrap lb-number-wrap--medium lb-number-wrap--error" data-lb-number>
+          <button type="button" class="lb-number__step lb-number__step--dec" aria-label="Decrease"><span data-lb-icon="minus"></span></button>
+          <input type="number" class="lb-number" id="num-err" value="-5">
+          <button type="button" class="lb-number__step lb-number__step--inc" aria-label="Increase"><span data-lb-icon="plus"></span></button>
+        </div>
+        <span class="lb-field__error">Must be positive.</span>
+      </div>
+      <div class="lb-number-field">
+        <label class="lb-label" for="num-success">Success</label>
+        <div class="lb-number-wrap lb-number-wrap--medium lb-number-wrap--success" data-lb-number>
+          <button type="button" class="lb-number__step lb-number__step--dec" aria-label="Decrease"><span data-lb-icon="minus"></span></button>
+          <input type="number" class="lb-number" id="num-success" value="42">
+          <button type="button" class="lb-number__step lb-number__step--inc" aria-label="Increase"><span data-lb-icon="plus"></span></button>
+        </div>
+        <span class="lb-field__success">Looks right.</span>
+      </div>
+      <div class="lb-number-field">
+        <label class="lb-label" for="num-disabled">Disabled</label>
+        <div class="lb-number-wrap lb-number-wrap--medium" data-lb-number>
+          <button type="button" class="lb-number__step lb-number__step--dec" aria-label="Decrease" disabled><span data-lb-icon="minus"></span></button>
+          <input type="number" class="lb-number" id="num-disabled" value="8" disabled>
+          <button type="button" class="lb-number__step lb-number__step--inc" aria-label="Increase" disabled><span data-lb-icon="plus"></span></button>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script src="../js/lb.js"></script>
+<script src="../js/slot-engine.js"></script>
+<script src="../js/theme-editor.js"></script>
+<script src="../js/token-exporter.js"></script>
+<script src="../js/gallery-layout.js"></script>
+
+<script>
+  // Number Input default-demo feedback
+  document.addEventListener('DOMContentLoaded', () => {
+    const defaultWrap = document.getElementById('num-default-wrap');
+    const defaultFb = document.getElementById('num-default-feedback');
+    if (defaultWrap && defaultFb) {
+      defaultWrap.addEventListener('lb-number-change', (e) => {
+        defaultFb.textContent = e.detail.value;
+      });
+    }
+  });
+</script>
+</body>
+</html>

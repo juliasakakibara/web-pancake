@@ -1,0 +1,3862 @@
+{
+  "$schema": {
+    "version": "1.0",
+    "_description": "Plugin schema (letbe-ds, post Item 9 vocabulary). Read by the letbe-tokens-figma plugin (Path 2 / Milestone 04) to map L2 token paths onto canvas slots, WCAG pairs, and sidebar categories. The plugin's slot names (bgSubtle, bgAccentEmphasis, etc.) are plugin-internal canvas variable names — they are STABLE across upstream renames. What this block declares is which letbe-ds token fills each slot. NOTE (2026-08-11): editor_rows[].wcag.against is LEGACY — under a $schema.wcag_pairs manifest (present since item 26) the plugin derives badges and the alternatives grid from the manifest and these values are inert; they only drive schemaless JSONs. Literal hexes here mean the canonical on-color ink #f7f5f1 (theme-stable), never a Figma white.",
+    "groups": {
+      "fg": {
+        "label": "Foreground",
+        "themed": true
+      },
+      "bg": {
+        "label": "Background",
+        "themed": true
+      },
+      "border": {
+        "label": "Border",
+        "themed": true
+      },
+      "data": {
+        "label": "Extras",
+        "themed": true,
+        "categorical": true
+      },
+      "code": {
+        "label": "Extras",
+        "themed": true,
+        "categorical": true
+      }
+    },
+    "non_themed_groups": [
+      "radius",
+      "border-width",
+      "component-size",
+      "elevation",
+      "opacity",
+      "stroke"
+    ],
+    "wcag_pairing": {
+      "status_keys": [
+        "accent",
+        "danger",
+        "warning",
+        "success",
+        "info",
+        "accent-2",
+        "accent-3"
+      ],
+      "fg_default": "fg/default",
+      "bg_default": "bg/default",
+      "border_skip": true
+    },
+    "wcag_pairs": [
+      {"fg":"fg/default","bg":"bg/default","what":"body text","min":4.5},
+      {"fg":"fg/default","bg":"surface/bg-default","what":"body text on card","min":4.5},
+      {"fg":"fg/default","bg":"surface/bg-elevated","what":"body text on elevated surface","min":4.5},
+      {"fg":"fg/default","bg":"bg/strong","what":"text on tinted fill (code chip)","min":4.5},
+      {"fg":"fg/muted","bg":"bg/default","what":"muted text","min":4.5},
+      {"fg":"fg/muted","bg":"surface/bg-default","what":"muted text on card","min":4.5},
+      {"fg":"fg/muted","bg":"surface/bg-elevated","what":"muted text on elevated surface","min":4.5},
+      {"fg":"fg/subtle","bg":"bg/default","what":"subtle text (captions, counts)","min":4.5},
+      {"fg":"fg/inverse","bg":"bg/inverse","what":"inverse text on inverse surface","min":4.5},
+      {"fg":"fg/default","bg":"surface/bg-elevated","what":"neutral toast text + action chip on its pill","min":4.5},
+      {"fg":"fg/accent","bg":"bg/default","what":"links / accent text","min":4.5},
+      {"fg":"fg/accent","bg":"bg/accent-subtle","what":"accent text on faint wash","min":4.5},
+      {"fg":"fg/accent","bg":"bg/accent-muted","what":"selected-state text (chips, nav)","min":4.5},
+      {"fg":"fg/accent-muted","bg":"bg/default","what":"muted accent text","min":4.5},
+      {"fg":"fg/accent-2","bg":"bg/default","what":"accent-2 text","min":4.5},
+      {"fg":"fg/accent-2","bg":"bg/accent-2-subtle","what":"accent-2 text on its wash","min":4.5},
+      {"fg":"action/fg-accent-2-default","bg":"action/bg-accent-2-default","what":"accent-2 button","min":4.5},
+      {"fg":"action/fg-accent-2-hover","bg":"action/bg-accent-2-hover","what":"accent-2 button hover","min":4.5},
+      {"fg":"action/fg-accent-2-pressed","bg":"action/bg-accent-2-pressed","what":"accent-2 button pressed","min":4.5},
+      {"fg":"bg/accent-2-value","bg":"bg/bolder","what":"accent-2 value fill vs track","min":3},
+      {"fg":"bg/accent-2","bg":"bg/default","what":"accent-2 fill vs page","min":3,"status":"advisory"},
+      {"fg":"fg/accent-3","bg":"bg/default","what":"accent-3 text","min":4.5},
+      {"fg":"fg/accent-3","bg":"bg/accent-3-subtle","what":"accent-3 text on its wash","min":4.5},
+      {"fg":"action/fg-accent-3-default","bg":"action/bg-accent-3-default","what":"accent-3 button","min":4.5},
+      {"fg":"action/fg-accent-3-hover","bg":"action/bg-accent-3-hover","what":"accent-3 button hover","min":4.5},
+      {"fg":"action/fg-accent-3-pressed","bg":"action/bg-accent-3-pressed","what":"accent-3 button pressed","min":4.5},
+      {"fg":"bg/accent-3-value","bg":"bg/bolder","what":"accent-3 value fill vs track","min":3},
+      {"fg":"bg/accent-3","bg":"bg/default","what":"accent-3 fill vs page","min":3,"status":"advisory"},
+      {"fg":"fg/danger","bg":"bg/default","what":"danger text","min":4.5},
+      {"fg":"fg/danger","bg":"bg/danger-subtle","what":"danger text on danger tint","min":4.5},
+      {"fg":"fg/success","bg":"bg/default","what":"success text","min":4.5},
+      {"fg":"fg/success","bg":"bg/success-subtle","what":"success text on success tint","min":4.5},
+      {"fg":"fg/warning","bg":"bg/default","what":"warning text","min":4.5},
+      {"fg":"fg/warning","bg":"bg/warning-subtle","what":"warning text on warning tint","min":4.5},
+      {"fg":"fg/info","bg":"bg/default","what":"info text","min":4.5},
+      {"fg":"fg/info","bg":"bg/info-subtle","what":"info text on info tint","min":4.5},
+      {"fg":"fg/inverse-strong","bg":"bg/danger","what":"text on solid danger fill","min":4.5},
+      {"fg":"action/fg-primary-default","bg":"action/bg-primary-default","what":"primary button","min":4.5},
+      {"fg":"action/fg-primary-hover","bg":"action/bg-primary-hover","what":"primary button hover","min":4.5},
+      {"fg":"action/fg-primary-pressed","bg":"action/bg-primary-pressed","what":"primary button pressed","min":4.5},
+      {"fg":"action/fg-secondary-default","bg":"action/bg-secondary-default","over":"bg/default","what":"secondary button","min":4.5},
+      {"fg":"action/fg-secondary-hover","bg":"action/bg-secondary-hover","over":"bg/default","what":"secondary button hover","min":4.5},
+      {"fg":"action/fg-secondary-pressed","bg":"action/bg-secondary-pressed","over":"bg/default","what":"secondary button pressed","min":4.5},
+      {"fg":"action/fg-ghost-default","bg":"action/bg-ghost-default","over":"bg/default","what":"ghost button","min":4.5},
+      {"fg":"action/fg-ghost-hover","bg":"action/bg-ghost-hover","over":"bg/default","what":"ghost button hover","min":4.5},
+      {"fg":"action/fg-ghost-pressed","bg":"action/bg-ghost-pressed","over":"bg/default","what":"ghost button pressed","min":4.5},
+      {"fg":"action/fg-danger-default","bg":"action/bg-danger-default","what":"danger button","min":4.5},
+      {"fg":"action/fg-danger-hover","bg":"action/bg-danger-hover","what":"danger button hover","min":4.5},
+      {"fg":"action/fg-danger-pressed","bg":"action/bg-danger-pressed","what":"danger button pressed","min":4.5},
+      {"fg":"action/fg-link-default","bg":"bg/default","what":"link action","min":4.5},
+      {"fg":"action/fg-link-hover","bg":"bg/default","what":"link action hover","min":4.5},
+      {"fg":"action/fg-selected","bg":"action/bg-selected","over":"bg/default","what":"selected action (chip, segment)","min":4.5},
+      {"fg":"field/fg-default","bg":"field/bg-default","what":"field input text","min":4.5},
+      {"fg":"field/fg-default","bg":"field/bg-hover","what":"field input text on hover","min":4.5},
+      {"fg":"field/fg-placeholder","bg":"field/bg-default","what":"placeholder text","min":4.5},
+      {"fg":"field/fg-label","bg":"bg/default","what":"field label","min":4.5},
+      {"fg":"field/fg-hint","bg":"bg/default","what":"field hint","min":4.5},
+      {"fg":"field/fg-error","bg":"bg/default","what":"field error text","min":4.5},
+      {"fg":"border/focus","bg":"bg/default","what":"focus ring on page","min":3},
+      {"fg":"border/focus","bg":"surface/bg-default","what":"focus ring on card","min":3},
+      {"fg":"field/border-focus","bg":"bg/default","what":"field focus border","min":3},
+      {"fg":"field/border-default","bg":"bg/default","what":"field boundary","min":3},
+      {"fg":"field/border-error","bg":"bg/default","what":"field error border","min":3},
+      {"fg":"action/border-secondary-default","bg":"bg/default","what":"secondary button outline","min":3},
+      {"fg":"action/bg-primary-default","bg":"bg/default","what":"primary fill vs page (labeled control — shape only)","min":3,"status":"advisory"},
+      {"fg":"bg/accent-value","bg":"border/muted","what":"value fill vs slider track","min":3},
+      {"fg":"bg/accent-value","bg":"bg/bolder","what":"value fill vs progress track","min":3},
+      {"fg":"bg/success-value","bg":"bg/bolder","what":"success progress fill vs track","min":3},
+      {"fg":"bg/warning-value","bg":"bg/bolder","what":"warning progress fill vs track","min":3},
+      {"fg":"bg/danger-value","bg":"bg/bolder","what":"danger progress fill vs track","min":3},
+      {"fg":"fg/inverse-strong","bg":"bg/danger","what":"now-pill text on danger fill","min":4.5},
+      {"fg":"bg/accent","bg":"bg/default","what":"accent fill vs page","min":3,"status":"advisory"},
+      {"fg":"action/fg-primary-disabled","bg":"action/bg-primary-disabled","what":"disabled primary button","min":4.5,"status":"exempt"},
+      {"fg":"field/fg-disabled","bg":"field/bg-disabled","what":"disabled field","min":4.5,"status":"exempt"},
+      {"fg":"fg/disabled","bg":"bg/default","what":"disabled text","min":4.5,"status":"exempt"},
+      {"fg":"border/default","bg":"bg/default","what":"decorative separators","min":3,"status":"advisory"},
+      {"fg":"data/1","bg":"surface/bg-default","what":"chart series 1 vs card","min":3,"status":"advisory"},
+      {"fg":"data/2","bg":"surface/bg-default","what":"chart series 2 vs card","min":3,"status":"advisory"}
+    ],
+    "editor_rows": [
+      {
+        "id": "body",
+        "token": "fg/default",
+        "slot": "fg",
+        "wcag": {
+          "against": "bg",
+          "label": "Body / bg"
+        }
+      },
+      {
+        "id": "muted",
+        "token": "fg/muted",
+        "slot": "fgMuted",
+        "wcag": {
+          "against": "bg",
+          "label": "Muted / bg"
+        }
+      },
+      {
+        "id": "subtle",
+        "token": "fg/subtle",
+        "slot": "fgSubtle",
+        "wcag": {
+          "against": "bgSubtle",
+          "label": "Placeholder / input",
+          "lg": true
+        }
+      },
+      {
+        "id": "accent",
+        "token": "fg/accent",
+        "slot": "fgAccent",
+        "wcag": {
+          "against": "bg",
+          "label": "Link / bg"
+        }
+      },
+      {
+        "id": "fgdanger",
+        "token": "fg/danger",
+        "slot": "fgDanger",
+        "wcag": {
+          "against": "bgDanger",
+          "label": "Danger fg / bg"
+        }
+      },
+      {
+        "id": "fgwarn",
+        "token": "fg/warning",
+        "slot": "fgWarning",
+        "wcag": {
+          "against": "bgWarning",
+          "label": "Warning fg / bg"
+        }
+      },
+      {
+        "id": "fgsucc",
+        "token": "fg/success",
+        "slot": "fgSuccess",
+        "wcag": {
+          "against": "bgSuccess",
+          "label": "Success fg / bg"
+        }
+      },
+      {
+        "id": "fginfo",
+        "token": "fg/info",
+        "slot": "fgInfo",
+        "wcag": {
+          "against": "bgInfo",
+          "label": "Info fg / bg"
+        }
+      },
+      {
+        "id": "fgdis",
+        "token": "fg/disabled",
+        "slot": "fgDisabled",
+        "wcag": {
+          "against": "bgDisabled",
+          "label": "Disabled fg / bg"
+        }
+      },
+      {
+        "id": "bgdefault",
+        "token": "bg/default",
+        "slot": "bg",
+        "wcag": {
+          "against": "fg",
+          "label": "bg / Body"
+        }
+      },
+      {
+        "id": "bgsubtle",
+        "token": "bg/strong",
+        "slot": "bgSubtle",
+        "wcag": {
+          "against": "fgSubtle",
+          "label": "Placeholder / input",
+          "lg": true
+        }
+      },
+      {
+        "id": "btnbg",
+        "token": "bg/accent",
+        "slot": "bgAccentEmphasis",
+        "wcag": {
+          "against": "#f7f5f1",
+          "label": "Button / btn-bg"
+        }
+      },
+      {
+        "id": "badgebg",
+        "token": "bg/accent-subtle",
+        "slot": "bgAccent",
+        "wcag": {
+          "against": "fgAccent",
+          "label": "Badge / badge-bg"
+        }
+      },
+      {
+        "id": "accent2",
+        "token": "fg/accent-2",
+        "slot": "fgAccent2",
+        "wcag": {
+          "against": "bg",
+          "label": "Accent-2 text / bg"
+        }
+      },
+      {
+        "id": "accent2btnbg",
+        "token": "bg/accent-2",
+        "slot": "bgAccent2Emphasis",
+        "wcag": {
+          "against": "#f7f5f1",
+          "label": "Accent-2 button / btn-bg"
+        }
+      },
+      {
+        "id": "accent3",
+        "token": "fg/accent-3",
+        "slot": "fgAccent3",
+        "wcag": {
+          "against": "bg",
+          "label": "Accent-3 text / bg"
+        }
+      },
+      {
+        "id": "accent3btnbg",
+        "token": "bg/accent-3",
+        "slot": "bgAccent3Emphasis",
+        "wcag": {
+          "against": "#f7f5f1",
+          "label": "Accent-3 button / btn-bg"
+        }
+      },
+      {
+        "id": "bgdanger",
+        "token": "bg/danger-subtle",
+        "slot": "bgDanger",
+        "wcag": {
+          "against": "fgDanger",
+          "label": "Danger bg / fg"
+        }
+      },
+      {
+        "id": "bgdangersolid",
+        "token": "bg/danger",
+        "slot": "bgDangerSolid",
+        "wcag": {
+          "against": "#f7f5f1",
+          "label": "Solid danger fill / on-color text"
+        }
+      },
+      {
+        "id": "bgwarn",
+        "token": "bg/warning-subtle",
+        "slot": "bgWarning",
+        "wcag": {
+          "against": "fgWarning",
+          "label": "Warning bg / fg"
+        }
+      },
+      {
+        "id": "bgsucc",
+        "token": "bg/success-subtle",
+        "slot": "bgSuccess",
+        "wcag": {
+          "against": "fgSuccess",
+          "label": "Success bg / fg"
+        }
+      },
+      {
+        "id": "bginfo",
+        "token": "bg/info-subtle",
+        "slot": "bgInfo",
+        "wcag": {
+          "against": "fgInfo",
+          "label": "Info bg / fg"
+        }
+      },
+      {
+        "id": "bgdis",
+        "token": "bg/disabled",
+        "slot": "bgDisabled"
+      },
+      {
+        "id": "bordefault",
+        "token": "border/default",
+        "slot": "border",
+        "wcag": {
+          "against": "bg",
+          "label": "Border / bg"
+        }
+      },
+      {
+        "id": "bordanger",
+        "token": "border/danger",
+        "slot": "borderDanger"
+      },
+      {
+        "id": "borwarn",
+        "token": "border/warning",
+        "slot": "borderWarning"
+      },
+      {
+        "id": "borsucc",
+        "token": "border/success",
+        "slot": "borderSuccess"
+      },
+      {
+        "id": "borinfo",
+        "token": "border/info",
+        "slot": "borderInfo"
+      },
+      {
+        "id": "bordis",
+        "token": "border/disabled",
+        "slot": "borderDisabled"
+      },
+      {
+        "id": "data1",
+        "token": "data/1"
+      },
+      {
+        "id": "data2",
+        "token": "data/2"
+      },
+      {
+        "id": "data3",
+        "token": "data/3"
+      },
+      {
+        "id": "data4",
+        "token": "data/4"
+      },
+      {
+        "id": "data5",
+        "token": "data/5"
+      },
+      {
+        "id": "data6",
+        "token": "data/6"
+      },
+      {
+        "id": "data7",
+        "token": "data/7"
+      },
+      {
+        "id": "data8",
+        "token": "data/8"
+      },
+      {
+        "id": "code1",
+        "token": "code/1"
+      },
+      {
+        "id": "code2",
+        "token": "code/2"
+      },
+      {
+        "id": "code3",
+        "token": "code/3"
+      },
+      {
+        "id": "code4",
+        "token": "code/4"
+      },
+      {
+        "id": "code5",
+        "token": "code/5"
+      },
+      {
+        "id": "code6",
+        "token": "code/6"
+      },
+      {
+        "id": "code7",
+        "token": "code/7"
+      },
+      {
+        "id": "code8",
+        "token": "code/8"
+      }
+    ]
+  },
+  "primitives": {
+    "neutral": {
+      "50": {
+        "$value": "#f7f5f1",
+        "$type": "color",
+        "$description": "oklch(0.970 0.004 75) — Near-white warm tint. bg-default in light theme."
+      },
+      "100": {
+        "$value": "#edebe6",
+        "$type": "color",
+        "$description": "oklch(0.940 0.005 75)"
+      },
+      "200": {
+        "$value": "#dfdcd7",
+        "$type": "color",
+        "$description": "oklch(0.895 0.006 75)"
+      },
+      "300": {
+        "$value": "#cdcac4",
+        "$type": "color",
+        "$description": "oklch(0.840 0.007 75)"
+      },
+      "400": {
+        "$value": "#aeaaa4",
+        "$type": "color",
+        "$description": "oklch(0.740 0.008 75)"
+      },
+      "500": {
+        "$value": "#898580",
+        "$type": "color",
+        "$description": "oklch(0.620 0.008 75) — Mid-gray base."
+      },
+      "600": {
+        "$value": "#66635e",
+        "$type": "color",
+        "$description": "oklch(0.500 0.007 75)"
+      },
+      "700": {
+        "$value": "#45423e",
+        "$type": "color",
+        "$description": "oklch(0.380 0.007 75)"
+      },
+      "800": {
+        "$value": "#272522",
+        "$type": "color",
+        "$description": "oklch(0.265 0.006 75)"
+      },
+      "900": {
+        "$value": "#13110e",
+        "$type": "color",
+        "$description": "oklch(0.178 0.006 75)"
+      },
+      "950": {
+        "$value": "#060504",
+        "$type": "color",
+        "$description": "oklch(0.115 0.005 75) — Near-black warm. bg-default in dark theme."
+      }
+    },
+    "red": {
+      "50": {
+        "$value": "#faf3f2",
+        "$type": "color",
+        "$description": "oklch(0.970 0.008 15)"
+      },
+      "100": {
+        "$value": "#fae6e5",
+        "$type": "color",
+        "$description": "oklch(0.940 0.022 15)"
+      },
+      "200": {
+        "$value": "#ffcecf",
+        "$type": "color",
+        "$description": "oklch(0.895 0.055 15)"
+      },
+      "300": {
+        "$value": "#ffb0b4",
+        "$type": "color",
+        "$description": "oklch(0.840 0.100 15)"
+      },
+      "400": {
+        "$value": "#ff7c89",
+        "$type": "color",
+        "$description": "oklch(0.740 0.160 15)"
+      },
+      "500": {
+        "$value": "#e63d5c",
+        "$type": "color",
+        "$description": "oklch(0.620 0.205 15) — Danger base."
+      },
+      "600": {
+        "$value": "#b5173e",
+        "$type": "color",
+        "$description": "oklch(0.500 0.188 15)"
+      },
+      "700": {
+        "$value": "#800026",
+        "$type": "color",
+        "$description": "oklch(0.380 0.155 15)"
+      },
+      "800": {
+        "$value": "#4e0012",
+        "$type": "color",
+        "$description": "oklch(0.265 0.112 15)"
+      },
+      "900": {
+        "$value": "#270208",
+        "$type": "color",
+        "$description": "oklch(0.178 0.065 15)"
+      },
+      "950": {
+        "$value": "#100102",
+        "$type": "color",
+        "$description": "oklch(0.115 0.038 15)"
+      }
+    },
+    "green": {
+      "50": {
+        "$value": "#f0f8f0",
+        "$type": "color",
+        "$description": "oklch(0.970 0.012 152)"
+      },
+      "100": {
+        "$value": "#def1e1",
+        "$type": "color",
+        "$description": "oklch(0.940 0.028 152)"
+      },
+      "200": {
+        "$value": "#bfe9c7",
+        "$type": "color",
+        "$description": "oklch(0.895 0.062 152)"
+      },
+      "300": {
+        "$value": "#97dea9",
+        "$type": "color",
+        "$description": "oklch(0.840 0.102 152)"
+      },
+      "400": {
+        "$value": "#54c579",
+        "$type": "color",
+        "$description": "oklch(0.740 0.150 152)"
+      },
+      "500": {
+        "$value": "#00a34a",
+        "$type": "color",
+        "$description": "oklch(0.620 0.180 152) — Success base."
+      },
+      "600": {
+        "$value": "#007c2c",
+        "$type": "color",
+        "$description": "oklch(0.500 0.165 152)"
+      },
+      "700": {
+        "$value": "#005515",
+        "$type": "color",
+        "$description": "oklch(0.380 0.138 152)"
+      },
+      "800": {
+        "$value": "#003108",
+        "$type": "color",
+        "$description": "oklch(0.265 0.098 152)"
+      },
+      "900": {
+        "$value": "#001804",
+        "$type": "color",
+        "$description": "oklch(0.178 0.058 152)"
+      },
+      "950": {
+        "$value": "#000702",
+        "$type": "color",
+        "$description": "oklch(0.115 0.030 152)"
+      }
+    },
+    "yellow": {
+      "50": {
+        "$value": "#fff9f0",
+        "$type": "color",
+        "$description": "oklch(0.985 0.012 72) — Amber uses higher-L ramp throughout to stay vibrant."
+      },
+      "100": {
+        "$value": "#fff2de",
+        "$type": "color",
+        "$description": "oklch(0.970 0.030 72)"
+      },
+      "200": {
+        "$value": "#ffe8bc",
+        "$type": "color",
+        "$description": "oklch(0.950 0.068 72)"
+      },
+      "300": {
+        "$value": "#ffd687",
+        "$type": "color",
+        "$description": "oklch(0.915 0.118 72)"
+      },
+      "400": {
+        "$value": "#ffc14b",
+        "$type": "color",
+        "$description": "oklch(0.870 0.158 72)"
+      },
+      "500": {
+        "$value": "#ffa700",
+        "$type": "color",
+        "$description": "oklch(0.800 0.178 72) — Warning base."
+      },
+      "600": {
+        "$value": "#d78700",
+        "$type": "color",
+        "$description": "oklch(0.690 0.162 72)"
+      },
+      "700": {
+        "$value": "#a36200",
+        "$type": "color",
+        "$description": "oklch(0.555 0.138 72)"
+      },
+      "800": {
+        "$value": "#643a00",
+        "$type": "color",
+        "$description": "oklch(0.390 0.098 72)"
+      },
+      "900": {
+        "$value": "#321b00",
+        "$type": "color",
+        "$description": "oklch(0.248 0.060 72)"
+      },
+      "950": {
+        "$value": "#0f0600",
+        "$type": "color",
+        "$description": "oklch(0.135 0.030 72)"
+      }
+    },
+    "blue": {
+      "50": {
+        "$value": "#f2f5f9",
+        "$type": "color",
+        "$description": "oklch(0.970 0.008 255)"
+      },
+      "100": {
+        "$value": "#e2ecf9",
+        "$type": "color",
+        "$description": "oklch(0.940 0.022 255)"
+      },
+      "200": {
+        "$value": "#c6dffe",
+        "$type": "color",
+        "$description": "oklch(0.895 0.052 255)"
+      },
+      "300": {
+        "$value": "#a3ceff",
+        "$type": "color",
+        "$description": "oklch(0.840 0.090 255)"
+      },
+      "400": {
+        "$value": "#6badff",
+        "$type": "color",
+        "$description": "oklch(0.740 0.140 255)"
+      },
+      "500": {
+        "$value": "#2079dc",
+        "$type": "color",
+        "$description": "oklch(0.580 0.172 255) — Info and focus base."
+      },
+      "600": {
+        "$value": "#0055ac",
+        "$type": "color",
+        "$description": "oklch(0.460 0.158 255)"
+      },
+      "700": {
+        "$value": "#00377c",
+        "$type": "color",
+        "$description": "oklch(0.350 0.132 255)"
+      },
+      "800": {
+        "$value": "#001f4c",
+        "$type": "color",
+        "$description": "oklch(0.248 0.095 255)"
+      },
+      "900": {
+        "$value": "#000d26",
+        "$type": "color",
+        "$description": "oklch(0.165 0.058 255)"
+      },
+      "950": {
+        "$value": "#010510",
+        "$type": "color",
+        "$description": "oklch(0.115 0.032 255)"
+      }
+    },
+    "violet": {
+      "50": {
+        "$value": "#f5f4f9",
+        "$type": "color",
+        "$description": "oklch(0.970 0.008 295)"
+      },
+      "100": {
+        "$value": "#ece9f8",
+        "$type": "color",
+        "$description": "oklch(0.940 0.022 295)"
+      },
+      "200": {
+        "$value": "#ded6fb",
+        "$type": "color",
+        "$description": "oklch(0.895 0.052 295)"
+      },
+      "300": {
+        "$value": "#cebfff",
+        "$type": "color",
+        "$description": "oklch(0.840 0.090 295)"
+      },
+      "400": {
+        "$value": "#b298f8",
+        "$type": "color",
+        "$description": "oklch(0.740 0.140 295)"
+      },
+      "500": {
+        "$value": "#855dd8",
+        "$type": "color",
+        "$description": "oklch(0.580 0.182 295) — Brand accent base. Interactive and link color."
+      },
+      "600": {
+        "$value": "#623ca8",
+        "$type": "color",
+        "$description": "oklch(0.460 0.165 295)"
+      },
+      "700": {
+        "$value": "#422378",
+        "$type": "color",
+        "$description": "oklch(0.350 0.138 295)"
+      },
+      "800": {
+        "$value": "#261249",
+        "$type": "color",
+        "$description": "oklch(0.248 0.098 295)"
+      },
+      "900": {
+        "$value": "#110724",
+        "$type": "color",
+        "$description": "oklch(0.165 0.058 295)"
+      },
+      "950": {
+        "$value": "#06030f",
+        "$type": "color",
+        "$description": "oklch(0.115 0.032 295)"
+      }
+    },
+    "orange": {
+      "50": {
+        "$value": "#fbf3ec",
+        "$type": "color",
+        "$description": "oklch(0.970 0.010 45)"
+      },
+      "100": {
+        "$value": "#f9e7d0",
+        "$type": "color",
+        "$description": "oklch(0.940 0.025 45)"
+      },
+      "200": {
+        "$value": "#fbd1a3",
+        "$type": "color",
+        "$description": "oklch(0.895 0.058 45)"
+      },
+      "300": {
+        "$value": "#fab572",
+        "$type": "color",
+        "$description": "oklch(0.840 0.100 45)"
+      },
+      "400": {
+        "$value": "#f59137",
+        "$type": "color",
+        "$description": "oklch(0.740 0.155 45)"
+      },
+      "500": {
+        "$value": "#d96d0a",
+        "$type": "color",
+        "$description": "oklch(0.620 0.165 45) — Orange base. Categorical use (data series, labels)."
+      },
+      "600": {
+        "$value": "#a75406",
+        "$type": "color",
+        "$description": "oklch(0.500 0.150 45)"
+      },
+      "700": {
+        "$value": "#783c04",
+        "$type": "color",
+        "$description": "oklch(0.380 0.125 45)"
+      },
+      "800": {
+        "$value": "#451e02",
+        "$type": "color",
+        "$description": "oklch(0.265 0.085 45)"
+      },
+      "900": {
+        "$value": "#260f01",
+        "$type": "color",
+        "$description": "oklch(0.178 0.050 45)"
+      },
+      "950": {
+        "$value": "#110501",
+        "$type": "color",
+        "$description": "oklch(0.115 0.028 45)"
+      }
+    },
+    "cyan": {
+      "50": {
+        "$value": "#eef8fa",
+        "$type": "color",
+        "$description": "oklch(0.970 0.012 205)"
+      },
+      "100": {
+        "$value": "#d8eff3",
+        "$type": "color",
+        "$description": "oklch(0.940 0.028 205)"
+      },
+      "200": {
+        "$value": "#b3dde6",
+        "$type": "color",
+        "$description": "oklch(0.895 0.060 205)"
+      },
+      "300": {
+        "$value": "#82c8d6",
+        "$type": "color",
+        "$description": "oklch(0.840 0.100 205)"
+      },
+      "400": {
+        "$value": "#43adc1",
+        "$type": "color",
+        "$description": "oklch(0.740 0.125 205)"
+      },
+      "500": {
+        "$value": "#15879f",
+        "$type": "color",
+        "$description": "oklch(0.620 0.140 205) — Cyan base. Categorical use (data series, labels)."
+      },
+      "600": {
+        "$value": "#0c697d",
+        "$type": "color",
+        "$description": "oklch(0.500 0.125 205)"
+      },
+      "700": {
+        "$value": "#084e5d",
+        "$type": "color",
+        "$description": "oklch(0.380 0.105 205)"
+      },
+      "800": {
+        "$value": "#042d36",
+        "$type": "color",
+        "$description": "oklch(0.265 0.075 205)"
+      },
+      "900": {
+        "$value": "#02181d",
+        "$type": "color",
+        "$description": "oklch(0.178 0.045 205)"
+      },
+      "950": {
+        "$value": "#010a0d",
+        "$type": "color",
+        "$description": "oklch(0.115 0.025 205)"
+      }
+    },
+    "size": {
+      "0": {
+        "$value": "0px",
+        "$type": "dimension",
+        "$description": "Zero — no size, no spacing."
+      },
+      "hairline": {
+        "$value": "1px",
+        "$type": "dimension",
+        "$description": "Hairline — borders, dividers, 1px details."
+      },
+      "theme": {
+        "$value": "1.6px",
+        "$type": "dimension",
+        "$description": "Theme-tunable interactive stroke. Default 1.6px. Used by border-width.action — the L2 stroke that drives focus rings, button borders, input outlines. Editable at runtime via the theme editor's interactive-stroke knob."
+      },
+      "0_5x": {
+        "$value": "2px",
+        "$type": "dimension",
+        "$description": "0.5 × 4px base. Sub-grid exception."
+      },
+      "1x": {
+        "$value": "4px",
+        "$type": "dimension",
+        "$description": "1 × 4px base. Grid unit."
+      },
+      "1_5x": {
+        "$value": "6px",
+        "$type": "dimension",
+        "$description": "1.5 × 4px base. Sub-grid exception."
+      },
+      "2x": {
+        "$value": "8px",
+        "$type": "dimension",
+        "$description": "2 × 4px base."
+      },
+      "3x": {
+        "$value": "12px",
+        "$type": "dimension",
+        "$description": "3 × 4px base."
+      },
+      "3_5x": {
+        "$value": "14px",
+        "$type": "dimension",
+        "$description": "3.5 × 4px base (half-step). Backs small glyph slots — status icons, switch thumb, copy buttons."
+      },
+      "4x": {
+        "$value": "16px",
+        "$type": "dimension",
+        "$description": "4 × 4px base. Default spacing baseline."
+      },
+      "5x": {
+        "$value": "20px",
+        "$type": "dimension",
+        "$description": "5 × 4px base."
+      },
+      "6x": {
+        "$value": "24px",
+        "$type": "dimension",
+        "$description": "6 × 4px base."
+      },
+      "8x": {
+        "$value": "32px",
+        "$type": "dimension",
+        "$description": "8 × 4px base."
+      },
+      "10x": {
+        "$value": "40px",
+        "$type": "dimension",
+        "$description": "10 × 4px base."
+      },
+      "12x": {
+        "$value": "48px",
+        "$type": "dimension",
+        "$description": "12 × 4px base."
+      },
+      "16x": {
+        "$value": "64px",
+        "$type": "dimension",
+        "$description": "16 × 4px base."
+      },
+      "20x": {
+        "$value": "80px",
+        "$type": "dimension",
+        "$description": "20 × 4px base."
+      },
+      "24x": {
+        "$value": "96px",
+        "$type": "dimension",
+        "$description": "24 × 4px base."
+      }
+    },
+    "font": {
+      "family": {
+        "1": {
+          "$value": [
+            "Inter",
+            "system-ui",
+            "-apple-system",
+            "BlinkMacSystemFont",
+            "Segoe UI",
+            "sans-serif"
+          ],
+          "$type": "fontFamily",
+          "$description": "Text font family slot (L1). Default Inter. Worn by body / action / label / caption (and overline) by default — the reading-and-UI face."
+        },
+        "2": {
+          "$value": [
+            "Inter",
+            "system-ui",
+            "-apple-system",
+            "BlinkMacSystemFont",
+            "Segoe UI",
+            "sans-serif"
+          ],
+          "$type": "fontFamily",
+          "$description": "Headline font family slot (L1). Default matches slot 1 — invisible until a brand picks a display face. Worn by display + heading by default; pick a font here to change headlines without touching body text."
+        },
+        "3": {
+          "$value": [
+            "Roboto Mono",
+            "ui-monospace",
+            "SFMono-Regular",
+            "Menlo",
+            "Monaco",
+            "Consolas",
+            "monospace"
+          ],
+          "$type": "fontFamily",
+          "$description": "Monospace font family slot (L1). Default Roboto Mono. Used by the code role and inline `.lb-code` snippets."
+        },
+        "sans": {
+          "$value": [
+            "Inter",
+            "system-ui",
+            "-apple-system",
+            "BlinkMacSystemFont",
+            "Segoe UI",
+            "sans-serif"
+          ],
+          "$type": "fontFamily",
+          "$description": "DEPRECATED — kept as a shim during the typography refactor. Use font.family.1 instead. Removed in Slice 7."
+        }
+      },
+      "base": {
+        "S": {
+          "$value": "16px",
+          "$type": "dimension",
+          "$description": "Mobile base font size (anchor). All typography step sizes derive from base × ratio^n at this mode."
+        },
+        "M": {
+          "$value": "16px",
+          "$type": "dimension",
+          "$description": "Tablet base font size. Default = same as S. Shift to 17–18 for larger tablet reading."
+        },
+        "L": {
+          "$value": "16px",
+          "$type": "dimension",
+          "$description": "Desktop base font size. Default = same as S. Shift to 17–18 for larger desktop reading."
+        }
+      },
+      "scale-ratio": {
+        "S": {
+          "$value": 1.25,
+          "$type": "number",
+          "$description": "Mobile type-scale ratio (Major Third). Each step n = base × 1.25^n. Common ratios: 1.125 Minor 2nd, 1.2 Minor 3rd, 1.25 Major 3rd, 1.333 Perfect 4th, 1.5 Perfect 5th."
+        },
+        "M": {
+          "$value": 1.25,
+          "$type": "number",
+          "$description": "Tablet type-scale ratio. Default = same as S."
+        },
+        "L": {
+          "$value": 1.25,
+          "$type": "number",
+          "$description": "Desktop type-scale ratio. Default = same as S."
+        }
+      },
+      "line-height-method": {
+        "$value": "4px-grid",
+        "$type": "string",
+        "$description": "Line-height calculation method. \"4px-grid\" (default) snaps line-height to nearest 4px multiple for clean baseline grid. \"ratio\" applies a fixed multiplier without snapping. Internal — not user-facing."
+      },
+      "size": {
+        "2xs": {
+          "$value": "11px",
+          "$type": "dimension",
+          "$description": "Smallest text — fine print, dense captions."
+        },
+        "xs": {
+          "$value": "12px",
+          "$type": "dimension"
+        },
+        "s": {
+          "$value": "14px",
+          "$type": "dimension"
+        },
+        "m": {
+          "$value": "16px",
+          "$type": "dimension",
+          "$description": "Base font size."
+        },
+        "l": {
+          "$value": "18px",
+          "$type": "dimension"
+        },
+        "xl": {
+          "$value": "20px",
+          "$type": "dimension"
+        },
+        "2xl": {
+          "$value": "24px",
+          "$type": "dimension"
+        },
+        "3xl": {
+          "$value": "30px",
+          "$type": "dimension"
+        },
+        "4xl": {
+          "$value": "36px",
+          "$type": "dimension"
+        },
+        "5xl": {
+          "$value": "48px",
+          "$type": "dimension"
+        },
+        "6xl": {
+          "$value": "60px",
+          "$type": "dimension"
+        },
+        "7xl": {
+          "$value": "72px",
+          "$type": "dimension"
+        },
+        "8xl": {
+          "$value": "96px",
+          "$type": "dimension"
+        }
+      },
+      "weight": {
+        "regular": {
+          "$value": 400,
+          "$type": "number"
+        },
+        "medium": {
+          "$value": 500,
+          "$type": "number",
+          "$description": "Labels, action/interactive elements."
+        },
+        "semibold": {
+          "$value": 600,
+          "$type": "number",
+          "$description": "Headings."
+        },
+        "bold": {
+          "$value": 700,
+          "$type": "number",
+          "$description": "Display text, strong emphasis."
+        }
+      },
+      "line-height": {
+        "2xs": {
+          "$value": "16px",
+          "$type": "dimension",
+          "$description": "Line height for 11px text — tight but readable on 4px grid."
+        },
+        "xs": {
+          "$value": "16px",
+          "$type": "dimension"
+        },
+        "s": {
+          "$value": "20px",
+          "$type": "dimension"
+        },
+        "m": {
+          "$value": "24px",
+          "$type": "dimension"
+        },
+        "l": {
+          "$value": "28px",
+          "$type": "dimension"
+        },
+        "xl": {
+          "$value": "28px",
+          "$type": "dimension"
+        },
+        "2xl": {
+          "$value": "32px",
+          "$type": "dimension"
+        },
+        "3xl": {
+          "$value": "36px",
+          "$type": "dimension"
+        },
+        "4xl": {
+          "$value": "40px",
+          "$type": "dimension"
+        },
+        "5xl": {
+          "$value": "52px",
+          "$type": "dimension"
+        },
+        "6xl": {
+          "$value": "64px",
+          "$type": "dimension"
+        },
+        "7xl": {
+          "$value": "80px",
+          "$type": "dimension"
+        },
+        "8xl": {
+          "$value": "104px",
+          "$type": "dimension"
+        }
+      },
+      "letter-spacing": {
+        "tight": {
+          "$value": "-0.02em",
+          "$type": "dimension",
+          "$description": "Large display text (30px+)."
+        },
+        "normal": {
+          "$value": "0em",
+          "$type": "dimension"
+        },
+        "slightly-wide": {
+          "$value": "0.01em",
+          "$type": "dimension",
+          "$description": "Action tokens — subtle legibility boost."
+        },
+        "wide": {
+          "$value": "0.02em",
+          "$type": "dimension",
+          "$description": "Small text, all-caps labels, action-s."
+        },
+        "caps": {
+          "$value": "0.04em",
+          "$type": "dimension",
+          "$description": "Uppercase micro-label tracking (overline/group-label voice). Replaces the raw 0.04em design-intent comments that lived in components.css."
+        },
+        "spaced": {
+          "$value": "0.45em",
+          "$type": "dimension",
+          "$description": "Code-slot display tracking — OTP/verification-code inputs read as separated slots."
+        }
+      }
+    },
+    "duration": {
+      "0": {
+        "$value": "0ms",
+        "$type": "duration",
+        "$description": "Instant. No animation."
+      },
+      "50": {
+        "$value": "50ms",
+        "$type": "duration",
+        "$description": "Near-instant micro-interactions."
+      },
+      "100": {
+        "$value": "100ms",
+        "$type": "duration",
+        "$description": "Fast transitions."
+      },
+      "150": {
+        "$value": "150ms",
+        "$type": "duration",
+        "$description": "Core UI transition speed."
+      },
+      "200": {
+        "$value": "200ms",
+        "$type": "duration",
+        "$description": "Comfortable transitions."
+      },
+      "300": {
+        "$value": "300ms",
+        "$type": "duration",
+        "$description": "Deliberate transitions."
+      },
+      "500": {
+        "$value": "500ms",
+        "$type": "duration",
+        "$description": "Maximum allowed. Anything longer feels sluggish."
+      }
+    },
+    "ease": {
+      "linear": {
+        "$value": "cubic-bezier(0, 0, 1, 1)",
+        "$type": "cubicBezier",
+        "$description": "Constant speed. Mechanical. Use sparingly."
+      },
+      "standard": {
+        "$value": "cubic-bezier(0.2, 0, 0, 1)",
+        "$type": "cubicBezier",
+        "$description": "System default. Slight deceleration."
+      },
+      "decelerate": {
+        "$value": "cubic-bezier(0, 0, 0, 1)",
+        "$type": "cubicBezier",
+        "$description": "Starts fast, settles gently. For entering elements."
+      },
+      "accelerate": {
+        "$value": "cubic-bezier(0.3, 0, 1, 1)",
+        "$type": "cubicBezier",
+        "$description": "Starts slow, exits fast. For departing elements."
+      },
+      "spring": {
+        "$value": "cubic-bezier(0.2, 1.4, 0.4, 1)",
+        "$type": "cubicBezier",
+        "$description": "Overshoots then settles. Playful — use intentionally."
+      }
+    },
+    "z": {
+      "0": {
+        "$value": 0,
+        "$type": "number",
+        "$description": "Ground. Document flow. No stacking context."
+      },
+      "1": {
+        "$value": 1,
+        "$type": "number",
+        "$description": "Slightly elevated content."
+      },
+      "2": {
+        "$value": 10,
+        "$type": "number",
+        "$description": "Persistent UI chrome."
+      },
+      "3": {
+        "$value": 100,
+        "$type": "number",
+        "$description": "Transient overlays."
+      },
+      "4": {
+        "$value": 200,
+        "$type": "number",
+        "$description": "Panel-level overlays."
+      },
+      "5": {
+        "$value": 300,
+        "$type": "number",
+        "$description": "Modal-level overlays."
+      },
+      "6": {
+        "$value": 400,
+        "$type": "number",
+        "$description": "Notifications."
+      },
+      "7": {
+        "$value": 500,
+        "$type": "number",
+        "$description": "Universal topmost."
+      }
+    },
+    "radius": {
+      "0": {
+        "$value": "0px",
+        "$type": "dimension",
+        "$description": "No rounding."
+      },
+      "2": {
+        "$value": "2px",
+        "$type": "dimension",
+        "$description": "Minimal rounding."
+      },
+      "4": {
+        "$value": "4px",
+        "$type": "dimension",
+        "$description": "Default rounding."
+      },
+      "8": {
+        "$value": "8px",
+        "$type": "dimension",
+        "$description": "Prominent rounding."
+      },
+      "12": {
+        "$value": "12px",
+        "$type": "dimension",
+        "$description": "Heavy rounding."
+      },
+      "16": {
+        "$value": "16px",
+        "$type": "dimension",
+        "$description": "Very rounded."
+      },
+      "9999": {
+        "$value": "9999px",
+        "$type": "dimension",
+        "$description": "Full pill / circle."
+      }
+    },
+    "opacity": {
+      "0": {
+        "$value": 0,
+        "$type": "number",
+        "$description": "Fully transparent."
+      },
+      "5": {
+        "$value": 0.05,
+        "$type": "number",
+        "$description": "Near-invisible."
+      },
+      "10": {
+        "$value": 0.1,
+        "$type": "number",
+        "$description": "Very faint."
+      },
+      "20": {
+        "$value": 0.2,
+        "$type": "number",
+        "$description": "Light transparency."
+      },
+      "40": {
+        "$value": 0.4,
+        "$type": "number",
+        "$description": "Mid-light transparency."
+      },
+      "60": {
+        "$value": 0.6,
+        "$type": "number",
+        "$description": "Mid transparency."
+      },
+      "80": {
+        "$value": 0.8,
+        "$type": "number",
+        "$description": "Mostly opaque."
+      },
+      "100": {
+        "$value": 1,
+        "$type": "number",
+        "$description": "Fully opaque."
+      }
+    },
+    "shadow": {
+      "1": {
+        "$type": "shadow",
+        "$value": {
+          "x": "0",
+          "y": "1px",
+          "blur": "2px",
+          "spread": "0",
+          "color": "{neutral.900}",
+          "opacity": 0.08
+        },
+        "$description": "Hairline lift — subtle depth for inline cards and inputs."
+      },
+      "2": {
+        "$type": "shadow",
+        "$value": {
+          "x": "0",
+          "y": "2px",
+          "blur": "6px",
+          "spread": "0",
+          "color": "{neutral.900}",
+          "opacity": 0.1
+        },
+        "$description": "Card elevation — default raised surface."
+      },
+      "3": {
+        "$type": "shadow",
+        "$value": {
+          "x": "0",
+          "y": "4px",
+          "blur": "12px",
+          "spread": "0",
+          "color": "{neutral.900}",
+          "opacity": 0.12
+        },
+        "$description": "Dropdown/popover elevation."
+      },
+      "4": {
+        "$type": "shadow",
+        "$value": {
+          "x": "0",
+          "y": "8px",
+          "blur": "24px",
+          "spread": "0",
+          "color": "{neutral.900}",
+          "opacity": 0.16
+        },
+        "$description": "Modal and drawer elevation."
+      },
+      "focus": {
+        "$type": "shadow",
+        "$value": {
+          "x": "0",
+          "y": "0",
+          "blur": "0",
+          "spread": "3px",
+          "color": "{blue.500}",
+          "opacity": 0.4
+        },
+        "$description": "Focus ring glow — matches border/focus blue colour."
+      }
+    }
+  },
+  "semantic": {
+    "light": {
+      "fg": {
+        "default": {
+          "$value": "{neutral.900}",
+          "$type": "color",
+          "$description": "Primary text and icons."
+        },
+        "muted": {
+          "$value": "{neutral.600}",
+          "$type": "color",
+          "$description": "Secondary text."
+        },
+        "subtle": {
+          "$value": "{neutral.700}",
+          "$type": "color",
+          "$description": "Tertiary/placeholder text."
+        },
+        "inverse": {
+          "$value": "{neutral.50}",
+          "$type": "color",
+          "$description": "Primary text and icons on inverted (dark) surfaces. Theme-flips: light text on dark surfaces in light mode, dark text on light surfaces in dark mode. Pairs with bg.emphasis (e.g. tooltip)."
+        },
+        "inverse-muted": {
+          "$value": "{neutral.300}",
+          "$type": "color",
+          "$description": "Secondary/disabled text on inverted (dark) surfaces. Theme-flipping muted variant of fg.inverse. Pairs with theme-flipping disabled bg (bg.disabled)."
+        },
+        "inverse-strong": {
+          "$value": "{neutral.50}",
+          "$type": "color",
+          "$description": "Theme-stable light fg (neutral.50 in both themes). Use on saturated/bold colored backgrounds (filled buttons, badges, card media scrims) where the bg doesn't theme-flip and text must always be light. Distinct from fg.inverse / fg.inverse-muted which theme-flip for inverted-luminance surfaces."
+        },
+        "accent": {
+          "$value": "{violet.600}",
+          "$type": "color",
+          "$description": "Accent-coloured text and icons."
+        },
+        "accent-muted": {
+          "$value": "{violet.600}",
+          "$type": "color",
+          "$description": "De-emphasised accent text — link hover."
+        },
+        "accent-subtle": {
+          "$value": "{violet.700}",
+          "$type": "color",
+          "$description": "Subtlest accent text — link pressed."
+        },
+        "accent-2": {
+          "$value": "{violet.600}",
+          "$type": "color",
+          "$description": "Accent-2 text and icons (second-signal slot 2). DORMANT by default: aliases the same L1 stops as fg/accent so it renders identically to accent until slot 2 is filled in the theme editor; the editor keeps dormant slots in lockstep with accent."
+        },
+        "accent-2-muted": {
+          "$value": "{violet.600}",
+          "$type": "color",
+          "$description": "Accent-2 muted role — mirrors the accent family shape. DORMANT by default: aliases the same L1 stops as fg/accent-muted so it renders identically to accent until slot 2 is filled in the theme editor; the editor keeps dormant slots in lockstep with accent."
+        },
+        "accent-2-subtle": {
+          "$value": "{violet.700}",
+          "$type": "color",
+          "$description": "Accent-2 subtle role — mirrors the accent family shape. DORMANT by default: aliases the same L1 stops as fg/accent-subtle so it renders identically to accent until slot 2 is filled in the theme editor; the editor keeps dormant slots in lockstep with accent."
+        },
+        "accent-3": {
+          "$value": "{violet.600}",
+          "$type": "color",
+          "$description": "Accent-3 text and icons (second-signal slot 3). DORMANT by default: aliases the same L1 stops as fg/accent so it renders identically to accent until slot 3 is filled in the theme editor; the editor keeps dormant slots in lockstep with accent."
+        },
+        "accent-3-muted": {
+          "$value": "{violet.600}",
+          "$type": "color",
+          "$description": "Accent-3 muted role — mirrors the accent family shape. DORMANT by default: aliases the same L1 stops as fg/accent-muted so it renders identically to accent until slot 3 is filled in the theme editor; the editor keeps dormant slots in lockstep with accent."
+        },
+        "accent-3-subtle": {
+          "$value": "{violet.700}",
+          "$type": "color",
+          "$description": "Accent-3 subtle role — mirrors the accent family shape. DORMANT by default: aliases the same L1 stops as fg/accent-subtle so it renders identically to accent until slot 3 is filled in the theme editor; the editor keeps dormant slots in lockstep with accent."
+        },
+        "disabled": {
+          "$value": "{neutral.600}",
+          "$type": "color",
+          "$description": "Text and icons in disabled state."
+        },
+        "success": {
+          "$value": "{green.600}",
+          "$type": "color",
+          "$description": "Success state text — default. Use on neutral page bg."
+        },
+        "danger": {
+          "$value": "{red.600}",
+          "$type": "color",
+          "$description": "Danger/error state text — default. Use on neutral page bg."
+        },
+        "warning": {
+          "$value": "{yellow.800}",
+          "$type": "color",
+          "$description": "Warning state text — default. Use on neutral page bg."
+        },
+        "info": {
+          "$value": "{blue.600}",
+          "$type": "color",
+          "$description": "Informational text — default. Use on neutral page bg."
+        },
+        "success-muted": {
+          "$value": "{green.500}",
+          "$type": "color",
+          "$description": "Success state text — quieter variant. Use for supplementary copy on neutral bg."
+        },
+        "warning-muted": {
+          "$value": "{yellow.600}",
+          "$type": "color",
+          "$description": "Warning state text — quieter variant."
+        },
+        "danger-muted": {
+          "$value": "{red.400}",
+          "$type": "color",
+          "$description": "Danger state text — quieter variant."
+        },
+        "info-muted": {
+          "$value": "{blue.400}",
+          "$type": "color",
+          "$description": "Informational text — quieter variant."
+        }
+      },
+      "bg": {
+        "default": {
+          "$value": "{neutral.50}",
+          "$type": "color",
+          "$description": "Primary page background."
+        },
+        "strong": {
+          "$value": "{neutral.100}",
+          "$type": "color",
+          "$description": "Background one step UP from default — slightly more present (hover surface for clickable cards, list rows, table rows). Position +1 on the L2 intensity scale."
+        },
+        "bolder": {
+          "$value": "{neutral.200}",
+          "$type": "color",
+          "$description": "Background two steps UP from default — most present neutral chrome bg (pressed/active state, divider fills, inset regions). Position +2 on the L2 intensity scale."
+        },
+        "inverse": {
+          "$value": "{neutral.900}",
+          "$type": "color",
+          "$description": "Inverted-luminance surface background (tooltip, dark island in light theme). Pairs with fg.inverse for the inverted text. Theme-flipping role token, not an intensity step."
+        },
+        "accent-subtle": {
+          "$value": "{violet.50}",
+          "$type": "color",
+          "$description": "Faintest accent wash — position -2 on intensity, quietest accent surface (matches status-ramp canon: subtle = 50 stop). Passive washes only (secondary-button hover was moved OFF this to accent-muted 2026-08-03 — a visible hover can't live on a near-invisible wash)."
+        },
+        "accent-muted": {
+          "$value": "{violet.200}",
+          "$type": "color",
+          "$description": "Muted accent background — position -1 on intensity, the visible accent tint (canon: muted = 200 stop). Selection fills (via action.bg-selected), badge fill, brand washes. GAP-12 realignment 2026-08-03: muted/subtle were inverted (muted was violet-100, quieter than subtle) — now canon-aligned."
+        },
+        "accent": {
+          "$value": "{violet.600}",
+          "$type": "color",
+          "$description": "Saturated accent background — position 0 (baseline). The default 'filled accent' surface used by filled buttons, today pills, calendar booking badge."
+        },
+        "accent-strong": {
+          "$value": "{violet.700}",
+          "$type": "color",
+          "$description": "Stronger accent background — position +1 on intensity. Used by L3 for the filled primary button HOVER target (action.bg-primary-hover binds here)."
+        },
+        "accent-bolder": {
+          "$value": "{violet.800}",
+          "$type": "color",
+          "$description": "Boldest accent background — position +2 on intensity. Used by L3 for the filled primary button PRESSED target (action.bg-primary-pressed binds here)."
+        },
+        "accent-value": {
+          "$value": "{violet.600}",
+          "$type": "color",
+          "$description": "Accent VALUE-DISPLAY fill (slider fill/thumb, progress, spinner, timeline handle) — a role, not an intensity step: tuned for 3:1 against its neutral track (border-muted / bg-bolder), where the interaction chain (accent/-strong/-bolder) is tuned for text-on-fill. Light: equals bg.accent by coincidence of constraints, dark diverges. Precedents: Radix accent-indicator/track, Spectrum accent-visual-color."
+        },
+        "accent-2-subtle": {
+          "$value": "{violet.50}",
+          "$type": "color",
+          "$description": "Accent-2 subtle role — mirrors the accent family shape. DORMANT by default: aliases the same L1 stops as bg/accent-subtle so it renders identically to accent until slot 2 is filled in the theme editor; the editor keeps dormant slots in lockstep with accent."
+        },
+        "accent-2-muted": {
+          "$value": "{violet.200}",
+          "$type": "color",
+          "$description": "Accent-2 muted role — mirrors the accent family shape. DORMANT by default: aliases the same L1 stops as bg/accent-muted so it renders identically to accent until slot 2 is filled in the theme editor; the editor keeps dormant slots in lockstep with accent."
+        },
+        "accent-2": {
+          "$value": "{violet.600}",
+          "$type": "color",
+          "$description": "Solid accent-2 fill — the accent-2 button face. DORMANT by default: aliases the same L1 stops as bg/accent so it renders identically to accent until slot 2 is filled in the theme editor; the editor keeps dormant slots in lockstep with accent."
+        },
+        "accent-2-strong": {
+          "$value": "{violet.700}",
+          "$type": "color",
+          "$description": "Accent-2 strong role — mirrors the accent family shape. DORMANT by default: aliases the same L1 stops as bg/accent-strong so it renders identically to accent until slot 2 is filled in the theme editor; the editor keeps dormant slots in lockstep with accent."
+        },
+        "accent-2-bolder": {
+          "$value": "{violet.800}",
+          "$type": "color",
+          "$description": "Accent-2 bolder role — mirrors the accent family shape. DORMANT by default: aliases the same L1 stops as bg/accent-bolder so it renders identically to accent until slot 2 is filled in the theme editor; the editor keeps dormant slots in lockstep with accent."
+        },
+        "accent-2-value": {
+          "$value": "{violet.600}",
+          "$type": "color",
+          "$description": "Accent-2 value role — mirrors the accent family shape. DORMANT by default: aliases the same L1 stops as bg/accent-value so it renders identically to accent until slot 2 is filled in the theme editor; the editor keeps dormant slots in lockstep with accent."
+        },
+        "accent-3-subtle": {
+          "$value": "{violet.50}",
+          "$type": "color",
+          "$description": "Accent-3 subtle role — mirrors the accent family shape. DORMANT by default: aliases the same L1 stops as bg/accent-subtle so it renders identically to accent until slot 3 is filled in the theme editor; the editor keeps dormant slots in lockstep with accent."
+        },
+        "accent-3-muted": {
+          "$value": "{violet.200}",
+          "$type": "color",
+          "$description": "Accent-3 muted role — mirrors the accent family shape. DORMANT by default: aliases the same L1 stops as bg/accent-muted so it renders identically to accent until slot 3 is filled in the theme editor; the editor keeps dormant slots in lockstep with accent."
+        },
+        "accent-3": {
+          "$value": "{violet.600}",
+          "$type": "color",
+          "$description": "Solid accent-3 fill — the accent-3 button face. DORMANT by default: aliases the same L1 stops as bg/accent so it renders identically to accent until slot 3 is filled in the theme editor; the editor keeps dormant slots in lockstep with accent."
+        },
+        "accent-3-strong": {
+          "$value": "{violet.700}",
+          "$type": "color",
+          "$description": "Accent-3 strong role — mirrors the accent family shape. DORMANT by default: aliases the same L1 stops as bg/accent-strong so it renders identically to accent until slot 3 is filled in the theme editor; the editor keeps dormant slots in lockstep with accent."
+        },
+        "accent-3-bolder": {
+          "$value": "{violet.800}",
+          "$type": "color",
+          "$description": "Accent-3 bolder role — mirrors the accent family shape. DORMANT by default: aliases the same L1 stops as bg/accent-bolder so it renders identically to accent until slot 3 is filled in the theme editor; the editor keeps dormant slots in lockstep with accent."
+        },
+        "accent-3-value": {
+          "$value": "{violet.600}",
+          "$type": "color",
+          "$description": "Accent-3 value role — mirrors the accent family shape. DORMANT by default: aliases the same L1 stops as bg/accent-value so it renders identically to accent until slot 3 is filled in the theme editor; the editor keeps dormant slots in lockstep with accent."
+        },
+        "success-value": {
+          "$value": "{green.600}",
+          "$type": "color",
+          "$description": "Success value-display fill (status progress). 3:1 vs track measured; NOT fg.success (fg is ink, never a fill — role doctrine)."
+        },
+        "warning-value": {
+          "$value": "{yellow.700}",
+          "$type": "color",
+          "$description": "Warning value-display fill. 700, not 600: yellow's luminance needs the extra step to reach 3:1 on the light track (600 = 2.09)."
+        },
+        "danger-value": {
+          "$value": "{red.600}",
+          "$type": "color",
+          "$description": "Danger value-display fill (status progress). 3:1 vs track measured."
+        },
+        "disabled": {
+          "$value": "{neutral.100}",
+          "$type": "color",
+          "$description": "Background for disabled interactive elements and fields."
+        },
+        "overlay": {
+          "$value": "{neutral.900}",
+          "$type": "color",
+          "$description": "Modal/drawer backdrop. Apply 60% opacity in code."
+        },
+        "success": {
+          "$value": "{green.500}",
+          "$type": "color",
+          "$description": "Success state background — default (saturated). Use for filled status bars, filled badges, toast accents."
+        },
+        "danger": {
+          "$value": "{red.600}",
+          "$type": "color",
+          "$description": "Danger state background — default (saturated)."
+        },
+        "warning": {
+          "$value": "{yellow.500}",
+          "$type": "color",
+          "$description": "Warning state background — default (saturated)."
+        },
+        "info": {
+          "$value": "{blue.500}",
+          "$type": "color",
+          "$description": "Informational background — default (saturated)."
+        },
+        "success-muted": {
+          "$value": "{green.200}",
+          "$type": "color",
+          "$description": "Success state background — mid intensity. Bridges saturated and soft tints."
+        },
+        "success-subtle": {
+          "$value": "{green.50}",
+          "$type": "color",
+          "$description": "Success state background — soft tint. Use for banners, validation hint containers, list-item soft hover."
+        },
+        "warning-muted": {
+          "$value": "{yellow.200}",
+          "$type": "color",
+          "$description": "Warning state background — mid intensity."
+        },
+        "warning-subtle": {
+          "$value": "{yellow.100}",
+          "$type": "color",
+          "$description": "Warning state background — soft tint. Banners, hint containers."
+        },
+        "danger-muted": {
+          "$value": "{red.200}",
+          "$type": "color",
+          "$description": "Danger state background — mid intensity."
+        },
+        "danger-subtle": {
+          "$value": "{red.50}",
+          "$type": "color",
+          "$description": "Danger state background — soft tint. Banners, hint containers."
+        },
+        "danger-strong": {
+          "$value": "{red.700}",
+          "$type": "color",
+          "$description": "Danger state background — bolder than default. Hover state for filled danger button (.lb-btn--danger:hover)."
+        },
+        "danger-bolder": {
+          "$value": "{red.800}",
+          "$type": "color",
+          "$description": "Danger state background — boldest. Pressed state for filled danger button (.lb-btn--danger:active)."
+        },
+        "info-muted": {
+          "$value": "{blue.200}",
+          "$type": "color",
+          "$description": "Informational background — mid intensity."
+        },
+        "info-subtle": {
+          "$value": "{blue.50}",
+          "$type": "color",
+          "$description": "Informational background — soft tint. Banners, hint containers."
+        }
+      },
+      "border": {
+        "default": {
+          "$value": "{neutral.300}",
+          "$type": "color",
+          "$description": "Standard borders. The everyday separator — cards, dividers, sidebars, headers. Tuned to be visible without competing for attention."
+        },
+        "muted": {
+          "$value": "{neutral.200}",
+          "$type": "color",
+          "$description": "Subtle borders — even softer than default. Use when a separator is needed but visual presence should be minimal (description rules, panel dividers inside a card)."
+        },
+        "strong": {
+          "$value": "{neutral.500}",
+          "$type": "color",
+          "$description": "Field/control border tier — the L2 reference for the L3 field.* family (inputs, selects, textareas, datepicker triggers, checkboxes, radios). Strong enough to mark interactivity, soft enough to sit calmly inside forms. Sits one step stronger than border.default, which is reserved for surface chrome."
+        },
+        "bolder": {
+          "$value": "{neutral.500}",
+          "$type": "color",
+          "$description": "Field/control border — position +2 on intensity (one step stronger than border.strong). Hover state for fields (.lb-input:hover, etc.)."
+        },
+        "focus": {
+          "$value": "{blue.500}",
+          "$type": "color",
+          "$description": "Keyboard focus ring. Blue distinguishes focus from violet action elements."
+        },
+        "accent": {
+          "$value": "{violet.600}",
+          "$type": "color",
+          "$description": "Accent borders — matches fg.accent for coherent brand expression (secondary buttons, chip outlines, tab indicators, default badges)."
+        },
+        "accent-2": {
+          "$value": "{violet.600}",
+          "$type": "color",
+          "$description": "Accent-2 boundary. DORMANT by default: aliases the same L1 stops as border/accent so it renders identically to accent until slot 2 is filled in the theme editor; the editor keeps dormant slots in lockstep with accent."
+        },
+        "accent-3": {
+          "$value": "{violet.600}",
+          "$type": "color",
+          "$description": "Accent-3 boundary. DORMANT by default: aliases the same L1 stops as border/accent so it renders identically to accent until slot 3 is filled in the theme editor; the editor keeps dormant slots in lockstep with accent."
+        },
+        "disabled": {
+          "$value": "{neutral.200}",
+          "$type": "color",
+          "$description": "Border for disabled interactive elements and fields."
+        },
+        "success": {
+          "$value": "{green.500}",
+          "$type": "color",
+          "$description": "Success border — default (matches bg.success saturation). Active status outlines, focus on success-validated input."
+        },
+        "danger": {
+          "$value": "{red.500}",
+          "$type": "color",
+          "$description": "Danger border — default (matches bg.danger saturation)."
+        },
+        "warning": {
+          "$value": "{yellow.500}",
+          "$type": "color",
+          "$description": "Warning border — default (matches bg.warning saturation)."
+        },
+        "info": {
+          "$value": "{blue.500}",
+          "$type": "color",
+          "$description": "Informational border — default (matches bg.info saturation)."
+        },
+        "success-muted": {
+          "$value": "{green.300}",
+          "$type": "color",
+          "$description": "Success border — mid emphasis. Banner outlines, soft container borders."
+        },
+        "success-subtle": {
+          "$value": "{green.200}",
+          "$type": "color",
+          "$description": "Success border — soft separator on tinted surfaces."
+        },
+        "warning-muted": {
+          "$value": "{yellow.300}",
+          "$type": "color",
+          "$description": "Warning border — mid emphasis. Banner outlines."
+        },
+        "warning-subtle": {
+          "$value": "{yellow.200}",
+          "$type": "color",
+          "$description": "Warning border — soft separator on tinted surfaces."
+        },
+        "danger-muted": {
+          "$value": "{red.300}",
+          "$type": "color",
+          "$description": "Danger border — mid emphasis. Banner outlines."
+        },
+        "danger-subtle": {
+          "$value": "{red.200}",
+          "$type": "color",
+          "$description": "Danger border — soft separator on tinted surfaces."
+        },
+        "info-muted": {
+          "$value": "{blue.300}",
+          "$type": "color",
+          "$description": "Informational border — mid emphasis. Banner outlines."
+        },
+        "info-subtle": {
+          "$value": "{blue.200}",
+          "$type": "color",
+          "$description": "Informational border — soft separator on tinted surfaces."
+        }
+      },
+      "data": {
+        "1": {
+          "$value": "{violet.500}",
+          "$type": "color",
+          "$description": "Categorical color 1 (violet). Use for chart series, list/legend swatches, donut slices, sparklines. Single token used as fill/color/stroke/background — categorical identity, not role-on-surface."
+        },
+        "2": {
+          "$value": "{blue.500}",
+          "$type": "color",
+          "$description": "Categorical color 2 (blue). Use for chart series, list/legend swatches, donut slices, sparklines. Single token used as fill/color/stroke/background — categorical identity, not role-on-surface."
+        },
+        "3": {
+          "$value": "{green.500}",
+          "$type": "color",
+          "$description": "Categorical color 3 (green). Use for chart series, list/legend swatches, donut slices, sparklines. Single token used as fill/color/stroke/background — categorical identity, not role-on-surface."
+        },
+        "4": {
+          "$value": "{yellow.500}",
+          "$type": "color",
+          "$description": "Categorical color 4 (yellow). Use for chart series, list/legend swatches, donut slices, sparklines. Single token used as fill/color/stroke/background — categorical identity, not role-on-surface."
+        },
+        "5": {
+          "$value": "{red.500}",
+          "$type": "color",
+          "$description": "Categorical color 5 (red). Use for chart series, list/legend swatches, donut slices, sparklines. Single token used as fill/color/stroke/background — categorical identity, not role-on-surface."
+        },
+        "6": {
+          "$value": "{neutral.500}",
+          "$type": "color",
+          "$description": "Categorical color 6 (neutral). Use for chart series, list/legend swatches, donut slices, sparklines. Single token used as fill/color/stroke/background — categorical identity, not role-on-surface."
+        },
+        "7": {
+          "$value": "{orange.500}",
+          "$type": "color",
+          "$description": "Categorical color 7 (orange). Use for chart series, list/legend swatches, donut slices, sparklines. Single token used as fill/color/stroke/background — categorical identity, not role-on-surface."
+        },
+        "8": {
+          "$value": "{cyan.500}",
+          "$type": "color",
+          "$description": "Categorical color 8 (cyan). Use for chart series, list/legend swatches, donut slices, sparklines. Single token used as fill/color/stroke/background — categorical identity, not role-on-surface."
+        }
+      },
+      "code": {
+        "1": {
+          "$value": "{violet.600}",
+          "$type": "color",
+          "$description": "Code highlighting color 1 (violet) — keyword (control flow, declarations, reserved words). Used by Code Block component's syntax highlighter for js, ts, json, css, html, bash."
+        },
+        "2": {
+          "$value": "{blue.600}",
+          "$type": "color",
+          "$description": "Code highlighting color 2 (blue) — number (numeric literals, function names). Used by Code Block component's syntax highlighter for js, ts, json, css, html, bash."
+        },
+        "3": {
+          "$value": "{green.600}",
+          "$type": "color",
+          "$description": "Code highlighting color 3 (green) — string (string literals, template literals). Used by Code Block component's syntax highlighter for js, ts, json, css, html, bash."
+        },
+        "4": {
+          "$value": "{yellow.600}",
+          "$type": "color",
+          "$description": "Code highlighting color 4 (yellow) — attribute (HTML attributes, CSS properties). Used by Code Block component's syntax highlighter for js, ts, json, css, html, bash."
+        },
+        "5": {
+          "$value": "{red.600}",
+          "$type": "color",
+          "$description": "Code highlighting color 5 (red) — tag (HTML elements, JSX tags). Used by Code Block component's syntax highlighter for js, ts, json, css, html, bash."
+        },
+        "6": {
+          "$value": "{neutral.600}",
+          "$type": "color",
+          "$description": "Code highlighting color 6 (neutral) — reserved. Used by Code Block component's syntax highlighter for js, ts, json, css, html, bash."
+        },
+        "7": {
+          "$value": "{orange.600}",
+          "$type": "color",
+          "$description": "Code highlighting color 7 (orange) — reserved. Used by Code Block component's syntax highlighter for js, ts, json, css, html, bash."
+        },
+        "8": {
+          "$value": "{cyan.600}",
+          "$type": "color",
+          "$description": "Code highlighting color 8 (cyan) — reserved. Used by Code Block component's syntax highlighter for js, ts, json, css, html, bash."
+        }
+      }
+    },
+    "dark": {
+      "fg": {
+        "default": {
+          "$value": "{neutral.100}",
+          "$type": "color",
+          "$description": "Primary text and icons."
+        },
+        "muted": {
+          "$value": "{neutral.400}",
+          "$type": "color",
+          "$description": "Secondary text."
+        },
+        "subtle": {
+          "$value": "{neutral.400}",
+          "$type": "color",
+          "$description": "Tertiary/placeholder text."
+        },
+        "inverse": {
+          "$value": "{neutral.900}",
+          "$type": "color",
+          "$description": "Primary text and icons on inverted (light) surfaces in dark mode. Theme-flips: dark text on light surfaces. Pairs with bg.inverse (e.g. tooltip)."
+        },
+        "inverse-muted": {
+          "$value": "{neutral.700}",
+          "$type": "color",
+          "$description": "Secondary/disabled text on inverted (light) surfaces in dark mode. Theme-flipping muted variant of fg.inverse. Pairs with theme-flipping disabled bg (bg.disabled)."
+        },
+        "inverse-strong": {
+          "$value": "{neutral.50}",
+          "$type": "color",
+          "$description": "Theme-stable light fg (neutral.50 in both themes). Use on saturated/bold colored backgrounds where the bg doesn't theme-flip and text must always be light. Distinct from fg.inverse / fg.inverse-muted which theme-flip for inverted-luminance surfaces."
+        },
+        "accent": {
+          "$value": "{violet.400}",
+          "$type": "color",
+          "$description": "Accent-coloured text and icons."
+        },
+        "accent-muted": {
+          "$value": "{violet.300}",
+          "$type": "color",
+          "$description": "De-emphasised accent text — link hover."
+        },
+        "accent-subtle": {
+          "$value": "{violet.200}",
+          "$type": "color",
+          "$description": "Subtlest accent text — link pressed."
+        },
+        "accent-2": {
+          "$value": "{violet.400}",
+          "$type": "color",
+          "$description": "Accent-2 text and icons (second-signal slot 2). DORMANT by default: aliases the same L1 stops as fg/accent so it renders identically to accent until slot 2 is filled in the theme editor; the editor keeps dormant slots in lockstep with accent."
+        },
+        "accent-2-muted": {
+          "$value": "{violet.300}",
+          "$type": "color",
+          "$description": "Accent-2 muted role — mirrors the accent family shape. DORMANT by default: aliases the same L1 stops as fg/accent-muted so it renders identically to accent until slot 2 is filled in the theme editor; the editor keeps dormant slots in lockstep with accent."
+        },
+        "accent-2-subtle": {
+          "$value": "{violet.200}",
+          "$type": "color",
+          "$description": "Accent-2 subtle role — mirrors the accent family shape. DORMANT by default: aliases the same L1 stops as fg/accent-subtle so it renders identically to accent until slot 2 is filled in the theme editor; the editor keeps dormant slots in lockstep with accent."
+        },
+        "accent-3": {
+          "$value": "{violet.400}",
+          "$type": "color",
+          "$description": "Accent-3 text and icons (second-signal slot 3). DORMANT by default: aliases the same L1 stops as fg/accent so it renders identically to accent until slot 3 is filled in the theme editor; the editor keeps dormant slots in lockstep with accent."
+        },
+        "accent-3-muted": {
+          "$value": "{violet.300}",
+          "$type": "color",
+          "$description": "Accent-3 muted role — mirrors the accent family shape. DORMANT by default: aliases the same L1 stops as fg/accent-muted so it renders identically to accent until slot 3 is filled in the theme editor; the editor keeps dormant slots in lockstep with accent."
+        },
+        "accent-3-subtle": {
+          "$value": "{violet.200}",
+          "$type": "color",
+          "$description": "Accent-3 subtle role — mirrors the accent family shape. DORMANT by default: aliases the same L1 stops as fg/accent-subtle so it renders identically to accent until slot 3 is filled in the theme editor; the editor keeps dormant slots in lockstep with accent."
+        },
+        "disabled": {
+          "$value": "{neutral.400}",
+          "$type": "color",
+          "$description": "Text and icons in disabled state."
+        },
+        "success": {
+          "$value": "{green.400}",
+          "$type": "color",
+          "$description": "Success state text — default. Use on neutral page bg."
+        },
+        "danger": {
+          "$value": "{red.400}",
+          "$type": "color",
+          "$description": "Danger/error state text — default. Use on neutral page bg."
+        },
+        "warning": {
+          "$value": "{yellow.400}",
+          "$type": "color",
+          "$description": "Warning state text — default. Use on neutral page bg."
+        },
+        "info": {
+          "$value": "{blue.400}",
+          "$type": "color",
+          "$description": "Informational text — default. Use on neutral page bg."
+        },
+        "success-muted": {
+          "$value": "{green.500}",
+          "$type": "color",
+          "$description": "Success state text — quieter variant. Use for supplementary copy on neutral bg."
+        },
+        "warning-muted": {
+          "$value": "{yellow.500}",
+          "$type": "color",
+          "$description": "Warning state text — quieter variant."
+        },
+        "danger-muted": {
+          "$value": "{red.500}",
+          "$type": "color",
+          "$description": "Danger state text — quieter variant."
+        },
+        "info-muted": {
+          "$value": "{blue.500}",
+          "$type": "color",
+          "$description": "Informational text — quieter variant."
+        }
+      },
+      "bg": {
+        "default": {
+          "$value": "{neutral.950}",
+          "$type": "color",
+          "$description": "Primary page background."
+        },
+        "strong": {
+          "$value": "{neutral.900}",
+          "$type": "color",
+          "$description": "Background one step UP from default — slightly more present (hover surface for clickable cards, list rows, table rows). Position +1 on the L2 intensity scale. Mirrors light theme's neutral.50 → neutral.100 progression with neutral.950 → neutral.900."
+        },
+        "bolder": {
+          "$value": "{neutral.800}",
+          "$type": "color",
+          "$description": "Background two steps UP from default — most present neutral chrome bg (pressed/active state, divider fills, inset regions). Position +2 on the L2 intensity scale. Mirrors light theme's neutral.50 → neutral.200 progression with neutral.950 → neutral.800."
+        },
+        "inverse": {
+          "$value": "{neutral.50}",
+          "$type": "color",
+          "$description": "Inverted-luminance surface background (tooltip in dark theme = light island). Pairs with fg.inverse. Theme-flipping role token, not an intensity step."
+        },
+        "accent-subtle": {
+          "$value": "{violet.950}",
+          "$type": "color",
+          "$description": "Faintest accent wash — position -2 on intensity, quietest accent surface (canon: subtle = 950 stop in dark). GAP-12 realignment 2026-08-03: was violet-700, which read as a loud active fill."
+        },
+        "accent-muted": {
+          "$value": "{violet.800}",
+          "$type": "color",
+          "$description": "Muted accent background — position -1 on intensity, the visible accent tint (canon: muted = 800 stop in dark). Selection fills resolve here: #261249 reads clearly (fg.accent 6.91:1) yet darker + lower-chroma than M3 dark secondary-container."
+        },
+        "accent": {
+          "$value": "{violet.600}",
+          "$type": "color",
+          "$description": "Saturated accent background — position 0 (baseline). Default 'filled accent' surface."
+        },
+        "accent-strong": {
+          "$value": "{violet.700}",
+          "$type": "color",
+          "$description": "Stronger accent background — position +1 on intensity. Dark theme uses LIGHTER violet so hover reads as brighter against dark page bg (mirrors light-theme darker-on-hover pattern)."
+        },
+        "accent-bolder": {
+          "$value": "{violet.800}",
+          "$type": "color",
+          "$description": "Boldest accent background — position +2 on intensity. Dark theme: lightest of the saturated stack."
+        },
+        "accent-value": {
+          "$value": "{violet.400}",
+          "$type": "color",
+          "$description": "Accent value-display fill, dark: LIGHTER than bg.accent (600) because its reference surface is the near-black track (6.36:1 at 400), not white text. The divergence from light is the reason this role exists."
+        },
+        "accent-2-subtle": {
+          "$value": "{violet.950}",
+          "$type": "color",
+          "$description": "Accent-2 subtle role — mirrors the accent family shape. DORMANT by default: aliases the same L1 stops as bg/accent-subtle so it renders identically to accent until slot 2 is filled in the theme editor; the editor keeps dormant slots in lockstep with accent."
+        },
+        "accent-2-muted": {
+          "$value": "{violet.800}",
+          "$type": "color",
+          "$description": "Accent-2 muted role — mirrors the accent family shape. DORMANT by default: aliases the same L1 stops as bg/accent-muted so it renders identically to accent until slot 2 is filled in the theme editor; the editor keeps dormant slots in lockstep with accent."
+        },
+        "accent-2": {
+          "$value": "{violet.600}",
+          "$type": "color",
+          "$description": "Solid accent-2 fill — the accent-2 button face. DORMANT by default: aliases the same L1 stops as bg/accent so it renders identically to accent until slot 2 is filled in the theme editor; the editor keeps dormant slots in lockstep with accent."
+        },
+        "accent-2-strong": {
+          "$value": "{violet.700}",
+          "$type": "color",
+          "$description": "Accent-2 strong role — mirrors the accent family shape. DORMANT by default: aliases the same L1 stops as bg/accent-strong so it renders identically to accent until slot 2 is filled in the theme editor; the editor keeps dormant slots in lockstep with accent."
+        },
+        "accent-2-bolder": {
+          "$value": "{violet.800}",
+          "$type": "color",
+          "$description": "Accent-2 bolder role — mirrors the accent family shape. DORMANT by default: aliases the same L1 stops as bg/accent-bolder so it renders identically to accent until slot 2 is filled in the theme editor; the editor keeps dormant slots in lockstep with accent."
+        },
+        "accent-2-value": {
+          "$value": "{violet.400}",
+          "$type": "color",
+          "$description": "Accent-2 value role — mirrors the accent family shape. DORMANT by default: aliases the same L1 stops as bg/accent-value so it renders identically to accent until slot 2 is filled in the theme editor; the editor keeps dormant slots in lockstep with accent."
+        },
+        "accent-3-subtle": {
+          "$value": "{violet.950}",
+          "$type": "color",
+          "$description": "Accent-3 subtle role — mirrors the accent family shape. DORMANT by default: aliases the same L1 stops as bg/accent-subtle so it renders identically to accent until slot 3 is filled in the theme editor; the editor keeps dormant slots in lockstep with accent."
+        },
+        "accent-3-muted": {
+          "$value": "{violet.800}",
+          "$type": "color",
+          "$description": "Accent-3 muted role — mirrors the accent family shape. DORMANT by default: aliases the same L1 stops as bg/accent-muted so it renders identically to accent until slot 3 is filled in the theme editor; the editor keeps dormant slots in lockstep with accent."
+        },
+        "accent-3": {
+          "$value": "{violet.600}",
+          "$type": "color",
+          "$description": "Solid accent-3 fill — the accent-3 button face. DORMANT by default: aliases the same L1 stops as bg/accent so it renders identically to accent until slot 3 is filled in the theme editor; the editor keeps dormant slots in lockstep with accent."
+        },
+        "accent-3-strong": {
+          "$value": "{violet.700}",
+          "$type": "color",
+          "$description": "Accent-3 strong role — mirrors the accent family shape. DORMANT by default: aliases the same L1 stops as bg/accent-strong so it renders identically to accent until slot 3 is filled in the theme editor; the editor keeps dormant slots in lockstep with accent."
+        },
+        "accent-3-bolder": {
+          "$value": "{violet.800}",
+          "$type": "color",
+          "$description": "Accent-3 bolder role — mirrors the accent family shape. DORMANT by default: aliases the same L1 stops as bg/accent-bolder so it renders identically to accent until slot 3 is filled in the theme editor; the editor keeps dormant slots in lockstep with accent."
+        },
+        "accent-3-value": {
+          "$value": "{violet.400}",
+          "$type": "color",
+          "$description": "Accent-3 value role — mirrors the accent family shape. DORMANT by default: aliases the same L1 stops as bg/accent-value so it renders identically to accent until slot 3 is filled in the theme editor; the editor keeps dormant slots in lockstep with accent."
+        },
+        "success-value": {
+          "$value": "{green.400}",
+          "$type": "color",
+          "$description": "Success value-display fill, dark (7.02:1 vs track)."
+        },
+        "warning-value": {
+          "$value": "{yellow.400}",
+          "$type": "color",
+          "$description": "Warning value-display fill, dark (9.45:1 vs track)."
+        },
+        "danger-value": {
+          "$value": "{red.400}",
+          "$type": "color",
+          "$description": "Danger value-display fill, dark (6.18:1 vs track)."
+        },
+        "disabled": {
+          "$value": "{neutral.800}",
+          "$type": "color",
+          "$description": "Background for disabled interactive elements and fields."
+        },
+        "overlay": {
+          "$value": "{neutral.900}",
+          "$type": "color",
+          "$description": "Modal/drawer backdrop. Apply 60% opacity in code."
+        },
+        "success": {
+          "$value": "{green.500}",
+          "$type": "color",
+          "$description": "Success state background — default (saturated). Use for filled status bars, filled badges, toast accents."
+        },
+        "danger": {
+          "$value": "{red.600}",
+          "$type": "color",
+          "$description": "Danger state background — default (saturated)."
+        },
+        "warning": {
+          "$value": "{yellow.500}",
+          "$type": "color",
+          "$description": "Warning state background — default (saturated)."
+        },
+        "info": {
+          "$value": "{blue.500}",
+          "$type": "color",
+          "$description": "Informational background — default (saturated)."
+        },
+        "success-muted": {
+          "$value": "{green.800}",
+          "$type": "color",
+          "$description": "Success state background — mid intensity. Bridges saturated and soft tints."
+        },
+        "success-subtle": {
+          "$value": "{green.950}",
+          "$type": "color",
+          "$description": "Success state background — soft tint. Use for banners, validation hint containers, list-item soft hover."
+        },
+        "warning-muted": {
+          "$value": "{yellow.800}",
+          "$type": "color",
+          "$description": "Warning state background — mid intensity."
+        },
+        "warning-subtle": {
+          "$value": "{yellow.950}",
+          "$type": "color",
+          "$description": "Warning state background — soft tint. Banners, hint containers."
+        },
+        "danger-muted": {
+          "$value": "{red.800}",
+          "$type": "color",
+          "$description": "Danger state background — mid intensity."
+        },
+        "danger-subtle": {
+          "$value": "{red.950}",
+          "$type": "color",
+          "$description": "Danger state background — soft tint. Banners, hint containers."
+        },
+        "danger-strong": {
+          "$value": "{red.700}",
+          "$type": "color",
+          "$description": "Danger state background — bolder than default. Hover state for filled danger button (.lb-btn--danger:hover). Lighter in dark mode for contrast."
+        },
+        "danger-bolder": {
+          "$value": "{red.800}",
+          "$type": "color",
+          "$description": "Danger state background — boldest. Pressed state for filled danger button (.lb-btn--danger:active)."
+        },
+        "info-muted": {
+          "$value": "{blue.800}",
+          "$type": "color",
+          "$description": "Informational background — mid intensity."
+        },
+        "info-subtle": {
+          "$value": "{blue.950}",
+          "$type": "color",
+          "$description": "Informational background — soft tint. Banners, hint containers."
+        }
+      },
+      "border": {
+        "default": {
+          "$value": "{neutral.800}",
+          "$type": "color",
+          "$description": "Standard borders. The everyday separator — cards, dividers, sidebars, headers. Tuned to be visible without competing for attention."
+        },
+        "muted": {
+          "$value": "{neutral.800}",
+          "$type": "color",
+          "$description": "Subtle borders — even softer than default. Use when a separator is needed but visual presence should be minimal (description rules, panel dividers inside a card). DARK-THEME NOTE: collapses to the same L1 as border.default (neutral.800) because dark theme's perceptual headroom between page bg (neutral.950) and card bg (neutral.900) is too narrow to express a meaningfully-quieter chrome border. The previous value (neutral.900) was effectively invisible at 1px. Material 3 ships outline / outline-variant with the same value in dark mode for the same reason."
+        },
+        "strong": {
+          "$value": "{neutral.600}",
+          "$type": "color",
+          "$description": "Field/control border tier — the L2 reference for the L3 field.* family (inputs, selects, textareas, datepicker triggers, checkboxes, radios). Strong enough to mark interactivity on dark surfaces, soft enough not to glow."
+        },
+        "bolder": {
+          "$value": "{neutral.500}",
+          "$type": "color",
+          "$description": "Field/control border — position +2 on intensity (one step stronger than border.strong). Hover state for fields. Sits between resting (neutral.700) and lighter neutrals for a clear contrast bump."
+        },
+        "focus": {
+          "$value": "{blue.400}",
+          "$type": "color",
+          "$description": "Keyboard focus ring. Blue distinguishes focus from violet action elements."
+        },
+        "accent": {
+          "$value": "{violet.400}",
+          "$type": "color",
+          "$description": "Accent borders — matches dark fg.accent for coherent brand expression."
+        },
+        "accent-2": {
+          "$value": "{violet.400}",
+          "$type": "color",
+          "$description": "Accent-2 boundary. DORMANT by default: aliases the same L1 stops as border/accent so it renders identically to accent until slot 2 is filled in the theme editor; the editor keeps dormant slots in lockstep with accent."
+        },
+        "accent-3": {
+          "$value": "{violet.400}",
+          "$type": "color",
+          "$description": "Accent-3 boundary. DORMANT by default: aliases the same L1 stops as border/accent so it renders identically to accent until slot 3 is filled in the theme editor; the editor keeps dormant slots in lockstep with accent."
+        },
+        "disabled": {
+          "$value": "{neutral.700}",
+          "$type": "color",
+          "$description": "Border for disabled interactive elements and fields."
+        },
+        "success": {
+          "$value": "{green.500}",
+          "$type": "color",
+          "$description": "Success border — default (matches bg.success saturation). Active status outlines, focus on success-validated input."
+        },
+        "danger": {
+          "$value": "{red.500}",
+          "$type": "color",
+          "$description": "Danger border — default (matches bg.danger saturation)."
+        },
+        "warning": {
+          "$value": "{yellow.500}",
+          "$type": "color",
+          "$description": "Warning border — default (matches bg.warning saturation)."
+        },
+        "info": {
+          "$value": "{blue.500}",
+          "$type": "color",
+          "$description": "Informational border — default (matches bg.info saturation)."
+        },
+        "success-muted": {
+          "$value": "{green.700}",
+          "$type": "color",
+          "$description": "Success border — mid emphasis. Banner outlines, soft container borders."
+        },
+        "success-subtle": {
+          "$value": "{green.800}",
+          "$type": "color",
+          "$description": "Success border — soft separator on tinted surfaces."
+        },
+        "warning-muted": {
+          "$value": "{yellow.700}",
+          "$type": "color",
+          "$description": "Warning border — mid emphasis. Banner outlines."
+        },
+        "warning-subtle": {
+          "$value": "{yellow.800}",
+          "$type": "color",
+          "$description": "Warning border — soft separator on tinted surfaces."
+        },
+        "danger-muted": {
+          "$value": "{red.700}",
+          "$type": "color",
+          "$description": "Danger border — mid emphasis. Banner outlines."
+        },
+        "danger-subtle": {
+          "$value": "{red.800}",
+          "$type": "color",
+          "$description": "Danger border — soft separator on tinted surfaces."
+        },
+        "info-muted": {
+          "$value": "{blue.700}",
+          "$type": "color",
+          "$description": "Informational border — mid emphasis. Banner outlines."
+        },
+        "info-subtle": {
+          "$value": "{blue.800}",
+          "$type": "color",
+          "$description": "Informational border — soft separator on tinted surfaces."
+        }
+      },
+      "data": {
+        "1": {
+          "$value": "{violet.400}",
+          "$type": "color",
+          "$description": "Categorical color 1 (violet) — bumped one step lighter for dark surfaces."
+        },
+        "2": {
+          "$value": "{blue.400}",
+          "$type": "color",
+          "$description": "Categorical color 2 (blue) — bumped one step lighter for dark surfaces."
+        },
+        "3": {
+          "$value": "{green.400}",
+          "$type": "color",
+          "$description": "Categorical color 3 (green) — bumped one step lighter for dark surfaces."
+        },
+        "4": {
+          "$value": "{yellow.400}",
+          "$type": "color",
+          "$description": "Categorical color 4 (yellow) — bumped one step lighter for dark surfaces."
+        },
+        "5": {
+          "$value": "{red.400}",
+          "$type": "color",
+          "$description": "Categorical color 5 (red) — bumped one step lighter for dark surfaces."
+        },
+        "6": {
+          "$value": "{neutral.400}",
+          "$type": "color",
+          "$description": "Categorical color 6 (neutral) — bumped one step lighter for dark surfaces."
+        },
+        "7": {
+          "$value": "{orange.400}",
+          "$type": "color",
+          "$description": "Categorical color 7 (orange) — bumped one step lighter for dark surfaces."
+        },
+        "8": {
+          "$value": "{cyan.400}",
+          "$type": "color",
+          "$description": "Categorical color 8 (cyan) — bumped one step lighter for dark surfaces."
+        }
+      },
+      "code": {
+        "1": {
+          "$value": "{violet.300}",
+          "$type": "color",
+          "$description": "Code highlighting color 1 (violet) — keyword (control flow, declarations, reserved words). Paler stop for dark surfaces."
+        },
+        "2": {
+          "$value": "{blue.300}",
+          "$type": "color",
+          "$description": "Code highlighting color 2 (blue) — number (numeric literals, function names). Paler stop for dark surfaces."
+        },
+        "3": {
+          "$value": "{green.300}",
+          "$type": "color",
+          "$description": "Code highlighting color 3 (green) — string (string literals, template literals). Paler stop for dark surfaces."
+        },
+        "4": {
+          "$value": "{yellow.300}",
+          "$type": "color",
+          "$description": "Code highlighting color 4 (yellow) — attribute (HTML attributes, CSS properties). Paler stop for dark surfaces."
+        },
+        "5": {
+          "$value": "{red.300}",
+          "$type": "color",
+          "$description": "Code highlighting color 5 (red) — tag (HTML elements, JSX tags). Paler stop for dark surfaces."
+        },
+        "6": {
+          "$value": "{neutral.300}",
+          "$type": "color",
+          "$description": "Code highlighting color 6 (neutral) — reserved. Paler stop for dark surfaces."
+        },
+        "7": {
+          "$value": "{orange.300}",
+          "$type": "color",
+          "$description": "Code highlighting color 7 (orange) — reserved. Paler stop for dark surfaces."
+        },
+        "8": {
+          "$value": "{cyan.300}",
+          "$type": "color",
+          "$description": "Code highlighting color 8 (cyan) — reserved. Paler stop for dark surfaces."
+        }
+      }
+    },
+    "typography": {
+      "family": {
+        "display": {
+          "$value": "{font.family.2}",
+          "$type": "fontFamily",
+          "$description": "Family used by display.* roles. Defaults to font.family.2 — the headline/display face (same Inter as slot 1 until a brand remaps it). Theme editor role map can re-point any role."
+        },
+        "heading": {
+          "$value": "{font.family.2}",
+          "$type": "fontFamily",
+          "$description": "Family used by heading.* roles. Defaults to font.family.2 — shares the headline face with display."
+        },
+        "body": {
+          "$value": "{font.family.1}",
+          "$type": "fontFamily",
+          "$description": "Family used by body.* roles. Defaults to font.family.1 (Inter)."
+        },
+        "action": {
+          "$value": "{font.family.1}",
+          "$type": "fontFamily",
+          "$description": "Family used by action.* roles (buttons, tabs, links). Defaults to font.family.1 — actions share the text face, per the two-face model (headline face + text face); remap via the role map for a distinct UI voice."
+        },
+        "label": {
+          "$value": "{font.family.1}",
+          "$type": "fontFamily",
+          "$description": "Family used by label.* roles. Defaults to font.family.1 (Inter)."
+        },
+        "caption": {
+          "$value": "{font.family.1}",
+          "$type": "fontFamily",
+          "$description": "Family used by caption.* roles. Defaults to font.family.1 (Inter)."
+        },
+        "code": {
+          "$value": "{font.family.3}",
+          "$type": "fontFamily",
+          "$description": "Family used by code.* roles (inline code, code blocks, IDs, keycaps, OTP). Defaults to font.family.3 (Roboto Mono). Minted 2026-08-05 with the small-heading/overline/code completion slice."
+        }
+      },
+      "text": {
+        "display": {
+          "xl": {
+            "$type": "typography",
+            "$description": "Largest display. Hero headlines, splash screens.",
+            "$value": {
+              "fontFamily": "{typography.family.display}",
+              "fontSize": "{font.size.8xl}",
+              "fontWeight": "{font.weight.bold}",
+              "lineHeight": "{font.line-height.8xl}",
+              "letterSpacing": "{font.letter-spacing.tight}"
+            },
+            "$modes": {
+              "S": {
+                "fontSize": "{font.size.6xl}",
+                "lineHeight": "{font.line-height.6xl}"
+              },
+              "M": {},
+              "L": {}
+            }
+          },
+          "l": {
+            "$type": "typography",
+            "$description": "Feature hero display.",
+            "$value": {
+              "fontFamily": "{typography.family.display}",
+              "fontSize": "{font.size.7xl}",
+              "fontWeight": "{font.weight.bold}",
+              "lineHeight": "{font.line-height.7xl}",
+              "letterSpacing": "{font.letter-spacing.tight}"
+            },
+            "$modes": {
+              "S": {
+                "fontSize": "{font.size.5xl}",
+                "lineHeight": "{font.line-height.5xl}"
+              },
+              "M": {},
+              "L": {}
+            }
+          },
+          "m": {
+            "$type": "typography",
+            "$description": "Section hero display.",
+            "$value": {
+              "fontFamily": "{typography.family.display}",
+              "fontSize": "{font.size.6xl}",
+              "fontWeight": "{font.weight.bold}",
+              "lineHeight": "{font.line-height.6xl}",
+              "letterSpacing": "{font.letter-spacing.tight}"
+            },
+            "$modes": {
+              "S": {
+                "fontSize": "{font.size.4xl}",
+                "lineHeight": "{font.line-height.4xl}"
+              },
+              "M": {},
+              "L": {}
+            }
+          },
+          "s": {
+            "$type": "typography",
+            "$description": "Large title display.",
+            "$value": {
+              "fontFamily": "{typography.family.display}",
+              "fontSize": "{font.size.5xl}",
+              "fontWeight": "{font.weight.bold}",
+              "lineHeight": "{font.line-height.5xl}",
+              "letterSpacing": "{font.letter-spacing.tight}"
+            },
+            "$modes": {
+              "S": {
+                "fontSize": "{font.size.3xl}",
+                "lineHeight": "{font.line-height.3xl}"
+              },
+              "M": {},
+              "L": {}
+            }
+          },
+          "xs": {
+            "$type": "typography",
+            "$description": "Display title. Smallest display size.",
+            "$value": {
+              "fontFamily": "{typography.family.display}",
+              "fontSize": "{font.size.4xl}",
+              "fontWeight": "{font.weight.bold}",
+              "lineHeight": "{font.line-height.4xl}",
+              "letterSpacing": "{font.letter-spacing.tight}"
+            },
+            "$modes": {
+              "S": {
+                "fontSize": "{font.size.2xl}",
+                "lineHeight": "{font.line-height.2xl}"
+              },
+              "M": {},
+              "L": {}
+            }
+          }
+        },
+        "heading": {
+          "xl": {
+            "$type": "typography",
+            "$description": "Page-level heading. Top of major content areas.",
+            "$value": {
+              "fontFamily": "{typography.family.heading}",
+              "fontSize": "{font.size.3xl}",
+              "fontWeight": "{font.weight.semibold}",
+              "lineHeight": "{font.line-height.3xl}",
+              "letterSpacing": "{font.letter-spacing.tight}"
+            },
+            "$modes": {
+              "S": {
+                "fontSize": "{font.size.2xl}",
+                "lineHeight": "{font.line-height.2xl}"
+              },
+              "M": {},
+              "L": {}
+            }
+          },
+          "l": {
+            "$type": "typography",
+            "$description": "Section heading.",
+            "$value": {
+              "fontFamily": "{typography.family.heading}",
+              "fontSize": "{font.size.2xl}",
+              "fontWeight": "{font.weight.semibold}",
+              "lineHeight": "{font.line-height.2xl}",
+              "letterSpacing": "{font.letter-spacing.tight}"
+            },
+            "$modes": {
+              "S": {
+                "fontSize": "{font.size.xl}",
+                "lineHeight": "{font.line-height.xl}"
+              },
+              "M": {},
+              "L": {}
+            }
+          },
+          "m": {
+            "$type": "typography",
+            "$description": "Card or modal heading.",
+            "$value": {
+              "fontFamily": "{typography.family.heading}",
+              "fontSize": "{font.size.xl}",
+              "fontWeight": "{font.weight.semibold}",
+              "lineHeight": "{font.line-height.xl}",
+              "letterSpacing": "{font.letter-spacing.tight}"
+            },
+            "$modes": {
+              "S": {
+                "fontSize": "{font.size.l}",
+                "lineHeight": "{font.line-height.l}"
+              },
+              "M": {},
+              "L": {}
+            }
+          },
+          "s": {
+            "$type": "typography",
+            "$description": "Small heading. Sidebars, panels, drawers.",
+            "$value": {
+              "fontFamily": "{typography.family.heading}",
+              "fontSize": "{font.size.l}",
+              "fontWeight": "{font.weight.semibold}",
+              "lineHeight": "{font.line-height.l}",
+              "letterSpacing": "{font.letter-spacing.tight}"
+            },
+            "$modes": {
+              "S": {},
+              "M": {},
+              "L": {}
+            }
+          },
+          "xs": {
+            "$type": "typography",
+            "$description": "Extra-small heading — section titles inside components (inspector sections, card/list titles, toolbar count, brand text). Tracking is NORMAL, a deliberate deviation from the heading group's tight tracking: negative tracking hurts 12-14px legibility.",
+            "$value": {
+              "fontFamily": "{typography.family.heading}",
+              "fontSize": "{font.size.s}",
+              "fontWeight": "{font.weight.semibold}",
+              "lineHeight": "{font.line-height.s}",
+              "letterSpacing": "{font.letter-spacing.normal}"
+            },
+            "$modes": {
+              "S": {},
+              "M": {},
+              "L": {}
+            }
+          },
+          "2xs": {
+            "$type": "typography",
+            "$description": "Smallest heading — dense-context titles (kanban column headers). Same normal-tracking rationale as heading.xs.",
+            "$value": {
+              "fontFamily": "{typography.family.heading}",
+              "fontSize": "{font.size.xs}",
+              "fontWeight": "{font.weight.semibold}",
+              "lineHeight": "{font.line-height.xs}",
+              "letterSpacing": "{font.letter-spacing.normal}"
+            },
+            "$modes": {
+              "S": {},
+              "M": {},
+              "L": {}
+            }
+          }
+        },
+        "body": {
+          "xl": {
+            "$type": "typography",
+            "$description": "Extra large body. Introductory lead paragraphs.",
+            "$value": {
+              "fontFamily": "{typography.family.body}",
+              "fontSize": "{font.size.xl}",
+              "fontWeight": "{font.weight.regular}",
+              "lineHeight": "{font.line-height.xl}",
+              "letterSpacing": "{font.letter-spacing.normal}"
+            },
+            "$modes": {
+              "S": {},
+              "M": {},
+              "L": {}
+            }
+          },
+          "l": {
+            "$type": "typography",
+            "$description": "Large body text. Secondary introductory content.",
+            "$value": {
+              "fontFamily": "{typography.family.body}",
+              "fontSize": "{font.size.l}",
+              "fontWeight": "{font.weight.regular}",
+              "lineHeight": "{font.line-height.l}",
+              "letterSpacing": "{font.letter-spacing.normal}"
+            },
+            "$modes": {
+              "S": {},
+              "M": {},
+              "L": {}
+            }
+          },
+          "m": {
+            "$type": "typography",
+            "$description": "Default body text. Base reading size.",
+            "$value": {
+              "fontFamily": "{typography.family.body}",
+              "fontSize": "{font.size.m}",
+              "fontWeight": "{font.weight.regular}",
+              "lineHeight": "{font.line-height.m}",
+              "letterSpacing": "{font.letter-spacing.normal}"
+            },
+            "$modes": {
+              "S": {},
+              "M": {},
+              "L": {}
+            }
+          },
+          "s": {
+            "$type": "typography",
+            "$description": "Small body text. Secondary content, footnotes.",
+            "$value": {
+              "fontFamily": "{typography.family.body}",
+              "fontSize": "{font.size.s}",
+              "fontWeight": "{font.weight.regular}",
+              "lineHeight": "{font.line-height.s}",
+              "letterSpacing": "{font.letter-spacing.normal}"
+            },
+            "$modes": {
+              "S": {},
+              "M": {},
+              "L": {}
+            }
+          },
+          "xs": {
+            "$type": "typography",
+            "$description": "Extra small body. Captions, dense data tables.",
+            "$value": {
+              "fontFamily": "{typography.family.body}",
+              "fontSize": "{font.size.xs}",
+              "fontWeight": "{font.weight.regular}",
+              "lineHeight": "{font.line-height.xs}",
+              "letterSpacing": "{font.letter-spacing.normal}"
+            },
+            "$modes": {
+              "S": {},
+              "M": {},
+              "L": {}
+            }
+          }
+        },
+        "action": {
+          "l": {
+            "$type": "typography",
+            "$description": "Large buttons, primary CTAs.",
+            "$value": {
+              "fontFamily": "{typography.family.action}",
+              "fontSize": "{font.size.m}",
+              "fontWeight": "{font.weight.medium}",
+              "lineHeight": "{font.line-height.m}",
+              "letterSpacing": "{font.letter-spacing.slightly-wide}"
+            },
+            "$modes": {
+              "S": {},
+              "M": {},
+              "L": {}
+            }
+          },
+          "m": {
+            "$type": "typography",
+            "$description": "Standard buttons, links, tabs, breadcrumbs.",
+            "$value": {
+              "fontFamily": "{typography.family.action}",
+              "fontSize": "{font.size.s}",
+              "fontWeight": "{font.weight.medium}",
+              "lineHeight": "{font.line-height.s}",
+              "letterSpacing": "{font.letter-spacing.slightly-wide}"
+            },
+            "$modes": {
+              "S": {},
+              "M": {},
+              "L": {}
+            }
+          },
+          "s": {
+            "$type": "typography",
+            "$description": "Small buttons, compact nav, breadcrumb trail.",
+            "$value": {
+              "fontFamily": "{typography.family.action}",
+              "fontSize": "{font.size.xs}",
+              "fontWeight": "{font.weight.medium}",
+              "lineHeight": "{font.line-height.xs}",
+              "letterSpacing": "{font.letter-spacing.wide}"
+            },
+            "$modes": {
+              "S": {},
+              "M": {},
+              "L": {}
+            }
+          }
+        },
+        "label": {
+          "l": {
+            "$type": "typography",
+            "$description": "Large label. Prominent buttons, tab labels.",
+            "$value": {
+              "fontFamily": "{typography.family.label}",
+              "fontSize": "{font.size.m}",
+              "fontWeight": "{font.weight.medium}",
+              "lineHeight": "{font.line-height.m}",
+              "letterSpacing": "{font.letter-spacing.slightly-wide}"
+            },
+            "$modes": {
+              "S": {},
+              "M": {},
+              "L": {}
+            }
+          },
+          "m": {
+            "$type": "typography",
+            "$description": "Default label. Input labels, tags.",
+            "$value": {
+              "fontFamily": "{typography.family.label}",
+              "fontSize": "{font.size.s}",
+              "fontWeight": "{font.weight.medium}",
+              "lineHeight": "{font.line-height.s}",
+              "letterSpacing": "{font.letter-spacing.slightly-wide}"
+            },
+            "$modes": {
+              "S": {},
+              "M": {},
+              "L": {}
+            }
+          },
+          "s": {
+            "$type": "typography",
+            "$description": "Small label. Captions, helper text, badges.",
+            "$value": {
+              "fontFamily": "{typography.family.label}",
+              "fontSize": "{font.size.xs}",
+              "fontWeight": "{font.weight.medium}",
+              "lineHeight": "{font.line-height.xs}",
+              "letterSpacing": "{font.letter-spacing.wide}"
+            },
+            "$modes": {
+              "S": {},
+              "M": {},
+              "L": {}
+            }
+          }
+        },
+        "overline": {
+          "$type": "typography",
+          "$description": "THE uppercase micro-label voice (finally a style — this is the aa4f64c group-label consolidation as a ramp citizen): nav/shell group labels, stat labels, donut center label, inspector labels. Consumers add text-transform: uppercase at the usage site (DTCG typography carries no textCase).",
+          "$value": {
+            "fontFamily": "{typography.family.label}",
+            "fontSize": "{font.size.xs}",
+            "fontWeight": "{font.weight.medium}",
+            "lineHeight": "{font.line-height.xs}",
+            "letterSpacing": "{font.letter-spacing.caps}"
+          },
+          "$modes": {
+            "S": {},
+            "M": {},
+            "L": {}
+          }
+        },
+        "code": {
+          "s": {
+            "$type": "typography",
+            "$description": "Small code — card IDs, keycap text (the item-17 kbd-mono wish).",
+            "$value": {
+              "fontFamily": "{typography.family.code}",
+              "fontSize": "{font.size.2xs}",
+              "fontWeight": "{font.weight.regular}",
+              "lineHeight": "{font.line-height.2xs}",
+              "letterSpacing": "{font.letter-spacing.normal}"
+            },
+            "$modes": {
+              "S": {},
+              "M": {},
+              "L": {}
+            }
+          },
+          "m": {
+            "$type": "typography",
+            "$description": "Default code — code-block bodies, inline .lb-code. Size pinned to what the code-block computes today (font.size.s = 14).",
+            "$value": {
+              "fontFamily": "{typography.family.code}",
+              "fontSize": "{font.size.s}",
+              "fontWeight": "{font.weight.regular}",
+              "lineHeight": "{font.line-height.s}",
+              "letterSpacing": "{font.letter-spacing.normal}"
+            },
+            "$modes": {
+              "S": {},
+              "M": {},
+              "L": {}
+            }
+          },
+          "l": {
+            "$type": "typography",
+            "$description": "Display code — OTP/verification-code inputs, spaced tracking reads as slots. Size pinned to CURRENT pixels (font.size.xl = 20; the slice spec draft said font.size.l/18 but the shipped OTP computes 20 — zero-visual-change principle wins, flagged in the handoff).",
+            "$value": {
+              "fontFamily": "{typography.family.code}",
+              "fontSize": "{font.size.xl}",
+              "fontWeight": "{font.weight.regular}",
+              "lineHeight": "{font.line-height.xl}",
+              "letterSpacing": "{font.letter-spacing.spaced}"
+            },
+            "$modes": {
+              "S": {},
+              "M": {},
+              "L": {}
+            }
+          }
+        },
+        "caption": {
+          "m": {
+            "$type": "typography",
+            "$description": "Image caption, helper text, metadata.",
+            "$value": {
+              "fontFamily": "{typography.family.caption}",
+              "fontSize": "{font.size.xs}",
+              "fontWeight": "{font.weight.regular}",
+              "lineHeight": "{font.line-height.xs}",
+              "letterSpacing": "{font.letter-spacing.normal}"
+            },
+            "$modes": {
+              "S": {},
+              "M": {},
+              "L": {}
+            }
+          },
+          "s": {
+            "$type": "typography",
+            "$description": "Timestamp, footnote, fine print.",
+            "$value": {
+              "fontFamily": "{typography.family.caption}",
+              "fontSize": "{font.size.2xs}",
+              "fontWeight": "{font.weight.regular}",
+              "lineHeight": "{font.line-height.2xs}",
+              "letterSpacing": "{font.letter-spacing.normal}"
+            },
+            "$modes": {
+              "S": {},
+              "M": {},
+              "L": {}
+            }
+          }
+        }
+      }
+    },
+    "radius": {
+      "radius": {
+        "none": {
+          "$value": "{radius.0}",
+          "$type": "dimension",
+          "$description": "Intentionally sharp corners — tables, dividers, full-bleed sections, progress bars."
+        },
+        "interactive": {
+          "$value": "{radius.4}",
+          "$type": "dimension",
+          "$description": "Clickable controls — buttons, toggles, tabs, nav items, segmented controls."
+        },
+        "field": {
+          "$value": "{radius.4}",
+          "$type": "dimension",
+          "$description": "Form inputs — text field, select, combobox, search bar, date picker."
+        },
+        "surface": {
+          "$value": "{radius.8}",
+          "$type": "dimension",
+          "$description": "Content containers — cards, panels, accordions, wells."
+        },
+        "overlay": {
+          "$value": "{radius.12}",
+          "$type": "dimension",
+          "$description": "Floating surfaces — modals, dialogs, dropdowns, popovers, toasts, tooltips."
+        },
+        "badge": {
+          "$value": "{radius.9999}",
+          "$type": "dimension",
+          "$description": "Status labels — badges, tags, chips. Themeable: can become rectangular in a sharp theme."
+        },
+        "media": {
+          "$value": "{radius.8}",
+          "$type": "dimension",
+          "$description": "Media frames — thumbnails, image containers, video embeds."
+        },
+        "full": {
+          "$value": "{radius.9999}",
+          "$type": "dimension",
+          "$description": "Absolute circle/pill — circular avatars, round icon buttons, status dots. Always pill regardless of theme."
+        }
+      }
+    },
+    "opacity": {
+      "opacity": {
+        "hidden": {
+          "$value": "{opacity.0}",
+          "$type": "number",
+          "$description": "Invisible — animated fade-out end state."
+        },
+        "faint": {
+          "$value": "{opacity.5}",
+          "$type": "number",
+          "$description": "Near-invisible — hover overlays on images, watermarks."
+        },
+        "subtle": {
+          "$value": "{opacity.10}",
+          "$type": "number",
+          "$description": "Subtle presence — skeleton loading shimmer."
+        },
+        "light": {
+          "$value": "{opacity.20}",
+          "$type": "number",
+          "$description": "Light overlay — scrim on non-blocking surfaces."
+        },
+        "medium": {
+          "$value": "{opacity.40}",
+          "$type": "number",
+          "$description": "Balanced transparency — disabled element overlay."
+        },
+        "heavy": {
+          "$value": "{opacity.60}",
+          "$type": "number",
+          "$description": "Strong overlay — modal / drawer backdrop."
+        },
+        "strong": {
+          "$value": "{opacity.80}",
+          "$type": "number",
+          "$description": "Mostly opaque — frosted glass effect."
+        },
+        "opaque": {
+          "$value": "{opacity.100}",
+          "$type": "number",
+          "$description": "Fully opaque — default for all solid elements."
+        }
+      }
+    },
+    "elevation": {
+      "elevation": {
+        "z-base": {
+          "$value": "{z.0}",
+          "$type": "number",
+          "$description": "Default document stacking — no stacking context."
+        },
+        "z-raised": {
+          "$value": "{z.1}",
+          "$type": "number",
+          "$description": "Elevated card, hover state, floating button."
+        },
+        "z-sticky": {
+          "$value": "{z.2}",
+          "$type": "number",
+          "$description": "Sticky header, persistent sidebar, floating nav."
+        },
+        "z-dropdown": {
+          "$value": "{z.3}",
+          "$type": "number",
+          "$description": "Dropdown menu, select, autocomplete, popover."
+        },
+        "z-drawer": {
+          "$value": "{z.4}",
+          "$type": "number",
+          "$description": "Side drawer, off-canvas nav, slide-in panel."
+        },
+        "z-modal": {
+          "$value": "{z.5}",
+          "$type": "number",
+          "$description": "Modal dialog, lightbox, full-screen overlay."
+        },
+        "z-toast": {
+          "$value": "{z.6}",
+          "$type": "number",
+          "$description": "Toast notification, snackbar — above modals."
+        },
+        "z-tooltip": {
+          "$value": "{z.7}",
+          "$type": "number",
+          "$description": "Tooltip — always topmost."
+        }
+      }
+    },
+    "animation": {
+      "animation": {
+        "dur-instant": {
+          "$value": "{duration.0}",
+          "$type": "duration",
+          "$description": "No visible transition — theme swap, layout reflow."
+        },
+        "dur-micro": {
+          "$value": "{duration.50}",
+          "$type": "duration",
+          "$description": "Checkbox tick, toggle snap, icon swap."
+        },
+        "dur-fast": {
+          "$value": "{duration.100}",
+          "$type": "duration",
+          "$description": "Button press feedback, tooltip appear, focus ring."
+        },
+        "dur-normal": {
+          "$value": "{duration.150}",
+          "$type": "duration",
+          "$description": "Hover color change, dropdown open, tab switch."
+        },
+        "dur-gentle": {
+          "$value": "{duration.200}",
+          "$type": "duration",
+          "$description": "Card lift, modal fade-in, accordion expand."
+        },
+        "dur-slow": {
+          "$value": "{duration.300}",
+          "$type": "duration",
+          "$description": "Page transitions, skeleton-to-content reveal."
+        },
+        "dur-collapse": {
+          "$value": "{duration.500}",
+          "$type": "duration",
+          "$description": "Large panel collapse / expand, drawer slide."
+        },
+        "ease-ui": {
+          "$value": "{ease.standard}",
+          "$type": "cubicBezier",
+          "$description": "Default for all UI transitions."
+        },
+        "ease-in": {
+          "$value": "{ease.decelerate}",
+          "$type": "cubicBezier",
+          "$description": "Elements entering / appearing."
+        },
+        "ease-out": {
+          "$value": "{ease.accelerate}",
+          "$type": "cubicBezier",
+          "$description": "Elements leaving / disappearing."
+        },
+        "ease-bounce": {
+          "$value": "{ease.spring}",
+          "$type": "cubicBezier",
+          "$description": "Playful emphasis — use sparingly."
+        }
+      }
+    },
+    "border-width": {
+      "border-width": {
+        "none": {
+          "$value": "{size.0}",
+          "$type": "dimension",
+          "$description": "No border."
+        },
+        "thin": {
+          "$value": "{size.hairline}",
+          "$type": "dimension",
+          "$description": "Standard — inputs, cards, dividers."
+        },
+        "action": {
+          "$value": "{size.theme}",
+          "$type": "dimension",
+          "$description": "Interactive stroke width. References primitives.size.theme so the theme editor's interactive-stroke knob propagates here. Used by buttons, inputs, focus rings."
+        },
+        "medium": {
+          "$value": "{size.0_5x}",
+          "$type": "dimension",
+          "$description": "Emphasis — active tabs, focus rings."
+        }
+      }
+    },
+    "stroke": {
+      "stroke": {
+        "icon": {
+          "$value": "{size.theme}",
+          "$type": "dimension",
+          "$description": "Icon stroke width. Defaults to the Brand preset (size.theme, follows Action stroke). Tunable via the Theme editor's Icon Stroke knob; SVG icons inherit this via `svg[stroke-width] { stroke-width: var(--lb-stroke-icon); }`."
+        }
+      }
+    },
+    "component-size": {
+      "component": {
+        "xs": {
+          "$value": "{size.3x}",
+          "$type": "dimension",
+          "$description": "12px — fixed dimension for mini badges, tiny avatars, small chips."
+        },
+        "s": {
+          "$value": "{size.4x}",
+          "$type": "dimension",
+          "$description": "16px — fixed dimension for small inline icons and small badges."
+        },
+        "m": {
+          "$value": "{size.5x}",
+          "$type": "dimension",
+          "$description": "20px — fixed dimension for default UI icons."
+        },
+        "l": {
+          "$value": "{size.6x}",
+          "$type": "dimension",
+          "$description": "24px — fixed dimension for primary action icons."
+        },
+        "xl": {
+          "$value": "{size.8x}",
+          "$type": "dimension",
+          "$description": "32px — fixed dimension for large icons and small button heights."
+        },
+        "2xl": {
+          "$value": "{size.12x}",
+          "$type": "dimension",
+          "$description": "48px — fixed dimension for avatar default size and illustration icons."
+        }
+      }
+    },
+    "shadow": {
+      "shadow": {
+        "card": {
+          "$type": "shadow",
+          "$value": "{shadow.2}",
+          "$description": "Surface/card default elevation."
+        },
+        "dropdown": {
+          "$type": "shadow",
+          "$value": "{shadow.3}",
+          "$description": "Dropdown menu and date picker elevation."
+        },
+        "modal": {
+          "$type": "shadow",
+          "$value": "{shadow.4}",
+          "$description": "Modal dialog and drawer elevation."
+        },
+        "tooltip": {
+          "$type": "shadow",
+          "$value": "{shadow.3}",
+          "$description": "Tooltip and popover elevation."
+        },
+        "focus": {
+          "$type": "shadow",
+          "$value": "{shadow.focus}",
+          "$description": "Focus ring glow for interactive elements."
+        }
+      }
+    }
+  },
+  "component": {
+    "action": {
+      "bg-primary-default": {
+        "$value": "{bg.accent}",
+        "$type": "color",
+        "$description": "Filled primary button background — default."
+      },
+      "bg-primary-hover": {
+        "$value": "{bg.accent-strong}",
+        "$type": "color",
+        "$description": "Filled primary button background — hovered."
+      },
+      "bg-primary-pressed": {
+        "$value": "{bg.accent-bolder}",
+        "$type": "color",
+        "$description": "Filled primary button background — pressed."
+      },
+      "bg-primary-disabled": {
+        "$value": "{bg.disabled}",
+        "$type": "color",
+        "$description": "Filled primary button background — disabled."
+      },
+      "fg-primary-default": {
+        "$value": "{fg.inverse-strong}",
+        "$type": "color",
+        "$description": "Text/icon on filled primary button — default. Theme-stable white on saturated accent bg."
+      },
+      "fg-primary-hover": {
+        "$value": "{fg.inverse-strong}",
+        "$type": "color",
+        "$description": "Text/icon on filled primary button — hovered."
+      },
+      "fg-primary-pressed": {
+        "$value": "{fg.inverse-strong}",
+        "$type": "color",
+        "$description": "Text/icon on filled primary button — pressed."
+      },
+      "fg-primary-disabled": {
+        "$value": "{fg.inverse-muted}",
+        "$type": "color",
+        "$description": "Text/icon on filled primary button — disabled."
+      },
+      "border-primary-default": {
+        "$value": "{bg.accent}",
+        "$type": "color",
+        "$description": "Filled primary button border — default (matches bg, no visible border)."
+      },
+      "border-primary-hover": {
+        "$value": "{bg.accent-strong}",
+        "$type": "color",
+        "$description": "Filled primary button border — hovered."
+      },
+      "border-primary-pressed": {
+        "$value": "{bg.accent-bolder}",
+        "$type": "color",
+        "$description": "Filled primary button border — pressed."
+      },
+      "border-primary-disabled": {
+        "$value": "{border.disabled}",
+        "$type": "color",
+        "$description": "Filled primary button border — disabled."
+      },
+      "bg-secondary-default": {
+        "$value": "{bg.default}",
+        "$type": "color",
+        "$description": "Outlined secondary button background — default (transparent)."
+      },
+      "bg-secondary-hover": {
+        "$value": "{bg.strong}",
+        "$type": "color",
+        "$description": "Outlined secondary button background — hovered. Neutral hover wash. State-based accent model 2026-08-03: secondary is NEUTRAL at rest (accent = signal, reserved for primary/links/state)."
+      },
+      "bg-secondary-pressed": {
+        "$value": "{bg.bolder}",
+        "$type": "color",
+        "$description": "Outlined secondary button background — pressed (one step past hover). State-based accent model 2026-08-03: secondary is NEUTRAL at rest (accent = signal, reserved for primary/links/state)."
+      },
+      "bg-secondary-disabled": {
+        "$value": "{bg.disabled}",
+        "$type": "color",
+        "$description": "Outlined secondary button background — disabled."
+      },
+      "fg-secondary-default": {
+        "$value": "{fg.default}",
+        "$type": "color",
+        "$description": "Text/icon of outlined secondary button — default. State-based accent model 2026-08-03: secondary is NEUTRAL at rest (accent = signal, reserved for primary/links/state)."
+      },
+      "fg-secondary-hover": {
+        "$value": "{fg.default}",
+        "$type": "color",
+        "$description": "Text/icon of outlined secondary button — hovered. State-based accent model 2026-08-03: secondary is NEUTRAL at rest (accent = signal, reserved for primary/links/state)."
+      },
+      "fg-secondary-pressed": {
+        "$value": "{fg.default}",
+        "$type": "color",
+        "$description": "Text/icon of outlined secondary button — pressed. State-based accent model 2026-08-03: secondary is NEUTRAL at rest (accent = signal, reserved for primary/links/state)."
+      },
+      "fg-secondary-disabled": {
+        "$value": "{fg.disabled}",
+        "$type": "color",
+        "$description": "Text/icon of outlined secondary button — disabled."
+      },
+      "border-secondary-default": {
+        "$value": "{border.strong}",
+        "$type": "color",
+        "$description": "Outlined secondary button border — default. State-based accent model 2026-08-03: secondary is NEUTRAL at rest (accent = signal, reserved for primary/links/state)."
+      },
+      "border-secondary-hover": {
+        "$value": "{border.bolder}",
+        "$type": "color",
+        "$description": "Outlined secondary button border — hovered (steps up from strong). State-based accent model 2026-08-03: secondary is NEUTRAL at rest (accent = signal, reserved for primary/links/state)."
+      },
+      "border-secondary-pressed": {
+        "$value": "{border.bolder}",
+        "$type": "color",
+        "$description": "Outlined secondary button border — pressed (steps up from strong). State-based accent model 2026-08-03: secondary is NEUTRAL at rest (accent = signal, reserved for primary/links/state)."
+      },
+      "border-secondary-disabled": {
+        "$value": "{border.disabled}",
+        "$type": "color",
+        "$description": "Outlined secondary button border — disabled."
+      },
+      "bg-danger-default": {
+        "$value": "{bg.danger}",
+        "$type": "color",
+        "$description": "Filled danger button background — default."
+      },
+      "bg-danger-hover": {
+        "$value": "{bg.danger-strong}",
+        "$type": "color",
+        "$description": "Filled danger button background — hovered."
+      },
+      "bg-danger-pressed": {
+        "$value": "{bg.danger-bolder}",
+        "$type": "color",
+        "$description": "Filled danger button background — pressed."
+      },
+      "bg-danger-disabled": {
+        "$value": "{bg.disabled}",
+        "$type": "color",
+        "$description": "Filled danger button background — disabled."
+      },
+      "fg-danger-default": {
+        "$value": "{fg.inverse-strong}",
+        "$type": "color",
+        "$description": "Text/icon of filled danger button — default. Theme-stable white on saturated red bg."
+      },
+      "fg-danger-hover": {
+        "$value": "{fg.inverse-strong}",
+        "$type": "color",
+        "$description": "Text/icon of filled danger button — hovered."
+      },
+      "fg-danger-pressed": {
+        "$value": "{fg.inverse-strong}",
+        "$type": "color",
+        "$description": "Text/icon of filled danger button — pressed."
+      },
+      "fg-danger-disabled": {
+        "$value": "{fg.inverse-muted}",
+        "$type": "color",
+        "$description": "Text/icon of filled danger button — disabled."
+      },
+      "border-danger-default": {
+        "$value": "{bg.danger}",
+        "$type": "color",
+        "$description": "Filled danger button border — default (matches bg, no visible border)."
+      },
+      "border-danger-hover": {
+        "$value": "{bg.danger-strong}",
+        "$type": "color",
+        "$description": "Filled danger button border — hovered."
+      },
+      "border-danger-pressed": {
+        "$value": "{bg.danger-bolder}",
+        "$type": "color",
+        "$description": "Filled danger button border — pressed."
+      },
+      "border-danger-disabled": {
+        "$value": "{border.disabled}",
+        "$type": "color",
+        "$description": "Filled danger button border — disabled."
+      },
+      "bg-ghost-default": {
+        "$value": "{bg.default}",
+        "$type": "color",
+        "$description": "Ghost button background — default (transparent)."
+      },
+      "bg-ghost-hover": {
+        "$value": "{bg.strong}",
+        "$type": "color",
+        "$description": "Ghost button background — hovered."
+      },
+      "bg-ghost-pressed": {
+        "$value": "{bg.bolder}",
+        "$type": "color",
+        "$description": "Ghost button background — pressed."
+      },
+      "bg-ghost-disabled": {
+        "$value": "{bg.disabled}",
+        "$type": "color",
+        "$description": "Ghost button background — disabled."
+      },
+      "fg-ghost-default": {
+        "$value": "{fg.default}",
+        "$type": "color",
+        "$description": "Text/icon of ghost button — default. State-based accent model 2026-08-03: ghost/utility controls are NEUTRAL at rest."
+      },
+      "fg-ghost-hover": {
+        "$value": "{fg.default}",
+        "$type": "color",
+        "$description": "Text/icon of ghost button — hovered. State-based accent model 2026-08-03: ghost/utility controls are NEUTRAL at rest."
+      },
+      "fg-ghost-pressed": {
+        "$value": "{fg.default}",
+        "$type": "color",
+        "$description": "Text/icon of ghost button — pressed. State-based accent model 2026-08-03: ghost/utility controls are NEUTRAL at rest."
+      },
+      "fg-ghost-disabled": {
+        "$value": "{fg.disabled}",
+        "$type": "color",
+        "$description": "Text/icon of ghost button — disabled."
+      },
+      "fg-link-default": {
+        "$value": "{fg.accent}",
+        "$type": "color",
+        "$description": "Link text — default."
+      },
+      "fg-link-hover": {
+        "$value": "{fg.accent-muted}",
+        "$type": "color",
+        "$description": "Link text — hovered."
+      },
+      "fg-link-pressed": {
+        "$value": "{fg.accent-subtle}",
+        "$type": "color",
+        "$description": "Link text — pressed."
+      },
+      "fg-link-disabled": {
+        "$value": "{fg.disabled}",
+        "$type": "color",
+        "$description": "Link text — disabled."
+      },
+      "bg-selected": {
+        "$value": "{bg.accent-muted}",
+        "$type": "color",
+        "$description": "Background of selected action element (chip, nav/shell item, table row, tree row, media track, composer tool) — the visible -1 accent tint. Deliberately one step MORE present than passive banner washes (-2 subtle): selection must signal. Re-pointed subtle→muted in the GAP-12 ramp realignment 2026-08-03 (light value unchanged at violet-200; dark quieted violet-700→violet-800)."
+      },
+      "fg-selected": {
+        "$value": "{fg.accent}",
+        "$type": "color",
+        "$description": "Text/icon of selected action element (tab, pill, nav item). Routes through fg.accent — the mode-corrected TEXT accent (violet-600 light / violet-400 dark). Re-routed 2026-07-31: the previous bg.accent routing used a FILL color as text and measured ~2.9:1 in dark mode (WCAG AA failure); fg.accent measures 8.5:1 dark / 7.3:1 light."
+      },
+      "border-selected": {
+        "$value": "{border.accent}",
+        "$type": "color",
+        "$description": "Border/indicator of selected action element (tab underline, segmented active bar). Routes through border.accent (border-role token, numerically identical to fg.accent in both themes) — role-corrected 2026-08-03 from the 2026-07-31 fg.accent re-route: border tokens reference border.* L2; passes the 3:1 non-text minimum in both themes (WCAG 1.4.11); indicator + label share one passing color."
+      },
+      "border-focus": {
+        "$value": "{border.focus}",
+        "$type": "color",
+        "$description": "Focus ring for all action elements."
+      },
+      "bg-accent-2-default": {
+        "$value": "{bg.accent-2}",
+        "$type": "color",
+        "$description": "Accent-2 button fill. Dormant: identical to primary."
+      },
+      "bg-accent-2-hover": {
+        "$value": "{bg.accent-2-strong}",
+        "$type": "color",
+        "$description": "Accent-2 button fill, hover."
+      },
+      "bg-accent-2-pressed": {
+        "$value": "{bg.accent-2-bolder}",
+        "$type": "color",
+        "$description": "Accent-2 button fill, pressed."
+      },
+      "bg-accent-2-disabled": {
+        "$value": "{bg.disabled}",
+        "$type": "color",
+        "$description": "Disabled fill — shared neutral, same as primary."
+      },
+      "fg-accent-2-default": {
+        "$value": "{fg.inverse-strong}",
+        "$type": "color",
+        "$description": "Accent-2 button text — on-color ink role, same as primary."
+      },
+      "fg-accent-2-hover": {
+        "$value": "{fg.inverse-strong}",
+        "$type": "color",
+        "$description": "Accent-2 button text, hover."
+      },
+      "fg-accent-2-pressed": {
+        "$value": "{fg.inverse-strong}",
+        "$type": "color",
+        "$description": "Accent-2 button text, pressed."
+      },
+      "fg-accent-2-disabled": {
+        "$value": "{fg.inverse-muted}",
+        "$type": "color",
+        "$description": "Disabled text — shared, same as primary."
+      },
+      "border-accent-2-default": {
+        "$value": "{bg.accent-2}",
+        "$type": "color",
+        "$description": "Accent-2 button border = fill (sanctioned filled-button exception)."
+      },
+      "border-accent-2-hover": {
+        "$value": "{bg.accent-2-strong}",
+        "$type": "color",
+        "$description": "Accent-2 button border, hover."
+      },
+      "border-accent-2-pressed": {
+        "$value": "{bg.accent-2-bolder}",
+        "$type": "color",
+        "$description": "Accent-2 button border, pressed."
+      },
+      "border-accent-2-disabled": {
+        "$value": "{border.disabled}",
+        "$type": "color",
+        "$description": "Disabled border — shared, same as primary."
+      },
+      "bg-accent-3-default": {
+        "$value": "{bg.accent-3}",
+        "$type": "color",
+        "$description": "Accent-3 button fill. Dormant: identical to primary."
+      },
+      "bg-accent-3-hover": {
+        "$value": "{bg.accent-3-strong}",
+        "$type": "color",
+        "$description": "Accent-3 button fill, hover."
+      },
+      "bg-accent-3-pressed": {
+        "$value": "{bg.accent-3-bolder}",
+        "$type": "color",
+        "$description": "Accent-3 button fill, pressed."
+      },
+      "bg-accent-3-disabled": {
+        "$value": "{bg.disabled}",
+        "$type": "color",
+        "$description": "Disabled fill — shared neutral, same as primary."
+      },
+      "fg-accent-3-default": {
+        "$value": "{fg.inverse-strong}",
+        "$type": "color",
+        "$description": "Accent-3 button text — on-color ink role, same as primary."
+      },
+      "fg-accent-3-hover": {
+        "$value": "{fg.inverse-strong}",
+        "$type": "color",
+        "$description": "Accent-3 button text, hover."
+      },
+      "fg-accent-3-pressed": {
+        "$value": "{fg.inverse-strong}",
+        "$type": "color",
+        "$description": "Accent-3 button text, pressed."
+      },
+      "fg-accent-3-disabled": {
+        "$value": "{fg.inverse-muted}",
+        "$type": "color",
+        "$description": "Disabled text — shared, same as primary."
+      },
+      "border-accent-3-default": {
+        "$value": "{bg.accent-3}",
+        "$type": "color",
+        "$description": "Accent-3 button border = fill (sanctioned filled-button exception)."
+      },
+      "border-accent-3-hover": {
+        "$value": "{bg.accent-3-strong}",
+        "$type": "color",
+        "$description": "Accent-3 button border, hover."
+      },
+      "border-accent-3-pressed": {
+        "$value": "{bg.accent-3-bolder}",
+        "$type": "color",
+        "$description": "Accent-3 button border, pressed."
+      },
+      "border-accent-3-disabled": {
+        "$value": "{border.disabled}",
+        "$type": "color",
+        "$description": "Disabled border — shared, same as primary."
+      }
+    },
+    "field": {
+      "fg-default": {
+        "$value": "{fg.default}",
+        "$type": "color",
+        "$description": "Input text — default role."
+      },
+      "fg-placeholder": {
+        "$value": "{fg.subtle}",
+        "$type": "color",
+        "$description": "Placeholder text in empty fields."
+      },
+      "fg-label": {
+        "$value": "{fg.default}",
+        "$type": "color",
+        "$description": "Field label text."
+      },
+      "fg-hint": {
+        "$value": "{fg.muted}",
+        "$type": "color",
+        "$description": "Helper/hint text below a field."
+      },
+      "fg-error": {
+        "$value": "{fg.danger}",
+        "$type": "color",
+        "$description": "Error message text and error-state field text."
+      },
+      "fg-success": {
+        "$value": "{fg.success}",
+        "$type": "color",
+        "$description": "Success message text."
+      },
+      "fg-disabled": {
+        "$value": "{fg.disabled}",
+        "$type": "color",
+        "$description": "Field text — disabled state."
+      },
+      "bg-default": {
+        "$value": "{bg.default}",
+        "$type": "color",
+        "$description": "Field background — default."
+      },
+      "bg-hover": {
+        "$value": "{bg.strong}",
+        "$type": "color",
+        "$description": "Field background — hovered."
+      },
+      "bg-disabled": {
+        "$value": "{bg.disabled}",
+        "$type": "color",
+        "$description": "Field background — disabled."
+      },
+      "border-default": {
+        "$value": "{border.strong}",
+        "$type": "color",
+        "$description": "Field border — default. Routes through border.emphasis (the field/control tier) so inputs read as interactive against page bg, distinct from the softer surface borders used for cards and dividers."
+      },
+      "border-hover": {
+        "$value": "{border.bolder}",
+        "$type": "color",
+        "$description": "Field border — hovered. Routes through border.emphasis-bold (neutral.500 in both themes) for a clear contrast bump from resting (neutral.400 light / neutral.700 dark)."
+      },
+      "border-focus": {
+        "$value": "{border.focus}",
+        "$type": "color",
+        "$description": "Field border — focused. Ocean focus ring."
+      },
+      "border-error": {
+        "$value": "{border.danger}",
+        "$type": "color",
+        "$description": "Field border — error state."
+      },
+      "border-success": {
+        "$value": "{border.success}",
+        "$type": "color",
+        "$description": "Field border — success/valid state."
+      },
+      "border-disabled": {
+        "$value": "{border.disabled}",
+        "$type": "color",
+        "$description": "Field border — disabled state."
+      }
+    },
+    "surface": {
+      "bg-default": {
+        "$value": "{bg.default}",
+        "$type": "color",
+        "$description": "Card, panel, popover background — default."
+      },
+      "bg-elevated": {
+        "$value": "{bg.strong}",
+        "$type": "color",
+        "$description": "Elevated surface (modal, dropdown). Shadow applied in code."
+      },
+      "bg-overlay": {
+        "$value": "{bg.default}",
+        "$type": "color",
+        "$description": "Overlay surface background — floating popups, modals, dropdowns. Matches default page bg; elevation comes from shadow, not a tonal step."
+      },
+      "bg-backdrop": {
+        "$value": "{bg.overlay}",
+        "$type": "color",
+        "$description": "Modal/drawer backdrop. Apply 60% opacity in code."
+      },
+      "border-default": {
+        "$value": "{border.default}",
+        "$type": "color",
+        "$description": "Card and panel border."
+      },
+      "border-elevated": {
+        "$value": "{border.muted}",
+        "$type": "color",
+        "$description": "Elevated surface border (modal, dropdown)."
+      },
+      "border-overlay": {
+        "$value": "{border.default}",
+        "$type": "color",
+        "$description": "Overlay panel border (tooltip, popover)."
+      },
+      "border-cutout": {
+        "$value": "{bg.default}",
+        "$type": "color",
+        "$description": "Cutout/separator ring: a border colored to MATCH the base page behind a floating element, so overlapping/floating elements read as separated (avatar-group rings, slider thumb). Intentionally aliases a bg token — the ring must equal the surface, not outline it. Base-surface variant; use -elevated on cards/media chrome."
+      },
+      "border-cutout-elevated": {
+        "$value": "{bg.strong}",
+        "$type": "color",
+        "$description": "Cutout/separator ring for an element floating over an ELEVATED surface (card, media player chrome) rather than the base page. Aliases bg.strong to match the elevated surface."
+      }
+    }
+  }
+}

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <!-- theme-preamble:v1 -->
+  <script>(function(){try{var t=localStorage.getItem('letbe-ds-dark-mode');if(t==='1')document.documentElement.setAttribute('data-theme','dark');else if(t==='0')document.documentElement.setAttribute('data-theme','light');}catch(e){}})();</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta data-lb-page="dropdown">
+  <title>Dropdown — letbe-ds</title>
+  <link rel="stylesheet" href="../tokens/theme.css">
+  <link rel="stylesheet" href="../tokens/fonts.css">
+  <link rel="stylesheet" href="../components/components.css">
+  <link rel="stylesheet" href="../components/theme-editor.css">
+  <link rel="stylesheet" href="../components/gallery.css">
+</head>
+<body data-lb-base="..">
+
+<main class="gallery-main">
+  <section class="gallery-section" id="dropdown">
+    <h1 class="gallery-section__title" style="font-size: var(--lb-t-heading-l-font-size); line-height: var(--lb-t-heading-l-line-height);">Dropdown</h1>
+    <p class="gallery-section__desc">Combobox input — type to filter, pick from a list. Use when the option set is large (>10 items) and the user knows roughly what they want. For small option sets use Select instead. For free-form text, use a regular Input.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>a11y (built in):</strong> the field is a real combobox &mdash; <code class="lb-code">role="combobox"</code> + <code class="lb-code">aria-autocomplete="list"</code> + <code class="lb-code">aria-expanded</code> + <code class="lb-code">aria-controls</code> on the input, <code class="lb-code">role="listbox"</code> / <code class="lb-code">role="option"</code> on the popup, and <code class="lb-code">aria-activedescendant</code> tracking the highlighted row (removed on close), so focus never leaves the input. <kbd>&darr;</kbd>/<kbd>&uarr;</kbd> open the list and walk it, skipping disabled options; <kbd>Enter</kbd> commits the highlighted one and <kbd>Esc</kbd> closes; the active row is scrolled into view with <code class="lb-code">block: "nearest"</code>, and reopening re-highlights the already-committed option instead of jumping back to the top. The optional clear button is <code class="lb-code">aria-label="Clear"</code> and <code class="lb-code">tabindex="-1"</code>, so it never adds a tab stop between the input and the list.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>Usage:</strong> <code class="lb-code">data-lb-dropdown</code> on the <code class="lb-code">.lb-dropdown-field</code> wrapper auto-inits; options come from the <code class="lb-code">data-lb-options</code> JSON array of <code class="lb-code">{ value, label, disabled }</code> or later via <code class="lb-code">el._lbDropdown.setOptions(array)</code>. Listen for <code class="lb-code">lb-dropdown-change</code> on the field — <code class="lb-code">detail</code> is the committed option object (empty <code class="lb-code">value</code> / <code class="lb-code">label</code> after the clear button). Write the input programmatically with <code class="lb-code">setValue()</code>, not <code class="lb-code">input.value</code>, so clear-button visibility stays in sync. The power options live on the constructor — <code class="lb-code">new LB.Dropdown(el, { onChange, allowCustom, filterFn, onRender, chunkSize, clearable })</code> — for custom matching, row decoration and lazy chunked rendering of large lists; <code class="lb-code">clearable</code> and <code class="lb-code">allowCustom</code> can also be flipped on with <code class="lb-code">data-lb-clearable="true"</code> / <code class="lb-code">data-lb-allow-custom="true"</code>.</p>
+
+<hr class="gallery-desc-divider">
+
+
+<h2 class="gallery-section__title">Dropdown Demo</h2>
+    <div style="max-width: 360px;">
+      <div class="lb-dropdown-field" data-lb-dropdown data-lb-options='[{"value":"apple","label":"Apple"},{"value":"banana","label":"Banana"},{"value":"cherry","label":"Cherry"},{"value":"grape","label":"Grape"},{"value":"mango","label":"Mango","disabled":true}]'>
+        <label class="lb-dropdown-field__label">Fruit</label>
+        <div class="lb-dropdown-wrap">
+          <input class="lb-dropdown lb-dropdown--medium" placeholder="Search fruits..." autocomplete="off">
+          <span class="lb-dropdown-wrap__chevron" data-lb-icon="chevron-down" style="width: 1.5rem; height: 1.5rem;"></span>
+        </div>
+        <span class="lb-dropdown-field__hint">Type to filter options</span>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script src="../js/lb.js"></script>
+<script src="../js/slot-engine.js"></script>
+<script src="../js/theme-editor.js"></script>
+<script src="../js/token-exporter.js"></script>
+<script src="../js/gallery-layout.js"></script>
+</body>
+</html>

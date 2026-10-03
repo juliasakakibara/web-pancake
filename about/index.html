@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <!-- theme-preamble:v1 -->
+  <script>(function(){try{var t=localStorage.getItem('letbe-ds-dark-mode');if(t==='1')document.documentElement.setAttribute('data-theme','dark');else if(t==='0')document.documentElement.setAttribute('data-theme','light');}catch(e){}})();</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta data-lb-page="about">
+  <title>About — letbe-ds</title>
+  <link rel="stylesheet" href="../tokens/theme.css">
+  <link rel="stylesheet" href="../tokens/fonts.css">
+  <link rel="stylesheet" href="../components/components.css">
+  <link rel="stylesheet" href="../components/theme-editor.css">
+  <link rel="stylesheet" href="../components/gallery.css">
+  <style>
+    /* Page glue — about-page composition only; everything visual is tokens. */
+    .about-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--lb-size-10x);
+      align-items: center;
+      margin: var(--lb-size-16x) 0;
+    }
+    .about-row--flip .about-row__media { order: 2; }
+    .about-row__media img {
+      display: block;
+      width: 100%;
+      height: auto;
+      border-radius: var(--lb-radius-media);
+      border: var(--lb-border-width-thin) solid var(--lb-surface-border-default);
+    }
+    .about-row__body > h2 { margin-top: 0; }
+    .about-kicker {
+      font-family: var(--lb-t-overline-font-family);
+      font-size: var(--lb-t-overline-font-size);
+      font-weight: var(--lb-t-overline-font-weight);
+      letter-spacing: var(--lb-t-overline-letter-spacing);
+      text-transform: uppercase;
+      color: var(--lb-fg-accent);
+      margin: 0 0 var(--lb-size-2x);
+    }
+    .about-wide {
+      margin: var(--lb-size-16x) 0 var(--lb-size-6x);
+    }
+    .about-wide img {
+      display: block;
+      width: 100%;
+      height: auto;
+      border-radius: var(--lb-radius-media);
+      border: var(--lb-border-width-thin) solid var(--lb-surface-border-default);
+    }
+    .about-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--lb-size-3x);
+      margin-top: var(--lb-size-6x);
+    }
+    @media (max-width: 768px) {
+      .about-row { grid-template-columns: 1fr; gap: var(--lb-size-6x); margin: var(--lb-size-10x) 0; }
+      .about-row--flip .about-row__media { order: 0; }
+    }
+  </style>
+</head>
+<body data-lb-base="..">
+
+<main class="gallery-main">
+  <section class="gallery-section" id="about">
+
+    <h1 class="gallery-section__title">About letbe-ds</h1>
+    <p class="gallery-section__desc">letbe-ds is a complete design system in three plain files — design tokens, component styles, one JavaScript runtime. No build step, no dependencies, no framework: link the files and you own the entire stack. This page is about the idea underneath it.</p>
+
+    <hr class="gallery-desc-divider">
+
+    <div class="about-row">
+      <div class="about-row__media">
+        <img src="../assets/media/about/torso-split.jpg" alt="Gold statue torso — draped classical sculpture on the left half, exposed skeleton ribs and spine on the right half" loading="lazy">
+      </div>
+      <div class="about-row__body">
+        <p class="about-kicker">The idea</p>
+        <h2 class="gallery-section__title">The anatomy is the product</h2>
+        <p class="gallery-section__desc">Most systems show you the drapery. letbe-ds is built skeleton-first: ~500 design tokens in three tiers are the bones, components are the musculature over them, templates are the posture. Strip any page in this gallery down to its markup and you find the same structure the documentation describes — nothing decorative pretending to be structural. That's what makes the whole system retunable: change the bones, and everything standing on them moves together.</p>
+      </div>
+    </div>
+
+    <div class="about-row about-row--flip">
+      <div class="about-row__media">
+        <img src="../assets/media/about/face-split.jpg" alt="Gold face in close-up — serene sculpted features on one half, bare skull on the other, split by a clean seam" loading="lazy">
+      </div>
+      <div class="about-row__body">
+        <p class="about-kicker">Tokens</p>
+        <h2 class="gallery-section__title">One source, two renderings</h2>
+        <p class="gallery-section__desc">Every color, size, radius and type style is authored once, in a single DTCG-standard JSON file. From it the build generates the CSS; through the letbe plugin the same tokens become Figma variables, and the component library built on them is published on <a class="lb-link" href="https://www.figma.com/community/file/1672532598361033237">Figma Community</a>. Light and dark are two renderings of one head — not two files that drift apart. Open the <a class="lb-link" href="../typography/">theme editor</a> on any page, move a knob or apply a preset, and you are editing the source vocabulary, not painting over it.</p>
+      </div>
+    </div>
+
+    <div class="about-row">
+      <div class="about-row__media">
+        <img src="../assets/media/about/plugin-letbe-tokens.jpg" alt="letbe tokens plugin promo — the plugin's three-tier token panel with WCAG badges beside the gold statue head, captioned: tokens in, contrast proof, variables out" loading="lazy">
+      </div>
+      <div class="about-row__body">
+        <p class="about-kicker">The plugin</p>
+        <h2 class="gallery-section__title">Tokens in. Variables out.</h2>
+        <p class="gallery-section__desc"><strong>letbe tokens</strong> is the system's official Figma plugin, live on <a class="lb-link" href="https://www.figma.com/community/plugin/1671570185456177314/letbe-tokens">Figma Community</a>. It reads the same DTCG JSON this site is generated from and registers it as Figma variables — all three tiers, aliases intact, light and dark, WCAG contrast audited on every pair. Pushing updates by name keeps existing bindings, so the <a class="lb-link" href="https://www.figma.com/community/file/1672532598361033237">component library</a> built on those variables tracks the code instead of drifting from it. And the theme editor on this site exports exactly what the plugin imports: explore a brand here, carry it into Figma in one file.</p>
+      </div>
+    </div>
+
+    <div class="about-row about-row--flip">
+      <div class="about-row__media">
+        <img src="../assets/media/about/mark-macro.jpg" alt="Macro of the letbe mark engraved in gold, at the seam where sculpted hair meets bare skull" loading="lazy">
+      </div>
+      <div class="about-row__body">
+        <p class="about-kicker">The project</p>
+        <h2 class="gallery-section__title">The mark at the seam</h2>
+        <p class="gallery-section__desc">letbe is a one-person project — a design system, a music catalogue, a film — made with AI tools under human direction, and the mark sits exactly where the halves meet. The media player demos stream the Letbe tracks: eighteen genres, one project, released under the same MIT license as the code at <a class="lb-link" href="https://github.com/m1ha1l0/letbe-media">letbe-media</a>. Take the code, take the music, ship them commercially. The name and the mark stay ours; everything else is yours.</p>
+      </div>
+    </div>
+
+    <div class="about-row">
+      <div class="about-row__media">
+        <img src="../assets/media/about/skeleton-side.jpg" alt="Gold skeleton in profile — ribcage, spine and pelvis fully exposed beneath the draped half" loading="lazy">
+      </div>
+      <div class="about-row__body">
+        <p class="about-kicker">Boundaries</p>
+        <h2 class="gallery-section__title">Honest bones</h2>
+        <p class="gallery-section__desc">The system ships chrome, state and events — never the engine. You bring the data layer, the virtualizer, the streaming source, the AI model, and every one of those boundaries is documented on the component it belongs to. Accessibility claims come with receipts: each page carries an "a11y (built in)" paragraph verified against the source, not against good intentions. And for machines, <a class="lb-link" href="../llms.txt">llms.txt</a> is the same anatomy in one readable file.</p>
+      </div>
+    </div>
+
+    <div class="about-wide">
+      <img src="../assets/media/about/skull-crown.jpg" alt="Gold skull crown in close-up — sculpted waves of hair meeting the bare cranium along a toothed suture line" loading="lazy">
+    </div>
+
+    <h2 class="gallery-section__title">Three rules the whole system follows</h2>
+    <p class="gallery-section__desc"><strong>Accent is a signal, not a skin.</strong> A hue that appears everywhere stops meaning anything — violet appears only where it carries information: the primary action, links, state, value-displaying fills. Everything at rest is neutral.</p>
+    <p class="gallery-section__desc"><strong>Menu-opening controls always signal it.</strong> Anything that opens a menu wears a visible indicator; primary actions never hide inside one.</p>
+    <p class="gallery-section__desc"><strong>Engines are never bundled.</strong> If it needs a data layer, a codec, or a model, the boundary is yours — documented, deliberate, and kept.</p>
+
+    <h2 class="gallery-section__title">Where everything lives</h2>
+    <div class="about-links">
+      <a class="lb-btn lb-btn--secondary lb-btn--medium" href="https://github.com/m1ha1l0/letbe-ds"><span class="lb-btn__label">Source on GitHub</span></a>
+      <a class="lb-btn lb-btn--secondary lb-btn--medium" href="https://www.figma.com/community/plugin/1671570185456177314/letbe-tokens"><span class="lb-btn__label">Figma plugin</span></a>
+      <a class="lb-btn lb-btn--secondary lb-btn--medium" href="https://www.figma.com/community/file/1672532598361033237"><span class="lb-btn__label">Figma library</span></a>
+      <a class="lb-btn lb-btn--secondary lb-btn--medium" href="https://github.com/m1ha1l0/letbe-media"><span class="lb-btn__label">Music &amp; media (MIT)</span></a>
+      <a class="lb-btn lb-btn--secondary lb-btn--medium" href="https://www.youtube.com/@letbedesign"><span class="lb-btn__label">YouTube</span></a>
+      <a class="lb-btn lb-btn--ghost lb-btn--medium" href="../llms.txt"><span class="lb-btn__label">llms.txt</span></a>
+      <a class="lb-btn lb-btn--ghost lb-btn--medium" href="../LICENSE"><span class="lb-btn__label">License</span></a>
+      <a class="lb-btn lb-btn--ghost lb-btn--medium" href="../NOTICE"><span class="lb-btn__label">Notice</span></a>
+      <a class="lb-btn lb-btn--ghost lb-btn--medium" href="../privacy/"><span class="lb-btn__label">Privacy</span></a>
+    </div>
+
+  </section>
+</main>
+
+<script src="../js/lb.js"></script>
+<script src="../js/slot-engine.js"></script>
+<script src="../js/theme-editor.js"></script>
+<script src="../js/token-exporter.js"></script>
+<script src="../js/gallery-layout.js"></script>
+</body>
+</html>

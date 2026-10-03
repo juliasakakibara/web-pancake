@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <!-- theme-preamble:v1 -->
+  <script>(function(){try{var t=localStorage.getItem('letbe-ds-dark-mode');if(t==='1')document.documentElement.setAttribute('data-theme','dark');else if(t==='0')document.documentElement.setAttribute('data-theme','light');}catch(e){}})();</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta data-lb-page="table">
+  <title>Table — letbe-ds</title>
+  <link rel="stylesheet" href="../tokens/theme.css">
+  <link rel="stylesheet" href="../tokens/fonts.css">
+  <link rel="stylesheet" href="../components/components.css">
+  <link rel="stylesheet" href="../components/theme-editor.css">
+  <link rel="stylesheet" href="../components/gallery.css">
+</head>
+<body data-lb-base="..">
+
+<main class="gallery-main">
+  <section class="gallery-section" id="table">
+    <h1 class="gallery-section__title" style="font-size: var(--lb-t-heading-l-font-size); line-height: var(--lb-t-heading-l-line-height);">Table</h1>
+    <p class="gallery-section__desc">Semantic tabular layout for data-dense views — user lists, invoices, reports, admin panels. Cells are <strong>slots</strong>: drop any letbe-ds component (badge, avatar, button, input, switch, chip) inside a <code class="lb-code">.lb-table__cell</code>. Every <code class="lb-code">th</code> and <code class="lb-code">td</code> carries that class — it is the styling contract, and bare cells render as an unstyled native table. Three sizes, alignment per cell, opt-in zebra striping, sticky header, row selection with <em>select-all</em> + indeterminate state, and sortable columns that dispatch a <code class="lb-code">lb-table-sort</code> event.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>a11y (built in):</strong> real <code class="lb-code">&lt;table&gt;</code> semantics throughout — <code class="lb-code">&lt;th scope="col"&gt;</code> on every header, <code class="lb-code">.lb-visually-hidden</code> names on the checkbox and actions columns, <code class="lb-code">aria-label</code> on icon-only row controls with their glyphs <code class="lb-code">aria-hidden</code>. Sortable headers are a <code class="lb-code">&lt;button data-lb-sort&gt;</code> inside the <code class="lb-code">&lt;th&gt;</code>: <code class="lb-code">LB.Table</code> cycles <code class="lb-code">aria-sort</code> none → ascending → descending, resets the other columns, and swaps the indicator icon per state so direction is never carried by opacity alone. Select-all drives the native <code class="lb-code">indeterminate</code> property, row expansion toggles <code class="lb-code">aria-expanded</code> on a real button, column-resize handles are <code class="lb-code">role="separator"</code> + <code class="lb-code">tabindex="0"</code> with <kbd>←</kbd>/<kbd>→</kbd> resize and double-click reset (the WCAG 2.5.7 non-drag path), and paged or lazily-appended bodies keep <code class="lb-code">aria-rowcount</code>/<code class="lb-code">aria-rowindex</code> plus a polite live region for the result count.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>Usage:</strong> Put <code class="lb-code">data-lb-table</code> on <code class="lb-code">&lt;table&gt;</code>. Selection checkboxes use <code class="lb-code">data-lb-table-select-all</code> (in <code class="lb-code">&lt;thead&gt;</code>) and <code class="lb-code">data-lb-table-select</code> (one per body row). Sortable headers use <code class="lb-code">&lt;button data-lb-sort="key"&gt;</code>. Add <code class="lb-code">data-lb-sort-auto</code> on the table for built-in DOM sorting; otherwise listen for <code class="lb-code">lb-table-sort</code> and sort on your side. Rows added or removed at runtime (pagination, filtering) just work — selection and sorting are delegated; call <code class="lb-code">el._lbTable.refresh()</code> after swapping rows to sync pre-checked state and new sortable headers, and <code class="lb-code">destroy()</code> to fully detach.</p>
+
+    <hr class="gallery-desc-divider">
+
+    <!-- ────────────────── Hero demo ────────────────── -->
+    <h2 class="gallery-section__title">Full demo</h2>
+    <p class="gallery-section__desc">Canonical data-view arrangement: the <code class="lb-code">.lb-toolbar</code> sits above the table — density control at rest, and the whole bar flips to bulk actions (<code class="lb-code">.lb-toolbar--selecting</code>) when rows are selected, wired via the <code class="lb-code">lb-table-select</code> event. Sortable columns (Name, Amount) re-order in place (<code class="lb-code">data-lb-sort-auto</code>).</p>
+
+    <!-- Canonical .lb-toolbar with the bulk flip (adapter wires it to
+         lb-table-select in the page script). The older .lb-table-toolbar
+         below-table bar is deprecated for new work. -->
+    <div class="lb-toolbar" id="demo-toolbar" style="margin-bottom: var(--lb-size-3x);">
+      <div class="lb-toolbar__default">
+        <div class="lb-segmented" data-lb-segmented aria-label="Row density" id="demo-density">
+          <button type="button" class="lb-segmented__item" data-lb-value="sm">Compact</button>
+          <button type="button" class="lb-segmented__item" data-lb-value="md" aria-checked="true">Default</button>
+          <button type="button" class="lb-segmented__item" data-lb-value="lg">Relaxed</button>
+        </div>
+        <div class="lb-toolbar__spacer"></div>
+      </div>
+      <div class="lb-toolbar__bulk">
+        <span class="lb-toolbar__count"><span id="demo-toolbar-count">0</span> selected</span>
+        <div class="lb-toolbar__spacer"></div>
+        <button type="button" class="lb-btn lb-btn--secondary lb-btn--small"><span class="lb-btn__icon" aria-hidden="true" data-lb-icon="download"></span> Export</button>
+        <button type="button" class="lb-btn lb-btn--primary lb-btn--small"><span class="lb-btn__icon" aria-hidden="true" data-lb-icon="archive"></span> Archive</button>
+        <button type="button" class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--small" id="demo-toolbar-clear" aria-label="Clear selection"><span data-lb-icon="x"></span></button>
+      </div>
+    </div>
+
+    <div class="lb-table-wrap">
+      <table class="lb-table lb-table--hoverable" id="demo-table" data-lb-table data-lb-sort-auto>
+        <thead>
+          <tr>
+            <th class="lb-table__cell lb-table__cell--select" scope="col">
+              <label class="lb-checkbox-wrap"><input type="checkbox" class="lb-checkbox" data-lb-table-select-all><span class="lb-visually-hidden">Select all</span></label>
+            </th>
+            <th class="lb-table__cell" scope="col">
+              <button type="button" class="lb-table__sort" data-lb-sort="name">
+                Member
+                <span class="lb-table__sort-indicator" aria-hidden="true" data-lb-icon="chevrons-up-down" style="width: 1rem; height: 1rem;"></span>
+              </button>
+            </th>
+            <th class="lb-table__cell" scope="col">Role</th>
+            <th class="lb-table__cell" scope="col">Status</th>
+            <th class="lb-table__cell lb-table__cell--end" scope="col">
+              <button type="button" class="lb-table__sort" data-lb-sort="amount">
+                Amount
+                <span class="lb-table__sort-indicator" aria-hidden="true" data-lb-icon="chevrons-up-down" style="width: 1rem; height: 1rem;"></span>
+              </button>
+            </th>
+            <th class="lb-table__cell lb-table__cell--actions" scope="col"><span class="lb-visually-hidden">Row actions</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="lb-table__cell lb-table__cell--select"><label class="lb-checkbox-wrap"><input type="checkbox" class="lb-checkbox" data-lb-table-select><span class="lb-visually-hidden">Select Avery Green</span></label></td>
+            <td class="lb-table__cell">
+              <div class="lb-table__inline">
+                <div class="lb-avatar lb-avatar--small" role="img" aria-label="Avery Green" data-lb-initials="AG"></div>
+                <div class="lb-table__stack">
+                  <span>Avery Green</span>
+                  <span class="lb-table__caption">avery.green@letbe.design</span>
+                </div>
+              </div>
+            </td>
+            <td class="lb-table__cell">Designer</td>
+            <td class="lb-table__cell"><span class="lb-badge lb-badge--small lb-badge--success"><span class="lb-badge__dot"></span>Active</span></td>
+            <td class="lb-table__cell lb-table__cell--end" data-lb-sort-value="1240">$1,240</td>
+            <td class="lb-table__cell lb-table__cell--actions">
+              <button type="button" class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--small" aria-label="Row actions">
+                <span class="lb-icon-btn__icon" aria-hidden="true" data-lb-icon="more-horizontal"></span>
+              </button>
+            </td>
+          </tr>
+          <tr>
+            <td class="lb-table__cell lb-table__cell--select"><label class="lb-checkbox-wrap"><input type="checkbox" class="lb-checkbox" data-lb-table-select><span class="lb-visually-hidden">Select Noor Ibrahim</span></label></td>
+            <td class="lb-table__cell">
+              <div class="lb-table__inline">
+                <div class="lb-avatar lb-avatar--small" role="img" aria-label="Noor Ibrahim" data-lb-initials="NI"></div>
+                <div class="lb-table__stack">
+                  <span>Noor Ibrahim</span>
+                  <span class="lb-table__caption">noor.i@letbe.design</span>
+                </div>
+              </div>
+            </td>
+            <td class="lb-table__cell">Engineer</td>
+            <td class="lb-table__cell"><span class="lb-badge lb-badge--small lb-badge--warning"><span class="lb-badge__dot"></span>Invited</span></td>
+            <td class="lb-table__cell lb-table__cell--end" data-lb-sort-value="0"><span class="lb-empty-value" aria-label="No data">—</span></td>
+            <td class="lb-table__cell lb-table__cell--actions">
+              <button type="button" class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--small" aria-label="Row actions">
+                <span class="lb-icon-btn__icon" aria-hidden="true" data-lb-icon="more-horizontal"></span>
+              </button>
+            </td>
+          </tr>
+          <tr>
+            <td class="lb-table__cell lb-table__cell--select"><label class="lb-checkbox-wrap"><input type="checkbox" class="lb-checkbox" data-lb-table-select><span class="lb-visually-hidden">Select Kai Tanaka</span></label></td>
+            <td class="lb-table__cell">
+              <div class="lb-table__inline">
+                <div class="lb-avatar lb-avatar--small" role="img" aria-label="Kai Tanaka" data-lb-initials="KT"></div>
+                <div class="lb-table__stack">
+                  <span>Kai Tanaka</span>
+                  <span class="lb-table__caption">kai.t@letbe.design</span>
+                </div>
+              </div>
+            </td>
+            <td class="lb-table__cell">Product</td>
+            <td class="lb-table__cell"><span class="lb-badge lb-badge--small lb-badge--success"><span class="lb-badge__dot"></span>Active</span></td>
+            <td class="lb-table__cell lb-table__cell--end" data-lb-sort-value="2400">$2,400</td>
+            <td class="lb-table__cell lb-table__cell--actions">
+              <button type="button" class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--small" aria-label="Row actions">
+                <span class="lb-icon-btn__icon" aria-hidden="true" data-lb-icon="more-horizontal"></span>
+              </button>
+            </td>
+          </tr>
+          <tr>
+            <td class="lb-table__cell lb-table__cell--select"><label class="lb-checkbox-wrap"><input type="checkbox" class="lb-checkbox" data-lb-table-select><span class="lb-visually-hidden">Select Luca Rossi</span></label></td>
+            <td class="lb-table__cell">
+              <div class="lb-table__inline">
+                <div class="lb-avatar lb-avatar--small" role="img" aria-label="Luca Rossi" data-lb-initials="LR"></div>
+                <div class="lb-table__stack">
+                  <span>Luca Rossi</span>
+                  <span class="lb-table__caption">luca.r@letbe.design</span>
+                </div>
+              </div>
+            </td>
+            <td class="lb-table__cell"><span class="lb-empty-value" aria-label="No data">—</span></td>
+            <td class="lb-table__cell"><span class="lb-badge lb-badge--small lb-badge--danger"><span class="lb-badge__dot"></span>Inactive</span></td>
+            <td class="lb-table__cell lb-table__cell--end" data-lb-sort-value="520">$520</td>
+            <td class="lb-table__cell lb-table__cell--actions">
+              <button type="button" class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--small" aria-label="Row actions">
+                <span class="lb-icon-btn__icon" aria-hidden="true" data-lb-icon="more-horizontal"></span>
+              </button>
+            </td>
+          </tr>
+          <tr>
+            <td class="lb-table__cell lb-table__cell--select"><label class="lb-checkbox-wrap"><input type="checkbox" class="lb-checkbox" data-lb-table-select><span class="lb-visually-hidden">Select Priya Shah</span></label></td>
+            <td class="lb-table__cell">
+              <div class="lb-table__inline">
+                <div class="lb-avatar lb-avatar--small" role="img" aria-label="Priya Shah" data-lb-initials="PS"></div>
+                <div class="lb-table__stack">
+                  <span>Priya Shah</span>
+                  <span class="lb-table__caption">priya.s@letbe.design</span>
+                </div>
+              </div>
+            </td>
+            <td class="lb-table__cell">Operations</td>
+            <td class="lb-table__cell"><span class="lb-badge lb-badge--small lb-badge--success"><span class="lb-badge__dot"></span>Active</span></td>
+            <td class="lb-table__cell lb-table__cell--end" data-lb-sort-value="3150">$3,150</td>
+            <td class="lb-table__cell lb-table__cell--actions">
+              <button type="button" class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--small" aria-label="Row actions">
+                <span class="lb-icon-btn__icon" aria-hidden="true" data-lb-icon="more-horizontal"></span>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+
+    <!-- ────────── Search, filters + pagination ────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Search, filters + pagination</h2>
+    <p class="gallery-section__desc">The client-side data-view flow: a debounced search plus a <strong>Filters</strong> popover narrow the row set, applied filters render as removable pills in a <code class="lb-code">.lb-filter-bar</code> (the × is the removal idiom, same as Multi-Select pills), pagination slices the result, and <code class="lb-code">refresh()</code> re-syncs selection after every render. Partial-DOM a11y per APG: <code class="lb-code">aria-rowcount</code> on the table, <code class="lb-code">aria-rowindex</code> per row, and the result count is a polite live region. In real apps, swap the filter/slice step for a server query — the chrome stays identical.</p>
+
+    <div class="lb-toolbar" style="margin-bottom: var(--lb-size-3x);">
+      <div class="lb-toolbar__default">
+        <div class="lb-input-wrap lb-toolbar__search">
+          <span class="lb-input-wrap__icon lb-input-wrap__icon--start" data-lb-icon="search"></span>
+          <input class="lb-input lb-input--medium lb-input--has-start" type="search" placeholder="Search members…" aria-label="Search members" id="paging-search">
+        </div>
+        <div class="lb-popover-host" data-lb-popover>
+          <button class="lb-popover-trigger lb-btn lb-btn--secondary lb-btn--small" type="button" id="paging-filter-btn"><span class="lb-btn__icon" aria-hidden="true" data-lb-icon="filter"></span> Filters <span class="lb-badge lb-badge--default lb-badge--small" id="paging-filter-count" hidden>0</span></button>
+          <div class="lb-popover lb-popover--bottom" style="display:none; min-width: 13rem; padding: var(--lb-size-3x);">
+            <div class="lb-label" style="margin-bottom: var(--lb-size-1x);">Role</div>
+            <div id="paging-filter-roles" style="display: grid; gap: var(--lb-size-1x); margin-bottom: var(--lb-size-3x);"></div>
+            <div class="lb-label" style="margin-bottom: var(--lb-size-1x);">Status</div>
+            <div id="paging-filter-statuses" style="display: grid; gap: var(--lb-size-1x);"></div>
+          </div>
+        </div>
+        <div class="lb-popover-host" data-lb-popover>
+          <button class="lb-popover-trigger lb-btn lb-btn--secondary lb-btn--small" type="button"><span class="lb-btn__icon" aria-hidden="true" data-lb-icon="sliders-horizontal"></span> Columns</button>
+          <div class="lb-popover lb-popover--bottom" style="display:none; min-width: 11rem; padding: var(--lb-size-3x);">
+            <div id="paging-columns" style="display: grid; gap: var(--lb-size-1x);"></div>
+          </div>
+        </div>
+        <div class="lb-toolbar__spacer"></div>
+        <span id="paging-info" aria-live="polite" style="font-size: var(--lb-t-body-s-font-size); color: var(--lb-fg-muted); white-space: nowrap;"></span>
+        <nav class="lb-pagination" data-lb-pagination data-lb-total-pages="1" data-lb-current-page="1" aria-label="Pagination" id="paging-nav"></nav>
+      </div>
+    </div>
+    <div class="lb-filter-bar" id="paging-filter-bar" hidden>
+      <span class="lb-filter-bar__label">Filters:</span>
+    </div>
+    <div class="lb-table-wrap">
+      <table class="lb-table lb-table--hoverable" id="paging-table" data-lb-table data-lb-table-resize>
+        <thead>
+          <tr>
+            <th class="lb-table__cell lb-table__cell--select" scope="col"><label class="lb-checkbox-wrap"><input type="checkbox" class="lb-checkbox" data-lb-table-select-all><span class="lb-visually-hidden">Select</span></label></th>
+            <th class="lb-table__cell" scope="col">Name</th>
+            <th class="lb-table__cell" scope="col">Role</th>
+            <th class="lb-table__cell" scope="col">Status</th>
+          </tr>
+        </thead>
+        <tbody id="paging-body"></tbody>
+      </table>
+    </div>
+
+    <!-- ────────────────── Status with icons ────────────────── -->
+    <h2 class="gallery-section__title">Status with icons</h2>
+    <p class="gallery-section__desc">Badges accept a <code class="lb-code">.lb-badge__icon</code> slot (16px at medium, 12px at small). Useful when a row needs an immediately-legible status — money flow, delivery state, approval — at a glance. Example below: a transactions view with direction + status columns.</p>
+    <div class="lb-table-wrap">
+      <table class="lb-table lb-table--hoverable">
+        <thead>
+          <tr>
+            <th class="lb-table__cell" scope="col">Merchant</th>
+            <th class="lb-table__cell" scope="col">Date</th>
+            <th class="lb-table__cell" scope="col">Direction</th>
+            <th class="lb-table__cell" scope="col">Status</th>
+            <th class="lb-table__cell lb-table__cell--end" scope="col">Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="lb-table__cell">Card payout</td>
+            <td class="lb-table__cell">Apr 18, 2026</td>
+            <td class="lb-table__cell">
+              <span class="lb-badge lb-badge--success">
+                <span class="lb-badge__icon" aria-hidden="true" data-lb-icon="arrow-down-left"></span>
+                Received
+              </span>
+            </td>
+            <td class="lb-table__cell">
+              <span class="lb-badge lb-badge--success">
+                <span class="lb-badge__icon" aria-hidden="true" data-lb-icon="circle-check-filled"></span>
+                Confirmed
+              </span>
+            </td>
+            <td class="lb-table__cell lb-table__cell--end" style="color: var(--lb-fg-success); font-weight: var(--lb-font-weight-medium);">+$2,450.00</td>
+          </tr>
+          <tr>
+            <td class="lb-table__cell">Figma subscription</td>
+            <td class="lb-table__cell">Apr 17, 2026</td>
+            <td class="lb-table__cell">
+              <span class="lb-badge lb-badge--danger">
+                <span class="lb-badge__icon" aria-hidden="true" data-lb-icon="arrow-up-right"></span>
+                Sent
+              </span>
+            </td>
+            <td class="lb-table__cell">
+              <span class="lb-badge lb-badge--warning">
+                <span class="lb-badge__icon" aria-hidden="true" data-lb-icon="clock"></span>
+                Pending
+              </span>
+            </td>
+            <td class="lb-table__cell lb-table__cell--end" style="color: var(--lb-fg-danger); font-weight: var(--lb-font-weight-medium);">−$45.00</td>
+          </tr>
+          <tr>
+            <td class="lb-table__cell">Expired card charge</td>
+            <td class="lb-table__cell">Apr 16, 2026</td>
+            <td class="lb-table__cell">
+              <span class="lb-badge lb-badge--danger">
+                <span class="lb-badge__icon" aria-hidden="true" data-lb-icon="arrow-up-right"></span>
+                Sent
+              </span>
+            </td>
+            <td class="lb-table__cell">
+              <span class="lb-badge lb-badge--danger">
+                <span class="lb-badge__icon" aria-hidden="true" data-lb-icon="x-circle-filled"></span>
+                Failed
+              </span>
+            </td>
+            <td class="lb-table__cell lb-table__cell--end" style="color: var(--lb-fg-muted); text-decoration: line-through;">−$12.99</td>
+          </tr>
+          <tr>
+            <td class="lb-table__cell">April salary</td>
+            <td class="lb-table__cell">Apr 15, 2026</td>
+            <td class="lb-table__cell">
+              <span class="lb-badge lb-badge--success">
+                <span class="lb-badge__icon" aria-hidden="true" data-lb-icon="arrow-down-left"></span>
+                Received
+              </span>
+            </td>
+            <td class="lb-table__cell">
+              <span class="lb-badge lb-badge--success">
+                <span class="lb-badge__icon" aria-hidden="true" data-lb-icon="circle-check-filled"></span>
+                Confirmed
+              </span>
+            </td>
+            <td class="lb-table__cell lb-table__cell--end" style="color: var(--lb-fg-success); font-weight: var(--lb-font-weight-medium);">+$8,400.00</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ────────────────── Missing cell values ────────────────── -->
+    <h2 class="gallery-section__title">Missing cell values</h2>
+    <p class="gallery-section__desc">When data loaded successfully but a specific field is null/empty, use <code class="lb-code">&lt;span class="lb-empty-value" aria-label="No data"&gt;—&lt;/span&gt;</code> — renders a muted em-dash so the row doesn't look broken or still loading. Different from <strong>skeleton</strong> (data hasn't arrived yet) and <strong>empty state row</strong> (nothing in the whole table). The em-dash is the conventional marker for a field that has no value.</p>
+    <div class="lb-table-wrap">
+      <table class="lb-table">
+        <thead>
+          <tr>
+            <th class="lb-table__cell" scope="col">Name</th>
+            <th class="lb-table__cell" scope="col">Email</th>
+            <th class="lb-table__cell" scope="col">Role</th>
+            <th class="lb-table__cell lb-table__cell--end" scope="col">Last active</th>
+            <th class="lb-table__cell lb-table__cell--end" scope="col">Deals closed</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="lb-table__cell">Avery Green</td>
+            <td class="lb-table__cell">avery@letbe.design</td>
+            <td class="lb-table__cell">Designer</td>
+            <td class="lb-table__cell lb-table__cell--end">2h ago</td>
+            <td class="lb-table__cell lb-table__cell--end">12</td>
+          </tr>
+          <tr>
+            <td class="lb-table__cell">Noor Ibrahim</td>
+            <td class="lb-table__cell"><span class="lb-empty-value" aria-label="No data">—</span></td>
+            <td class="lb-table__cell">Engineer</td>
+            <td class="lb-table__cell lb-table__cell--end">Yesterday</td>
+            <td class="lb-table__cell lb-table__cell--end"><span class="lb-empty-value" aria-label="No data">—</span></td>
+          </tr>
+          <tr>
+            <td class="lb-table__cell">Kai Tanaka</td>
+            <td class="lb-table__cell">kai@letbe.design</td>
+            <td class="lb-table__cell"><span class="lb-empty-value" aria-label="No data">—</span></td>
+            <td class="lb-table__cell lb-table__cell--end"><span class="lb-empty-value" aria-label="No data">—</span></td>
+            <td class="lb-table__cell lb-table__cell--end">7</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ────────────────── Sizes ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Sizes</h2>
+    <p class="gallery-section__desc">Three row densities. Default is medium. Use <code class="lb-code">.lb-table--sm</code> for dense dashboards and <code class="lb-code">.lb-table--lg</code> for light settings views.</p>
+
+    <div class="gallery-label">Density toggle — user-switchable, persisted</div>
+    <p class="gallery-section__desc" style="font-size: var(--lb-t-body-s-font-size);">The data-view pattern: a Segmented control swaps the size class and remembers the choice. Wire <code class="lb-code">lb-segmented-change</code> → toggle <code class="lb-code">--sm</code>/<code class="lb-code">--lg</code>; persist per view.</p>
+    <div class="lb-segmented" data-lb-segmented aria-label="Row density" id="density-toggle" style="margin-bottom: var(--lb-size-3x);">
+      <button type="button" class="lb-segmented__item" data-lb-value="sm">Compact</button>
+      <button type="button" class="lb-segmented__item" data-lb-value="md" aria-checked="true">Default</button>
+      <button type="button" class="lb-segmented__item" data-lb-value="lg">Relaxed</button>
+    </div>
+    <div class="lb-table-wrap">
+      <table class="lb-table" id="density-demo">
+        <thead><tr><th class="lb-table__cell" scope="col">Name</th><th class="lb-table__cell" scope="col">Role</th><th class="lb-table__cell lb-table__cell--end" scope="col">Amount</th></tr></thead>
+        <tbody>
+          <tr><td class="lb-table__cell">Avery Green</td><td class="lb-table__cell">Designer</td><td class="lb-table__cell lb-table__cell--end">$1,240</td></tr>
+          <tr><td class="lb-table__cell">Noor Ibrahim</td><td class="lb-table__cell">Engineer</td><td class="lb-table__cell lb-table__cell--end">$980</td></tr>
+          <tr><td class="lb-table__cell">Kai Tanaka</td><td class="lb-table__cell">Product</td><td class="lb-table__cell lb-table__cell--end">$2,400</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="gallery-label" style="margin-top: var(--lb-size-6x);">Small — .lb-table--sm</div>
+    <div class="lb-table-wrap">
+      <table class="lb-table lb-table--sm">
+        <thead><tr><th class="lb-table__cell" scope="col">Name</th><th class="lb-table__cell" scope="col">Role</th><th class="lb-table__cell lb-table__cell--end" scope="col">Amount</th></tr></thead>
+        <tbody>
+          <tr><td class="lb-table__cell">Avery Green</td><td class="lb-table__cell">Designer</td><td class="lb-table__cell lb-table__cell--end">$1,240</td></tr>
+          <tr><td class="lb-table__cell">Noor Ibrahim</td><td class="lb-table__cell">Engineer</td><td class="lb-table__cell lb-table__cell--end">$980</td></tr>
+          <tr><td class="lb-table__cell">Kai Tanaka</td><td class="lb-table__cell">Product</td><td class="lb-table__cell lb-table__cell--end">$2,400</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="gallery-label" style="margin-top: var(--lb-size-6x);">Medium (default)</div>
+    <div class="lb-table-wrap">
+      <table class="lb-table">
+        <thead><tr><th class="lb-table__cell" scope="col">Name</th><th class="lb-table__cell" scope="col">Role</th><th class="lb-table__cell lb-table__cell--end" scope="col">Amount</th></tr></thead>
+        <tbody>
+          <tr><td class="lb-table__cell">Avery Green</td><td class="lb-table__cell">Designer</td><td class="lb-table__cell lb-table__cell--end">$1,240</td></tr>
+          <tr><td class="lb-table__cell">Noor Ibrahim</td><td class="lb-table__cell">Engineer</td><td class="lb-table__cell lb-table__cell--end">$980</td></tr>
+          <tr><td class="lb-table__cell">Kai Tanaka</td><td class="lb-table__cell">Product</td><td class="lb-table__cell lb-table__cell--end">$2,400</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="gallery-label" style="margin-top: var(--lb-size-6x);">Large — .lb-table--lg</div>
+    <div class="lb-table-wrap">
+      <table class="lb-table lb-table--lg">
+        <thead><tr><th class="lb-table__cell" scope="col">Name</th><th class="lb-table__cell" scope="col">Role</th><th class="lb-table__cell lb-table__cell--end" scope="col">Amount</th></tr></thead>
+        <tbody>
+          <tr><td class="lb-table__cell">Avery Green</td><td class="lb-table__cell">Designer</td><td class="lb-table__cell lb-table__cell--end">$1,240</td></tr>
+          <tr><td class="lb-table__cell">Noor Ibrahim</td><td class="lb-table__cell">Engineer</td><td class="lb-table__cell lb-table__cell--end">$980</td></tr>
+          <tr><td class="lb-table__cell">Kai Tanaka</td><td class="lb-table__cell">Product</td><td class="lb-table__cell lb-table__cell--end">$2,400</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ────────────────── Alignment ────────────────── -->
+    <h2 class="gallery-section__title">Alignment</h2>
+    <p class="gallery-section__desc">Default is <code class="lb-code">--start</code> (text). Use <code class="lb-code">--center</code> for icons/indicators, <code class="lb-code">--end</code> for numbers or dates (<code class="lb-code">tabular-nums</code> is applied so digits line up).</p>
+    <div class="lb-table-wrap">
+      <table class="lb-table">
+        <thead>
+          <tr>
+            <th class="lb-table__cell lb-table__cell--start" scope="col">Start</th>
+            <th class="lb-table__cell lb-table__cell--center" scope="col">Center</th>
+            <th class="lb-table__cell lb-table__cell--end" scope="col">End (numbers)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="lb-table__cell lb-table__cell--start">Title text</td>
+            <td class="lb-table__cell lb-table__cell--center"><span class="lb-badge lb-badge--success lb-badge--small">OK</span></td>
+            <td class="lb-table__cell lb-table__cell--end">1,240.50</td>
+          </tr>
+          <tr>
+            <td class="lb-table__cell lb-table__cell--start">Another item</td>
+            <td class="lb-table__cell lb-table__cell--center"><span class="lb-badge lb-badge--warning lb-badge--small">Warn</span></td>
+            <td class="lb-table__cell lb-table__cell--end">980.00</td>
+          </tr>
+          <tr>
+            <td class="lb-table__cell lb-table__cell--start">Third row</td>
+            <td class="lb-table__cell lb-table__cell--center"><span class="lb-badge lb-badge--danger lb-badge--small">Fail</span></td>
+            <td class="lb-table__cell lb-table__cell--end">2,400.75</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ────────────────── Cell content patterns ────────────────── -->
+    <h2 class="gallery-section__title">Cell content — slots</h2>
+    <p class="gallery-section__desc">Cells accept any component. Below: avatar + text stack, icon + text, badge, chip, switch, input, link. Wrap grouped content with <code class="lb-code">.lb-table__stack</code> (vertical) or <code class="lb-code">.lb-table__inline</code> (horizontal) helpers. Secondary text uses <code class="lb-code">.lb-table__caption</code>.</p>
+    <div class="lb-table-wrap">
+      <table class="lb-table">
+        <thead>
+          <tr>
+            <th class="lb-table__cell" scope="col">Avatar + stack</th>
+            <th class="lb-table__cell" scope="col">Badge</th>
+            <th class="lb-table__cell" scope="col">Chip</th>
+            <th class="lb-table__cell" scope="col">Switch</th>
+            <th class="lb-table__cell" scope="col">Input</th>
+            <th class="lb-table__cell" scope="col">Link</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="lb-table__cell">
+              <div class="lb-table__inline">
+                <div class="lb-avatar lb-avatar--small" role="img" aria-label="Avery Green" data-lb-initials="AG"></div>
+                <div class="lb-table__stack">
+                  <span>Avery Green</span>
+                  <span class="lb-table__caption">Designer</span>
+                </div>
+              </div>
+            </td>
+            <td class="lb-table__cell"><span class="lb-badge lb-badge--small lb-badge--success"><span class="lb-badge__dot"></span>Active</span></td>
+            <td class="lb-table__cell"><button type="button" class="lb-chip lb-chip--selected">Enterprise</button></td>
+            <td class="lb-table__cell"><label class="lb-switch-wrap"><input type="checkbox" class="lb-switch" role="switch" aria-label="Enable user" checked></label></td>
+            <td class="lb-table__cell"><input type="text" class="lb-input lb-input--medium" value="edit me" aria-label="Cell value" style="max-width: 12rem;"></td>
+            <td class="lb-table__cell"><a href="#" class="lb-link">View profile</a></td>
+          </tr>
+          <tr>
+            <td class="lb-table__cell">
+              <div class="lb-table__inline">
+                <div class="lb-avatar lb-avatar--small" role="img" aria-label="Noor Ibrahim" data-lb-initials="NI"></div>
+                <div class="lb-table__stack">
+                  <span>Noor Ibrahim</span>
+                  <span class="lb-table__caption">Engineer</span>
+                </div>
+              </div>
+            </td>
+            <td class="lb-table__cell"><span class="lb-badge lb-badge--small lb-badge--warning"><span class="lb-badge__dot"></span>Pending</span></td>
+            <td class="lb-table__cell"><button type="button" class="lb-chip">Startup</button></td>
+            <td class="lb-table__cell"><label class="lb-switch-wrap"><input type="checkbox" class="lb-switch" role="switch" aria-label="Enable user"></label></td>
+            <td class="lb-table__cell"><input type="text" class="lb-input lb-input--medium" value="editable" aria-label="Cell value" style="max-width: 12rem;"></td>
+            <td class="lb-table__cell"><a href="#" class="lb-link lb-link--subtle">Details</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ────────────────── States ────────────────── -->
+    <h2 class="gallery-section__title">Row states</h2>
+    <p class="gallery-section__desc">Hover highlight (on <code class="lb-code">.lb-table--hoverable</code>), persistent selection (<code class="lb-code">.lb-table__row--selected</code>, auto-applied when the row checkbox is checked), and keyboard focus outline (for row-click patterns).</p>
+    <div class="lb-table-wrap">
+      <table class="lb-table lb-table--hoverable" data-lb-table>
+        <thead>
+          <tr>
+            <th class="lb-table__cell lb-table__cell--select" scope="col"><label class="lb-checkbox-wrap"><input type="checkbox" class="lb-checkbox" data-lb-table-select-all><span class="lb-visually-hidden">Select all</span></label></th>
+            <th class="lb-table__cell" scope="col">State</th>
+            <th class="lb-table__cell" scope="col">Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="lb-table__cell lb-table__cell--select"><label class="lb-checkbox-wrap"><input type="checkbox" class="lb-checkbox" data-lb-table-select><span class="lb-visually-hidden">Select row</span></label></td>
+            <td class="lb-table__cell">Default</td>
+            <td class="lb-table__cell">Hover me to see the highlight.</td>
+          </tr>
+          <tr>
+            <td class="lb-table__cell lb-table__cell--select"><label class="lb-checkbox-wrap"><input type="checkbox" class="lb-checkbox" data-lb-table-select checked><span class="lb-visually-hidden">Select row</span></label></td>
+            <td class="lb-table__cell">Selected</td>
+            <td class="lb-table__cell">Row background picks up <code class="lb-code">--lb-action-bg-selected</code> when its checkbox is ticked.</td>
+          </tr>
+          <tr tabindex="0">
+            <td class="lb-table__cell lb-table__cell--select"><label class="lb-checkbox-wrap"><input type="checkbox" class="lb-checkbox" data-lb-table-select><span class="lb-visually-hidden">Select row</span></label></td>
+            <td class="lb-table__cell">Keyboard focus</td>
+            <td class="lb-table__cell">Tab to this row — outlines with the focus ring. Use for clickable rows.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ────────────────── Zebra striping ────────────────── -->
+    <h2 class="gallery-section__title">Zebra striping (opt-in)</h2>
+    <p class="gallery-section__desc">Add <code class="lb-code">.lb-table--striped</code> for alternating rows. Off by default — cleaner dashboards look tidier without it; long financial tables read better with it.</p>
+    <div class="lb-table-wrap">
+      <table class="lb-table lb-table--striped lb-table--hoverable">
+        <thead><tr><th class="lb-table__cell" scope="col">Name</th><th class="lb-table__cell" scope="col">Role</th><th class="lb-table__cell lb-table__cell--end" scope="col">Amount</th></tr></thead>
+        <tbody>
+          <tr><td class="lb-table__cell">Avery Green</td><td class="lb-table__cell">Designer</td><td class="lb-table__cell lb-table__cell--end">$1,240</td></tr>
+          <tr><td class="lb-table__cell">Noor Ibrahim</td><td class="lb-table__cell">Engineer</td><td class="lb-table__cell lb-table__cell--end">$980</td></tr>
+          <tr><td class="lb-table__cell">Kai Tanaka</td><td class="lb-table__cell">Product</td><td class="lb-table__cell lb-table__cell--end">$2,400</td></tr>
+          <tr><td class="lb-table__cell">Luca Rossi</td><td class="lb-table__cell">QA</td><td class="lb-table__cell lb-table__cell--end">$520</td></tr>
+          <tr><td class="lb-table__cell">Priya Shah</td><td class="lb-table__cell">Operations</td><td class="lb-table__cell lb-table__cell--end">$3,150</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ────────────────── Sticky header ────────────────── -->
+    <h2 class="gallery-section__title">Sticky header</h2>
+    <p class="gallery-section__desc">Split the table into two — one for the header, one for the body — so the vertical scrollbar lives only along the rows area, never alongside the pinned <code class="lb-code">&lt;thead&gt;</code>. Both tables get <code class="lb-code">.lb-table--sticky</code> (which applies <code class="lb-code">table-layout: fixed</code> so columns align by default). For unequal column widths, add matching <code class="lb-code">&lt;colgroup&gt;</code> to both. This demo also opts into <strong>column resize</strong>: <code class="lb-code">data-lb-table-resize</code> on the wrap keeps both split tables' colgroups in sync — drag a header edge, use ←/→ on the focused handle, or double-click the edge to reset (the WCAG 2.5.7 non-drag path). And it demonstrates <strong>chunked lazy-append</strong>: 200 rows load 30 at a time as you near the scroller's end (<code class="lb-code">aria-rowcount</code> announces the real total; async consumers append skeleton rows while fetching). That's the DS-side scale boundary — for 100k-row sets bring a windowed virtualizer (TanStack Virtual, Clusterize) per the pluggable-engines rule.</p>
+    <div class="lb-table-wrap lb-table-wrap--sticky" data-lb-table-resize>
+      <div class="lb-table-wrap__header">
+        <table class="lb-table lb-table--sticky">
+          <thead>
+            <tr>
+              <th class="lb-table__cell" scope="col">Name</th>
+              <th class="lb-table__cell" scope="col">Role</th>
+              <th class="lb-table__cell" scope="col">Status</th>
+              <th class="lb-table__cell lb-table__cell--end" scope="col">Amount</th>
+            </tr>
+          </thead>
+        </table>
+      </div>
+      <div class="lb-table-wrap__body">
+        <table class="lb-table lb-table--sticky lb-table--hoverable">
+          <tbody id="sticky-demo-body"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ────────────────── Loading ────────────────── -->
+    <h2 class="gallery-section__title">Row expansion + side peek</h2>
+    <p class="gallery-section__desc">Two ways to reveal a record's depth: <strong>expansion</strong> — a <code class="lb-code">data-lb-table-expand</code> button toggles the adjacent <code class="lb-code">.lb-table__detail-row</code> in place (aria-expanded, chevron rotates, detail rows travel with their parent through sorting; not compatible with <code class="lb-code">--striped</code>) — and <strong>side peek</strong> — the row's end action opens a right <code class="lb-code">lb-sheet</code> with the record while the table stays in context. Dispatches <code class="lb-code">lb-table-expand</code>.</p>
+    <div class="lb-table-wrap">
+      <table class="lb-table lb-table--hoverable" data-lb-table data-lb-sort-auto id="expand-table">
+        <thead>
+          <tr>
+            <th class="lb-table__cell lb-table__cell--select" scope="col"><span class="lb-visually-hidden">Expand</span></th>
+            <th class="lb-table__cell" scope="col"><button type="button" class="lb-table__sort" data-lb-sort="name">Name <span class="lb-table__sort-indicator" data-lb-icon="chevrons-up-down"></span></button></th>
+            <th class="lb-table__cell" scope="col">Role</th>
+            <th class="lb-table__cell lb-table__cell--end" scope="col">Amount</th>
+            <th class="lb-table__cell lb-table__cell--actions" scope="col"><span class="lb-visually-hidden">Details</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="lb-table__cell lb-table__cell--select"><button type="button" class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--small" data-lb-table-expand aria-expanded="false" aria-label="Expand Avery Green"><span class="lb-icon-btn__icon" aria-hidden="true" data-lb-icon="chevron-down"></span></button></td>
+            <td class="lb-table__cell">Avery Green</td>
+            <td class="lb-table__cell">Designer</td>
+            <td class="lb-table__cell lb-table__cell--end" data-lb-sort-value="1240">$1,240</td>
+            <td class="lb-table__cell lb-table__cell--actions"><button type="button" class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--small" data-peek aria-label="Open Avery Green details"><span class="lb-icon-btn__icon" aria-hidden="true" data-lb-icon="chevron-right"></span></button></td>
+          </tr>
+          <tr class="lb-table__detail-row" hidden>
+            <td class="lb-table__cell" colspan="5"><strong>Avery Green</strong> — joined Jan 12, 2025 · Rotterdam · 312 sessions. Owns the letbe-ds component gallery and the Figma library bindings.</td>
+          </tr>
+          <tr>
+            <td class="lb-table__cell lb-table__cell--select"><button type="button" class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--small" data-lb-table-expand aria-expanded="false" aria-label="Expand Noor Ibrahim"><span class="lb-icon-btn__icon" aria-hidden="true" data-lb-icon="chevron-down"></span></button></td>
+            <td class="lb-table__cell">Noor Ibrahim</td>
+            <td class="lb-table__cell">Engineer</td>
+            <td class="lb-table__cell lb-table__cell--end" data-lb-sort-value="980">$980</td>
+            <td class="lb-table__cell lb-table__cell--actions"><button type="button" class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--small" data-peek aria-label="Open Noor Ibrahim details"><span class="lb-icon-btn__icon" aria-hidden="true" data-lb-icon="chevron-right"></span></button></td>
+          </tr>
+          <tr class="lb-table__detail-row" hidden>
+            <td class="lb-table__cell" colspan="5"><strong>Noor Ibrahim</strong> — joined Mar 3, 2025 · Stockholm · 1,204 sessions. Maintains the token build pipeline and the theme editor.</td>
+          </tr>
+          <tr>
+            <td class="lb-table__cell lb-table__cell--select"><button type="button" class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--small" data-lb-table-expand aria-expanded="false" aria-label="Expand Kai Tanaka"><span class="lb-icon-btn__icon" aria-hidden="true" data-lb-icon="chevron-down"></span></button></td>
+            <td class="lb-table__cell">Kai Tanaka</td>
+            <td class="lb-table__cell">Product</td>
+            <td class="lb-table__cell lb-table__cell--end" data-lb-sort-value="2400">$2,400</td>
+            <td class="lb-table__cell lb-table__cell--actions"><button type="button" class="lb-icon-btn lb-icon-btn--ghost lb-icon-btn--small" data-peek aria-label="Open Kai Tanaka details"><span class="lb-icon-btn__icon" aria-hidden="true" data-lb-icon="chevron-right"></span></button></td>
+          </tr>
+          <tr class="lb-table__detail-row" hidden>
+            <td class="lb-table__cell" colspan="5"><strong>Kai Tanaka</strong> — joined Jun 21, 2025 · Osaka · 86 sessions. Runs the Stage-5 template program roadmap.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="lb-sheet-root" id="peek-sheet" data-lb-sheet style="display:none;" role="dialog" aria-modal="true" aria-labelledby="peek-sheet-title">
+      <div class="lb-sheet-overlay" aria-hidden="true"></div>
+      <div class="lb-sheet lb-sheet--right">
+        <div class="lb-sheet__header">
+          <h3 class="lb-sheet__title" id="peek-sheet-title">Member</h3>
+          <button class="lb-sheet__close" aria-label="Close"><span data-lb-icon="x" style="width: 1.5rem; height: 1.5rem;"></span></button>
+        </div>
+        <div class="lb-sheet__body" id="peek-sheet-body"></div>
+      </div>
+    </div>
+
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Pinned first column</h2>
+    <p class="gallery-section__desc">Wide tables scroll horizontally inside the wrap while <code class="lb-code">.lb-table--pin-first</code> keeps the identity column sticky at the left edge (P&amp;P: as important for horizontal scroll as the fixed header is for vertical). Base background is opaque, row states (hover, selected) still paint through, and a hairline marks the pin boundary. Never collapse a table to <code class="lb-code">display:&nbsp;block</code> for small screens — this is the sanctioned responsive strategy.</p>
+    <div class="lb-table-wrap">
+      <table class="lb-table lb-table--hoverable lb-table--pin-first" style="min-width: 1080px;">
+        <thead>
+          <tr>
+            <th class="lb-table__cell" scope="col" style="width: 12rem;">Member</th>
+            <th class="lb-table__cell" scope="col">Role</th>
+            <th class="lb-table__cell" scope="col">Team</th>
+            <th class="lb-table__cell" scope="col">Location</th>
+            <th class="lb-table__cell" scope="col">Joined</th>
+            <th class="lb-table__cell" scope="col">Last active</th>
+            <th class="lb-table__cell lb-table__cell--end" scope="col">Sessions</th>
+            <th class="lb-table__cell lb-table__cell--end" scope="col">Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="lb-table__cell">Avery Green</td><td class="lb-table__cell">Designer</td><td class="lb-table__cell">Core</td><td class="lb-table__cell">Rotterdam</td><td class="lb-table__cell">Jan 12, 2025</td><td class="lb-table__cell">Today</td><td class="lb-table__cell lb-table__cell--end">312</td><td class="lb-table__cell lb-table__cell--end">$1,240</td></tr>
+          <tr class="lb-table__row--selected"><td class="lb-table__cell">Noor Ibrahim</td><td class="lb-table__cell">Engineer</td><td class="lb-table__cell">Platform</td><td class="lb-table__cell">Stockholm</td><td class="lb-table__cell">Mar 3, 2025</td><td class="lb-table__cell">Yesterday</td><td class="lb-table__cell lb-table__cell--end">1,204</td><td class="lb-table__cell lb-table__cell--end">$980</td></tr>
+          <tr><td class="lb-table__cell">Kai Tanaka</td><td class="lb-table__cell">Product</td><td class="lb-table__cell">Growth</td><td class="lb-table__cell">Osaka</td><td class="lb-table__cell">Jun 21, 2025</td><td class="lb-table__cell">2 days ago</td><td class="lb-table__cell lb-table__cell--end">86</td><td class="lb-table__cell lb-table__cell--end">$2,400</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Loading (skeleton)</h2>
+    <p class="gallery-section__desc">Set <code class="lb-code">aria-busy="true"</code> on <code class="lb-code">&lt;tbody&gt;</code> and fill cells with <code class="lb-code">.lb-skeleton .lb-skeleton--text</code>. Mirror the final column structure so the layout doesn't jump when data arrives.</p>
+    <div class="lb-table-wrap">
+      <table class="lb-table">
+        <thead><tr><th class="lb-table__cell" scope="col">Name</th><th class="lb-table__cell" scope="col">Role</th><th class="lb-table__cell" scope="col">Status</th><th class="lb-table__cell lb-table__cell--end" scope="col">Amount</th></tr></thead>
+        <tbody aria-busy="true">
+          <tr>
+            <td class="lb-table__cell"><span class="lb-skeleton lb-skeleton--text" style="width: 60%"></span></td>
+            <td class="lb-table__cell"><span class="lb-skeleton lb-skeleton--text" style="width: 40%"></span></td>
+            <td class="lb-table__cell"><span class="lb-skeleton lb-skeleton--text" style="width: 30%"></span></td>
+            <td class="lb-table__cell lb-table__cell--end"><span class="lb-skeleton lb-skeleton--text" style="width: 25%"></span></td>
+          </tr>
+          <tr>
+            <td class="lb-table__cell"><span class="lb-skeleton lb-skeleton--text" style="width: 70%"></span></td>
+            <td class="lb-table__cell"><span class="lb-skeleton lb-skeleton--text" style="width: 35%"></span></td>
+            <td class="lb-table__cell"><span class="lb-skeleton lb-skeleton--text" style="width: 45%"></span></td>
+            <td class="lb-table__cell lb-table__cell--end"><span class="lb-skeleton lb-skeleton--text" style="width: 30%"></span></td>
+          </tr>
+          <tr>
+            <td class="lb-table__cell"><span class="lb-skeleton lb-skeleton--text" style="width: 55%"></span></td>
+            <td class="lb-table__cell"><span class="lb-skeleton lb-skeleton--text" style="width: 50%"></span></td>
+            <td class="lb-table__cell"><span class="lb-skeleton lb-skeleton--text" style="width: 40%"></span></td>
+            <td class="lb-table__cell lb-table__cell--end"><span class="lb-skeleton lb-skeleton--text" style="width: 20%"></span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ────────────────── Empty state ────────────────── -->
+    <h2 class="gallery-section__title">Empty state</h2>
+    <p class="gallery-section__desc">A single row spanning all columns via <code class="lb-code">colspan</code>. Include a hint for what to do next.</p>
+    <div class="lb-table-wrap">
+      <table class="lb-table">
+        <thead><tr><th class="lb-table__cell" scope="col">Name</th><th class="lb-table__cell" scope="col">Role</th><th class="lb-table__cell" scope="col">Status</th><th class="lb-table__cell lb-table__cell--end" scope="col">Amount</th></tr></thead>
+        <tbody>
+          <tr class="lb-table__row--empty">
+            <td class="lb-table__cell" colspan="4">
+              <div class="lb-empty-state lb-empty-state--sm">
+                <span class="lb-empty-state__icon" aria-hidden="true" data-lb-icon="inbox"></span>
+                <h3 class="lb-empty-state__title">No members yet</h3>
+                <p class="lb-empty-state__description">Invite a teammate to get started.</p>
+                <div class="lb-empty-state__actions"><button type="button" class="lb-btn lb-btn--primary lb-btn--small">Invite member</button></div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </section>
+</main>
+
+<script src="../js/lb.js"></script>
+<script src="../js/slot-engine.js"></script>
+<script src="../js/theme-editor.js"></script>
+<script src="../js/token-exporter.js"></script>
+<script src="../js/gallery-layout.js"></script>
+
+<script>
+  // ─── Density toggle demo ──────────────────────────────────
+  // Segmented control swaps the size class; persisted per view.
+  document.addEventListener('DOMContentLoaded', () => {
+    const seg = document.getElementById('density-toggle');
+    const dens = document.getElementById('density-demo');
+    if (seg && dens) {
+      const KEY = 'letbe-ds-table-density-demo';
+      const apply = (v) => {
+        dens.classList.toggle('lb-table--sm', v === 'sm');
+        dens.classList.toggle('lb-table--lg', v === 'lg');
+      };
+      let saved = null;
+      try { saved = localStorage.getItem(KEY); } catch (e) {}
+      if (saved && saved !== 'md') {
+        apply(saved);
+        seg.querySelectorAll('.lb-segmented__item').forEach((b) => {
+          b.setAttribute('aria-checked', String(b.dataset.lbValue === saved));
+        });
+      }
+      seg.addEventListener('lb-segmented-change', (e) => {
+        apply(e.detail.value);
+        try { localStorage.setItem(KEY, e.detail.value); } catch (err) {}
+      });
+    }
+  });
+
+  // ─── Side-peek: row end-action opens the record in a right sheet ──
+  document.addEventListener('DOMContentLoaded', () => {
+    const exTable = document.getElementById('expand-table');
+    const sheetRoot = document.getElementById('peek-sheet');
+    if (exTable && sheetRoot) {
+      exTable.addEventListener('click', (e) => {
+        const btn = e.target.closest('[data-peek]');
+        if (!btn) return;
+        const tr = btn.closest('tr');
+        const cells = tr.cells;
+        document.getElementById('peek-sheet-title').textContent = cells[1].textContent.trim();
+        const detail = tr.nextElementSibling;
+        document.getElementById('peek-sheet-body').innerHTML =
+          '<p><span class="lb-label">Role</span><br>' + cells[2].textContent.trim() + '</p>' +
+          '<p><span class="lb-label">Amount</span><br>' + cells[3].textContent.trim() + '</p>' +
+          (detail && detail.classList.contains('lb-table__detail-row')
+            ? '<p style="margin-top: var(--lb-size-4x); color: var(--lb-fg-muted);">' + detail.textContent.trim() + '</p>' : '');
+        if (sheetRoot._lbSheet) sheetRoot._lbSheet.open();
+      });
+    }
+  });
+
+  // ─── Hero-demo toolbar adapter ────────────────────────────
+  // Bridges LB.Table selection events onto the canonical .lb-toolbar
+  // bulk flip: >0 selected rows adds .lb-toolbar--selecting (default
+  // row swaps for the bulk row), count text stays in sync, X clears.
+  // Density segmented in the default row swaps the size class.
+  document.addEventListener('DOMContentLoaded', () => {
+    const table = document.getElementById('demo-table');
+    const toolbar = document.getElementById('demo-toolbar');
+    const countEl = document.getElementById('demo-toolbar-count');
+    const clearBtn = document.getElementById('demo-toolbar-clear');
+    const density = document.getElementById('demo-density');
+    if (density && table) {
+      density.addEventListener('lb-segmented-change', (e) => {
+        table.classList.toggle('lb-table--sm', e.detail.value === 'sm');
+        table.classList.toggle('lb-table--lg', e.detail.value === 'lg');
+      });
+    }
+    if (clearBtn && table) {
+      clearBtn.addEventListener('click', () => {
+        table.querySelectorAll('[data-lb-table-select]:checked').forEach((c) => {
+          c.checked = false;
+          c.dispatchEvent(new Event('change', { bubbles: true }));
+        });
+      });
+    }
+    if (table && toolbar && countEl) {
+      table.addEventListener('lb-table-select', (e) => {
+        const count = e.detail.selectedCount;
+        countEl.textContent = count;
+        toolbar.classList.toggle('lb-toolbar--selecting', count > 0);
+      });
+    }
+
+    // ─── Search + pagination demo ─────────────────────────────
+    // filter → slice → render → refresh(): the client-side data-view
+    // loop. aria-rowcount/-rowindex keep AT oriented in the partial DOM.
+    (() => {
+      const table = document.getElementById('paging-table');
+      const tbody = document.getElementById('paging-body');
+      const search = document.getElementById('paging-search');
+      const info = document.getElementById('paging-info');
+      const nav = document.getElementById('paging-nav');
+      if (!table || !tbody || !search || !nav) return;
+      const pNames = ['Avery Green','Noor Ibrahim','Kai Tanaka','Luca Rossi','Priya Shah','Sam Lee','Mei Zhao','Omar Khan','Lin Chen','Yusuf Ali','Olivia Smith','Elena Petrov','Arjun Rao','Diego Morales','Hana Kim','Mateo Silva','Ada Obi','Jun Park','Zoe Martin','Rafi Nasser','Ines Duarte','Tom Novak','Sana Iqbal'];
+      const pRoles = ['Designer','Engineer','Product','QA','Operations','Marketing'];
+      const pBadges = [
+        '<span class="lb-badge lb-badge--small lb-badge--success"><span class="lb-badge__dot"></span>Active</span>',
+        '<span class="lb-badge lb-badge--small lb-badge--warning"><span class="lb-badge__dot"></span>Invited</span>',
+        '<span class="lb-badge lb-badge--small lb-badge--danger"><span class="lb-badge__dot"></span>Inactive</span>',
+      ];
+      const pStatuses = ['Active', 'Invited', 'Inactive'];
+      const data = pNames.map((n, i) => ({ name: n, role: pRoles[i % pRoles.length], status: pStatuses[i % 3], badge: pBadges[i % 3] }));
+      const PAGE_SIZE = 8;
+      let query = '';
+      let page = 1;
+      const roleFilter = new Set();
+      const statusFilter = new Set();
+
+      const render = () => {
+        const q = query.trim().toLowerCase();
+        const filtered = data.filter((r) =>
+          (!q || (r.name + ' ' + r.role).toLowerCase().includes(q)) &&
+          (roleFilter.size === 0 || roleFilter.has(r.role)) &&
+          (statusFilter.size === 0 || statusFilter.has(r.status)));
+        const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+        if (page > totalPages) page = totalPages;
+        const start = (page - 1) * PAGE_SIZE;
+        const slice = filtered.slice(start, start + PAGE_SIZE);
+
+        table.setAttribute('aria-rowcount', filtered.length + 1);
+        if (slice.length === 0) {
+          tbody.innerHTML = '<tr class="lb-table__row--empty"><td class="lb-table__cell" colspan="4"><div class="lb-empty-state lb-empty-state--sm"><span class="lb-empty-state__icon" aria-hidden="true" data-lb-icon="search"></span><h3 class="lb-empty-state__title">No matches</h3><p class="lb-empty-state__description">Try a different search.</p></div></td></tr>';
+          info.textContent = '0 results';
+        } else {
+          tbody.innerHTML = slice.map((r, i) =>
+            '<tr aria-rowindex="' + (start + i + 2) + '">' +
+            '<td class="lb-table__cell lb-table__cell--select"><label class="lb-checkbox-wrap"><input type="checkbox" class="lb-checkbox" data-lb-table-select><span class="lb-visually-hidden">Select row</span></label></td>' +
+            '<td class="lb-table__cell">' + r.name + '</td>' +
+            '<td class="lb-table__cell">' + r.role + '</td>' +
+            '<td class="lb-table__cell">' + r.badge + '</td>' +
+            '</tr>').join('');
+          info.textContent = (start + 1) + '–' + (start + slice.length) + ' of ' + filtered.length;
+        }
+        if (window.LB && LB.initIcons) LB.initIcons(tbody);
+        if (table._lbTable) table._lbTable.refresh();
+        const pager = nav._lbPagination;
+        if (pager) {
+          pager.totalPages = totalPages;
+          pager.currentPage = page;
+          pager.render();
+        }
+        nav.style.visibility = totalPages > 1 ? '' : 'hidden';
+        applyCols();
+      };
+
+      // Column visibility: checkbox per hideable column; hidden attr on
+      // th + the matching cell index every render (selection col fixed).
+      const COLS = [
+        { index: 1, label: 'Name' },
+        { index: 2, label: 'Role' },
+        { index: 3, label: 'Status' },
+      ];
+      const hiddenCols = new Set();
+      const colsHost = document.getElementById('paging-columns');
+      const applyCols = () => {
+        const ths = table.tHead.rows[0].cells;
+        COLS.forEach((c) => { if (ths[c.index]) ths[c.index].hidden = hiddenCols.has(c.index); });
+        Array.from(tbody.rows).forEach((tr) => {
+          if (tr.classList.contains('lb-table__row--empty')) return;
+          COLS.forEach((c) => { if (tr.cells[c.index]) tr.cells[c.index].hidden = hiddenCols.has(c.index); });
+        });
+      };
+      if (colsHost) {
+        COLS.forEach((c) => {
+          const label = document.createElement('label');
+          label.className = 'lb-checkbox-wrap';
+          label.innerHTML = '<input type="checkbox" class="lb-checkbox" checked><span class="lb-checkbox__label">' + c.label + '</span>';
+          label.querySelector('input').addEventListener('change', (e) => {
+            if (e.target.checked) hiddenCols.delete(c.index); else hiddenCols.add(c.index);
+            applyCols();
+          });
+          colsHost.appendChild(label);
+        });
+        if (window.LB && LB.initCheckboxGlyphs) { LB.initCheckboxGlyphs(colsHost); LB.initIcons(colsHost); }
+      }
+
+      // Filters popover: checkbox per value; applied filters mirror as
+      // removal-idiom chips in the .lb-filter-bar (× unchecks + removes).
+      const bar = document.getElementById('paging-filter-bar');
+      const countBadge = document.getElementById('paging-filter-count');
+      const groups = [
+        { host: document.getElementById('paging-filter-roles'), values: pRoles, set: roleFilter, label: 'Role' },
+        { host: document.getElementById('paging-filter-statuses'), values: pStatuses, set: statusFilter, label: 'Status' },
+      ];
+      const syncFilters = () => {
+        const total = roleFilter.size + statusFilter.size;
+        if (countBadge) { countBadge.hidden = total === 0; countBadge.textContent = total; }
+        if (!bar) return;
+        bar.hidden = total === 0;
+        bar.querySelectorAll('.lb-chip').forEach((c) => c.remove());
+        groups.forEach((g) => {
+          g.set.forEach((v) => {
+            const chip = document.createElement('span');
+            chip.className = 'lb-chip lb-chip--selected';
+            chip.append(g.label + ': ' + v);
+            const rm = document.createElement('button');
+            rm.type = 'button';
+            rm.className = 'lb-chip__remove';
+            rm.setAttribute('aria-label', 'Remove filter ' + v);
+            rm.innerHTML = '<span data-lb-icon="x"></span>';
+            rm.addEventListener('click', () => {
+              g.set.delete(v);
+              const cb = g.host && g.host.querySelector('input[value="' + v + '"]');
+              if (cb) cb.checked = false;
+              page = 1; syncFilters(); render();
+            });
+            chip.appendChild(rm);
+            bar.appendChild(chip);
+          });
+        });
+        if (window.LB && LB.initIcons) LB.initIcons(bar);
+      };
+      groups.forEach((g) => {
+        if (!g.host) return;
+        g.values.forEach((v) => {
+          const label = document.createElement('label');
+          label.className = 'lb-checkbox-wrap';
+          label.innerHTML = '<input type="checkbox" class="lb-checkbox" value="' + v + '"><span class="lb-checkbox__label">' + v + '</span>';
+          label.querySelector('input').addEventListener('change', (e) => {
+            if (e.target.checked) g.set.add(v); else g.set.delete(v);
+            page = 1; syncFilters(); render();
+          });
+          g.host.appendChild(label);
+        });
+        if (window.LB && LB.initCheckboxGlyphs) { LB.initCheckboxGlyphs(g.host); LB.initIcons(g.host); }
+      });
+
+      let debounce;
+      search.addEventListener('input', () => {
+        clearTimeout(debounce);
+        debounce = setTimeout(() => { query = search.value; page = 1; render(); }, 150);
+      });
+      nav.addEventListener('lb-page-change', (e) => { page = e.detail.page; render(); });
+      render();
+    })();
+
+    // ─── Sticky-header demo — now also the CHUNKED LAZY-APPEND pattern:
+    // 200 rows total, appended in chunks of 30 as the body scroller
+    // nears its end (the LB.Dropdown chunkSize model applied to tables).
+    // The DS boundary: chunked append + aria-rowcount is DS-side chrome;
+    // true windowed virtualization for 100k rows is bring-your-own
+    // engine (TanStack Virtual, Clusterize) per the pluggable-engines
+    // rule. Async consumers append skeleton rows while fetching.
+    const body = document.getElementById('sticky-demo-body');
+    if (body) {
+      const names = ['Avery Green','Noor Ibrahim','Kai Tanaka','Luca Rossi','Priya Shah','Sam Lee','Mei Zhao','Omar Khan','Lin Chen','Yusuf Ali','Olivia Smith','Elena Petrov','Arjun Rao','Diego Morales','Hana Kim','Mateo Silva','Ada Obi','Jun Park','Zoe Martin','Rafi Nasser'];
+      const roles = ['Designer','Engineer','Product','QA','Operations','Marketing'];
+      const statuses = [
+        '<span class="lb-badge lb-badge--small lb-badge--success"><span class="lb-badge__dot"></span>Active</span>',
+        '<span class="lb-badge lb-badge--small lb-badge--warning"><span class="lb-badge__dot"></span>Invited</span>',
+        '<span class="lb-badge lb-badge--small lb-badge--danger"><span class="lb-badge__dot"></span>Inactive</span>',
+      ];
+      const TOTAL = 200, CHUNK = 30;
+      const stickyTable = body.closest('table');
+      let loaded = 0;
+      const rowHtml = (i) => {
+        const amount = 200 + (i * 137) % 3500;
+        return `<tr aria-rowindex="${i + 2}">
+          <td class="lb-table__cell">${names[i % names.length]}</td>
+          <td class="lb-table__cell">${roles[i % roles.length]}</td>
+          <td class="lb-table__cell">${statuses[i % statuses.length]}</td>
+          <td class="lb-table__cell lb-table__cell--end">$${amount.toLocaleString()}</td>
+        </tr>`;
+      };
+      const appendChunk = () => {
+        if (loaded >= TOTAL) return;
+        const end = Math.min(loaded + CHUNK, TOTAL);
+        let html = '';
+        for (let i = loaded; i < end; i++) html += rowHtml(i);
+        body.insertAdjacentHTML('beforeend', html);
+        loaded = end;
+        if (stickyTable) stickyTable.setAttribute('aria-rowcount', TOTAL + 1);
+      };
+      appendChunk();
+      const scroller = body.closest('.lb-table-wrap__body');
+      if (scroller) {
+        scroller.addEventListener('scroll', () => {
+          if (scroller.scrollTop + scroller.clientHeight >= scroller.scrollHeight - 120) appendChunk();
+        }, { passive: true });
+      }
+    }
+  });
+</script>
+</body>
+</html>

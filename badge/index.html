@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <!-- theme-preamble:v1 -->
+  <script>(function(){try{var t=localStorage.getItem('letbe-ds-dark-mode');if(t==='1')document.documentElement.setAttribute('data-theme','dark');else if(t==='0')document.documentElement.setAttribute('data-theme','light');}catch(e){}})();</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta data-lb-page="badge">
+  <title>Badge — letbe-ds</title>
+  <link rel="stylesheet" href="../tokens/theme.css">
+  <link rel="stylesheet" href="../tokens/fonts.css">
+  <link rel="stylesheet" href="../components/components.css">
+  <link rel="stylesheet" href="../components/theme-editor.css">
+  <link rel="stylesheet" href="../components/gallery.css">
+</head>
+<body data-lb-base="..">
+
+<main class="gallery-main">
+  <section class="gallery-section" id="badge">
+    <h1 class="gallery-section__title" style="font-size: var(--lb-t-heading-l-font-size); line-height: var(--lb-t-heading-l-line-height);">Badge</h1>
+    <p class="gallery-section__desc">Compact status label — and the read-only counterpart to Chip: no pointer affordances, no interaction. Four variants: default (brand), success, warning, danger. For neutral, non-status descriptors (category, role, region), use <code class="lb-code">--default</code>. Two sizes: medium (default, 16px icon slot) and small (12px icon slot). Use to label states (active, pending), counts, or categorize items. Optional leading dot via <code class="lb-code">.lb-badge__dot</code> (add <code class="lb-code">.lb-badge__dot--pulse</code> to make it pulse), or an icon via <code class="lb-code">.lb-badge__icon</code> for statuses like money flow.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>a11y (built in):</strong> a badge is a plain <code class="lb-code">&lt;span&gt;</code> whose status word is real text, so the meaning never rides on color alone; the optional <code class="lb-code">.lb-badge__icon</code> is <code class="lb-code">aria-hidden</code> reinforcement, not the signal itself. The ambient <code class="lb-code">.lb-badge__dot--pulse</code> animation is dropped entirely under <code class="lb-code">prefers-reduced-motion: reduce</code>.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>Usage:</strong> Pure CSS — a static <code class="lb-code">&lt;span class="lb-badge"&gt;</code> needs no init, dispatches no events and has no JS handle. The one live part is the icon slot: author it empty as <code class="lb-code">&lt;span class="lb-badge__icon" aria-hidden="true" data-lb-icon="…"&gt;&lt;/span&gt;</code> and the <code class="lb-code">LB.init()</code> sweep (self-runs on <code class="lb-code">DOMContentLoaded</code> once <code class="lb-code">js/lb.js</code> is on the page) fills in the SVG — text- and dot-only badges work with the stylesheets alone. For badges injected after boot, hydrate the new subtree with <code class="lb-code">LB.initIcons(root)</code>; it is idempotent and skips already-filled slots.</p>
+
+<hr class="gallery-desc-divider">
+
+<h2 class="gallery-section__title">Badge Demo</h2>
+    <div class="gallery-label">Medium (default) — bare <code class="lb-code">.lb-badge</code> is medium; <code class="lb-code">--medium</code> is optional</div>
+    <div class="gallery-row">
+      <span class="lb-badge lb-badge--default">Default</span>
+      <span class="lb-badge lb-badge--success"><span class="lb-badge__dot"></span>Active</span>
+      <span class="lb-badge lb-badge--warning">Warning</span>
+      <span class="lb-badge lb-badge--danger">Error</span>
+      <span class="lb-badge lb-badge--success"><span class="lb-badge__dot lb-badge__dot--pulse"></span>42 live</span>
+    </div>
+
+    <div class="gallery-label" style="margin-top: var(--lb-size-6x);">Small — <code class="lb-code">.lb-badge--small</code></div>
+    <div class="gallery-row">
+      <span class="lb-badge lb-badge--default lb-badge--small">Default</span>
+      <span class="lb-badge lb-badge--success lb-badge--small"><span class="lb-badge__dot"></span>Active</span>
+      <span class="lb-badge lb-badge--warning lb-badge--small">Warning</span>
+      <span class="lb-badge lb-badge--danger lb-badge--small">Error</span>
+    </div>
+
+    <div class="gallery-label" style="margin-top: var(--lb-size-6x);">With icon — 16px (medium) / 12px (small)</div>
+    <div class="gallery-row">
+      <span class="lb-badge lb-badge--success">
+        <span class="lb-badge__icon" aria-hidden="true" data-lb-icon="circle-check-filled"></span>
+        Confirmed
+      </span>
+      <span class="lb-badge lb-badge--warning">
+        <span class="lb-badge__icon" aria-hidden="true" data-lb-icon="clock"></span>
+        Pending
+      </span>
+      <span class="lb-badge lb-badge--danger">
+        <span class="lb-badge__icon" aria-hidden="true" data-lb-icon="x-circle-filled"></span>
+        Failed
+      </span>
+      <span class="lb-badge lb-badge--default">
+        <span class="lb-badge__icon" aria-hidden="true" data-lb-icon="arrow-down-left"></span>
+        Received
+      </span>
+    </div>
+
+    <div class="gallery-row" style="margin-top: var(--lb-size-3x);">
+      <span class="lb-badge lb-badge--small lb-badge--success">
+        <span class="lb-badge__icon" aria-hidden="true" data-lb-icon="circle-check-filled"></span>
+        Confirmed
+      </span>
+      <span class="lb-badge lb-badge--small lb-badge--warning">
+        <span class="lb-badge__icon" aria-hidden="true" data-lb-icon="clock"></span>
+        Pending
+      </span>
+      <span class="lb-badge lb-badge--small lb-badge--danger">
+        <span class="lb-badge__icon" aria-hidden="true" data-lb-icon="x-circle-filled"></span>
+        Failed
+      </span>
+      <span class="lb-badge lb-badge--small lb-badge--default">
+        <span class="lb-badge__icon" aria-hidden="true" data-lb-icon="arrow-down-left"></span>
+        Received
+      </span>
+    </div>
+  </section>
+</main>
+
+<script src="../js/lb.js"></script>
+<script src="../js/slot-engine.js"></script>
+<script src="../js/theme-editor.js"></script>
+<script src="../js/token-exporter.js"></script>
+<script src="../js/gallery-layout.js"></script>
+</body>
+</html>

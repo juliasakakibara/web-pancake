@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>letbe-ds — CDN-only consumer</title>
+  <!-- The entire install: three files from a pinned CDN tag. Nothing else. -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/m1ha1l0/letbe-ds@v1.4.0/tokens/theme.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/m1ha1l0/letbe-ds@v1.4.0/tokens/fonts.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/m1ha1l0/letbe-ds@v1.4.0/components/components.css">
+</head>
+<body style="margin:0;padding:var(--lb-size-8x);background:var(--lb-bg-default);color:var(--lb-fg-default);font-family:var(--lb-t-body-m-font-family);">
+  <main style="max-width:40rem;margin:0 auto;display:flex;flex-direction:column;gap:var(--lb-size-6x);">
+    <h1 style="font:var(--lb-t-heading-l-font-weight) var(--lb-t-heading-l-font-size)/var(--lb-t-heading-l-line-height) var(--lb-t-heading-l-font-family);margin:0;">
+      Three files, straight from the CDN
+    </h1>
+    <p style="margin:0;color:var(--lb-fg-muted);">This page has no local files at all. Everything below is served from <code class="lb-code">cdn.jsdelivr.net/gh/m1ha1l0/letbe-ds@v1.4.0</code>. Toggle the theme, tap the button, open the accordion — all of it is the real runtime.</p>
+
+    <div style="display:flex;flex-wrap:wrap;gap:var(--lb-size-2x);align-items:center;">
+      <button type="button" class="lb-btn lb-btn--primary lb-btn--medium" id="toast-it"><span class="lb-btn__label">Show a toast</span></button>
+      <button type="button" class="lb-btn lb-btn--secondary lb-btn--medium" id="undo-it"><span class="lb-btn__label">Neutral + Undo</span></button>
+      <label class="lb-switch-wrap"><input type="checkbox" class="lb-switch" role="switch" id="dark"><span class="lb-switch__label">Dark</span></label>
+      <span class="lb-badge lb-badge--success">v1.0.0</span>
+      <span class="lb-badge lb-badge--default">MIT</span>
+    </div>
+
+    <div class="lb-accordion" data-lb-accordion>
+      <div class="lb-accordion__item">
+        <button type="button" class="lb-accordion__trigger" aria-expanded="true">What did the browser fetch?<span class="lb-accordion__chevron" aria-hidden="true" data-lb-icon="chevron-down"></span></button>
+        <div class="lb-accordion__panel">
+          <p style="margin:0;">Tokens (44 KB), fonts (2 KB + two ~100 KB woff2 on demand), components (459 KB), runtime (362 KB), plus each icon as it appears. No build step ran anywhere.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="lb-progress-wrap"><progress class="lb-progress" value="70" max="100" aria-label="Demo progress"></progress></div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/gh/m1ha1l0/letbe-ds@v1.4.0/js/lb.js"></script>
+  <script>
+    // Icon and flag paths auto-detect from lb.js's own script origin,
+    // CDN included; the explicit setters remain as escape hatches for
+    // self-hosted asset splits (LB.setIconBasePath / LB.setFlagBasePath).
+    LB.setIconBasePath('https://cdn.jsdelivr.net/gh/m1ha1l0/letbe-ds@v1.4.0/assets/icons');
+    const toasts = new LB.ToastManager();
+    document.getElementById('toast-it').addEventListener('click', () =>
+      toasts.show({ variant: 'success', title: 'It works', message: 'Served entirely from the CDN.' }));
+    document.getElementById('undo-it').addEventListener('click', () =>
+      toasts.show({ variant: 'neutral', message: 'Moved to Archive', action: { label: 'Undo', onClick: () => toasts.show({ variant: 'neutral', message: 'Restored', duration: 2500 }) } }));
+    document.getElementById('dark').addEventListener('change', (e) =>
+      document.documentElement.setAttribute('data-theme', e.target.checked ? 'dark' : 'light'));
+  </script>
+</body>
+</html>

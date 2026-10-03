@@ -1,0 +1,691 @@
+/*
+ * gallery.css — shared layout for every page in the letbe-ds gallery
+ * Extracted from the old single-page index.html inline <style> block.
+ * Loaded by every component page via <link rel="stylesheet" href="../components/gallery.css">.
+ */
+
+/* FOUC guard: hide body until gallery-layout.js finishes injecting header + sidebar */
+body { visibility: hidden; }
+body.gallery-ready { visibility: visible; }
+
+    /* ─── Gallery Layout ──────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; }
+
+    /* Lock body to viewport height — the page scrolls INSIDE
+       .gallery-main rather than on <body>. That keeps the page-level
+       scrollbar contained below the fixed header (instead of running
+       behind it the full viewport height) and naturally clears the
+       sidebar too. */
+    html, body { height: 100%; overflow: hidden; }
+    body {
+      margin: 0;
+      /* Inherit page chrome's font from the body L2 role alias so that
+         when the user remaps body in the Theme editor's role map, the
+         page's prose, descriptions, gallery sidebar, and other text-default
+         elements follow the swap. Previously this hardcoded
+         --lb-font-family-1 which bypassed the role map entirely — body
+         specimens on the typography page would swap but gallery prose
+         wouldn't. */
+      font-family: var(--lb-typography-family-body);
+      background: var(--lb-surface-bg-default);
+      color: var(--lb-fg-default);
+      display: flex;
+    }
+
+    /* Sidebar — sits BELOW the full-width header. The .lb-nav--vertical
+       component owns most visuals (group labels, item layout, active-bar
+       marker, padding); we override the bg here to match the page bg
+       (so the sidebar reads as part of the page surface, not a separate
+       elevated panel) while keeping every other lb-nav--vertical
+       property intact. The component-level demo on /navigation/ keeps
+       its own elevated bg via the regular .lb-nav--vertical rule. */
+    /* Sidebar locks to the viewport (no scroll on the wrap) and uses
+       flex column so the search stays pinned + the list scrolls below.
+       Override the .lb-nav--vertical default padding since we now manage
+       child layout ourselves. */
+    /* Gallery sidebar group headings read as headings, not overlines —
+       a gallery-scoped consumer restyle; the shipped Navigation component
+       keeps its overline group-label idiom untouched. */
+    .gallery-sidebar .lb-nav__group-label {
+      font-family: var(--lb-t-heading-s-font-family);
+      font-size: var(--lb-t-heading-s-font-size);
+      font-weight: var(--lb-t-heading-s-font-weight);
+      line-height: var(--lb-t-heading-s-line-height);
+      letter-spacing: var(--lb-t-heading-s-letter-spacing);
+      text-transform: none;
+      color: var(--lb-fg-default);
+    }
+
+    .gallery-sidebar {
+      width: 240px;
+      flex-shrink: 0;
+      position: fixed;
+      top: 3.5rem;
+      left: 0;
+      bottom: 0;
+      z-index: 10;
+      background: var(--lb-surface-bg-default);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;       /* the inner list owns scrolling */
+      padding: 0;
+    }
+
+    /* Search field — pinned at top, never scrolls. Padding matches the
+       inset of the .lb-nav--vertical component default. The bottom
+       border separates chrome (search) from content (group lists). */
+    .gallery-sidebar__search {
+      flex-shrink: 0;
+      padding: var(--lb-size-4x);
+      padding-bottom: var(--lb-size-3x);
+      border-bottom: var(--lb-border-width-thin) solid var(--lb-border-default);
+    }
+
+    /* Scrollable list region — only this area shows a scrollbar when
+       the component list overflows. flex: 1 makes it fill the space
+       between the pinned search and the bottom of the sidebar. */
+    .gallery-sidebar__list {
+      flex: 1;
+      overflow-y: auto;
+      padding: var(--lb-size-3x) var(--lb-size-4x) var(--lb-size-4x);
+    }
+
+    /* Divider between Foundation and Components groups inside the
+       gallery sidebar. The .lb-nav__group component normally separates
+       groups by white-space + a label only — adding the divider here
+       reinforces the section break in a long sidebar without changing
+       the component's default look elsewhere. */
+    .gallery-sidebar .lb-nav__group + .lb-nav__group {
+      margin-top: var(--lb-size-3x);
+      padding-top: var(--lb-size-3x);
+      border-top: var(--lb-border-width-thin) solid var(--lb-border-default);
+    }
+
+    /* Truncate long page names with ellipsis so the sidebar's 240px
+       width never overflows or wraps. .lb-nav__item is inline-flex by
+       default; min-width:0 + overflow:hidden on the label child lets
+       text-overflow take effect inside a flex context. */
+    .gallery-sidebar .lb-nav__item-label {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      min-width: 0;
+      flex: 1;
+    }
+
+    /* Bigger, bolder group labels in the gallery sidebar so the
+       FOUNDATION / COMPONENTS section breaks read at a glance against
+       the page-name list below them. The base .lb-nav__group-label
+       used in the /navigation/ demo stays unchanged — this scoped
+       override only affects the gallery chrome. */
+    .gallery-sidebar .lb-nav__group-label {
+      font-size: var(--lb-font-size-s);
+      font-weight: var(--lb-font-weight-bold);
+      color: var(--lb-fg-default);
+      padding: var(--lb-size-2x) var(--lb-size-4x) var(--lb-size-3x);
+    }
+
+
+    /* Main content — see .gallery-header section for .gallery-main */
+
+    .gallery-section {
+      margin-bottom: var(--lb-size-16x);
+    }
+
+    .gallery-section__title {
+      font: var(--lb-t-heading-l-font-weight) var(--lb-t-heading-l-font-size)/var(--lb-t-heading-l-line-height) var(--lb-t-heading-l-font-family);
+      letter-spacing: var(--lb-t-heading-l-letter-spacing);
+      margin: 0 0 var(--lb-size-2x);
+      padding-bottom: var(--lb-size-2x);
+      border-bottom: var(--lb-border-width-thin) solid var(--lb-border-default);
+    }
+
+    /* Section heading (comes after the main page title + description).
+       A real heading, not a label — page hierarchy is h1 (heading-l) →
+       h2 (heading-s) → .gallery-label captions on individual demos. */
+    h2.gallery-section__title {
+      margin-top: var(--lb-size-16x);
+      font: var(--lb-t-heading-s-font-weight) var(--lb-t-heading-s-font-size)/var(--lb-t-heading-s-line-height) var(--lb-t-heading-s-font-family);
+      letter-spacing: var(--lb-t-heading-s-letter-spacing);
+      color: var(--lb-fg-default);
+      padding-bottom: 0;
+      border-bottom: none;
+    }
+
+    /* Rule that visually separates the page description from the Demo block.
+       Sits right before the Demo heading on every component page. */
+    .gallery-desc-divider {
+      border: none;
+      height: var(--lb-border-width-thin);
+      background: var(--lb-border-default);
+      margin: var(--lb-size-6x) 0 0;
+    }
+
+    .gallery-section__desc {
+      font-size: var(--lb-t-body-s-font-size);
+      color: var(--lb-fg-muted);
+      margin: 0 0 var(--lb-size-6x);
+      /* Long unbreakable inline-code tokens (selectors, one-line JS like
+         document.querySelector('…:checked').value) may exceed a phone
+         column; anywhere lets them wrap mid-token ONLY when they cannot
+         fit — nothing is lost, and text that fits is untouched.
+         Inherits into the <code class="lb-code"> spans. */
+      overflow-wrap: anywhere;
+    }
+
+    .gallery-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--lb-size-3x);
+      margin-bottom: var(--lb-size-4x);
+    }
+
+    /* Code-snippet panel — built on top of the .lb-accordion DS
+       component (single-item accordion). gallery-layout.js renders
+       the trigger/panel; the styling below is just the body chrome
+       (mono font + tinted bg around the <pre>) and the absolute Copy
+       button. The accordion itself owns the trigger, chevron, hover,
+       and open/close behaviour. */
+    .gallery-code {
+      /* 48px breathing room above and below so the panel doesn't crowd
+         the demo it documents or the next section. */
+      margin: var(--lb-size-12x) 0;
+    }
+    .gallery-code__body {
+      position: relative;
+      background: var(--lb-bg-bolder);
+      border: var(--lb-border-width-thin) solid var(--lb-border-muted);
+      border-radius: var(--lb-radius-surface);
+      overflow: hidden;
+      /* Override .lb-accordion__panel-inner's heavy bottom padding —
+         we're a single-line "open code panel" not a multi-paragraph
+         FAQ entry. */
+      padding: 0 !important;
+      color: var(--lb-fg-default);
+    }
+    .gallery-code__pre {
+      margin: 0;
+      padding: var(--lb-size-4x);
+      padding-right: 6rem; /* room for the Copy button at top-right */
+      overflow-x: auto;
+      font-family: var(--lb-font-family-3);
+      font-size: var(--lb-t-body-s-font-size);
+      line-height: 1.6;
+      color: var(--lb-fg-default);
+    }
+    .gallery-code__pre code { font-family: inherit; }
+    .gallery-code__copy {
+      position: absolute;
+      top: var(--lb-size-2x);
+      right: var(--lb-size-2x);
+    }
+
+    .gallery-row--col {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .gallery-label {
+      font-size: var(--lb-font-size-xs);
+      color: var(--lb-fg-subtle);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: var(--lb-size-1x);
+      width: 100%;
+    }
+
+    /* Separate multiple demo subgroups with 48px of breathing room.
+       The first label in a section stays snug to the demo heading. */
+    .gallery-section .gallery-label ~ .gallery-label,
+    .gallery-row + .gallery-label {
+      margin-top: var(--lb-size-12x);
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: var(--lb-size-4x);
+    }
+
+    .gallery-icon-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+      gap: var(--lb-size-2x);
+    }
+
+    .gallery-icon-cell {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--lb-size-1x);
+      padding: var(--lb-size-3x) var(--lb-size-1x);
+      border-radius: var(--lb-radius-field);
+      border: var(--lb-border-width-thin) solid var(--lb-border-default);
+      transition: background 120ms ease;
+      color: var(--lb-fg-default);
+    }
+
+    .gallery-icon-cell:hover {
+      background: var(--lb-surface-bg-elevated);
+    }
+
+    .gallery-icon-cell svg {
+      width: 24px;
+      height: 24px;
+    }
+
+    .gallery-icon-cell span {
+      font-size: var(--lb-font-size-xs);
+      color: var(--lb-fg-muted);
+      text-align: center;
+      word-break: break-all;
+    }
+
+    .gallery-demo-box {
+      padding: var(--lb-size-4x);
+      border: var(--lb-border-width-thin) solid var(--lb-border-default);
+      border-radius: var(--lb-radius-field);
+      background: var(--lb-surface-bg-default);
+    }
+
+    /* ─── Typography specimen ────────────────────────────── */
+    .type-specimen {
+      display: flex;
+      flex-direction: column;
+      gap: var(--lb-size-6x);
+    }
+    .type-specimen__row {
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      gap: var(--lb-size-6x);
+      align-items: center;
+      padding-bottom: var(--lb-size-4x);
+      border-bottom: var(--lb-border-width-thin) solid var(--lb-border-muted);
+    }
+    .type-specimen__name {
+      font-family: var(--lb-t-body-s-font-family);
+      font-size: var(--lb-t-body-s-font-size);
+      font-weight: var(--lb-font-weight-semibold);
+      color: var(--lb-fg-default);
+    }
+    .type-specimen__name span {
+      display: block;
+      font-weight: var(--lb-font-weight-regular);
+      color: var(--lb-fg-muted);
+      font-size: var(--lb-font-size-xs);
+      margin-top: var(--lb-size-0-5x);
+    }
+    /* Viewport-labelled size lines (Desktop / Mobile). One per line, mono font
+       for the values so numbers read cleanly. */
+    .type-specimen__meta {
+      display: block;
+      font-family: 'Roboto Mono', monospace;
+      font-size: var(--lb-font-size-xs);
+      color: var(--lb-fg-muted);
+      margin-top: var(--lb-size-0-5x);
+      line-height: 1.5;
+    }
+    .type-specimen__meta-label {
+      display: inline-block;
+      min-width: 60px;
+      color: var(--lb-fg-subtle);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      font-size: var(--lb-font-size-2xs);
+      font-family: var(--lb-t-body-s-font-family);
+    }
+    /* "Responsive" pill: indicates this row shrinks at a breakpoint */
+    .type-specimen__row--responsive .type-specimen__name::after {
+      content: 'Responsive';
+      display: inline-block;
+      margin-left: var(--lb-size-1-5x);
+      padding: 1px var(--lb-size-1x) 2px;
+      background: var(--lb-fg-accent);
+      color: var(--lb-fg-inverse);
+      font-family: var(--lb-t-caption-s-font-family);
+      font-size: var(--lb-t-caption-s-font-size);
+      font-weight: var(--lb-font-weight-semibold);
+      letter-spacing: 0.03em;
+      border-radius: var(--lb-radius-full);
+      vertical-align: middle;
+      line-height: 1.2;
+    }
+    /* Left accent border for responsive rows — scannable at a glance */
+    .type-specimen__row--responsive {
+      padding-left: var(--lb-size-3x);
+      border-left: var(--lb-border-width-medium) solid var(--lb-border-accent);
+    }
+    .type-specimen__sample {
+      color: var(--lb-fg-default);
+      word-wrap: break-word;
+      overflow-wrap: anywhere;
+    }
+
+    /* ─── Typography page — interactive demos ──────────
+       Family-map + role-intro blocks shipped with the typography
+       page rewrite. Force-mode controls used to live here too but
+       moved to the Theme editor where they affect the whole gallery. */
+    /* Family map — compact table showing role → slot → font */
+    .type-family-map {
+      display: grid;
+      grid-template-columns: max-content max-content 1fr;
+      gap: var(--lb-size-1x) var(--lb-size-3x);
+      padding: var(--lb-size-4x);
+      /* fixed-geometry mini-table (max-content columns of mono token
+         paths) — scrolls in place on narrow screens instead of pushing
+         the page wide; thin visible-when-overflowing scrollbar per the
+         DS scrollbar policy */
+      overflow-x: auto;
+      margin-bottom: var(--lb-size-8x);
+      background: var(--lb-bg-default);
+      border: var(--lb-border-width-thin) solid var(--lb-border-muted);
+      border-radius: var(--lb-radius-surface);
+      font-family: var(--lb-t-caption-m-font-family);
+      font-size: var(--lb-t-caption-m-font-size);
+      line-height: 1.5;
+    }
+    .type-family-map__head {
+      font-family: var(--lb-t-label-s-font-family);
+      font-size: var(--lb-t-label-s-font-size);
+      font-weight: var(--lb-t-label-s-font-weight);
+      letter-spacing: var(--lb-t-label-s-letter-spacing);
+      color: var(--lb-fg-subtle);
+      text-transform: uppercase;
+    }
+    .type-family-map__role {
+      color: var(--lb-fg-default);
+      font-weight: var(--lb-font-weight-semibold);
+    }
+    .type-family-map__slot {
+      color: var(--lb-fg-muted);
+      font-family: var(--lb-font-family-3);
+    }
+    .type-family-map__font {
+      color: var(--lb-fg-default);
+    }
+    /* Role intro block — a brief paragraph before each H2's specimens */
+    .type-role-intro {
+      margin: var(--lb-size-4x) 0 var(--lb-size-6x);
+      max-width: 64ch;
+      font-family: var(--lb-t-body-s-font-family);
+      font-size: var(--lb-t-body-s-font-size);
+      line-height: var(--lb-t-body-s-line-height);
+      color: var(--lb-fg-muted);
+    }
+    /* Family swap demo control (used on Action section) */
+    .type-swap-demo {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--lb-size-3x);
+      padding: var(--lb-size-3x) var(--lb-size-4x);
+      margin: var(--lb-size-3x) 0 var(--lb-size-6x);
+      background: var(--lb-bg-accent-muted);
+      border: var(--lb-border-width-thin) solid var(--lb-border-accent);
+      border-radius: var(--lb-radius-surface);
+    }
+    .type-swap-demo__label {
+      font-family: var(--lb-t-label-s-font-family);
+      font-size: var(--lb-t-label-s-font-size);
+      font-weight: var(--lb-t-label-s-font-weight);
+      color: var(--lb-fg-accent);
+    }
+    /* When the user previews a mode, this attribute forces those
+       specific CSS variables. Mirrors the @media (max-width: 600px)
+       overrides for S but applies regardless of viewport width.
+       Selector uses html[...] (specificity 0,1,1) to strictly
+       outrank :root (specificity 0,1,0) — same-specificity source-
+       order cascade was unreliable in practice for these overrides. */
+    html[data-typo-preview="S"] {
+      --lb-t-display-xl-font-size: var(--lb-font-size-6xl);
+      --lb-t-display-xl-line-height: var(--lb-font-line-height-6xl);
+      --lb-t-display-l-font-size: var(--lb-font-size-5xl);
+      --lb-t-display-l-line-height: var(--lb-font-line-height-5xl);
+      --lb-t-display-m-font-size: var(--lb-font-size-4xl);
+      --lb-t-display-m-line-height: var(--lb-font-line-height-4xl);
+      --lb-t-display-s-font-size: var(--lb-font-size-3xl);
+      --lb-t-display-s-line-height: var(--lb-font-line-height-3xl);
+      --lb-t-display-xs-font-size: var(--lb-font-size-2xl);
+      --lb-t-display-xs-line-height: var(--lb-font-line-height-2xl);
+      --lb-t-heading-xl-font-size: var(--lb-font-size-2xl);
+      --lb-t-heading-xl-line-height: var(--lb-font-line-height-2xl);
+      --lb-t-heading-l-font-size: var(--lb-font-size-xl);
+      --lb-t-heading-l-line-height: var(--lb-font-line-height-xl);
+      --lb-t-heading-m-font-size: var(--lb-font-size-l);
+      --lb-t-heading-m-line-height: var(--lb-font-line-height-l);
+    }
+    /* M and L modes currently have no overrides — same as base.
+       Empty rules left here as documentation: when phase 2 lands
+       and breakpoint-specific values appear, these blocks fill in. */
+    html[data-typo-preview="M"] { /* no overrides today */ }
+    html[data-typo-preview="L"] { /* no overrides today */ }
+
+    /* ─── Color palette ──────────────────────────────────── */
+    .color-palette {
+      margin-bottom: var(--lb-size-8x);
+    }
+    .color-palette__header {
+      margin-bottom: var(--lb-size-3x);
+    }
+    .color-palette__name {
+      font: var(--lb-t-heading-s-font-weight) var(--lb-t-heading-s-font-size)/var(--lb-t-heading-s-line-height) var(--lb-t-heading-s-font-family);
+      margin: 0 0 var(--lb-size-1x);
+      color: var(--lb-fg-default);
+    }
+    .color-palette__desc {
+      font-size: var(--lb-t-body-s-font-size);
+      color: var(--lb-fg-muted);
+      margin: 0;
+    }
+    .color-palette__grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      gap: var(--lb-size-2x);
+    }
+    .color-swatch {
+      display: flex;
+      flex-direction: column;
+      gap: var(--lb-size-1x);
+    }
+    .color-swatch__chip {
+      width: 100%;
+      height: 60px;
+      border-radius: var(--lb-radius-field);
+      border: var(--lb-border-width-thin) solid var(--lb-border-muted);
+    }
+    .color-swatch__info {
+      padding: 0 var(--lb-size-0-5x);
+    }
+    .color-swatch__step {
+      font-family: var(--lb-t-label-m-font-family);
+      font-size: var(--lb-t-label-m-font-size);
+      font-weight: var(--lb-font-weight-semibold);
+      color: var(--lb-fg-default);
+    }
+    .color-swatch__token {
+      font-family: 'Roboto Mono', monospace;
+      font-size: var(--lb-font-size-2xs);
+      color: var(--lb-fg-muted);
+      word-break: break-all;
+    }
+
+    /* ─── Top header bar — full width across the page ─────── */
+    .gallery-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3.5rem;
+      z-index: 12;
+      display: flex;
+      align-items: center;
+      gap: var(--lb-size-3x);
+      padding: 0 var(--lb-size-6x);
+      background: var(--lb-surface-bg-default);
+      border-bottom: var(--lb-border-width-thin) solid var(--lb-border-default);
+    }
+
+    .gallery-header__label {
+      font-family: var(--lb-t-body-m-font-family);
+      font-size: var(--lb-t-body-s-font-size);
+      color: var(--lb-fg-muted);
+    }
+
+    .gallery-header__brand {
+      font-family: var(--lb-t-action-m-font-family);
+      font-size: var(--lb-t-action-m-font-size);
+      font-weight: var(--lb-font-weight-semibold);
+      color: var(--lb-fg-default);
+      flex: 1;
+      min-width: 0;             /* let brand text truncate on tight viewports */
+      display: flex;
+      align-items: center;       /* vertical center inside the 3.5rem header */
+    }
+
+    /* Brand link wraps the mark + wordmark; both share the same row
+       so they align on the optical center of the mark, not the text
+       baseline. */
+    .gallery-header__brand-link {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--lb-size-2x);
+      color: inherit;
+      text-decoration: none;
+      border-radius: var(--lb-radius-2);
+      transition: opacity 120ms ease;
+    }
+    .gallery-header__brand-link:hover { opacity: 0.7; }
+    .gallery-header__brand-link:focus-visible {
+      outline: var(--lb-border-width-medium) solid var(--lb-border-focus);
+      outline-offset: var(--lb-size-0-5x);
+    }
+
+    .gallery-header__mark {
+      width: 1.75rem;
+      height: 1.75rem;
+      border-radius: var(--lb-radius-interactive);
+      flex-shrink: 0;
+      display: block;
+    }
+
+    /* Desktop: show the switch label, hide the icon-only fallback. */
+    .gallery-header__theme-icon-btn { display: none; }
+
+    /* .gallery-main is the SCROLL container — it spans the full
+       remaining viewport (right edge to sidebar) so the scrollbar
+       paints at the browser edge, not at a 960px content boundary.
+       Content max-width is constrained on .gallery-section instead
+       (one rule down). 100dvh handles mobile address-bar showing
+       and hiding cleanly so there's no phantom scroll area below
+       content. */
+    .gallery-main {
+      margin-left: 240px;
+      margin-top: 3.5rem;       /* clear the fixed header */
+      height: calc(100dvh - 3.5rem);
+      flex: 1;
+      padding: var(--lb-size-8x);
+      overflow-y: auto;          /* scrollbar lives at browser edge */
+    }
+    /* Constrain content readable-width here. Each .gallery-section
+       centers itself in the now-full-width .gallery-main. */
+    .gallery-main > .gallery-section {
+      max-width: 960px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* ─── Mobile hamburger button ────────────────────────── */
+    .gallery-menu-btn {
+      display: none;
+      position: fixed;
+      top: var(--lb-size-3x);
+      left: var(--lb-size-3x);
+      z-index: 20;
+      width: 2.5rem;
+      height: 2.5rem;
+      align-items: center;
+      justify-content: center;
+      background: var(--lb-surface-bg-default);
+      border: var(--lb-border-width-thin) solid var(--lb-border-default);
+      border-radius: var(--lb-radius-field);
+      box-shadow: var(--lb-shadow-card);
+      cursor: pointer;
+      color: var(--lb-fg-default);
+    }
+
+    .gallery-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.4);
+      z-index: 9;
+    }
+
+    /* ─── Responsive: tablet ─────────────────────────────── */
+    @media (max-width: 1024px) {
+      /* Let .gallery-section fill the available width when the
+         viewport is narrower than the readable-width cap. */
+      .gallery-main > .gallery-section {
+        max-width: 100%;
+      }
+    }
+
+    /* ─── Responsive: mobile ─────────────────────────────── */
+    @media (max-width: 768px) {
+      .gallery-menu-btn { display: flex; }
+
+      .gallery-sidebar {
+        transform: translateX(-100%);
+        transition: transform 200ms ease;
+        z-index: 11;
+      }
+
+      .gallery-sidebar.gallery-sidebar--open {
+        transform: translateX(0);
+      }
+
+      .gallery-overlay--visible {
+        display: block;
+      }
+
+      .gallery-header {
+        padding-left: calc(var(--lb-size-4x) + 3rem);
+        gap: var(--lb-size-2x);
+      }
+
+      /* Mobile: switch becomes the icon button, label hides. */
+      .gallery-header__theme-toggle { display: none; }
+      .gallery-header__theme-icon-btn { display: inline-flex; }
+
+      /* Mobile: Theme Editor button drops its text label, shows only
+         the pencil glyph. lb-btn already centers the icon. */
+      .gallery-header__edit-theme-label { display: none; }
+      .gallery-header__edit-theme {
+        padding: 0;
+        width: 2rem;            /* match small icon-btn footprint */
+        justify-content: center;
+      }
+
+      /* Mobile: brand wordmark drops its text — only the mark + the
+         "letbe-ds — component gallery" tagline gets too long. The
+         landing page is still reachable via the mark click. */
+      .gallery-header__brand-text { display: none; }
+
+      .gallery-main {
+        margin-left: 0;
+        padding: var(--lb-size-4x);
+      }
+
+      .gallery-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .gallery-icon-grid {
+        grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+      }
+
+      .lb-nav--horizontal {
+        flex-wrap: wrap;
+      }
+    }

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <!-- theme-preamble:v1 -->
+  <script>(function(){try{var t=localStorage.getItem('letbe-ds-dark-mode');if(t==='1')document.documentElement.setAttribute('data-theme','dark');else if(t==='0')document.documentElement.setAttribute('data-theme','light');}catch(e){}})();</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta data-lb-page="segmented">
+  <title>Segmented — letbe-ds</title>
+  <link rel="stylesheet" href="../tokens/theme.css">
+  <link rel="stylesheet" href="../tokens/fonts.css">
+  <link rel="stylesheet" href="../components/components.css">
+  <link rel="stylesheet" href="../components/theme-editor.css">
+  <link rel="stylesheet" href="../components/gallery.css">
+</head>
+<body data-lb-base="..">
+
+<main class="gallery-main">
+  <section class="gallery-section" id="segmented">
+    <h1 class="gallery-section__title" style="font-size: var(--lb-t-heading-l-font-size); line-height: var(--lb-t-heading-l-line-height);">Segmented</h1>
+    <p class="gallery-section__desc">Pill-style selector for mutually-exclusive choices in one visual unit — view modes (grid / list), time ranges (day / week / month), sort orders, density presets, tabs inside a toolbar. Visually and semantically distinct from <strong>Tabs</strong> (which own content panels below) — use Segmented for filter/state switches; use Tabs when each option reveals different content.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>a11y (built in):</strong> segments are real <code class="lb-code">&lt;button&gt;</code>s; in radio mode the controller adds <code class="lb-code">role="radiogroup"</code> to the group and <code class="lb-code">role="radio"</code> + <code class="lb-code">aria-checked</code> to each segment, while toggle mode leaves the native button role and tracks <code class="lb-code">aria-pressed</code>. One roving tab stop sits on the selected segment (first enabled one if none is selected): <kbd>←</kbd>/<kbd>→</kbd>/<kbd>↑</kbd>/<kbd>↓</kbd> wrap around and skip <code class="lb-code">disabled</code> segments — auto-selecting in radio mode, moving focus only in toggle mode — <kbd>Home</kbd>/<kbd>End</kbd> jump to the ends and <kbd>Space</kbd>/<kbd>Enter</kbd> activate. Icon-only segments need their own <code class="lb-code">aria-label</code> because the glyph span is <code class="lb-code">aria-hidden</code>, and the active pill is a background + shadow change, not colour alone.</p>
+    <p class="gallery-section__desc" style="margin-top: calc(-1 * var(--lb-size-4x)); margin-bottom: var(--lb-size-6x);"><strong>Usage:</strong> <code class="lb-code">&lt;div class="lb-segmented" data-lb-segmented&gt;</code> with <code class="lb-code">&lt;button class="lb-segmented__item" aria-checked="true|false"&gt;</code>. For multi-toggle (multiple can be pressed, e.g. text formatting B/I/U), add <code class="lb-code">data-lb-mode="toggle"</code> and use <code class="lb-code">aria-pressed</code>. Toggle mode sets no group role, so add <code class="lb-code">role="group"</code> yourself if the group carries an <code class="lb-code">aria-label</code>. Dispatches <code class="lb-code">lb-segmented-change</code> with <code class="lb-code">{ value, index, item, mode }</code>.</p>
+
+    <hr class="gallery-desc-divider">
+
+    <!-- ────────────────── Radio (single select) ────────────────── -->
+    <h2 class="gallery-section__title">Single select (radio)</h2>
+    <p class="gallery-section__desc">Exactly one active at a time. Arrow keys roam + auto-select. Default ARIA is <code class="lb-code">radiogroup</code> with <code class="lb-code">aria-checked</code>.</p>
+    <div class="gallery-row">
+      <div class="lb-segmented" data-lb-segmented aria-label="Time range" id="demo-time">
+        <button type="button" class="lb-segmented__item" data-lb-value="day">Day</button>
+        <button type="button" class="lb-segmented__item" data-lb-value="week" aria-checked="true">Week</button>
+        <button type="button" class="lb-segmented__item" data-lb-value="month">Month</button>
+        <button type="button" class="lb-segmented__item" data-lb-value="year">Year</button>
+      </div>
+    </div>
+    <p class="gallery-section__desc" style="margin-top: var(--lb-size-3x); font-size: var(--lb-t-body-s-font-size);">Selected: <span id="demo-time-fb" style="font-family: var(--lb-font-family-3); color: var(--lb-fg-accent);">week</span></p>
+
+    <!-- ────────────────── With icons ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">With icons</h2>
+    <p class="gallery-section__desc">Icon + label, or icon only. View-mode switcher pattern.</p>
+    <div class="gallery-label">Icon + label</div>
+    <div class="gallery-row">
+      <div class="lb-segmented" data-lb-segmented aria-label="View">
+        <button type="button" class="lb-segmented__item" data-lb-value="list" aria-checked="true">
+          <span class="lb-segmented__icon" aria-hidden="true" data-lb-icon="list"></span>
+          List
+        </button>
+        <button type="button" class="lb-segmented__item" data-lb-value="grid">
+          <span class="lb-segmented__icon" aria-hidden="true" data-lb-icon="layout-grid"></span>
+          Grid
+        </button>
+        <button type="button" class="lb-segmented__item" data-lb-value="board">
+          <span class="lb-segmented__icon" aria-hidden="true" data-lb-icon="layout-dashboard"></span>
+          Board
+        </button>
+      </div>
+    </div>
+
+    <div class="gallery-label" style="margin-top: var(--lb-size-4x);">Icon only — use <code class="lb-code">aria-label</code> per button</div>
+    <div class="gallery-row">
+      <div class="lb-segmented" data-lb-segmented aria-label="Alignment">
+        <button type="button" class="lb-segmented__item" data-lb-value="left" aria-checked="true" aria-label="Align left">
+          <span class="lb-segmented__icon" aria-hidden="true" data-lb-icon="align-left"></span>
+        </button>
+        <button type="button" class="lb-segmented__item" data-lb-value="center" aria-label="Align center">
+          <span class="lb-segmented__icon" aria-hidden="true" data-lb-icon="align-center"></span>
+        </button>
+        <button type="button" class="lb-segmented__item" data-lb-value="right" aria-label="Align right">
+          <span class="lb-segmented__icon" aria-hidden="true" data-lb-icon="align-right"></span>
+        </button>
+        <button type="button" class="lb-segmented__item" data-lb-value="justify" aria-label="Justify">
+          <span class="lb-segmented__icon" aria-hidden="true" data-lb-icon="align-justify"></span>
+        </button>
+      </div>
+    </div>
+
+    <!-- ────────────────── Toggle mode ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Toggle mode — multi-select</h2>
+    <p class="gallery-section__desc">Each segment toggles independently. Text-formatting pattern: Bold / Italic / Underline. Set <code class="lb-code">data-lb-mode="toggle"</code>; active state uses <code class="lb-code">aria-pressed</code>.</p>
+    <div class="gallery-row">
+      <div class="lb-segmented" data-lb-segmented data-lb-mode="toggle" role="group" aria-label="Text style" id="demo-toggle">
+        <button type="button" class="lb-segmented__item" data-lb-value="bold" aria-pressed="true" aria-label="Bold">
+          <span class="lb-segmented__icon" aria-hidden="true" data-lb-icon="bold"></span>
+        </button>
+        <button type="button" class="lb-segmented__item" data-lb-value="italic" aria-pressed="false" aria-label="Italic">
+          <span class="lb-segmented__icon" aria-hidden="true" data-lb-icon="italic"></span>
+        </button>
+        <button type="button" class="lb-segmented__item" data-lb-value="underline" aria-pressed="false" aria-label="Underline">
+          <span class="lb-segmented__icon" aria-hidden="true" data-lb-icon="underline"></span>
+        </button>
+        <button type="button" class="lb-segmented__item" data-lb-value="strike" aria-pressed="false" aria-label="Strikethrough">
+          <span class="lb-segmented__icon" aria-hidden="true" data-lb-icon="strikethrough"></span>
+        </button>
+      </div>
+    </div>
+    <p class="gallery-section__desc" style="margin-top: var(--lb-size-3x); font-size: var(--lb-t-body-s-font-size);">Active: <span id="demo-toggle-fb" style="font-family: var(--lb-font-family-3); color: var(--lb-fg-accent);">bold</span></p>
+
+    <!-- ────────────────── Sizes ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Sizes</h2>
+    <div class="gallery-label">Small — <code class="lb-code">--sm</code></div>
+    <div class="gallery-row">
+      <div class="lb-segmented lb-segmented--sm" data-lb-segmented aria-label="Density">
+        <button type="button" class="lb-segmented__item" data-lb-value="compact" aria-checked="true">Compact</button>
+        <button type="button" class="lb-segmented__item" data-lb-value="cozy">Cozy</button>
+        <button type="button" class="lb-segmented__item" data-lb-value="comfortable">Comfortable</button>
+      </div>
+    </div>
+    <div class="gallery-label" style="margin-top: var(--lb-size-4x);">Medium (default)</div>
+    <div class="gallery-row">
+      <div class="lb-segmented" data-lb-segmented aria-label="Density (medium)">
+        <button type="button" class="lb-segmented__item" data-lb-value="compact" aria-checked="true">Compact</button>
+        <button type="button" class="lb-segmented__item" data-lb-value="cozy">Cozy</button>
+        <button type="button" class="lb-segmented__item" data-lb-value="comfortable">Comfortable</button>
+      </div>
+    </div>
+
+    <!-- ────────────────── Full width ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Full width — fills container</h2>
+    <p class="gallery-section__desc">Useful at the top of a panel or sidebar when the segmented control needs to span a predictable container width. Add <code class="lb-code">--full-width</code>.</p>
+    <div style="max-width: 480px;">
+      <div class="lb-segmented lb-segmented--full-width" data-lb-segmented aria-label="Sort order">
+        <button type="button" class="lb-segmented__item" data-lb-value="newest" aria-checked="true">Newest</button>
+        <button type="button" class="lb-segmented__item" data-lb-value="oldest">Oldest</button>
+        <button type="button" class="lb-segmented__item" data-lb-value="price">Price</button>
+        <button type="button" class="lb-segmented__item" data-lb-value="name">Name</button>
+      </div>
+    </div>
+
+    <!-- ────────────────── Disabled ────────────────── -->
+    <h2 class="gallery-section__title" style="margin-top: var(--lb-size-10x);">Disabled segments</h2>
+    <p class="gallery-section__desc">Individual segments can be disabled — keyboard nav skips them.</p>
+    <div class="gallery-row">
+      <div class="lb-segmented" data-lb-segmented aria-label="Plan">
+        <button type="button" class="lb-segmented__item" data-lb-value="monthly" aria-checked="true">Monthly</button>
+        <button type="button" class="lb-segmented__item" data-lb-value="yearly">Yearly (20% off)</button>
+        <button type="button" class="lb-segmented__item" data-lb-value="lifetime" disabled>Lifetime (sold out)</button>
+      </div>
+    </div>
+
+  </section>
+</main>
+
+<script src="../js/lb.js"></script>
+<script src="../js/slot-engine.js"></script>
+<script src="../js/theme-editor.js"></script>
+<script src="../js/token-exporter.js"></script>
+<script src="../js/gallery-layout.js"></script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const time = document.getElementById('demo-time');
+    const timeFb = document.getElementById('demo-time-fb');
+    if (time && timeFb) {
+      time.addEventListener('lb-segmented-change', (e) => {
+        timeFb.textContent = e.detail.value;
+      });
+    }
+    const toggle = document.getElementById('demo-toggle');
+    const toggleFb = document.getElementById('demo-toggle-fb');
+    if (toggle && toggleFb) {
+      const update = () => {
+        const v = toggle._lbSegmented.getValue();
+        toggleFb.textContent = v.length ? v.join(' + ') : '(none)';
+      };
+      toggle.addEventListener('lb-segmented-change', update);
+      update();
+    }
+  });
+</script>
+</body>
+</html>
