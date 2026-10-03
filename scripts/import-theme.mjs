@@ -200,6 +200,8 @@ for (const mode of ['light', 'dark']) {
 }
 
 // ─── 5. write the theme, build its CSS, write the diff ───────────────────
+// Name the theme for tools that read it (Syrup shows it when a Figma file links here).
+out.$extensions = { ...(out.$extensions ?? {}), 'pancake.theme': { name: map.name ?? 'Theme' } };
 writeFileSync(join(themeDir, 'source-tokens.json'), JSON.stringify(out, null, 2) + '\n');
 // The base build reads fixed paths, so run it on a scratch copy.
 const tmp = mkdtempSync(join(tmpdir(), 'pancake-theme-'));

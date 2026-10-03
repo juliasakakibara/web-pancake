@@ -4265,5 +4265,10 @@
         "$description": "Cutout/separator ring for an element floating over an ELEVATED surface (card, media player chrome) rather than the base page. Aliases bg.strong to match the elevated surface."
       }
     }
+  },
+  "$extensions": {
+    "pancake.theme": {
+      "name": "Pancake 2 · Pancake"
+    }
   }
 }
