@@ -1,0 +1,48 @@
+{
+  "name": "Pancake",
+  "source": "brand-tokens.json",
+  "neutral": {
+    "50": "color.neutral.50",
+    "100": "color.neutral.100",
+    "200": "color.neutral.200",
+    "300": "color.neutral.300",
+    "400": "color.neutral.400",
+    "500": "color.neutral.500",
+    "600": "color.neutral.600",
+    "700": "color.neutral.700",
+    "800": "color.neutral.800",
+    "900": "color.neutral.900",
+    "950": "color.neutral.950"
+  },
+  "accent": {
+    "palette": "blue",
+    "steps": {
+      "50": "color.brand.blue.50",
+      "100": "color.brand.blue.100",
+      "200": "color.brand.blue.200",
+      "300": "color.brand.blue.300",
+      "400": "color.brand.blue.400",
+      "500": "color.brand.blue.500",
+      "600": "color.brand.blue.600",
+      "700": "color.brand.blue.700",
+      "800": "color.brand.blue.800",
+      "900": "color.brand.blue.900"
+    }
+  },
+  "set": {
+    "semantic.light.fg.muted": {
+      "value": "{neutral.700}",
+      "why": "Pancake 1 decision: content.muted is neutral.700 (Pancake's mid greys are lighter than letbe's)"
+    },
+    "semantic.light.border.strong": {
+      "value": "{neutral.600}",
+      "why": "Pancake 1 decision: border.control is neutral.600, the lightest grey that passes 3:1"
+    }
+  },
+  "notes": [
+    "Source: Pancake DS 1 (expert-octo-pancake), tokens/tier-1-definitions/color.json, copied as brand-tokens.json.",
+    "Neutrals and the brand blue come straight from Pancake 1: #FAFAFA (neutral.50), #212121 (neutral.900), #0A5CFF (blue.600).",
+    "The accent (and the dormant accent-2 / accent-3 slots) moves from letbe's violet to Pancake's blue. blue.950 keeps the base value: Pancake 1's ramp stops at 900.",
+    "Status colours, type, radius and shadows keep letbe's values for now."
+  ]
+}

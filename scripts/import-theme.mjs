@@ -101,24 +101,27 @@ const contrast = (a, b) => {
   return (x + 0.05) / (y + 0.05);
 };
 
-// ─── 1. neutral ramp ──────────────────────────────────────────────────────
-const STEPS = Object.keys(base.primitives.neutral).filter((k) => !k.startsWith('$'));
-if (map.neutral) {
-  const anchors = Object.entries(map.neutral)
-    .map(([step, ref]) => ({ i: STEPS.indexOf(step), step, lab: rgbToOklab(hexToRgb(brandValue(ref.replace(/^@/, '')))), ref }))
+// ─── 1. ramps ─────────────────────────────────────────────────────────────
+/** Fill primitives.<palette> from brand anchors; steps between anchors are interpolated in OKLab. */
+function buildRamp(palette, anchorMap) {
+  const steps = Object.keys(base.primitives[palette]).filter((k) => !k.startsWith('$'));
+  const anchors = Object.entries(anchorMap)
+    .map(([step, ref]) => ({ i: steps.indexOf(step), step, ref: ref.replace(/^@/, '') }))
+    .map((a) => ({ ...a, lab: rgbToOklab(hexToRgb(brandValue(a.ref))) }))
     .sort((a, b) => a.i - b.i);
-  if (anchors.some((a) => a.i < 0)) throw new Error(`map.neutral steps must be among ${STEPS.join(', ')}`);
-  STEPS.forEach((step, i) => {
+  if (anchors.some((a) => a.i < 0)) throw new Error(`${palette} steps must be among ${steps.join(', ')}`);
+  steps.forEach((step, i) => {
     const exact = anchors.find((a) => a.i === i);
-    if (exact) return setToken(`primitives.neutral.${step}`, `@${exact.ref.replace(/^@/, '')}`, 'brand', `anchor`);
+    if (exact) return setToken(`primitives.${palette}.${step}`, `@${exact.ref}`, 'brand', 'anchor');
     const lo = [...anchors].reverse().find((a) => a.i < i);
     const hi = anchors.find((a) => a.i > i);
     // Outside the anchors: keep the base step (nothing to interpolate towards).
     if (!lo || !hi) return;
     const t = (i - lo.i) / (hi.i - lo.i);
-    setToken(`primitives.neutral.${step}`, oklabToHex(lo.lab.map((v, k) => v + (hi.lab[k] - v) * t)), 'generated', `between ${lo.step} and ${hi.step}`);
+    setToken(`primitives.${palette}.${step}`, oklabToHex(lo.lab.map((v, k) => v + (hi.lab[k] - v) * t)), 'generated', `between ${lo.step} and ${hi.step}`);
   });
 }
+if (map.neutral) buildRamp('neutral', map.neutral);
 
 // ─── 2. accent ────────────────────────────────────────────────────────────
 // "monochrome": the first accent follows the neutrals. accent-2 / accent-3 are left alone.
@@ -138,6 +141,19 @@ if (map.accent === 'monochrome') {
       if (!/^accent(-|$)/.test(role) || /^accent-[23]/.test(role)) continue;
       const step = mono[mode][role] ?? mono[mode].accent;
       setToken(path.join('.'), `{neutral.${step}}`, 'mapped', 'monochrome accent');
+    }
+  }
+}
+// { "palette": "blue", "steps": { "600": "color.brand.blue.600", … } }: the accent roles
+// (accent-2 / accent-3 included: they mirror the primary until a brand fills them) move from
+// the base accent hue to <palette>, and <palette> is rebuilt from the brand's ramp.
+if (map.accent && typeof map.accent === 'object') {
+  const { palette, steps, from = 'violet' } = map.accent;
+  if (steps) buildRamp(palette, steps);
+  for (const mode of ['light', 'dark']) {
+    for (const [path, t] of tokens(base.semantic[mode], ['semantic', mode])) {
+      if (!/^accent/.test(path.at(-1)) || typeof t.$value !== 'string' || !t.$value.startsWith(`{${from}.`)) continue;
+      setToken(path.join('.'), t.$value.replace(`{${from}.`, `{${palette}.`), 'mapped', `accent hue: ${from} → ${palette}`);
     }
   }
 }

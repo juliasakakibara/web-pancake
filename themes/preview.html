@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<title>Theme preview</title>
+<link rel="stylesheet" id="theme" href="../tokens/theme.css">
+<link rel="stylesheet" href="../tokens/fonts.css">
+<link rel="stylesheet" href="../components/components.css">
+<style>
+  body { margin: 0; padding: 24px; background: var(--lb-bg-default); color: var(--lb-fg-default); font-family: var(--lb-font-family-1); }
+  .row { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; margin: 16px 0; }
+  .muted { color: var(--lb-fg-muted); }
+  .band { background: var(--lb-bg-inverse); color: var(--lb-fg-inverse); padding: 16px; }
+</style>
+</head>
+<body>
+<!-- Usage: themes/preview.html?theme=pancake&mode=dark  (no theme = the base system) -->
+<h1>Theme preview</h1>
+<p>Body text on the page. <span class="muted">Secondary helper text.</span> <a href="#">A link</a></p>
+<div class="row">
+  <button class="lb-btn lb-btn--primary lb-btn--medium">Primary</button>
+  <button class="lb-btn lb-btn--secondary lb-btn--medium">Secondary</button>
+  <button class="lb-btn lb-btn--ghost lb-btn--medium">Ghost</button>
+  <button class="lb-btn lb-btn--danger lb-btn--medium">Danger</button>
+  <input class="lb-input lb-input--medium" type="text" placeholder="Input" style="width:160px">
+  <span class="lb-badge lb-badge--default lb-badge--medium">Badge</span>
+  <span class="lb-badge lb-badge--success lb-badge--medium">Success</span>
+</div>
+<div class="row">
+  <div class="lb-card lb-card--elevated" style="width:240px"><div class="lb-card__body"><strong>Elevated card</strong><p class="muted">Sits on the raised surface.</p></div></div>
+  <div class="lb-card" style="width:240px"><div class="lb-card__body"><strong>Card</strong><p class="muted">Default surface.</p></div></div>
+</div>
+<div class="band">Inverted band — dark hero, footer.</div>
+<script>
+  const t = new URLSearchParams(location.search).get('theme');
+  if (t) document.getElementById('theme').href = t + '/theme.css';
+  const m = new URLSearchParams(location.search).get('mode');
+  if (m) document.documentElement.dataset.theme = m;
+</script>
+</body>
+</html>
