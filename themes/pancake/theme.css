@@ -503,7 +503,7 @@
 
   /* ─── L2 — Radius semantic ─── */
   --lb-radius-none: var(--lb-radius-0);
-  --lb-radius-interactive: var(--lb-radius-4);
+  --lb-radius-interactive: var(--lb-radius-9999);
   --lb-radius-field: var(--lb-radius-4);
   --lb-radius-surface: var(--lb-radius-8);
   --lb-radius-overlay: var(--lb-radius-12);

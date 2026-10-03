@@ -1,5 +1,5 @@
 {
-  "name": "Pancake 2 \u00b7 Pancake",
+  "name": "Pancake 2 · Pancake",
   "source": "brand-tokens.json",
   "neutral": {
     "50": "color.neutral.50",
@@ -37,6 +37,10 @@
     "semantic.light.border.strong": {
       "value": "{neutral.600}",
       "why": "Pancake 1 decision: border.control is neutral.600, the lightest grey that passes 3:1"
+    },
+    "semantic.radius.radius.interactive": {
+      "value": "{radius.9999}",
+      "why": "edited in Figma 2026-10-03 (one value for both modes)"
     }
   },
   "notes": [

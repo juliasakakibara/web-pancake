@@ -3473,7 +3473,7 @@
           "$description": "Intentionally sharp corners — tables, dividers, full-bleed sections, progress bars."
         },
         "interactive": {
-          "$value": "{radius.4}",
+          "$value": "{radius.9999}",
           "$type": "dimension",
           "$description": "Clickable controls — buttons, toggles, tabs, nav items, segmented controls."
         },
