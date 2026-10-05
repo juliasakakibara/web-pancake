@@ -1,0 +1,67 @@
+{
+  "name": "Julia",
+  "source": "brand-tokens.json",
+  "neutral": {
+    "50": "color.paper",
+    "100": "color.mist",
+    "200": "color.hairline",
+    "400": "color.ash",
+    "500": "color.graphite",
+    "800": "color.smoke",
+    "900": "color.soot",
+    "950": "color.ink"
+  },
+  "accent": "monochrome",
+  "shadows": "none",
+  "set": {
+    "semantic.light.fg.default": {
+      "value": "{neutral.950}",
+      "why": "body text is pure black on the site"
+    },
+    "semantic.light.fg.muted": {
+      "value": "{neutral.500}",
+      "why": "site muted-foreground #737373 (4.7:1 on white)"
+    },
+    "semantic.dark.bg.default": {
+      "value": "{neutral.950}",
+      "why": "dark mode page is pure black on the site"
+    },
+    "semantic.dark.fg.default": {
+      "value": "{neutral.50}",
+      "why": "dark mode text is pure white on the site"
+    },
+    "semantic.radius.radius.interactive": {
+      "value": "{radius.0}",
+      "why": "site radius is 0"
+    },
+    "semantic.radius.radius.field": {
+      "value": "{radius.0}",
+      "why": "site radius is 0"
+    },
+    "semantic.radius.radius.full": {
+      "value": "{radius.0}",
+      "why": "site radius is 0, buttons included"
+    },
+    "semantic.radius.radius.badge": {
+      "value": "{radius.0}",
+      "why": "site radius is 0"
+    },
+    "semantic.radius.radius.surface": {
+      "value": "{radius.8}",
+      "why": "cards keep the site's 0.5rem card radius"
+    },
+    "semantic.dark.border.strong": {
+      "value": "{neutral.500}",
+      "why": "control borders need 3:1 on pure black; #737373 is the site's own grey"
+    },
+    "semantic.dark.fg.muted": {
+      "value": "{neutral.400}",
+      "why": "site dark muted-foreground #a3a3a3"
+    }
+  },
+  "notes": [
+    "The portfolio site's own look, as a Pancake topping: monochrome Core light/dark from test-wisp globals.css.",
+    "The site's Fun themes (Electric, Neon, Signal, Albers) become their own toppings later.",
+    "Neutral anchors are the site's real values (the 4% / 15% overlays flattened on white and black); only 300, 600 and 700 are generated."
+  ]
+}

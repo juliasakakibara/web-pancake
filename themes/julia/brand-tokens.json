@@ -1,0 +1,50 @@
+{
+  "color": {
+    "paper": {
+      "$value": "#ffffff",
+      "$type": "color",
+      "$description": "Page background (light) and text on dark."
+    },
+    "graphite": {
+      "$value": "#737373",
+      "$type": "color",
+      "$description": "Secondary text: the site's muted-foreground."
+    },
+    "ink": {
+      "$value": "#000000",
+      "$type": "color",
+      "$description": "Body text and the primary action; page background in dark mode."
+    },
+    "mist": {
+      "$value": "#f5f5f5",
+      "$type": "color",
+      "$description": "Subtle surface: 4% black on white (site --muted, light)."
+    },
+    "hairline": {
+      "$value": "#d9d9d9",
+      "$type": "color",
+      "$description": "Divider: 15% black on white (site --border, light)."
+    },
+    "ash": {
+      "$value": "#a3a3a3",
+      "$type": "color",
+      "$description": "Secondary text in dark mode (site --muted-foreground, dark)."
+    },
+    "smoke": {
+      "$value": "#262626",
+      "$type": "color",
+      "$description": "Divider in dark mode: 15% white on black (site --border, dark)."
+    },
+    "soot": {
+      "$value": "#0f0f0f",
+      "$type": "color",
+      "$description": "Subtle surface in dark mode: 6% white on black (site --muted, dark)."
+    }
+  },
+  "$extensions": {
+    "pancake.source": {
+      "from": "test-wisp src/app/globals.css (Core light/dark)",
+      "date": "2026-10-05"
+    }
+  }
+}
